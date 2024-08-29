@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\Permission;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
+
+class PermissionController extends Controller
+{
+    public function index(): View
+    {
+        $permissions = Permission::query()->latest()->get();
+        return view('permissions.index', compact('permissions'));
+    }
+
+    public function create(): View
+    {
+        return view('permissions.create');
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        Permission::create($request->all());
+
+        return redirect()->route('permissions.index')->with('success', 'Полномочие успешно создано');
+    }
+
+    public function edit(Permission $permission): View
+    {
+        return view('permissions.edit', compact('permission'));
+    }
+
+    public function update(Request $request, Permission $permission): RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $permission->update($request->all());
+
+        return redirect()->route('permissions.index')->with('success', 'Полномочие успешно обновлено');
+    }
+
+    public function destroy(Permission $permission): RedirectResponse
+    {
+        $permission->delete();
+
+        return redirect()->route('permissions.index')->with('success', 'Полномочие успешно удалено');
+    }
+}
+
+
+
+    
+
