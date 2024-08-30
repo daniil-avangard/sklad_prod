@@ -25,7 +25,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Название</th>
-                            <th>Описание</th>
+                            <th>Событие</th>
                             <th>Действие</th>
                         </tr>
                     </thead>
@@ -46,7 +46,10 @@
                             </td>
 
                             <td>
-                                <form action="" method="POST">
+                                <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-primary">
+                                    Редактировать
+                                </a>
+                                <!-- <form action="" method="POST">
                                     @csrf
 
                                     <input type="hidden" name="permission_id" value="{{ $permission->id }}">
@@ -54,7 +57,7 @@
                                     <a href="#" onclick="event.preventDefault(); this.parentElement.submit();" class="text-danger small">
                                         Удалить
                                     </a>
-                                </form>
+                                </form> -->
                             </td>
                         </tr>
                     @endforeach

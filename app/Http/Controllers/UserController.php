@@ -15,6 +15,11 @@ class UserController extends Controller
 {
     public function index()
     {
+
+        // if (Gate::denies('view', User::class)) {
+        //     throw new AuthorizationException('У вас нет разрешения на просмотр пользователей.');
+        // }
+
         $users = User::all();
         return view('users.index', compact('users'));
     }
@@ -44,11 +49,19 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        if (Gate::denies('update', $user)) {
+            throw new AuthorizationException('У вас нет разрешения на редактирование пользователя.');
+        }
+
         return view('users.edit', compact('user'));
     }
 
     public function update(UdateUserRequest $updateUserRequest, User $user)
     {
+        if (Gate::denies('update', $user)) {
+            throw new AuthorizationException('У вас нет разрешения на редактирование пользователя.');
+        }
+
         $data = $updateUserRequest->only(['surname', 'first_name', 'middle_name', 'email']);
         $user->update($data);
         return redirect()->route('users.index')->with('success', 'Пользователь успешно обновлен');
@@ -56,12 +69,20 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        if (Gate::denies('view', $user)) {
+            throw new AuthorizationException('У вас нет разрешения на просмотр пользователя.');
+        }
+
         $permissions = $user->permissions()->get();
         return view('users.show', compact('user', 'permissions'));
     }
 
     public function delete(User $user)
     {
+        if (Gate::denies('delete', $user)) {
+            throw new AuthorizationException('У вас нет разрешения на удаление пользователя.');
+        }
+
         $user->delete();
         return redirect()->route('users.index')->with('success', 'Пользователь успешно удален');
     }

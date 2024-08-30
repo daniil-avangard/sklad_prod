@@ -50,13 +50,18 @@
                                             <td>{{ $user->middle_name }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>
-                                                <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">Редактировать</a>
-                                                <form action="{{ route('users.delete', $user->id) }}" method="POST" style="display: inline-block;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить пользователя?')">Удалить</button>
-                                                </form>
+                                                @can('update', $user)
+                                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">Редактировать</a>
+                                                @endcan
+                                                @can('delete', $user)
+                                                    <form action="{{ route('users.delete', $user->id) }}" method="POST" style="display: inline-block;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить пользователя?')">Удалить</button>
+                                                    </form>
+                                                @endcan
                                             </td>
+                                        </tr>
                                         </tr>
                                     @endforeach
                             </table>

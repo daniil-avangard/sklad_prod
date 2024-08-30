@@ -4,18 +4,23 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Permission;
+
 
 
 
 class AdminPermissionController extends Controller
 {
-    public function create(User $user)
+    public function getPermissionsForModal(User $user)
     {
-        $permissions = Permission::query()
-        ->whereNotIn('id', $user->permissions()->pluck('id'))
-        ->oldest()
-        ->get();
-        return view('admin.permissions.create', compact('user', 'permissions'));
+        $permissionsAdd = Permission::query()
+            ->whereNotIn('id', $user->permissions()->pluck('id'))
+            ->oldest('action')
+            ->get();
+
+        return response()->json([
+            'permissionsAdd' => $permissionsAdd
+        ]);
     }
 
     public function attach(Request $request, User $user)
@@ -23,7 +28,7 @@ class AdminPermissionController extends Controller
         $id = $request->input('permission_id');
         $user->permissions()->syncWithoutDetaching($id);
 
-        return redirect()->route('admin.users.permissions.create', $user)->with('success', 'Полномочие успешно добавлено');
+        return redirect()->route('users.show', $user)->with('success', 'Полномочие успешно добавлено');
     }
 
     public function detach(Request $request, User $user)
@@ -31,7 +36,7 @@ class AdminPermissionController extends Controller
         $id = $request->input('permission_id');
         $user->permissions()->detach($id);
 
-        return redirect()->route('admin.users.permissions.create', $user)->with('success', 'Полномочие успешно удалено');
+        return redirect()->route('users.show', $user)->with('success', 'Полномочие успешно удалено');
     }
 
 

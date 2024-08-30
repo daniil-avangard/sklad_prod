@@ -23,14 +23,12 @@ class PermissionController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-        ]);
+        $data = $request->validated();
+        $data['type'] = 'custom';
+        
+        $permission = Permission::query()->create($data);
 
-        Permission::create($request->all());
-
-        return redirect()->route('permissions.index')->with('success', 'Полномочие успешно создано');
+        return to_route('permissions.show', $permission)->with('success', 'Полномочие успешно создано');
     }
 
     public function edit(Permission $permission): View
@@ -40,15 +38,15 @@ class PermissionController extends Controller
 
     public function update(Request $request, Permission $permission): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:50'],
         ]);
+        
+        $permission->update($data);
 
-        $permission->update($request->all());
-
-        return redirect()->route('permissions.index')->with('success', 'Полномочие успешно обновлено');
+        return to_route('permissions')->with('success', 'Полномочие успешно обновлено');
     }
+
 
     public function destroy(Permission $permission): RedirectResponse
     {

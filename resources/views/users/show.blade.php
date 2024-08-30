@@ -109,7 +109,9 @@
                                                         <div class="row">
                                                             <div class="col d-flex justify-content-between">
                                                                 <p class="text-dark mb-1 fw-semibold">Список Полномочий</p>
-                                                                    <a href="#" class=" col-auto align-self-center btn btn-primary">Добавить</a>   
+                                                                <button type="button" class="col-auto align-self-center btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="loadPermissions({{ $user->id }})">
+                                                                    Добавить
+                                                                </button>
                                                             </div>
                                                                 
                                                             <table id="permissions-table" class="bootstable table-responsive">
@@ -125,7 +127,15 @@
                                                                         <tr>
                                                                             <td>{{ $permission->id }}</td>
                                                                             <td>{{ $permission->name }}</td>
-                                                                            <td><a href="#" class="btn btn-danger">Удалить</a></td>
+                                                                            <td>
+                                                                                
+                                                                            <x-form action="{{ route('user.permissions.detach', [$user, $permission]) }}" method="POST">
+                                                                                @csrf
+                                                                                <input type="hidden" name="permission_id" value="{{ $permission->id }}">
+                                                                                <button type="submit" class="btn btn-danger">Удалить</button>
+                                                                            </x-form>
+                                                                            
+                                                                            </td>
                                                                         </tr>
                                                                     @endforeach
                                                                 </tbody>
@@ -351,4 +361,34 @@
                     </div><!--end row-->
 
                 
+
+                    <!-- Modal -->
+                    @include('includes.modal.add_permissions')
+                    <script>
+    function loadPermissions(userId) {
+    fetch(`/users/${userId}/permissions/modal`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text(); // Сначала получаем текст ответа
+        })
+        .then(text => {
+            // console.log('Ответ сервера:', text); // Выводим ответ в консоль
+            return JSON.parse(text); // Затем парсим JSON
+        })
+        .then(data => {
+            const select = document.getElementById('permission_id');
+            select.innerHTML = '';
+            data.permissionsAdd.forEach(permission => {
+                const option = new Option(permission.name, permission.id);
+                select.add(option);
+            });
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка при загрузке данных. Пожалуйста, попробуйте еще раз.');
+        });
+}
+</script>
 @endsection
