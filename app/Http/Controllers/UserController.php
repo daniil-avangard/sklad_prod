@@ -74,7 +74,8 @@ class UserController extends Controller
         }
 
         $permissions = $user->permissions()->get();
-        return view('users.show', compact('user', 'permissions'));
+        $roles = $user->roles()->get();
+        return view('users.show', compact('user', 'permissions', 'roles'));
     }
 
     public function delete(User $user)

@@ -109,9 +109,12 @@
                                                         <div class="row">
                                                             <div class="col d-flex justify-content-between">
                                                                 <p class="text-dark mb-1 fw-semibold">Список Полномочий</p>
-                                                                <button type="button" class="col-auto align-self-center btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalCenter" onclick="loadPermissions({{ $user->id }})">
-                                                                    Добавить
-                                                                </button>
+                                                                <button type="button" 
+                                                                class="col-auto align-self-center btn btn-primary" 
+                                                                data-bs-toggle="modal" data-bs-target="#add_permission_user" 
+                                                                onclick="loadData('{{ route('users.permissions.modal', $user->id, false) }}', 'permissions')">
+                                                                Добавить Полномочия
+                                                            </button>
                                                             </div>
                                                                 
                                                             <table id="permissions-table" class="bootstable table-responsive">
@@ -132,7 +135,7 @@
                                                                             <x-form action="{{ route('user.permissions.detach', [$user, $permission]) }}" method="POST">
                                                                                 @csrf
                                                                                 <input type="hidden" name="permission_id" value="{{ $permission->id }}">
-                                                                                <button type="submit" class="btn btn-danger">Удалить</button>
+                                                                                <button onclick="return confirm('Вы уверены, что хотите удалить это полномочие?')" type="submit" class="btn btn-danger">Удалить</button>
                                                                             </x-form>
                                                                             
                                                                             </td>
@@ -150,38 +153,35 @@
                                                         <div class="row">
                                                             <div class="col d-flex justify-content-between">
                                                                 <p class="text-dark mb-1 fw-semibold">Список Ролей</p>
-                                                                    <a href="#" class=" col-auto align-self-center btn btn-primary">Добавить</a>   
+                                                                <button type="button" 
+                                                                class="col-auto align-self-center btn btn-primary" 
+                                                                data-bs-toggle="modal" data-bs-target="#add_role_user" 
+                                                                onclick="loadData('{{ route('user.roles.modal', $user->id, false) }}', 'roles')">
+                                                                    Добавить Роли
+                                                                </button>
                                                                 </div>
-                                                            <table>
+                                                            <table class="bootstable table-responsive">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th>Полномочия</th>
-                                                                        <th>Описание</th>
-                                                                        <th>Действие</th>
-                                                                        
+                                                                        <th>ID</th>
+                                                                        <th>Роль</th>
+                                                                        <th>Действие</th>                                                                        
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                    <tr>
-                                                                        <td>Полномочия</td>
-                                                                        <td>Описание</td>
-                                                                        <td><a href="#" class="btn btn-danger">Удалить</a></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Полномочия</td>
-                                                                        <td>Описание</td>
-                                                                        <td><a href="#" class="btn btn-danger">Удалить</a></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Полномочия</td>
-                                                                        <td>Описание</td>
-                                                                        <td><a href="#" class="btn btn-danger">Удалить</a></td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>Полномочия</td>
-                                                                        <td>Описание</td>
-                                                                        <td><a href="#" class="btn btn-danger">Удалить</a></td>
-                                                                    </tr>
+                                                                    @foreach ($roles as $role)
+                                                                        <tr>
+                                                                            <td>{{ $role->id }}</td>
+                                                                            <td>{{ $role->name }}</td>
+                                                                            <td>
+                                                                                <x-form action="{{ route('user.roles.detach', [$user, $role]) }}" method="POST">
+                                                                                    @csrf
+                                                                                    <input type="hidden" name="role_id" value="{{ $role->id }}">
+                                                                                    <button onclick="return confirm('Вы уверены, что хотите удалить эту роль?')" type="submit" class="btn btn-danger">Удалить</button>
+                                                                                </x-form>
+                                                                            </td>   
+                                                                        </tr>
+                                                                    @endforeach
 
                                                                 </tbody>
                                                             </table>
@@ -196,166 +196,9 @@
                                             </div>
                                         
                                         </div><!--end col-->
-                                        <div class="col-lg-3">
-                                            
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="dash-datepick">
-                                                        <input type="hidden" id="light_datepick"/>
-                                                    </div>
-                                                </div><!--end card-body-->
-                                            </div><!--end card-->
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <div class="row align-items-center">
-                                                      
-                                                    </div>  <!--end row-->                                  
-                                                </div><!--end card-header-->
-                                                
-                                            </div><!--end card-->                                            
-                                        </div><!--end col-->
                                     </div><!--end row-->    
                                 </div>
 
-                                <div class="tab-pane fade" id="Profile_Settings" role="tabpanel" aria-labelledby="settings_detail_tab">
-                                    <div class="row">
-                                        <div class="col-lg-6 col-xl-6">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <div class="row align-items-center">
-                                                        <div class="col">                      
-                                                            <h4 class="card-title">Personal Information</h4>                      
-                                                        </div><!--end col-->                                                       
-                                                    </div>  <!--end row-->                                  
-                                                </div><!--end card-header-->
-                                                <div class="card-body">                       
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">First Name</label>
-                                                        <div class="col-lg-9 col-xl-8">
-                                                            <input class="form-control" type="text" value="Rosa">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Last Name</label>
-                                                        <div class="col-lg-9 col-xl-8">
-                                                            <input class="form-control" type="text" value="Dodson">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Company Name</label>
-                                                        <div class="col-lg-9 col-xl-8">
-                                                            <input class="form-control" type="text" value="MannatThemes">
-                                                            <span class="form-text text-muted font-12">We'll never share your email with anyone else.</span>
-                                                        </div>
-                                                    </div>
-                        
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Contact Phone</label>
-                                                        <div class="col-lg-9 col-xl-8">
-                                                            <div class="input-group">
-                                                                <span class="input-group-text"><i class="las la-phone"></i></span>
-                                                                <input type="text" class="form-control" value="+123456789" placeholder="Phone" aria-describedby="basic-addon1">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Email Address</label>
-                                                        <div class="col-lg-9 col-xl-8">
-                                                            <div class="input-group">
-                                                                <span class="input-group-text"><i class="las la-at"></i></span>
-                                                                <input type="text" class="form-control" value="rosa.dodson@demo.com" placeholder="Email" aria-describedby="basic-addon1">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Website Link</label>
-                                                        <div class="col-lg-9 col-xl-8">
-                                                            <div class="input-group">
-                                                                <span class="input-group-text"><i class="la la-globe"></i></span>
-                                                                <input type="text" class="form-control" value=" https://mannatthemes.com/" placeholder="Email" aria-describedby="basic-addon1">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">USA</label>
-                                                        <div class="col-lg-9 col-xl-8">
-                                                            <select class="form-select">
-                                                                <option>London</option>
-                                                                <option>India</option>
-                                                                <option>USA</option>
-                                                                <option>Canada</option>
-                                                                <option>Thailand</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <div class="col-lg-9 col-xl-8 offset-lg-3">
-                                                            <button type="submit" class="btn btn-sm btn-outline-primary">Submit</button>
-                                                            <button type="button" class="btn btn-sm btn-outline-danger">Cancel</button>
-                                                        </div>
-                                                    </div>                                                    
-                                                </div>                                            
-                                            </div>
-                                        </div> <!--end col--> 
-                                        <div class="col-lg-6 col-xl-6">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h4 class="card-title">Change Password</h4>
-                                                </div><!--end card-header-->
-                                                <div class="card-body"> 
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Current Password</label>
-                                                        <div class="col-lg-9 col-xl-8">
-                                                            <input class="form-control" type="password" placeholder="Password">
-                                                            <a href="#" class="text-primary font-12">Forgot password ?</a>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">New Password</label>
-                                                        <div class="col-lg-9 col-xl-8">
-                                                            <input class="form-control" type="password" placeholder="New Password">
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Confirm Password</label>
-                                                        <div class="col-lg-9 col-xl-8">
-                                                            <input class="form-control" type="password" placeholder="Re-Password">
-                                                            <span class="form-text text-muted font-12">Never share your password.</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <div class="col-lg-9 col-xl-8 offset-lg-3">
-                                                            <button type="submit" class="btn btn-sm btn-outline-primary">Change Password</button>
-                                                            <button type="button" class="btn btn-sm btn-outline-danger">Cancel</button>
-                                                        </div>
-                                                    </div>   
-                                                </div><!--end card-body-->
-                                            </div><!--end card-->
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h4 class="card-title">Other Settings</h4>
-                                                </div><!--end card-header-->
-                                                <div class="card-body"> 
-
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="Email_Notifications" checked>
-                                                        <label class="form-check-label" for="Email_Notifications">
-                                                            Email Notifications
-                                                        </label>
-                                                        <span class="form-text text-muted font-12 mt-0">Do you need them?</span>
-                                                      </div>
-                                                      <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="" id="API_Access">
-                                                        <label class="form-check-label" for="API_Access">
-                                                            API Access
-                                                        </label>
-                                                        <span class="form-text text-muted font-12 mt-0">Enable/Disable access</span>
-                                                    </div>
-                                                </div><!--end card-body-->
-                                            </div><!--end card-->
-                                        </div> <!-- end col -->                                                                              
-                                    </div><!--end row-->
-                                </div><!--end tab-pane-->
                             </div><!--end tab-content-->
                         </div><!--end col-->
                     </div><!--end row-->
@@ -363,32 +206,33 @@
                 
 
                     <!-- Modal -->
-                    @include('includes.modal.add_permissions')
+                    @include('users.modals.add_permissions_user')
+                    @include('users.modals.add_roles_user')
                     <script>
-    function loadPermissions(userId) {
-    fetch(`/users/${userId}/permissions/modal`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.text(); // Сначала получаем текст ответа
-        })
-        .then(text => {
-            // console.log('Ответ сервера:', text); // Выводим ответ в консоль
-            return JSON.parse(text); // Затем парсим JSON
-        })
-        .then(data => {
-            const select = document.getElementById('permission_id');
-            select.innerHTML = '';
-            data.permissionsAdd.forEach(permission => {
-                const option = new Option(permission.name, permission.id);
-                select.add(option);
+    function loadData(url, type) {
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text(); // Сначала получаем текст ответа
+            })
+            .then(text => {
+                return JSON.parse(text); // Затем парсим JSON
+            })
+            .then(data => {
+                const select = document.getElementById(type === 'permissions' ? 'permission_id' : 'role_id');
+                select.innerHTML = '';
+                const items = type === 'permissions' ? data.permissionsAdd : data.rolesAdd;
+                items.forEach(item => {
+                    const option = new Option(item.name, item.id);
+                    select.add(option);
+                });
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при загрузке данных. Пожалуйста, попробуйте еще раз.');
             });
-        })
-        .catch(error => {
-            console.error('Ошибка:', error);
-            alert('Произошла ошибка при загрузке данных. Пожалуйста, попробуйте еще раз.');
-        });
-}
+    }
 </script>
 @endsection

@@ -13,6 +13,7 @@ class UserPolicy
 
     public function view(User $user, User $model): bool
     {
+        #PolicyMethod['view'] = 'Просмотр пользователей';
         return $user->hasPermission('view', User::class);
     }
 

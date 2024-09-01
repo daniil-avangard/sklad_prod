@@ -15,14 +15,21 @@
                             <div class="page-title-box">
                                 <div class="row">
                                     <div class="col">
-                                        <h4 class="page-title">Пользователи</h4>
-                                @include('includes.breadcrumb')
+                                        <h4 class="page-title">Роли</h4>
+                                        @include('includes.breadcrumb')
                                     </div><!--end col-->
->  
                                 </div><!--end row-->                                                              
                             </div><!--end page-title-box-->
 
                             <x-success />
+
+                           <div class="row">
+                            <div class="col-12 mb-3">
+                            <button type="button" class="col-auto align-self-center btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+                                    Добавить
+                                </button>
+                            </div>
+                           </div>
 
                 <div class="row">
                     <div class="col-12">
@@ -30,48 +37,39 @@
 
 
                             <div class="card-body">
-                            <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="datatable" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Фамилия</th>
-                                        <th>Имя</th>
-                                        <th>Отчество</th>
-                                        <th>Email</th>
-                                        <th>Действия</th>
+                                        <th>Роль</th>
+                                        <th>Действие</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($users as $user)
-                                        <tr>
-                                            <td>{{ $user->id }}</td>
-                                            <td><a href="{{ route('users.show', $user->id) }}">{{ $user->surname }}</a></td>
-                                            <td>{{ $user->first_name }}</td>
-                                            <td>{{ $user->middle_name }}</td>
-                                            <td>{{ $user->email }}</td>
-                                            <td>
-                                                @can('update', $user)
-                                                    <a href="{{ route('users.edit', $user->id) }}" class="btn btn-primary">Редактировать</a>
-                                                @endcan
-                                                @can('delete', $user)
-                                                    <form action="{{ route('users.delete', $user->id) }}" method="POST" style="display: inline-block;">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить пользователя?')">Удалить</button>
-                                                    </form>
-                                                @endcan
+                                   @foreach ($roles as $role)
+                                       <tr>
+                                           <td>{{ $role->id }}</td>
+                                           <td>
+                                            <a href="{{ route('roles.show', $role) }}">{{ $role->name }}</a>
                                             </td>
-                                        </tr>
-                                    @endforeach
+                                            <td>
+                                                <x-form action="{{ route('roles.delete', $role) }}" method="DELETE">
+                                                    <button onclick="return confirm('Вы уверены, что хотите удалить эту роль?')" type="submit" class="btn btn-danger">Удалить</button>
+                                               </x-form>
+                                            </td>
+                                       </tr>
+                                   @endforeach
                             </table>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                @endsection
                 
-        
+               {{-- @include('includes.modal.add_role') --}} 
+
+                @endsection
+
 @push('scripts-plugins')
         <!-- Required datatable js -->
         <script src="/plugins/datatables/jquery.dataTables.min.js"></script>

@@ -50,7 +50,10 @@ class CreatePermissionsCommand extends Command
         $policies = Gate::policies();
 
         foreach ($policies as $model => $policy) {
-            $methods = $this->getPolicyMethods($policy);
+                $methods = $this->getPolicyMethods($policy);
+
+            
+                
 
             foreach ($methods as $method) {
                 Permission::query()

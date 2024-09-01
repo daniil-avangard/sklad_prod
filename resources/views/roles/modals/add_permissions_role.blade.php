@@ -1,14 +1,14 @@
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="add_permission_role" tabindex="-1" role="dialog" aria-labelledby="add_permission_roleTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title m-0" id="exampleModalCenterTitle">Добавить полномочие</h6>
+                <h6 class="modal-title m-0" id="add_permission_roleTitle">Добавить полномочие</h6>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <form action="{{ route('user.permissions.attach', $user) }}" method="POST">
+                        <form action="{{ route('roles.permissions.attach', $role) }}" method="POST">
                             @csrf
                             <div class="mb-3">
                                 <label for="permission_id" class="form-label">Полномочие</label>

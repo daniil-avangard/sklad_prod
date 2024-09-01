@@ -31,6 +31,7 @@
                         <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span>Полномочия и роли</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
                         <ul class="nav-second-level" aria-expanded="false">
                             <li class="nav-item"><a class="nav-link" href="{{ route('permissions') }}"><i class="ti-control-record"></i>Полномочия</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('roles') }}"><i class="ti-control-record"></i>Роли</a></li>
                         </ul>
                     </li>
 

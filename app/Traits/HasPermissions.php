@@ -4,6 +4,8 @@ namespace App\Traits;
 
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\Permission;
+use App\Models\Role;
+
 
 
 trait HasPermissions

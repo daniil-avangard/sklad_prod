@@ -9,7 +9,7 @@ use App\Models\Permission;
 
 
 
-class AdminPermissionController extends Controller
+class UserPermissionController extends Controller
 {
     public function getPermissionsForModal(User $user)
     {
