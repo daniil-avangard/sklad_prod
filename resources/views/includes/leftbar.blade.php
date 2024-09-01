@@ -12,14 +12,12 @@
     
                     <hr class="hr-dashed hr-menu">
 
-                    <li class="menu-label mt-0">Пользователи</li>
+                    <li class="menu-label mt-0">Склад</li>
                     <li>
-                        <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span>Пользователи</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                        <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span>Склад</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
                         <ul class="nav-second-level" aria-expanded="false">
-                            <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}"><i class="ti-control-record"></i>Пользователи</a></li>
-                            @can('create', App\Models\User::class)
-                            <li class="nav-item"><a class="nav-link" href="{{ route('users.create') }}"><i class="ti-control-record"></i>Добавить пользователя</a></li>
-                            @endcan
+                            <li class="nav-item"><a class="nav-link" href="{{ route('inventories') }}"><i class="ti-control-record"></i>Инвентаризация</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{ route('arivals') }}"><i class="ti-control-record"></i>Приход</a></li>
                         </ul>
                     </li>   
 
@@ -30,6 +28,7 @@
                     <li>
                         <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span>Полномочия и роли</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
                         <ul class="nav-second-level" aria-expanded="false">
+                            <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}"><i class="ti-control-record"></i>Пользователи</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('permissions') }}"><i class="ti-control-record"></i>Полномочия</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('roles') }}"><i class="ti-control-record"></i>Роли</a></li>
                         </ul>
