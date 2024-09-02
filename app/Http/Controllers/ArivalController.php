@@ -7,6 +7,7 @@ use App\Models\Arival;
 use App\Models\Inventory;
 use App\Models\User;
 use App\Models\Product;
+use App\Models\ArivalProduct;
 
 
 class ArivalController extends Controller
@@ -25,9 +26,33 @@ class ArivalController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->all());
+        $arival = new Arival();
+
+        $arival->user_id = auth()->user()->id;
+        $arival->invoice = $request->invoice;
+        $arival->arrival_date = $request->arrival_date;
+        $arival->save();
+
+        foreach ($request->products as $product) {
+            $arivalProduct = new ArivalProduct();
+            $arivalProduct->arival_id = $arival->id;
+            $arivalProduct->product_id = $product['product_id'];
+            $arivalProduct->quantity = $product['quantity'];
+            $arivalProduct->save();
+        }
+
+        dump($arival);
+        dump($arivalProduct);
+        return dd("Готово");
+
         $request->validate([
             'name' => 'required',
         ]);
+
+
+
+
     }
 
     public function edit($id)

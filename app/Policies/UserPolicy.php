@@ -6,6 +6,10 @@ use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Auth\Access\HandlesAuthorization;
 class UserPolicy
+
+/**
+ * @PolicyName(view="Просмотр пользователей", create="Создание пользователей", update="Редактирование пользователей", delete="Удаление пользователей")
+ */
 {
     use HandlesAuthorization;
 
@@ -13,7 +17,6 @@ class UserPolicy
 
     public function view(User $user, User $model): bool
     {
-        #PolicyMethod['view'] = 'Просмотр пользователей';
         return $user->hasPermission('view', User::class);
     }
 
@@ -35,4 +38,6 @@ class UserPolicy
         return $user->hasPermission('delete', User::class);
     }
 
+
+    
 }

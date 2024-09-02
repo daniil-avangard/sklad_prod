@@ -50,14 +50,14 @@ class CreatePermissionsCommand extends Command
         $policies = Gate::policies();
 
         foreach ($policies as $model => $policy) {
-                $methods = $this->getPolicyMethods($policy);
-
-            
-                
+            $methods = $this->getPolicyMethods($policy);
+            $policyNames = $this->getPolicyNames($policy);
 
             foreach ($methods as $method) {
+                $permissionName = $policyNames[$method] ?? $method;
                 Permission::query()
                     ->firstOrCreate([
+                        'name' => $permissionName,
                         'action' => $method,
                         'model' => $model,
                     ]);
@@ -83,4 +83,26 @@ class CreatePermissionsCommand extends Command
             ]);
         });
     }
+
+    private function getPolicyNames(string $policy): array
+    {
+        $reflection = new \ReflectionClass($policy);
+        $docComment = $reflection->getDocComment();
+    
+        if ($docComment) {
+            preg_match('/@PolicyName\((.*?)\)/', $docComment, $matches);
+            if (isset($matches[1])) {
+                $policyNamesString = $matches[1];
+                $policyNamesArray = [];
+                preg_match_all('/(\w+)="([^"]+)"/', $policyNamesString, $nameMatches, PREG_SET_ORDER);
+                foreach ($nameMatches as $nameMatch) {
+                    $policyNamesArray[$nameMatch[1]] = $nameMatch[2];
+                }
+                return $policyNamesArray;
+            }
+        }
+    
+        return [];
+    }
+
 }

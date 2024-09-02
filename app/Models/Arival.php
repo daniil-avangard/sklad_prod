@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Enum\ArivalStatusEnum;
 
 class Arival extends Model
 {
@@ -15,6 +16,16 @@ class Arival extends Model
         'invoice',
         'arrival_date',
     ];
+
+    protected $casts = [
+        'arrival_date' => 'datetime',
+        'status' => ArivalStatusEnum::class,
+    ];
+
+    public function products()
+    {
+        return $this->hasMany(ArivalProduct::class);
+    }
 
     public function user()
     {
