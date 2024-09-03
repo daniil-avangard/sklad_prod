@@ -16,7 +16,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreignId('user_id')->constrained('users');
-            $table->enum('status', ['pending', 'received', 'rejected'])->default('pending')->comment('Статус поступления [pending - В ожидании, accepted - Получено, rejected - Отклонено   ]');
+            $table->enum('status', ['pending', 'accepted', 'rejected'])->default('pending')->comment('Статус поступления [pending - В ожидании, accepted - Получено, rejected - Отклонено   ]');
             $table->string('invoice')->nullable()->comment('Номер счета');
             $table->date('arrival_date')->comment('Дата поступления');
         });

@@ -51,9 +51,9 @@ class CreatePermissionsCommand extends Command
         $policies = Gate::policies();
 
         foreach ($policies as $model => $policy) {
-            if (class_exists($policy)) { // Изменено здесь
-                $methods = $this->getPolicyMethods($policy); // Изменено здесь
-                $policyNames = $this->getPolicyNames($policy); // Изменено здесь
+            if (class_exists($policy)) { 
+                $methods = $this->getPolicyMethods($policy); 
+                $policyNames = $this->getPolicyNames($policy); 
                 foreach ($methods as $method) {
                     $permissionName = $policyNames[$method] ?? $method;
                     Permission::query()
@@ -69,7 +69,7 @@ class CreatePermissionsCommand extends Command
     
     private function getPolicyMethods(string $policy)
     {
-        $methods = get_class_methods($policy); // Изменено здесь
+        $methods = get_class_methods($policy); 
     
         return array_filter($methods, function (string $method) {
             return !in_array($method, [
@@ -81,7 +81,7 @@ class CreatePermissionsCommand extends Command
     
     private function getPolicyNames(string $policy): array
     {
-        $reflection = new \ReflectionClass($policy); // Изменено здесь
+        $reflection = new \ReflectionClass($policy);
         $docComment = $reflection->getDocComment();
     
         if ($docComment) {
