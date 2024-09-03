@@ -24,15 +24,38 @@ class AppServiceProvider extends ServiceProvider
         $this->app->register(BreadcrumbsServiceProvider::class);
     }
 
-    /**
-     * Bootstrap any application services.
-     */
+    protected $policies = [
+        User::class => UserPolicy::class,
+        Arival::class => ArivalPolicy::class,
+    ];
+
     public function boot(): void
     {
-        // require base_path('routes/breadcrumbs.php');
+        foreach ($this->policies as $model => $policy) {
+            Gate::policy($model, $policy);
+        }
 
-        Gate::policy(User::class, UserPolicy::class);
-        Gate::policy(Arival::class, ArivalPolicy::class);
+        if ($this->app->runningInConsole()) {
+            return;
+        }
+
+        Gate::before(function (User $user) {
+            return $user->roles
+                ->where('super', true)
+                ->isNotEmpty() ?: null;
+        });
+
+        $permissions = Permission::query()
+            ->whereNull('model')
+            ->get();
+
+        foreach ($permissions as $permission) {
+            Gate::define($permission->action, 
+                function (User $user) use ($permission) {
+                    return $user->permissions
+                        ->contains('id', $permission->id);
+            });
+        }
 
     }
 }
