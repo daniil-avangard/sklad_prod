@@ -16,9 +16,9 @@ class UserController extends Controller
     public function index()
     {
 
-        // if (Gate::denies('view', User::class)) {
-        //     throw new AuthorizationException('У вас нет разрешения на просмотр пользователей.');
-        // }
+        if (Gate::denies('view', User::class)) {
+            throw new AuthorizationException('У вас нет разрешения на просмотр пользователей.');
+        }
 
         $users = User::all();
         return view('users.index', compact('users'));

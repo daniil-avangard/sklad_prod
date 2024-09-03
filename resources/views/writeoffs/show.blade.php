@@ -4,10 +4,10 @@
 
 
 @include('includes.breadcrumb', [
-    'title' => 'Приход ' . $arival->invoice, 
-    'route' => 'arivals.show', 
-    'breadcrumbs' => 'Приходы',
-    'param' => $arival,
+    'title' => 'Списание ' . $writeoff->invoice, 
+    'route' => 'writeoffs.show', 
+    'breadcrumbs' => 'Списания',
+    'param' => $writeoff,
 ])
 
 
@@ -15,22 +15,20 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <p class="card-text">Номер: {{ $arival->invoice }}</p>
-                <p class="card-text">Дата поставки: {{ $arival->arrival_date }}</p>
-                <p class="card-text">Пользователь: {{ $arival->user->surname }} {{ $arival->user->first_name }} {{ $arival->user->middle_name }}</p>
+                <p class="card-text">Дата списания: {{ $writeoff->writeoff_date }}</p>
+                <p class="card-text">Пользователь: {{ $writeoff->user->surname }} {{ $writeoff->user->first_name }} {{ $writeoff->user->middle_name }}</p>
                 <p class="card-text">Статус:
-                    <span class="badge bg-{{ $arival->status->color() }}">
-                        {{ $arival->status->name() }}
+                    <span class="badge bg-{{ $writeoff->status->color() }}">
+                        {{ $writeoff->status->name() }}
                     </span>
-                    @if($arival->status === \App\Enum\ArivalStatusEnum::pending)
-                            @can('changeStatus', $arival)
-                                <a href="{{ route('arivals.accepted', $arival->id) }}" class="btn btn-success">Принять</a>
-                                <a href="{{ route('arivals.rejected', $arival->id) }}" class="btn btn-danger">Отклонить</a>
+                    @if($writeoff->status === \App\Enum\WriteoffStatusEnum::pending)
+                            @can('changeStatus', $writeoff)
+                                <a href="{{ route('writeoffs.accepted', $writeoff->id) }}" class="btn btn-success">Принять</a>
+                                <a href="{{ route('writeoffs.rejected', $writeoff->id) }}" class="btn btn-danger">Отклонить</a>
                     @endcan
                 @endif
                 </p>
-
-                <p class="card-text">Дата создания: {{ $arival->created_at }}</p>
+                <p class="card-text">Дата создания: {{ $writeoff->created_at }}</p>
             </div>
         </div>
     </div>
@@ -49,7 +47,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($arivalProducts as $item)
+                        @foreach ($writeoffProducts as $item)
                             <tr>
                                 <td>{{ $item->product->name }}</td>
                                 <td>{{ $item->quantity }}</td>

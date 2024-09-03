@@ -3,8 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ArivalController;
+use App\Http\Controllers\WriteoffController;
 
 
+
+Route::middleware('auth', 'admin')->group(function () {
+
+    
 // Приход
 Route::get('/arivals', [ArivalController::class, 'index'])->name('arivals');
 Route::get('/arivals/create', [ArivalController::class, 'create'])->name('arivals.create');
@@ -19,3 +24,20 @@ Route::delete('/arivals/{arival}', [ArivalController::class, 'delete'])->name('a
     // Отклонение прихода
     Route::get('/arivals/{arival}/rejected', [ArivalController::class, 'rejected'])->name('arivals.rejected');
 
+
+// Списание
+Route::get('/writeoffs', [WriteoffController::class, 'index'])->name('writeoffs');
+Route::get('/writeoffs/create', [WriteoffController::class, 'create'])->name('writeoffs.create');
+Route::post('/writeoffs', [WriteoffController::class, 'store'])->name('writeoffs.store');
+Route::get('/writeoffs/{writeoff}', [WriteoffController::class, 'show'])->name('writeoffs.show');
+Route::get('/writeoffs/{writeoff}/edit', [WriteoffController::class, 'edit'])->name('writeoffs.edit');
+Route::put('/writeoffs/{writeoff}', [WriteoffController::class, 'update'])->name('writeoffs.update');
+Route::delete('/writeoffs/{writeoff}', [WriteoffController::class, 'delete'])->name('writeoffs.delete');
+
+    // Принятие списания
+    Route::get('/writeoffs/{writeoff}/accepted', [WriteoffController::class, 'accepted'])->name('writeoffs.accepted');
+    // Отклонение списания
+    Route::get('/writeoffs/{writeoff}/rejected', [WriteoffController::class, 'rejected'])->name('writeoffs.rejected');
+
+
+});

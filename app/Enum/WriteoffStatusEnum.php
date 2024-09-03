@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-enum WriteoffStatusEnum
+enum WriteoffStatusEnum: string
 {
     case pending = 'pending';
     case accepted = 'accepted';

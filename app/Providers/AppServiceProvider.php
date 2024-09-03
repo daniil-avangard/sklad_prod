@@ -9,6 +9,8 @@ use App\Policies\UserPolicy;
 use App\Models\Permission;
 use App\Models\Arival;
 use App\Policies\ArivalPolicy;
+use App\Models\Writeoff;
+use App\Policies\WriteoffPolicy;
 use DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
     protected $policies = [
         User::class => UserPolicy::class,
         Arival::class => ArivalPolicy::class,
+        Writeoff::class => WriteoffPolicy::class,
     ];
 
     public function boot(): void

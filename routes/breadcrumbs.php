@@ -90,3 +90,24 @@ Breadcrumbs::for('products.edit', function ($trail, $product) {
     $trail->parent('products');
     $trail->push('Редактирование продукта', route('products.edit', $product));
 });
+
+// Списание
+
+Breadcrumbs::for('writeoffs', function ($trail) {
+    $trail->parent('main');
+    $trail->push('Списание', route('writeoffs'));
+});
+
+// Просмотр списания
+
+Breadcrumbs::for('writeoffs.show', function ($trail, $writeoff) {
+    $trail->parent('writeoffs');
+    $trail->push('Просмотр списания', route('writeoffs.show', $writeoff));
+});
+
+Breadcrumbs::for('writeoffs.create', function ($trail) {
+    $trail->parent('writeoffs');
+    $trail->push('Добавление списания', route('writeoffs.create'));
+});
+
+
