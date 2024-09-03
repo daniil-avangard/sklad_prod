@@ -15,7 +15,7 @@ class UserPolicy
 
 
 
-    public function view(User $user, User $model): bool
+    public function view(User $user, User $model = null): bool
     {
         return $user->hasPermission('view', User::class);
     }
@@ -27,13 +27,13 @@ class UserPolicy
     }
 
  
-    public function update(User $user, User $model): bool
+    public function update(User $user, User $model = null): bool
     {
         return $user->hasPermission('update', User::class);
     }
 
   
-    public function delete(User $user, User $model): bool
+    public function delete(User $user, User $model = null): bool
     {
         return $user->hasPermission('delete', User::class);
     }
