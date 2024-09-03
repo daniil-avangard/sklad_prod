@@ -27,9 +27,14 @@ class ProductController extends Controller
 
         $product = Product::create($data);
 
-        return redirect()->route('products.index')->with('success', 'Продукт успешно добавлен');
+        return redirect()->route('products')->with('success', 'Продукт успешно добавлен');
     }
-    
+
+    public function show(Product $product)
+    {
+        return view('products.show', compact('product'));
+    }
+
     public function edit(Product $product)
     {
         return view('products.edit', compact('product'));
@@ -41,13 +46,13 @@ class ProductController extends Controller
 
         $product->update($data);
 
-        return redirect()->route('products.index')->with('success', 'Продукт успешно обновлен');
+        return redirect()->route('products')->with('success', 'Продукт успешно обновлен');
     }
 
     public function delete(Product $product)
     {
         $product->delete();
 
-        return redirect()->route('products.index')->with('success', 'Продукт успешно удален');
+        return redirect()->route('products')->with('success', 'Продукт успешно удален');
     }
 }

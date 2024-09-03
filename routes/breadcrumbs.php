@@ -65,3 +65,28 @@ Breadcrumbs::for('arivals.create', function ($trail) {
     $trail->parent('arivals');
     $trail->push('Добавление прихода', route('arivals.create'));
 });
+
+// Продукты
+
+Breadcrumbs::for('products', function ($trail) {
+    $trail->parent('main');
+    $trail->push('Продукты', route('products'));
+});
+
+// Просмотр продукта
+
+Breadcrumbs::for('products.show', function ($trail, $product) {
+    $trail->parent('products');
+    $trail->push('Просмотр продукта', route('products.show', $product));
+});
+
+Breadcrumbs::for('products.create', function ($trail) {
+    $trail->parent('products');
+    $trail->push('Добавление продукта', route('products.create'));
+});
+
+// Редактирование продукта
+Breadcrumbs::for('products.edit', function ($trail, $product) {
+    $trail->parent('products');
+    $trail->push('Редактирование продукта', route('products.edit', $product));
+});

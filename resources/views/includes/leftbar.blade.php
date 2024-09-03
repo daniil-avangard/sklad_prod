@@ -5,7 +5,7 @@
                         <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span>Продукты</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
                         <ul class="nav-second-level" aria-expanded="false">
                             <li class="nav-item"><a class="nav-link" href="{{ route('login') }}"><i class="ti-control-record"></i>Вход</a></li>
-                            <li class="nav-item"><a class="nav-link" href="{{ route('products.index') }}"><i class="ti-control-record"></i>Продукты</a></li> 
+                            <li class="nav-item"><a class="nav-link" href="{{ route('products') }}"><i class="ti-control-record"></i>Продукты</a></li> 
                             <li class="nav-item"><a class="nav-link" href="{{ route('products.create') }}"><i class="ti-control-record"></i>Добавить продукт</a></li> 
                         </ul>
                     </li>
