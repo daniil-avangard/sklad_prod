@@ -9,20 +9,9 @@
 @endpush
 
 @section('content')
-                    <!-- Page-Title -->
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="page-title-box">
-                                <div class="row">
-                                    <div class="col">
-                                        <h4 class="page-title">Пользователи</h4>
-                                @include('includes.breadcrumb')
-                                    </div><!--end col-->
->  
-                                </div><!--end row-->                                                              
-                            </div><!--end page-title-box-->
+@include('includes.breadcrumb', ['title' => 'Пользователи', 'route' => 'users.index', 'breadcrumbs' => 'Пользователи'])
 
-                            <x-success />
+
 
                 <div class="row">
                     <div class="col-12">

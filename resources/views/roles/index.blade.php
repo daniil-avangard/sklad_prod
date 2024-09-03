@@ -9,23 +9,18 @@
 @endpush
 
 @section('content')
-                    <!-- Page-Title -->
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="page-title-box">
-                                <div class="row">
-                                    <div class="col">
-                                        <h4 class="page-title">Роли</h4>
-                                        @include('includes.breadcrumb')
-                                    </div><!--end col-->
-                                </div><!--end row-->                                                              
-                            </div><!--end page-title-box-->
+
+@include('includes.breadcrumb', [
+    'title' => 'Роли', 
+    'route' => 'roles', 
+    'breadcrumbs' => 'Роли',
+])
 
                             <x-success />
 
                            <div class="row">
                             <div class="col-12 mb-3">
-                            <button type="button" class="col-auto align-self-center btn btn-primary" data-bs-toggle="modal" data-bs-target="#addRoleModal">
+                            <button type="button" class="col-auto align-self-center btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_role_role">
                                     Добавить
                                 </button>
                             </div>
@@ -66,9 +61,9 @@
                 </div>
 
                 
-               {{-- @include('includes.modal.add_role') --}} 
+               @include('roles.modals.add_role') 
 
-                @endsection
+@endsection
 
 @push('scripts-plugins')
         <!-- Required datatable js -->

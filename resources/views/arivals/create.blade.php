@@ -5,19 +5,12 @@
 @endpush
 
 @section('content')
-                    <!-- Page-Title -->
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="page-title-box">
-                                <div class="row">
-                                    <div class="col">
-                                        <h4 class="page-title">Приход</h4>
-                                @include('includes.breadcrumb')
-                                    </div><!--end col-->
->  
-                                </div><!--end row-->                                                              
-                            </div><!--end page-title-box-->
-
+@include('includes.breadcrumb', [
+    'title' => 'Приход',
+    'route' => 'arivals',
+    'breadcrumbs' => 'Добавление прихода',
+    'back_route' => 'arivals',
+])
                             <x-success />
 
                             <div class="row">

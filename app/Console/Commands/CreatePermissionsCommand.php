@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Permission;
 use App\Models\Role;
+use Illuminate\Support\Str;
 class CreatePermissionsCommand extends Command
 {
 
@@ -50,43 +51,37 @@ class CreatePermissionsCommand extends Command
         $policies = Gate::policies();
 
         foreach ($policies as $model => $policy) {
-            $methods = $this->getPolicyMethods($policy);
-            $policyNames = $this->getPolicyNames($policy);
-
-            foreach ($methods as $method) {
-                $permissionName = $policyNames[$method] ?? $method;
-                Permission::query()
-                    ->firstOrCreate([
-                        'name' => $permissionName,
-                        'action' => $method,
-                        'model' => $model,
-                    ]);
+            if (class_exists($policy)) { // Изменено здесь
+                $methods = $this->getPolicyMethods($policy); // Изменено здесь
+                $policyNames = $this->getPolicyNames($policy); // Изменено здесь
+                foreach ($methods as $method) {
+                    $permissionName = $policyNames[$method] ?? $method;
+                    Permission::query()
+                        ->firstOrCreate([
+                            'name' => $permissionName,
+                            'action' => $method,
+                            'model' => $model,
+                        ]);
+                }
             }
         }
     }
-
+    
     private function getPolicyMethods(string $policy)
     {
-        $methods = get_class_methods($policy);
-
+        $methods = get_class_methods($policy); // Изменено здесь
+    
         return array_filter($methods, function (string $method) {
-            return !in_array($method,[
+            return !in_array($method, [
                 'denyWithStatus',
-                'denyWithMessage',
                 'denyAsNotFound',
-                'denyAsForbidden',
-                'denyAsTooManyRequests',
-                'denyAsUnauthorized',
-                'denyAsBadRequest',
-                'denyAsInternalServerError',
-                'denyAsServiceUnavailable',
             ]);
         });
     }
-
+    
     private function getPolicyNames(string $policy): array
     {
-        $reflection = new \ReflectionClass($policy);
+        $reflection = new \ReflectionClass($policy); // Изменено здесь
         $docComment = $reflection->getDocComment();
     
         if ($docComment) {

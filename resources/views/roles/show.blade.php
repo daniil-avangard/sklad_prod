@@ -1,20 +1,14 @@
 @extends('layouts.base')
 
 @section('content')
-                  <!-- Page-Title -->
-                  <div class="row">
-                        <div class="col-sm-12">
-                            <div class="page-title-box">
-                                <div class="row">
-                                    <div class="col">
-                                        <h4 class="page-title">Роль: {{ $role->name }}</h4>
-                                @include('includes.breadcrumb')
-                                    </div><!--end col-->
->  
-                                </div><!--end row-->                                                              
-                            </div><!--end page-title-box-->
+@include('includes.breadcrumb', [
+    'title' => 'Роль ' . $role->name, 
+    'route' => 'roles.show', 
+    'breadcrumbs' => 'Роли',
+    'param' => $role,
+])
 
-                            <x-success />
+    <x-success />
 
     <div class="row">
         <div class="col-lg-9">
@@ -43,6 +37,12 @@
                                   <tr>
                                         <td>{{ $permission->id }}</td>
                                         <td>{{ $permission->name }}</td>
+                                        <td>
+                                                <x-form action="{{ route('roles.permissions.detach', $role) }}" method="POST" style="display: inline-block;">
+                                                <input type="hidden" name="permission_id" value="{{ $permission->id }}">
+                                                    <button type="submit" class="btn btn-danger">Удалить</button>
+                                                </x-form>
+                                        </td>
                                     </tr>
                                 @endforeach
                                 </tbody>

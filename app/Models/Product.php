@@ -19,6 +19,7 @@ class Product extends Model
         'reserve',
         'status',
         'user_id',
+        'division_id',
     ];
 
     protected $casts = [
@@ -45,6 +46,11 @@ class Product extends Model
     public function arivalProduct()
     {
         return $this->hasMany(ArivalProduct::class);
+    }
+
+    public function division()
+    {
+        return $this->belongsToMany(Division::class);
     }
 
 

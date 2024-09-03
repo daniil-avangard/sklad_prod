@@ -8,13 +8,16 @@ use App\Models\Inventory;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\ArivalProduct;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\AuthorizationException;
 
 
 class ArivalController extends Controller
 {
     public function index()
     {
-        return view('arivals.index');
+        $arivals = Arival::all()->sortByDesc('created_at');
+        return view('arivals.index', compact('arivals'));
     }
 
     public function create()
@@ -26,7 +29,6 @@ class ArivalController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->all());
         $arival = new Arival();
 
         $arival->user_id = auth()->user()->id;
@@ -42,20 +44,10 @@ class ArivalController extends Controller
             $arivalProduct->save();
         }
 
-        dump($arival);
-        dump($arivalProduct);
-        return dd("Готово");
-
-        $request->validate([
-            'name' => 'required',
-        ]);
-
-
-
-
+        return redirect()->route('arivals')->with('success', 'Приход успешно добавлен');
     }
 
-    public function edit($id)
+    public function edit($arival)
     {
         return view('arivals.edit', compact('id'));
     }
@@ -67,13 +59,49 @@ class ArivalController extends Controller
         ]);
     }
 
-    public function destroy($id)
+    public function delete($arival)
     {
         return view('arivals.destroy', compact('id'));
     }
 
-    public function show($id)
+    public function show($arival)
     {
-        return view('arivals.show', compact('id'));
+        $arival = Arival::find($arival);
+        $arivalProducts = ArivalProduct::where('arival_id', $arival->id)->get();
+        return view('arivals.show', compact('arival', 'arivalProducts'));
+    }
+
+    public function accepted($id)
+    {
+        $arival = Arival::find($id);
+        if (Gate::denies('changeStatus', $arival)) {
+            throw new AuthorizationException('У вас нет разрешения на изменение статуса прихода.');
+        }
+
+        $arival = Arival::find($id);
+        $arival->status = \App\Enum\ArivalStatusEnum::accepted->value;
+
+        foreach ($arival->products as $item) {
+            $arivalProduct = ArivalProduct::where('product_id', $item->product_id)->first();
+            $productItem = Product::where('id', $item->product_id)->first();
+            $productItem->quantity += $item->quantity;
+            $productItem->save();
+        }
+
+        $arival->save();
+        return redirect()->route('arivals')->with('success', 'Приход принят');
+    }
+
+    public function rejected($id)
+    {
+        if (Gate::denies('changeStatus', $arival)) {
+            throw new AuthorizationException('У вас нет разрешения на изменение статуса прихода.');
+        }
+
+        $arival = Arival::find($id);
+        $arival->status = \App\Enum\ArivalStatusEnum::rejected->value;
+        $arival->save();
+
+        return redirect()->route('arivals')->with('success', 'Приход отклонен');
     }
 }

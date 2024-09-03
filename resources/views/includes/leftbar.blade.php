@@ -16,7 +16,7 @@
                     <li>
                         <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span>Склад</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
                         <ul class="nav-second-level" aria-expanded="false">
-                            <li class="nav-item"><a class="nav-link" href="{{ route('inventories') }}"><i class="ti-control-record"></i>Инвентаризация</a></li>
+                            
                             <li class="nav-item"><a class="nav-link" href="{{ route('arivals') }}"><i class="ti-control-record"></i>Приход</a></li>
                         </ul>
                     </li>   

@@ -2,19 +2,12 @@
 
 @section('content')
 
- <!-- Page-Title -->
- <div class="row">
-                        <div class="col-sm-12">
-                            <div class="page-title-box">
-                                <div class="row">
-                                    <div class="col">
-                                        <h4 class="page-title">Редактирование пользователя</h4>
-                                @include('includes.breadcrumb')
-                                    </div><!--end col-->
-
-                                </div><!--end row-->                                                              
-                            </div><!--end page-title-box-->
-
+@include('includes.breadcrumb', [
+    'title' => 'Редактирование полномочия', 
+    'route' => 'permissions.edit', 
+    'breadcrumbs' => $permission->name,
+    'param' => $permission
+])
 
 <div class="row">
     <div class="col-12">
