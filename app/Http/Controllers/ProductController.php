@@ -32,7 +32,23 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
-        return view('products.show', compact('product'));
+        $divisions = $product->divisions()->get();
+
+        $arivals = $product->arivalProduct()->with('arival')->get()->map(function ($arivalProduct) {
+            return [
+                'arival' => $arivalProduct->arival,
+                'quantity' => $arivalProduct->quantity
+            ];
+        })->unique('arival.id');
+
+        $writeOffs = $product->writeOffProduct()->with('writeOff')->get()->map(function ($writeOffProduct) {
+            return [
+                'writeOff' => $writeOffProduct->writeOff,
+                'quantity' => $writeOffProduct->quantity
+            ];
+        })->unique('writeOff.id');
+        
+        return view('products.show', compact('product', 'divisions', 'arivals', 'writeOffs'));
     }
 
     public function edit(Product $product)

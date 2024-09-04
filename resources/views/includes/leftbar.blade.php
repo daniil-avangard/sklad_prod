@@ -6,7 +6,7 @@
                         <ul class="nav-second-level" aria-expanded="false">
                             <li class="nav-item"><a class="nav-link" href="{{ route('login') }}"><i class="ti-control-record"></i>Вход</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{ route('products') }}"><i class="ti-control-record"></i>Продукты</a></li> 
-                            <li class="nav-item"><a class="nav-link" href="{{ route('products.create') }}"><i class="ti-control-record"></i>Добавить продукт</a></li> 
+                            <li class="nav-item"><a class="nav-link" href="{{ route('divisions') }}"><i class="ti-control-record"></i>Подразделения</a></li> 
                         </ul>
                     </li>
     

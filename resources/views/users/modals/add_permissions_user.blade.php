@@ -1,6 +1,4 @@
-@push('styles-plugins')
-<link href="/plugins/select2/select2.min.css" rel="stylesheet" type="text/css" />
-@endpush
+
 <div class="modal fade" id="add_permission_user" tabindex="-1" role="dialog" aria-labelledby="add_permission_userTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -15,7 +13,7 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="permission_id" class="form-label">Полномочие</label>
-                                <select name="permission_id" id="permission_id" class="select2 form-control mb-3 custom-select">
+                                <select name="permission_id" id="permission_id" class="form-control mb-3">
                                     <!-- Опции будут добавлены динамически -->
                                 </select>
                             </div>
@@ -30,7 +28,3 @@
         </div>
     </div>
 </div>
-
-@push('scripts-plugins')
-<script src="/plugins/select2/select2.min.js"></script>
-@endpush

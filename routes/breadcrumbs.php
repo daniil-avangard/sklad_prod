@@ -110,4 +110,24 @@ Breadcrumbs::for('writeoffs.create', function ($trail) {
     $trail->push('Добавление списания', route('writeoffs.create'));
 });
 
+// Подразделения
 
+Breadcrumbs::for('divisions', function ($trail) {
+    $trail->parent('main');
+    $trail->push('Подразделения', route('divisions'));
+});
+
+Breadcrumbs::for('divisions.create', function ($trail) {
+    $trail->parent('divisions');
+    $trail->push('Добавление подразделения', route('divisions.create'));
+});
+
+Breadcrumbs::for('divisions.show', function ($trail, $division) {
+    $trail->parent('divisions');
+    $trail->push('Просмотр подразделения', route('divisions.show', $division));
+});
+
+Breadcrumbs::for('divisions.edit', function ($trail, $division) {
+    $trail->parent('divisions');
+    $trail->push('Редактирование подразделения', route('divisions.edit', $division));
+});

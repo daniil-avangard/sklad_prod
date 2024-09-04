@@ -48,10 +48,17 @@ class Product extends Model
         return $this->hasMany(ArivalProduct::class);
     }
 
-    public function division()
+    public function writeOffProduct()
+    {
+        return $this->hasMany(WriteOffProduct::class);
+    }
+
+    public function divisions()
     {
         return $this->belongsToMany(Division::class);
     }
+
+
 
 
 

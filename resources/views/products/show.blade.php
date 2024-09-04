@@ -21,11 +21,9 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="card">
-            <div class="card-body">
-
-            </div>
-        </div>
+        @include('products.inc.list_division', ['divisions' => $divisions])
+        @include('products.inc.writeoffs', ['writeOffs' => $writeOffs])
+        @include('products.inc.arivals', ['arivals' => $arivals])
     </div>
 </div>
 
