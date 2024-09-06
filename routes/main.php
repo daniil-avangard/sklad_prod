@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DivisionController;
+use App\Http\Controllers\ProductVariantsController;
 
 
 Route::middleware('auth', 'admin')->group(function () {
@@ -20,6 +21,16 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'delete'])->name('products.delete');
+
+
+    Route::get('/products/{product}/variants', [ProductVariantsController::class, 'index'])->name('products.variants');
+    Route::get('/products/{product}/variants/create', [ProductVariantsController::class, 'create'])->name('products.variants.create');
+    Route::post('/products/{product}/variants', [ProductVariantsController::class, 'store'])->name('products.variants.store');
+    Route::get('/products/{product}/variants/{variant}', [ProductVariantsController::class, 'show'])->name('products.variants.show');
+    Route::get('/products/{product}/variants/{variant}/edit', [ProductVariantsController::class, 'edit'])->name('products.variants.edit');
+    Route::put('/products/{product}/variants/{variant}', [ProductVariantsController::class, 'update'])->name('products.variants.update');
+    Route::delete('/products/{product}/variants/{variant}', [ProductVariantsController::class, 'delete'])->name('products.variants.delete');
+   
 
     Route::get('/divisions', [DivisionController::class, 'index'])->name('divisions'); 
     Route::get('/divisions/create', [DivisionController::class, 'create'])->name('divisions.create');

@@ -78,7 +78,6 @@ class ArivalController extends Controller
             throw new AuthorizationException('У вас нет разрешения на изменение статуса прихода.');
         }
 
-        $arival = Arival::find($id);
         $arival->status = \App\Enum\ArivalStatusEnum::accepted->value;
 
         foreach ($arival->products as $item) {
@@ -94,11 +93,11 @@ class ArivalController extends Controller
 
     public function rejected($id)
     {
+        $arival = Arival::find($id);
         if (Gate::denies('changeStatus', $arival)) {
             throw new AuthorizationException('У вас нет разрешения на изменение статуса прихода.');
         }
 
-        $arival = Arival::find($id);
         $arival->status = \App\Enum\ArivalStatusEnum::rejected->value;
         $arival->save();
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Enum\ProductStatusEnum;
+use App\Enum\Products\PointsSale\Operator;
 
 
 class Product extends Model
@@ -15,15 +16,23 @@ class Product extends Model
         'name',
         'description',
         'image',
-        'quantity',
-        'reserve',
-        'status',
         'user_id',
-        'division_id',
+        'kko_hall',
+        'kko_account_opening',
+        'kko_manager',
+        'kko_operator',
+        'express_hall',
+        'express_operator',       
+        'sku',
     ];
 
     protected $casts = [
-        'status' => ProductStatusEnum::class,
+        'kko_hall' => 'boolean',
+        'kko_account_opening' => 'boolean',
+        'kko_operator' => Operator::class,
+        'kko_manager' => 'boolean',
+        'express_hall' => 'boolean',
+        'express_operator' => Operator::class,
     ];
 
     public function getStatusName(): string

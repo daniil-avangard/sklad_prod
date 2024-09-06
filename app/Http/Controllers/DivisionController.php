@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Division;
 use App\Http\Requests\Division\CreateDisionRequest;
+use App\Http\Requests\Division\Product\AddProductRequest;
+use App\Http\Requests\Division\Product\RemoveProductRequest;
+
 class DivisionController extends Controller
 {
     public function index()
@@ -56,15 +59,15 @@ class DivisionController extends Controller
         return response()->json($products);
     }
 
-    public function addProduct(Division $division, Product $product)
+    public function addProduct(AddProductRequest $request)
     {
-        $division->products()->attach($product);
+        $division->products()->attach($request->product_id);
         return redirect()->route('divisions.show', $division);
     }
 
-    public function removeProduct(Division $division, Product $product)
+    public function removeProduct(RemoveProductRequest $request)
     {
-        $division->products()->detach($product);
+        $division->products()->detach($request->product_id);
         return redirect()->route('divisions.show', $division);
     }
 }

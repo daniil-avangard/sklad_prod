@@ -10,11 +10,6 @@ use App\Http\Controllers\UserRoleController;
 
 
 
-
-Route::get('/admin/', function () {
-    return 'Привет, мир!';
-});
-
 Route::middleware(['auth', 'admin'])->group(function () {
 
 

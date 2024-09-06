@@ -12,6 +12,16 @@ $(function () {
   $('.dropify').dropify();
 
   // Translated
+    // Translated
+    $('.dropify-ru').dropify({
+        messages: {
+            default: 'Перетащите файл сюда или нажмите',
+            replace: 'Перетащите файл сюда или нажмите для замены',
+            remove:  'Удалить',
+            error:   'Извините, файл слишком большой'
+        }
+    });
+
   $('.dropify-fr').dropify({
       messages: {
           default: 'Glissez-déposez un fichier ici ou cliquez',

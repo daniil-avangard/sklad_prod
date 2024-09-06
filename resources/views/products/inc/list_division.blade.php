@@ -2,7 +2,7 @@
     <div class="card">
         <div class="card-header">
             <div class="row align-items-center">
-                <div class="col">                      
+                <div class="col">
                     <h4 class="card-title">Список доступных подразделений</h4>                      
                 </div><!--end col-->
                 <div class="col-auto"> 

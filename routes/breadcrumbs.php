@@ -131,3 +131,16 @@ Breadcrumbs::for('divisions.edit', function ($trail, $division) {
     $trail->parent('divisions');
     $trail->push('Редактирование подразделения', route('divisions.edit', $division));
 });
+
+// Продукты Варианты
+
+Breadcrumbs::for('products.variants', function ($trail, $product) {
+    $trail->parent('products');
+    $trail->push('Варианты продукта', route('products.variants', $product));
+});
+
+Breadcrumbs::for('products.variants.create', function ($trail, $product) {
+    $trail->parent('products');
+    $trail->push('Добавление варианта продукта', route('products.variants.create', $product));
+});
+

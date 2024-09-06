@@ -28,15 +28,26 @@
                             <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Name</th>
+                                        <th>Название</th>
+                                        <th>Количество</th>
+                                        <th>Действия</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($products as $product)
                                         <tr>
-                                            <td>{{ $product->id }}</td>
                                             <td><a href="{{ route('products.show', $product) }}">{{ $product->name }}</a></td>
+                                            <td>{{ $product->quantity }}</td>
+                                            <td>
+                                                <a href="{{ route('products.variants.create', $product) }}" class="btn btn-success">Добавить варианты</a>
+                                                <a href="{{ route('products.show', $product) }}" class="btn btn-primary">Посмотреть</a>
+                                                <a href="{{ route('products.edit', $product) }}" class="btn btn-warning">Изменить</a>
+                                                <form action="{{ route('products.delete', $product) }}" method="POST" style="display: inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить этот продукт?');">Удалить</button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     @endforeach
                             </table>
