@@ -15,7 +15,12 @@ $(document).ready(function() {
   //Buttons examples
   var table = $('#datatable-buttons').DataTable({
       lengthChange: false,
-      buttons: ['copy', 'excel', 'pdf', 'colvis']
+      responsive: true,
+      buttons: ['copy', 'excel', 'pdf', 'colvis'],
+      language: {
+        url: '/assets/lang/datatables_ru.json',
+      },
+      dom: 'Bfrtip', // Добавляем эту строку для отображения кнопок
   });
 
   table.buttons().container()

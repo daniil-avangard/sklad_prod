@@ -77,7 +77,7 @@ Breadcrumbs::for('products', function ($trail) {
 
 Breadcrumbs::for('products.show', function ($trail, $product) {
     $trail->parent('products');
-    $trail->push('Просмотр продукта', route('products.show', $product));
+    $trail->push($product->name, route('products.show', $product));
 });
 
 Breadcrumbs::for('products.create', function ($trail) {
@@ -149,3 +149,8 @@ Breadcrumbs::for('products.variants.edit', function ($trail, $product, $variant)
     $trail->push('Редактирование варианта продукта', route('products.variants.edit', ['product' => $product, 'variant' => $variant]));
 });
 
+// Добавление подразделения Продукту
+Breadcrumbs::for('products.divisions.create', function ($trail, $product) {
+    $trail->parent('products.show', $product);
+    $trail->push('Добавление подразделения', route('products.divisions.create', $product));
+});

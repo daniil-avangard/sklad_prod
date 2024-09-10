@@ -16,7 +16,7 @@
         <div class="card">
             <div class="card-body">
                 <p class="card-text">Номер: {{ $arival->invoice }}</p>
-                <p class="card-text">Дата поставки: {{ $arival->arrival_date }}</p>
+                <p class="card-text">Дата поставки: {{ \Carbon\Carbon::parse($arival->arrival_date)->format('d.m.Y') }}</p>
                 <p class="card-text">Пользователь: {{ $arival->user->surname }} {{ $arival->user->first_name }} {{ $arival->user->middle_name }}</p>
                 <p class="card-text">Статус:
                     <span class="badge bg-{{ $arival->status->color() }}">
@@ -30,7 +30,7 @@
                 @endif
                 </p>
 
-                <p class="card-text">Дата создания: {{ $arival->created_at }}</p>
+                <p class="card-text">Дата создания: {{ \Carbon\Carbon::parse($arival->created_at)->format('d.m.Y H:i:s') }}</p>
             </div>
         </div>
     </div>
@@ -45,6 +45,7 @@
                     <thead>
                         <tr>
                             <th>Название</th>
+                            <th>Дата актуализации</th>
                             <th>Количество</th>
                         </tr>
                     </thead>
@@ -52,6 +53,7 @@
                         @foreach ($arivalProducts as $item)
                             <tr>
                                 <td>{{ $item->product->name }}</td>
+                                <td>{{ \Carbon\Carbon::parse($item->date_of_actuality)->format('d.m.Y') }}</td>
                                 <td>{{ $item->quantity }}</td>
                             </tr>
                         @endforeach

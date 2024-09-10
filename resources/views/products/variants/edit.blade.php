@@ -22,19 +22,9 @@
 <x-success />
 <x-errors />
 
-<div class="pb-4">
-    <ul class="nav-border nav nav-pills mb-0">
-        <li class="nav-item">
-        <a class="nav-link active">Просмотр</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="{{ route('products.edit', $product->id) }}">Редактировать</a>
-        </li>
-    </ul>        
-</div>
 @include('products.info.header')
 
-<x-form action="{{ route('products.variants.update', ['product' => $product, 'variant' => $variant]) }}" method="PUT">
+<x-form action="{{ route('products.variants.update', ['product' => $product, 'variant' => $variant]) }}" method="PUT" enctype="multipart/form-data">
     <div class="row">
         <div class="col-lg-1 mb-1">
             <label for="sku">Артикул</label>

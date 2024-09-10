@@ -32,10 +32,14 @@
                     @endif
                 </td>
                 <td>
-                    <a href="{{ route('products.variants.edit', ['product' => $product, 'variant' => $variant]) }}" class="btn btn-primary">Редактировать</a>
+                    @can('update', App\Models\ProductVariant::class)
+                    <a href="{{ route('products.variants.edit', ['product' => $product, 'variant' => $variant]) }}" class="btn btn-primary">Редактировать</a>   
+                    @endcan
+                    @can('delete', App\Models\ProductVariant::class)
                     <x-form action="{{ route('products.variants.delete', ['product' => $product, 'variant' => $variant]) }}" method="DELETE" style="display: inline-block;">
                         <button type="submit" class="btn btn-danger">Удалить</button>
                     </x-form>
+                    @endcan
                 </td>
             </tr>
         @endforeach

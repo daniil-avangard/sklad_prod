@@ -8,6 +8,9 @@
     'breadcrumbs' => 'Продукты',
 ])
 
+
+@include('products.info.header')
+
 <div class="row">
     <div class="col-lg-12">
         <div class="card">

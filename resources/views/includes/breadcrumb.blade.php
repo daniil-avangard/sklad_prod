@@ -15,7 +15,7 @@
                         <a href="{{ route($add_route) }}" class="btn btn-sm btn-outline-primary">Добавить</a>
                     @endif
                     @if(isset($back_route))
-                        <a href="{{ route($back_route) }}" class="btn btn-sm btn-outline-primary">Назад</a>
+                        <a href="{{ route($back_route, $back_route_param ?? null) }}" class="btn btn-sm btn-outline-primary">Назад</a>
                     @endif
                 </div><!--end col-->  
 

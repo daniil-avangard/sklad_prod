@@ -12,7 +12,7 @@
             Нет ни одной записи.
         @else
             <div class="table-responsive">
-                <table class="table table-borderless text-nowrap mb-0">
+                <table id="datatable" class="table table-borderless text-nowrap mb-0">
 
                     <thead>
                         <tr>
@@ -63,3 +63,12 @@
     </div>
 </div>
 @endsection
+
+@push('scripts-plugins')
+        <!-- Required datatable js -->
+        <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="/plugins/datatables/dataTables.bootstrap5.min.js"></script>
+        <script src="/plugins/datatables/dataTables.responsive.min.js"></script>
+        <script src="/plugins/datatables/responsive.bootstrap4.min.js"></script>
+        <script src="/assets/pages/jquery.datatable.init.js"></script>
+@endpush

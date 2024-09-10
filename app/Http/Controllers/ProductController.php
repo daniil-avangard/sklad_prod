@@ -10,22 +10,43 @@ use App\Models\Company;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Product\UpdateProductRequest;
 use App\Models\ProductVariant;
+use App\Models\Division;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\AuthorizationException;
+
 class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
+        
+        if (Gate::denies('view', Product::class)) {
+            throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
+        }
+
+        $products = Product::with('variants')->get()->map(function ($product) {
+            $product->total_quantity = $product->variants->sum('quantity');
+            $product->total_reserved = $product->variants->sum('reserved');
+            return $product;
+        });
         return view('products.index', compact('products'));
     }
 
     public function create()
     {
+        if (Gate::denies('create', Product::class)) {
+            throw new AuthorizationException('У вас нет разрешения на создание продуктов.');
+        }
+
         $companies = Company::all();
         return view('products.create', compact('companies'));
     }
 
     public function store(ProductRequest $productRequest)
     {
+        if (Gate::denies('create', Product::class)) {
+            throw new AuthorizationException('У вас нет разрешения на создание продуктов.');
+        }
+
         $data = $productRequest->only(['name', 'description', 'company_id', 'kko_hall', 'kko_account_opening', 'kko_manager', 'kko_operator', 'express_hall', 'express_operator', 'sku']);
         $data['user_id'] = Auth::user()->id;
 
@@ -46,9 +67,6 @@ class ProductController extends Controller
             $product->update(['image' => $data['image']]);
         }
 
-        if ($productRequest->input('action') === 'save_and_add_variant') {
-            return redirect()->route('product.variants.create', $product)->with('success', 'Продукт успешно добавлен. Теперь добавьте вариант.');
-        }
 
         $variant = new ProductVariant();
         $variant->product_id = $product->id;
@@ -64,6 +82,10 @@ class ProductController extends Controller
 
     public function show(Product $product)
     {
+        if (Gate::denies('view', $product)) {
+            throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
+        }
+
         $divisions = $product->divisions()->get();
         $variants = $product->variants()->orderBy('date_of_actuality', 'desc')->get();
         $arivals = $product->arivalProduct()->with('arival')->get()->map(function ($arivalProduct) {
@@ -85,12 +107,19 @@ class ProductController extends Controller
 
     public function edit(Product $product)
     {
+        if (Gate::denies('update', $product)) {
+            throw new AuthorizationException('У вас нет разрешения на редактирование продуктов.');
+        }
+
         $companies = Company::all();
         return view('products.edit', compact('product', 'companies'));
     }
 
     public function update(UpdateProductRequest $productRequest, Product $product)
     {
+        if (Gate::denies('update', $product)) {
+            throw new AuthorizationException('У вас нет разрешения на редактирование продуктов.');
+        }
         $data = $productRequest->only(['name', 'description', 'company_id', 'sku', 'kko_operator', 'express_operator']);
         // Обработка чекбоксов
         $checkboxFields = ['kko_hall', 'kko_account_opening', 'kko_manager', 'express_hall'];
@@ -119,8 +148,60 @@ class ProductController extends Controller
 
     public function delete(Product $product)
     {
-        $product->delete();
+        if (Gate::denies('delete', $product)) {
+            throw new AuthorizationException('У вас нет разрешения на удаление продуктов.');
+        }
 
+        $product->arivalProduct()->delete();
+        $product->writeOffProduct()->delete();
+    
+        $product->variants()->delete();
+        
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
+        
+        $product->delete();
+    
         return redirect()->route('products')->with('success', 'Продукт успешно удален');
+    }
+
+
+    public function createDivision(Product $product)
+    {
+        if (Gate::denies('update', $product)) {
+            throw new AuthorizationException('У вас нет разрешения на редактирование продуктов.');
+        }
+
+        $divisions = Division::query()
+        ->whereNotIn('id', $product->divisions()->pluck('id'))
+        ->oldest('name')
+        ->get();
+
+
+        return view('products.divisions.create', compact('divisions', 'product'));
+    }
+
+    public function addDivision(Product $product, Request $request)
+    {
+        if (Gate::denies('update', $product)) {
+            throw new AuthorizationException('У вас нет разрешения на редактирование продуктов.');
+        }
+
+        $product->divisions()->syncWithoutDetaching($request->division_id);
+
+        return redirect()->route('products.show', $product)->with('success', 'Подразделение успешно добавлено');
+        
+    }
+
+    public function removeDivision(Product $product, Division $division)
+    {
+        if (Gate::denies('update', $product)) {
+            throw new AuthorizationException('У вас нет разрешения на редактирование продуктов.');
+        }
+
+        $product->divisions()->detach($division->id);
+
+        return redirect()->route('products.show', $product)->with('success', 'Подразделение успешно удалено');
     }
 }

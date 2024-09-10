@@ -29,7 +29,7 @@
                 <li class="list-group-item align-items-center d-flex justify-content-between">
                     <div class="media">
                         <div class="media-body align-self-center"> 
-                            <a href="#" class="m-0 d-block fw-semibold font-13">{{ \Carbon\Carbon::parse($arival['arival']->arival_date)->format('d.m.Y') }}</a>
+                            <a href="{{ route('arivals.show', $arival['arival']) }}" class="m-0 d-block fw-semibold font-13">{{ \Carbon\Carbon::parse($arival['arival']->arival_date)->format('d.m.Y') }}</a>
                         </div>
                     </div>
                     <div class="align-self-center">

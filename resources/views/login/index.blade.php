@@ -26,7 +26,7 @@
 <div class="form-group mb-2">
 <label class="form-label" for="email">Почта</label>
 <div class="input-group">                                                                                         
-<input type="text" class="form-control" name="email" id="email" placeholder="Введите ваш email">
+<input type="text" class="form-control" name="email" value="{{ old('email') }}" id="email" placeholder="Введите ваш email">
 </div>                                    
 </div><!--end form-group--> 
 

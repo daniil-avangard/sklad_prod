@@ -22,6 +22,10 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'delete'])->name('products.delete');
 
+    Route::get('/products/{product}/divisions/create', [ProductController::class, 'createDivision'])->name('products.divisions.create');
+    Route::post('/products/{product}/divisions', [ProductController::class, 'addDivision'])->name('products.divisions.addDivision');
+    Route::delete('/products/{product}/divisions/{division}', [ProductController::class, 'removeDivision'])->name('products.divisions.removeDivision');
+
 
     Route::get('/products/{product}/variants', [ProductVariantsController::class, 'index'])->name('products.variants');
     Route::get('/products/{product}/variants/create', [ProductVariantsController::class, 'create'])->name('products.variants.create');

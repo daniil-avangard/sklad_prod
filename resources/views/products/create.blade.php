@@ -24,14 +24,14 @@
 
                                     <div class="form-group mb-4">
                                         <label for="name">Название</label>
-                                        <input type="text" class="form-control" id="name" name="name" required>
+                                        <input type="text" class="form-control" value="{{ old('name') }}" id="name" name="name" required>
 
                             </div>
                         </div>
                         <div class="col-lg-1">
                                     <div class="form-group mb-3">
                                         <label for="sku">Артикул</label>
-                                        <input type="text" class="form-control" id="sku" name="sku">
+                                        <input type="text" class="form-control" value="{{ old('sku') }}" id="sku" name="sku">
                                     </div>
                         </div>
                         <div class="col-lg-3">
@@ -40,7 +40,7 @@
                                         <select class="form-select" id="company_id" name="company_id">
                                 <option value="">Выберите компанию</option>
                                 @foreach ($companies as $company)
-                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                    <option {{ old('company_id') == $company->id ? 'selected' : '' }} value="{{ $company->id }}">{{ $company->name }}</option>
                                 @endforeach
                                         </select>
                                     
@@ -75,21 +75,21 @@
                                     <div class="row">
                                     <div class="form-group mb-3 col-lg-6">
                                     <div class="checkbox-primary">
-                                <input id="kko_hall" type="checkbox" value="1" name="kko_hall">
+                                <input id="kko_hall" type="checkbox" value="1" name="kko_hall" {{ old('kko_hall') ? 'checked' : '' }}>
                                 <label for="kko_hall">
                                     Оперзал
                                 </label>
                             </div>
                     
                             <div class="checkbox-primary">
-                                <input id="kko_account_opening" type="checkbox" value="1" name="kko_account_opening">
+                                <input id="kko_account_opening" type="checkbox" value="1" name="kko_account_opening" {{ old('kko_account_opening') ? 'checked' : '' }}>
                                 <label for="kko_account_opening">
                                 Открытие счетов
                                 </label>
                             </div>
 
                             <div class="checkbox-primary">
-                                <input id="kko_manager" type="checkbox" value="1" name="kko_manager">
+                                <input id="kko_manager" type="checkbox" value="1" name="kko_manager" {{ old('kko_manager') ? 'checked' : '' }}>
                                 <label for="kko_manager">
                                 Менеджеру
                                 </label>
@@ -101,7 +101,7 @@
                             <label for="kko_operator">Оперциансту</label>
                                         <select id="kko_operator" name="kko_operator" class="form-select">
                                             @foreach (App\Enum\Products\PointsSale\Operator::cases() as $operator)
-                                            <option value="{{ $operator->value }}">{{ $operator->name() }}</option>
+                                            <option {{ old('kko_operator') == $operator->value ? 'selected' : '' }} value="{{ $operator->value }}">{{ $operator->name() }}</option>
                                                 @endforeach
                                         </select>
                                     </div>
@@ -124,7 +124,7 @@
                                     <div class="row">
                                     <div class="form-group mb-3 col-lg-6">
                                 <div class="checkbox-primary">
-                                    <input id="express_hall" type="checkbox" value="1" name="express_hall">
+                                    <input id="express_hall" type="checkbox" value="1" name="express_hall" {{ old('express_hall') ? 'checked' : '' }}>
                                     <label for="express_hall">
                                     Оперзал
                                     </label>
@@ -136,7 +136,7 @@
                             <label for="kko_operator">Оперциансту</label>
                                         <select id="express_operator" name="express_operator" class="form-select">
                                             @foreach (App\Enum\Products\PointsSale\Operator::cases() as $operator)
-                                            <option value="{{ $operator->value }}">{{ $operator->name() }}</option>
+                                            <option {{ old('express_operator') == $operator->value ? 'selected' : '' }} value="{{ $operator->value }}">{{ $operator->name() }}</option>
                                                 @endforeach
                                         </select>
                                     </div>
@@ -155,12 +155,12 @@
 
                 <div class="form-group mb-3 col-lg-12">
                     <label for="description">Описание</label>
-                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                    <textarea class="form-control" id="description" name="description" rows="3">{{ old('description') }}</textarea>
                 </div>
 
                 <div class="mt-3">
         <button type="submit" class="btn btn-primary" name="action" value="save">Добавить</button>
-        <button type="submit" class="btn btn-secondary" name="action" value="save_and_add_variant">Добавить и перейти к добавлению варианта</button>
+        
     </div>   
     </div>
                 

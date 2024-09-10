@@ -11,6 +11,10 @@ use App\Models\Arival;
 use App\Policies\ArivalPolicy;
 use App\Models\Writeoff;
 use App\Policies\WriteoffPolicy;
+use App\Models\Product;
+use App\Policies\ProductPolicy;
+use App\Models\ProductVariant;
+use App\Policies\ProductVariantPolicy;
 use DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
         User::class => UserPolicy::class,
         Arival::class => ArivalPolicy::class,
         Writeoff::class => WriteoffPolicy::class,
+        Product::class => ProductPolicy::class,
+        ProductVariant::class => ProductVariantPolicy::class,
     ];
 
     public function boot(): void

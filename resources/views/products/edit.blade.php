@@ -12,22 +12,7 @@
     'back_route' => 'products',
 ])
 
-<div class="pb-4">
-    <ul class="nav-border nav nav-pills mb-0">
-        <li class="nav-item">
-        <a class="nav-link" href="{{ route('products.show', $product->id) }}">Просмотр</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link active" href="#Profile_Post">Редактировать</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="#Profile_Portfolio">Пост</a>
-        </li>
-        <li class="nav-item">
-        <a class="nav-link" href="#Profile_Settings">Настройки</a>
-        </li>
-    </ul>        
-</div>
+@include('products.inc.nav')
 
 <div class="row">
     <div class="col-12">

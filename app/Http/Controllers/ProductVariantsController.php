@@ -22,6 +22,7 @@ class ProductVariantsController extends Controller
 
     public function store(Product $product, CreateVariantRequest $request)
     {        
+        
         $data = $request->only(['is_active', 'reserved', 'date_of_actuality']);
 
         if($request->date_of_actuality){
@@ -112,7 +113,6 @@ class ProductVariantsController extends Controller
 
     public function delete(Product $product, ProductVariant $variant)
     {
-        dd($variant);
         $variant->delete();
         return redirect()->route('products.show', $product)->with('success', 'Вариант успешно удален');
     }

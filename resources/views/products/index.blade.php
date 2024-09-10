@@ -30,6 +30,7 @@
                                     <tr>
                                         <th>Название</th>
                                         <th>Количество</th>
+                                        <th>В резерве</th>
                                         <th>Действия</th>
                                     </tr>
                                 </thead>
@@ -37,16 +38,21 @@
                                     @foreach ($products as $product)
                                         <tr>
                                             <td><a href="{{ route('products.show', $product) }}">{{ $product->name }}</a></td>
-                                            <td>{{ $product->quantity }}</td>
+                                            <td>{{ $product->total_quantity }}</td>
+                                            <td>{{ $product->total_reserved }}</td>
                                             <td>
                                                 <a href="{{ route('products.variants.create', $product) }}" class="btn btn-success">Добавить варианты</a>
+                                                @can('view', $product)
                                                 <a href="{{ route('products.show', $product) }}" class="btn btn-primary">Посмотреть</a>
+                                                @endcan
+                                                @can('update', $product)
                                                 <a href="{{ route('products.edit', $product) }}" class="btn btn-warning">Изменить</a>
-                                                <form action="{{ route('products.delete', $product) }}" method="POST" style="display: inline-block;">
-                                                    @csrf
-                                                    @method('DELETE')
+                                                @endcan
+                                                @can('delete', $product)
+                                                <x-form action="{{ route('products.delete', $product) }}" method="DELETE" style="display: inline-block;">
                                                     <button type="submit" class="btn btn-danger" onclick="return confirm('Вы уверены, что хотите удалить этот продукт?');">Удалить</button>
-                                                </form>
+                                                </x-form>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @endforeach
