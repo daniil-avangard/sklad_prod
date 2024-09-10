@@ -144,3 +144,8 @@ Breadcrumbs::for('products.variants.create', function ($trail, $product) {
     $trail->push('Добавление варианта продукта', route('products.variants.create', $product));
 });
 
+Breadcrumbs::for('products.variants.edit', function ($trail, $product, $variant) {
+    $trail->parent('products.variants', $product);
+    $trail->push('Редактирование варианта продукта', route('products.variants.edit', ['product' => $product, 'variant' => $variant]));
+});
+

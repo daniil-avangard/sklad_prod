@@ -1,4 +1,4 @@
-<div class="col-lg-3">
+
     <div class="card">
         <div class="card-header">
             <div class="row align-items-center">
@@ -43,6 +43,4 @@
             </ul>                                    
         </div><!--end card-body--> 
     </div><!--end card-->
-</div><!--end col-->
                                           
-</div><!--end col-->

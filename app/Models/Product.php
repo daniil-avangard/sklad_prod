@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Enum\ProductStatusEnum;
 use App\Enum\Products\PointsSale\Operator;
+use App\Models\ProductVariant;
 
 
 class Product extends Model
@@ -67,6 +68,10 @@ class Product extends Model
         return $this->belongsToMany(Division::class);
     }
 
+    public function variants()
+    {
+        return $this->hasMany(ProductVariant::class);
+    }
 
 
 

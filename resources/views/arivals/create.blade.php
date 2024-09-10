@@ -46,11 +46,20 @@
                                                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
                                                                     @endforeach
                                                                 </select>
+
                                                             </div><!--end col-->
 
                                                             <div class="col-sm-4">
                                                                 <label class="form-label">Количество</label>
                                                                 <input type="text" name="product[0][quantity]" value="0" class="form-control">
+                                                            </div><!--end col-->
+                                                            
+                                                            <div class="col-sm-3">
+                                                                <label for="date_of_actuality" class="form-label">Дата актуализации</label>
+                                                                <div class="input-group">
+                                                                    <input type="date" name="product[0][date_of_actuality]" id="date_of_actuality" value="" class="form-control">
+                                                                    <button type="button" class="btn btn-outline-secondary" id="reset_date" onclick="document.getElementById('date_of_actuality').value = ''">Сбросить</button>
+                                                                </div>
                                                             </div><!--end col-->
 
 

@@ -4,12 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Arival;
-use App\Models\Inventory;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\ArivalProduct;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
+use App\Models\ProductVariant;
 
 
 class ArivalController extends Controller
@@ -36,11 +36,14 @@ class ArivalController extends Controller
         $arival->arrival_date = $request->arrival_date;
         $arival->save();
 
+
+
         foreach ($request->products as $product) {
             $arivalProduct = new ArivalProduct();
             $arivalProduct->arival_id = $arival->id;
             $arivalProduct->product_id = $product['product_id'];
             $arivalProduct->quantity = $product['quantity'];
+            $arivalProduct->date_of_actuality = $product['date_of_actuality'];
             $arivalProduct->save();
         }
 
@@ -80,11 +83,28 @@ class ArivalController extends Controller
 
         $arival->status = \App\Enum\ArivalStatusEnum::accepted->value;
 
+        
         foreach ($arival->products as $item) {
-            $arivalProduct = ArivalProduct::where('product_id', $item->product_id)->first();
-            $productItem = Product::where('id', $item->product_id)->first();
-            $productItem->quantity += $item->quantity;
-            $productItem->save();
+            $variant = ProductVariant::where('product_id', $item->product_id)
+                                     ->where('date_of_actuality', $item->date_of_actuality)
+                                     ->first();
+            
+            if ($variant) {
+                $variant->quantity += $item->quantity;
+                $variant->save();
+            } else {
+                $product = Product::find($item->product_id);
+                $sku = $product->sku;
+                if ($item->date_of_actuality) {
+                    $sku .= '-' . date('dmY', strtotime($item->date_of_actuality));
+                }
+                $variant = new ProductVariant();
+                $variant->product_id = $item->product_id;
+                $variant->sku = $sku;
+                $variant->quantity = $item->quantity;
+                $variant->date_of_actuality = $item->date_of_actuality;
+                $variant->save();
+            }
         }
 
         $arival->save();

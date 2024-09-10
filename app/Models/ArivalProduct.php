@@ -13,6 +13,7 @@ class ArivalProduct extends Model
         'arival_id',
         'product_id',
         'quantity',
+        'date_of_actuality',
     ];
 
     public function arival()

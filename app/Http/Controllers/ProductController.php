@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Company;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Product\UpdateProductRequest;
+use App\Models\ProductVariant;
 class ProductController extends Controller
 {
     public function index()
@@ -27,8 +28,12 @@ class ProductController extends Controller
     {
         $data = $productRequest->only(['name', 'description', 'company_id', 'kko_hall', 'kko_account_opening', 'kko_manager', 'kko_operator', 'express_hall', 'express_operator', 'sku']);
         $data['user_id'] = Auth::user()->id;
+
+
         // Создаем новый продукт для получения его ID
         $product = Product::create($data);
+
+
         
         // Создаем директорию для изображений продукта
         $imagePath = 'products/' . $product->id;
@@ -45,13 +50,22 @@ class ProductController extends Controller
             return redirect()->route('product.variants.create', $product)->with('success', 'Продукт успешно добавлен. Теперь добавьте вариант.');
         }
 
-        return redirect()->route('products')->with('success', 'Продукт успешно добавлен');
+        $variant = new ProductVariant();
+        $variant->product_id = $product->id;
+        $variant->quantity = 0;
+        $variant->is_active = true;
+        $variant->reserved = 0;
+        $variant->sku = $product->sku;
+        $variant->save();
+
+
+        return redirect()->route('products.show', $product)->with('success', 'Продукт успешно добавлен');
     }
 
     public function show(Product $product)
     {
         $divisions = $product->divisions()->get();
-
+        $variants = $product->variants()->orderBy('date_of_actuality', 'desc')->get();
         $arivals = $product->arivalProduct()->with('arival')->get()->map(function ($arivalProduct) {
             return [
                 'arival' => $arivalProduct->arival,
@@ -66,7 +80,7 @@ class ProductController extends Controller
             ];
         })->unique('writeOff.id');
         
-        return view('products.show', compact('product', 'divisions', 'arivals', 'writeOffs'));
+        return view('products.show', compact('product', 'divisions', 'arivals', 'writeOffs', 'variants'));
     }
 
     public function edit(Product $product)
@@ -77,7 +91,7 @@ class ProductController extends Controller
 
     public function update(UpdateProductRequest $productRequest, Product $product)
     {
-        $data = $productRequest->only(['name', 'description', 'company_id', 'sku']);
+        $data = $productRequest->only(['name', 'description', 'company_id', 'sku', 'kko_operator', 'express_operator']);
         // Обработка чекбоксов
         $checkboxFields = ['kko_hall', 'kko_account_opening', 'kko_manager', 'express_hall'];
         foreach ($checkboxFields as $field) {
@@ -100,7 +114,7 @@ class ProductController extends Controller
             // Обновляем продукт с путем к изображению
         $product->update($data);
 
-        return redirect()->route('products')->with('success', 'Продукт успешно обновлен');
+        return redirect()->route('products.show', $product)->with('success', 'Продукт успешно обновлен');
     }
 
     public function delete(Product $product)

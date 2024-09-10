@@ -11,6 +11,24 @@
     'breadcrumbs' => 'Продукты',
     'back_route' => 'products',
 ])
+
+<div class="pb-4">
+    <ul class="nav-border nav nav-pills mb-0">
+        <li class="nav-item">
+        <a class="nav-link" href="{{ route('products.show', $product->id) }}">Просмотр</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link active" href="#Profile_Post">Редактировать</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="#Profile_Portfolio">Пост</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" href="#Profile_Settings">Настройки</a>
+        </li>
+    </ul>        
+</div>
+
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -18,13 +36,13 @@
                 <x-form action="{{ route('products.update', $product) }}" method="PUT" enctype="multipart/form-data">
                     <div class="row">                        
                     <div class="card">
-                                <div class="card-body">
+                        <div class="card-body">
                         <div class="row">
                         <div class="col-lg-4">
                                     <div class="form-group mb-3">
                                         <label for="name">Название</label>
                                         <input type="text" class="form-control" id="name" name="name" value="{{ $product->name }}" required>
-                                    </div>>
+                                    </div>
                         </div>
                         <div class="col-lg-1">
                             <div class="form-group mb-3">
@@ -105,7 +123,6 @@
                                         <select id="kko_operator" name="kko_operator" class="form-select">
                                             @foreach (App\Enum\Products\PointsSale\Operator::cases() as $operator)
                                             <option value="{{ $operator->value }}" {{ $product->kko_operator === $operator ? 'selected' : '' }}>{{ $operator->name() }}</option>
-
                                                 @endforeach
                                         </select>
                                     </div>
