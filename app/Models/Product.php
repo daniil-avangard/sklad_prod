@@ -23,8 +23,10 @@ class Product extends Model
         'kko_manager',
         'kko_operator',
         'express_hall',
-        'express_operator',       
+        'express_operator',
         'sku',
+        'company_id',
+        'category_id',
     ];
 
     protected $casts = [
@@ -73,7 +75,13 @@ class Product extends Model
         return $this->hasMany(ProductVariant::class);
     }
 
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 
-
-
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

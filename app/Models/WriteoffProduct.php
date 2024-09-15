@@ -13,6 +13,11 @@ class WriteoffProduct extends Model
         'writeoff_id',
         'product_id',
         'quantity',
+        'date_of_actruality',
+    ];
+
+    protected $casts = [
+        'date_of_actruality' => 'date',
     ];
 
     public function writeoff()

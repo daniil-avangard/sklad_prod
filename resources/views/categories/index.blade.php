@@ -2,10 +2,10 @@
 
 @section('content')
     @include('includes.breadcrumb', [
-        'title' => 'Подразделения',
-        'route' => 'divisions',
-        'breadcrumbs' => 'Подразделения',
-        'add_route' => 'divisions.create',
+        'title' => 'Категории',
+        'route' => 'categories',
+        'breadcrumbs' => 'Категории',
+        'add_route' => 'categories.create',
     ])
 
     <div class="row">
@@ -19,14 +19,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($divisions as $division)
+                    @foreach ($categories as $category)
                         <tr>
-                            <td>{{ $division->id }}</td>
-                            <td>{{ $division->name }}</td>
+                            <td>{{ $category->id }}</td>
+                            <td>{{ $category->name }}</td>
                             <td>
-                                <a href="{{ route('divisions.show', $division) }}" class="btn btn-primary">Просмотр</a>
-                                <a href="{{ route('divisions.edit', $division) }}" class="btn btn-warning">Редактировать</a>
-                                <x-form action="{{ route('divisions.delete', $division) }}" method="DELETE"
+                                <a href="{{ route('categories.show', $category) }}" class="btn btn-primary">Просмотр</a>
+                                <a href="{{ route('categories.edit', $category) }}" class="btn btn-warning">Редактировать</a>
+                                <x-form action="{{ route('categories.delete', $category) }}" method="DELETE"
                                     style="display: inline-block;">
                                     <button onclick="return confirm('Вы уверены?')" type="submit"
                                         class="btn btn-danger">Удалить</button>
@@ -38,4 +38,4 @@
             </table>
         </div>
     </div>
-@endsection
+@endSection

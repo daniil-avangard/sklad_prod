@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
+use App\Models\ProductVariant;
 
 class WriteoffController extends Controller
 {
@@ -17,7 +18,7 @@ class WriteoffController extends Controller
         if (Gate::denies('view', Writeoff::class)) {
             throw new AuthorizationException('У вас нет разрешения на просмотр списаний.');
         }
-        
+
         $writeoffs = Writeoff::all()->sortByDesc('created_at');
         return view('writeoffs.index', compact('writeoffs'));
     }
@@ -34,7 +35,7 @@ class WriteoffController extends Controller
         $writeoff->user_id = auth()->user()->id;
         $writeoff->reason = $request->reason;
         $writeoff->writeoff_date = $request->writeoff_date;
-        
+
         $writeoff->save();
 
         foreach ($request->products as $product) {
@@ -42,6 +43,7 @@ class WriteoffController extends Controller
             $writeoffProduct->writeoff_id = $writeoff->id;
             $writeoffProduct->product_id = $product['product_id'];
             $writeoffProduct->quantity = $product['quantity'];
+            $writeoffProduct->date_of_actuality = $product['date_of_actuality'];
             $writeoffProduct->save();
         }
 
@@ -60,7 +62,7 @@ class WriteoffController extends Controller
         $writeoff = Writeoff::find($writeoff);
         return view('writeoffs.edit', compact('writeoff', 'products'));
     }
-    
+
 
     public function update(Request $request, $id)
     {
@@ -77,18 +79,24 @@ class WriteoffController extends Controller
     {
 
         $writeoff = Writeoff::find($id);
-        foreach ($writeoff->products as $item) {
-            $writeoffProduct = WriteoffProduct::where('product_id', $item->product_id)->first();
-            $productItem = Product::where('id', $item->product_id)->first();
-            $productItem->quantity -= $writeoffProduct->quantity;
-            if ($productItem->quantity < 0) {
+
+        $writeoffProducts = WriteoffProduct::where('writeoff_id', $writeoff->id)->get();
+
+        foreach ($writeoffProducts as $writeoffProduct) {
+
+            $productItem = ProductVariant::where('product_id', $writeoffProduct->product_id)
+                ->where('date_of_actuality', $writeoffProduct->date_of_actuality)
+                ->first();
+
+            if ($productItem->quantity < $writeoffProduct->quantity) {
                 return redirect()->route('writeoffs')->withErrors(['error' => 'Недостаточно товара на складе']);
             }
-            $writeoff->status = \App\Enum\WriteoffStatusEnum::accepted->value;
+            $productItem->quantity -= $writeoffProduct->quantity;
 
             $productItem->save();
         }
 
+        $writeoff->status = \App\Enum\WriteoffStatusEnum::accepted->value;
         $writeoff->save();
         return redirect()->route('writeoffs')->with('success', 'Списание принято');
     }
@@ -102,4 +110,22 @@ class WriteoffController extends Controller
         return redirect()->route('writeoffs')->with('success', 'Списание отклонено');
     }
 
+
+    public function getVariantsDates(Request $request)
+    {
+
+        $variants = ProductVariant::where('product_id', $request->product_id)
+            ->orderBy('date_of_actuality')
+            ->get();
+        $dates = [];
+
+        foreach ($variants as $variant) {
+            $dates[] = [
+                'id' => $variant->id,
+                'date' => $variant->date_of_actuality,
+            ];
+        }
+
+        return response()->json($dates);
+    }
 }

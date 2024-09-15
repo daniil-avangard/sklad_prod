@@ -27,6 +27,7 @@ class ProductRequest extends FormRequest
             'express_operator' => ['nullable', 'in:' . implode(',', array_column(\App\Enum\Products\PointsSale\Operator::cases(), 'value'))],
             'description' => ['nullable', 'string'],
             'sku' => ['required', 'string', 'max:255', 'unique:products,sku'],
+            'category_id' => ['nullable', 'exists:categories,id'],
         ];
     }
 }

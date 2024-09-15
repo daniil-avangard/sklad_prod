@@ -91,6 +91,20 @@ Breadcrumbs::for('products.edit', function ($trail, $product) {
     $trail->push('Редактирование продукта', route('products.edit', $product));
 });
 
+// Приходы продукта
+
+Breadcrumbs::for('products.arival', function ($trail, $product) {
+    $trail->parent('products.show', $product);
+    $trail->push('Приходы', route('products.arival', $product));
+});
+
+// Списание продукта
+
+Breadcrumbs::for('products.writeoff', function ($trail, $product) {
+    $trail->parent('products.show', $product);
+    $trail->push('Списание', route('products.writeoff', $product));
+});
+
 // Списание
 
 Breadcrumbs::for('writeoffs', function ($trail) {
@@ -153,4 +167,49 @@ Breadcrumbs::for('products.variants.edit', function ($trail, $product, $variant)
 Breadcrumbs::for('products.divisions.create', function ($trail, $product) {
     $trail->parent('products.show', $product);
     $trail->push('Добавление подразделения', route('products.divisions.create', $product));
+});
+
+// Компании
+
+Breadcrumbs::for('companies', function ($trail) {
+    $trail->parent('main');
+    $trail->push('Компании', route('companies'));
+});
+
+Breadcrumbs::for('companies.create', function ($trail) {
+    $trail->parent('companies');
+    $trail->push('Добавление компании', route('companies.create'));
+});
+
+Breadcrumbs::for('companies.show', function ($trail, $company) {
+    $trail->parent('companies');
+    $trail->push('Просмотр компании', route('companies.show', $company));
+});
+
+Breadcrumbs::for('companies.edit', function ($trail, $company) {
+    $trail->parent('companies');
+    $trail->push('Редактирование компании', route('companies.edit', $company));
+});
+
+
+// Категории
+
+Breadcrumbs::for('categories', function ($trail) {
+    $trail->parent('main');
+    $trail->push('Категории', route('categories'));
+});
+
+Breadcrumbs::for('categories.create', function ($trail) {
+    $trail->parent('categories');
+    $trail->push('Добавление категории', route('categories.create'));
+});
+
+Breadcrumbs::for('categories.show', function ($trail, $category) {
+    $trail->parent('categories');
+    $trail->push('Просмотр категории', route('categories.show', $category));
+});
+
+Breadcrumbs::for('categories.edit', function ($trail, $category) {
+    $trail->parent('categories');
+    $trail->push('Редактирование категории', route('categories.edit', $category));
 });

@@ -18,7 +18,7 @@ class Arival extends Model
     ];
 
     protected $casts = [
-        'arrival_date' => 'datetime',
+        'arrival_date' => 'date',
         'status' => ArivalStatusEnum::class,
     ];
 
@@ -31,6 +31,4 @@ class Arival extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-
 }

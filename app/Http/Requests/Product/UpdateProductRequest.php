@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Product;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateProductRequest extends FormRequest
 {
@@ -21,6 +22,8 @@ class UpdateProductRequest extends FormRequest
      */
     public function rules(): array
     {
+        $unique = Rule::unique('products', 'sku')->ignore($this->route('product'));
+
         return [
             'name' => ['required', 'string', 'max:255'],
             'company_id' => ['required', 'exists:companies,id'],
@@ -33,6 +36,8 @@ class UpdateProductRequest extends FormRequest
             'express_operator' => ['nullable', 'in:' . implode(',', array_column(\App\Enum\Products\PointsSale\Operator::cases(), 'value'))],
             'description' => ['nullable', 'string'],
             'delete_image' => ['nullable', 'boolean'],
+            'sku' => ['required', 'string', 'max:255', $unique],
+            'category_id' => ['nullable', 'exists:categories,id'],
         ];
     }
 }

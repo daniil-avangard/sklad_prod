@@ -4,7 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DivisionController;
 use App\Http\Controllers\ProductVariantsController;
-
+use App\Http\Controllers\CompanyController;
+use App\Models\Company;
+use App\Http\Controllers\CategoryController;
 
 Route::middleware('auth', 'admin')->group(function () {
 
@@ -22,6 +24,9 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'delete'])->name('products.delete');
 
+    Route::get('/products/{product}/arivals', [ProductController::class, 'arival'])->name('products.arival');
+    Route::get('/products/{product}/writeoffs', [ProductController::class, 'writeoff'])->name('products.writeoff');
+
     Route::get('/products/{product}/divisions/create', [ProductController::class, 'createDivision'])->name('products.divisions.create');
     Route::post('/products/{product}/divisions', [ProductController::class, 'addDivision'])->name('products.divisions.addDivision');
     Route::delete('/products/{product}/divisions/{division}', [ProductController::class, 'removeDivision'])->name('products.divisions.removeDivision');
@@ -34,9 +39,20 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::get('/products/{product}/variants/{variant}/edit', [ProductVariantsController::class, 'edit'])->name('products.variants.edit');
     Route::put('/products/{product}/variants/{variant}', [ProductVariantsController::class, 'update'])->name('products.variants.update');
     Route::delete('/products/{product}/variants/{variant}', [ProductVariantsController::class, 'delete'])->name('products.variants.delete');
-   
 
-    Route::get('/divisions', [DivisionController::class, 'index'])->name('divisions'); 
+
+    // Категории
+
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/categories/{category}', [CategoryController::class, 'show'])->name('categories.show');
+    Route::get('/categories/{category}/edit', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::delete('/categories/{category}', [CategoryController::class, 'delete'])->name('categories.delete');
+
+
+    Route::get('/divisions', [DivisionController::class, 'index'])->name('divisions');
     Route::get('/divisions/create', [DivisionController::class, 'create'])->name('divisions.create');
     Route::post('/divisions', [DivisionController::class, 'store'])->name('divisions.store');
     Route::get('/divisions/{division}', [DivisionController::class, 'show'])->name('divisions.show');
@@ -48,9 +64,11 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::post('/divisions/{division}/products', [DivisionController::class, 'addProduct'])->name('divisions.addProduct');
     Route::delete('/divisions/{division}/products/{product}', [DivisionController::class, 'removeProduct'])->name('divisions.removeProduct');
 
-
+    Route::get('/companies', [CompanyController::class, 'index'])->name('companies');
+    Route::get('companies/create', [CompanyController::class, 'create'])->name('companies.create');
+    Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
+    Route::get('companies/{company}', [CompanyController::class, 'show'])->name('companies.show');
+    Route::get('companies/{company}/edit', [CompanyController::class, 'edit'])->name('companies.edit');
+    Route::put('companies/{company}', [CompanyController::class, 'update'])->name('companies.update');
+    Route::delete('companies/{company}', [CompanyController::class, 'delete'])->name('companies.delete');
 });
-
-
-
-

@@ -7,6 +7,7 @@ use App\Models\Division;
 use App\Http\Requests\Division\CreateDisionRequest;
 use App\Http\Requests\Division\Product\AddProductRequest;
 use App\Http\Requests\Division\Product\RemoveProductRequest;
+use App\Models\Product;
 
 class DivisionController extends Controller
 {
@@ -44,18 +45,21 @@ class DivisionController extends Controller
 
     public function update(Request $request, Division $division)
     {
-        return redirect()->route('divisions');
+        $division->update($request->only(['name']));
+        return redirect()->route('divisions')->with('success', 'Подразделение успешно обновлено');
     }
 
     public function delete(Division $division)
     {
-        return redirect()->route('divisions');
+        $division->products()->detach();
+        $division->delete();
+        return redirect()->route('divisions')->with('success', 'Подразделение успешно удалено');
     }
 
     public function getProductsForModal(Division $division)
     {
         $products = Product::whereNotIn('id', $division->products()->pluck('id'))->get();
-        
+
         return response()->json($products);
     }
 

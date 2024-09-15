@@ -13,12 +13,13 @@ use App\Models\ProductVariant;
 use App\Models\Division;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
+use App\Models\Category;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        
+
         if (Gate::denies('view', Product::class)) {
             throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
         }
@@ -38,7 +39,8 @@ class ProductController extends Controller
         }
 
         $companies = Company::all();
-        return view('products.create', compact('companies'));
+        $categories = Category::all();
+        return view('products.create', compact('companies', 'categories'));
     }
 
     public function store(ProductRequest $productRequest)
@@ -47,7 +49,19 @@ class ProductController extends Controller
             throw new AuthorizationException('У вас нет разрешения на создание продуктов.');
         }
 
-        $data = $productRequest->only(['name', 'description', 'company_id', 'kko_hall', 'kko_account_opening', 'kko_manager', 'kko_operator', 'express_hall', 'express_operator', 'sku']);
+        $data = $productRequest->only([
+            'name',
+            'description',
+            'company_id',
+            'kko_hall',
+            'kko_account_opening',
+            'kko_manager',
+            'kko_operator',
+            'express_hall',
+            'express_operator',
+            'sku',
+            'category_id'
+        ]);
         $data['user_id'] = Auth::user()->id;
 
 
@@ -55,14 +69,14 @@ class ProductController extends Controller
         $product = Product::create($data);
 
 
-        
+
         // Создаем директорию для изображений продукта
         $imagePath = 'products/' . $product->id;
-        
+
         // Сохраняем изображение в новую директорию
         if ($productRequest->hasFile('image')) {
             $data['image'] = $productRequest->file('image')->store($imagePath, 'public');
-            
+
             // Обновляем продукт с путем к изображению
             $product->update(['image' => $data['image']]);
         }
@@ -101,7 +115,7 @@ class ProductController extends Controller
                 'quantity' => $writeOffProduct->quantity
             ];
         })->unique('writeOff.id');
-        
+
         return view('products.show', compact('product', 'divisions', 'arivals', 'writeOffs', 'variants'));
     }
 
@@ -112,7 +126,8 @@ class ProductController extends Controller
         }
 
         $companies = Company::all();
-        return view('products.edit', compact('product', 'companies'));
+        $categories = Category::all();
+        return view('products.edit', compact('product', 'companies', 'categories'));
     }
 
     public function update(UpdateProductRequest $productRequest, Product $product)
@@ -120,7 +135,16 @@ class ProductController extends Controller
         if (Gate::denies('update', $product)) {
             throw new AuthorizationException('У вас нет разрешения на редактирование продуктов.');
         }
-        $data = $productRequest->only(['name', 'description', 'company_id', 'sku', 'kko_operator', 'express_operator']);
+        $data = $productRequest->only([
+            'name',
+            'description',
+            'company_id',
+            'sku',
+            'kko_operator',
+            'express_operator',
+            'category_id'
+        ]);
+        $data['user_id'] = Auth::user()->id;
         // Обработка чекбоксов
         $checkboxFields = ['kko_hall', 'kko_account_opening', 'kko_manager', 'express_hall'];
         foreach ($checkboxFields as $field) {
@@ -129,18 +153,18 @@ class ProductController extends Controller
         $imagePath = 'products/' . $product->id;
         if ($productRequest->hasFile('image')) {
 
-            if($product->image){
+            if ($product->image) {
                 Storage::disk('public')->delete($product->image);
             }
             $data['image'] = $productRequest->file('image')->store($imagePath, 'public');
-        } elseif($productRequest->input('delete_image') == 1){
-            if($productRequest->image){
+        } elseif ($productRequest->input('delete_image') == 1) {
+            if ($productRequest->image) {
                 Storage::disk('public')->delete($product->image);
             }
             $data['image'] = null;
         }
-            
-            // Обновляем продукт с путем к изображению
+
+        // Обновляем продукт с путем к изображению
         $product->update($data);
 
         return redirect()->route('products.show', $product)->with('success', 'Продукт успешно обновлен');
@@ -154,18 +178,49 @@ class ProductController extends Controller
 
         $product->arivalProduct()->delete();
         $product->writeOffProduct()->delete();
-    
+
         $product->variants()->delete();
-        
+
         if ($product->image) {
             Storage::disk('public')->delete($product->image);
         }
-        
+
         $product->delete();
-    
+
         return redirect()->route('products')->with('success', 'Продукт успешно удален');
     }
 
+
+    public function arival(Product $product)
+    {
+        if (Gate::denies('view', $product)) {
+            throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
+        }
+
+        $arivals = $product->arivalProduct()->with('arival')->orderByDesc('created_at')->get()->map(function ($arivalProduct) {
+            return [
+                'arival' => $arivalProduct->arival,
+                'quantity' => $arivalProduct->quantity
+            ];
+        })->unique('arival.id');
+        return view('products.arivals.index', compact('product', 'arivals'));
+    }
+
+    public function writeoff(Product $product)
+    {
+        if (Gate::denies('view', $product)) {
+            throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
+        }
+
+        $writeoffs = $product->writeOffProduct()->with('writeOff')->get()->map(function ($writeOffProduct) {
+            return [
+                'writeoff' => $writeOffProduct->writeOff,
+                'quantity' => $writeOffProduct->quantity
+            ];
+        })->unique('writeOff.id');
+
+        return view('products.writeoffs.index', compact('product', 'writeoffs'));
+    }
 
     public function createDivision(Product $product)
     {
@@ -174,9 +229,9 @@ class ProductController extends Controller
         }
 
         $divisions = Division::query()
-        ->whereNotIn('id', $product->divisions()->pluck('id'))
-        ->oldest('name')
-        ->get();
+            ->whereNotIn('id', $product->divisions()->pluck('id'))
+            ->oldest('name')
+            ->get();
 
 
         return view('products.divisions.create', compact('divisions', 'product'));
@@ -191,7 +246,6 @@ class ProductController extends Controller
         $product->divisions()->syncWithoutDetaching($request->division_id);
 
         return redirect()->route('products.show', $product)->with('success', 'Подразделение успешно добавлено');
-        
     }
 
     public function removeDivision(Product $product, Division $division)
