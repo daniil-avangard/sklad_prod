@@ -213,3 +213,11 @@ Breadcrumbs::for('categories.edit', function ($trail, $category) {
     $trail->parent('categories');
     $trail->push('Редактирование категории', route('categories.edit', $category));
 });
+
+
+// Настройки пользователя
+
+Breadcrumbs::for('user.settings', function ($trail) {
+    $trail->parent('main');
+    $trail->push('Настройки пользователя', route('user.settings'));
+});

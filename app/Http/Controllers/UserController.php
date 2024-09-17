@@ -43,7 +43,7 @@ class UserController extends Controller
         $data = $userRequest->only(['surname', 'first_name', 'midle_name', 'email', 'password']);
         $data['password'] = bcrypt($data['password']);
         $user = User::create($data);
-        
+
         return redirect()->route('users.index')->with('success', 'Пользователь успешно создан');
     }
 
@@ -75,6 +75,7 @@ class UserController extends Controller
 
         $permissions = $user->permissions()->get();
         $roles = $user->roles()->get();
+
         return view('users.show', compact('user', 'permissions', 'roles'));
     }
 
@@ -87,5 +88,4 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('users.index')->with('success', 'Пользователь успешно удален');
     }
-    
 }

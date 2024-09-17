@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Traits\HasPermissions;
+use Carbon\Carbon;
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasPermissions;
@@ -35,5 +37,8 @@ class User extends Authenticatable
         ];
     }
 
-
+    public function getCreatedAtYearAttribute()
+    {
+        return $this->created_at->format('Y');
+    }
 }
