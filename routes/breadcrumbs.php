@@ -19,6 +19,11 @@ Breadcrumbs::for('users.show', function ($trail, $user) {
     $trail->push($user ?? 'Без имени', $user);
 });
 
+Breadcrumbs::for('users.edit', function ($trail, $user) {
+    $trail->parent('users.show', $user);
+    $trail->push('Редактирование пользователя', route('users.edit', $user));
+});
+
 // Полномочия
 
 Breadcrumbs::for('permissions', function ($trail) {
@@ -220,4 +225,26 @@ Breadcrumbs::for('categories.edit', function ($trail, $category) {
 Breadcrumbs::for('user.settings', function ($trail) {
     $trail->parent('main');
     $trail->push('Настройки пользователя', route('user.settings'));
+});
+
+
+// Лист продуктов
+
+Breadcrumbs::for('products.list', function ($trail) {
+    $trail->parent('main');
+    $trail->push('Лист продуктов', route('products.list'));
+});
+
+// Просмотр продукта
+
+Breadcrumbs::for('products.info', function ($trail, $product) {
+    $trail->parent('products.list');
+    $trail->push('Просмотр продукта', route('products.info', $product));
+});
+
+// Корзина
+
+Breadcrumbs::for('basket', function ($trail) {
+    $trail->parent('main');
+    $trail->push('Корзина', route('basket'));
 });

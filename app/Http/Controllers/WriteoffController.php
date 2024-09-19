@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\ProductVariant;
+use Illuminate\Support\Facades\Auth;
 
 class WriteoffController extends Controller
 {
@@ -32,7 +33,7 @@ class WriteoffController extends Controller
     public function store(Request $request)
     {
         $writeoff = new Writeoff();
-        $writeoff->user_id = auth()->user()->id;
+        $writeoff->user_id = Auth::user()->id;
         $writeoff->reason = $request->reason;
         $writeoff->writeoff_date = $request->writeoff_date;
 

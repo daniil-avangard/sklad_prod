@@ -1,5 +1,7 @@
 @extends('layouts.base')
 
+@section('title_page', 'Продукты')
+
 @push('styles-plugins')
     <!-- DataTables -->
     <link href="/plugins/datatables/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />

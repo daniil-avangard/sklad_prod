@@ -1,6 +1,7 @@
 <footer class="footer text-center text-sm-start">
-                    &copy; <script>
-                        document.write(new Date().getFullYear())
-                    </script> Dastone <span class="text-muted d-none d-sm-inline-block float-end">Crafted with <i
-                            class="mdi mdi-heart text-danger"></i> by Mannatthemes</span>
-                </footer><!--end footer-->
+    &copy;
+    <script>
+        document.write(new Date().getFullYear())
+    </script> Авангард <span class="text-muted d-none d-sm-inline-block float-end">С любовью <i
+            class="mdi mdi-heart text-danger"></i> Авангард</span>
+</footer><!--end footer-->

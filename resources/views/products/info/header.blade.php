@@ -36,35 +36,19 @@
                                     <h6>ККО:</h6>
                                     <ul class="list-unstyled  border-0">
                                         <li class="mb-2"><b>Оперзал: </b>
-                                            @if ($product->kko_hall)
-                                                <i data-feather="check" style="color: green;"></i>
-                                            @else
-                                                <i data-feather="x" style="color: red;"></i>
-                                            @endif
+                                            {!! kko_express_check($product->kko_hall) !!}
                                         </li>
                                         <li class="mb-2">
                                             <b>Открытие счетов: </b>
-                                            @if ($product->kko_account_opening)
-                                                <i data-feather="check" style="color: green;"></i>
-                                            @else
-                                                <i data-feather="x" style="color: red;"></i>
-                                            @endif
+                                            {!! kko_express_check($product->kko_account_opening) !!}
                                         </li>
                                         <li class="mb-2">
                                             <b>Менеджерам: </b>
-                                            @if ($product->kko_manager)
-                                                <i data-feather="check" style="color: green;"></i>
-                                            @else
-                                                <i data-feather="x" style="color: red;"></i>
-                                            @endif
+                                            {!! kko_express_check($product->kko_manager) !!}
                                         </li>
                                         <li class="mb-2">
                                             <b>Операционистам: </b>
-                                            @if ($product->kko_operator->name === 'no')
-                                                <i data-feather="x" style="color: red;"></i>
-                                            @else
-                                                {{ $product->kko_operator->name() }}
-                                            @endif
+                                            {!! kko_express_check($product->kko_operator) !!}
                                         </li>
                                     </ul>
                                 </div>
@@ -72,19 +56,11 @@
                                     <h6>Экспресс:</h6>
                                     <ul class="list-unstyled  border-0">
                                         <li class="mb-2"><b>Оперзал: </b>
-                                            @if ($product->express_hall)
-                                                <i data-feather="check" style="color: green;"></i>
-                                            @else
-                                                <i data-feather="x" style="color: red;"></i>
-                                            @endif
+                                            {!! kko_express_check($product->express_hall) !!}
                                         </li>
                                         <li class="mb-2">
                                             <b>Операционистам: </b>
-                                            @if ($product->express_operator->name === 'no')
-                                                <i data-feather="x" style="color: red;"></i>
-                                            @else
-                                                {{ $product->express_operator->name() }}
-                                            @endif
+                                            {!! kko_express_check($product->express_operator) !!}
                                         </li>
                                     </ul>
 

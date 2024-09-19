@@ -6,8 +6,10 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\User\UserRequest;
 use App\Http\Requests\User\UdateUserRequest;
+use App\Http\Requests\User\UpdatePasswordRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
+use App\Models\Division;
 
 
 
@@ -53,7 +55,9 @@ class UserController extends Controller
             throw new AuthorizationException('У вас нет разрешения на редактирование пользователя.');
         }
 
-        return view('users.edit', compact('user'));
+        $divisions = Division::all();
+
+        return view('users.edit', compact('user', 'divisions'));
     }
 
     public function update(UdateUserRequest $updateUserRequest, User $user)
@@ -62,7 +66,20 @@ class UserController extends Controller
             throw new AuthorizationException('У вас нет разрешения на редактирование пользователя.');
         }
 
-        $data = $updateUserRequest->only(['surname', 'first_name', 'middle_name', 'email']);
+        $data = $updateUserRequest->only(['surname', 'first_name', 'middle_name', 'email', 'division_id']);
+        $user->update($data);
+        return redirect()->route('users.index')->with('success', 'Пользователь успешно обновлен');
+    }
+
+    public function updatePassword(UpdatePasswordRequest $request, User $user)
+    {
+        if (Gate::denies('update', $user)) {
+            throw new AuthorizationException('У вас нет разрешения на редактирование пользователя.');
+        }
+
+        $data = $request->only(['password']);
+        $data['password'] = bcrypt($data['password']);
+
         $user->update($data);
         return redirect()->route('users.index')->with('success', 'Пользователь успешно обновлен');
     }

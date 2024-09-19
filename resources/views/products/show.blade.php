@@ -1,5 +1,7 @@
 @extends('layouts.base')
 
+@section('title_page', $product->name)
+
 @section('content')
     @include('includes.breadcrumb', [
         'title' => 'Продукт ' . $product->name,
@@ -10,8 +12,6 @@
 
 
     @include('products.info.header')
-
-
 
 
 

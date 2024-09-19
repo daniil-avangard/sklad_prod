@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
             __DIR__ . '/../routes/warehouse.php',
             __DIR__ . '/../routes/authorization.php',
             __DIR__ . '/../routes/product.php',
+            __DIR__ . '/../routes/order.php',
             __DIR__ . '/../routes/user_settings.php',
             __DIR__ . '/../routes/web.php',
         ],

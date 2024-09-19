@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Enum\ProductStatusEnum;
 use App\Enum\Products\PointsSale\Operator;
 use App\Models\ProductVariant;
+use App\Models\Division;
+use App\Models\Basket;
 
 
 class Product extends Model
@@ -83,5 +85,10 @@ class Product extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function baskets()
+    {
+        return $this->belongsToMany(Basket::class)->withPivot('quantity');
     }
 }

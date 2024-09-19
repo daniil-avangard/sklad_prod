@@ -1,5 +1,7 @@
 @extends('layouts.base')
 
+@section('title_page', 'Редактировать продукт')
+
 @push('styles-plugins')
     <link href="/plugins/dropify/css/dropify.min.css" rel="stylesheet">
 @endpush

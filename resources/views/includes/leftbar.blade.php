@@ -1,6 +1,19 @@
 <div class="menu-content h-100" data-simplebar>
     <ul class="metismenu left-sidenav-menu">
         <li class="menu-label mt-0">Main</li>
+
+        <li>
+            <a href="javascript: void(0)">
+                <i data-feather="home" class="align-self-center menu-icon"></i><span>Заказ</span><span
+                    class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span>
+            </a>
+            <ul class="nav-second-level" aria-expanded="false">
+                <li class="nav-item"><a class="nav-link" href="{{ route('basket') }}"><i
+                            class="ti-control-record"></i>Корзина</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('products.list') }}"><i
+                            class="ti-control-record"></i>Товары</a></li>
+            </ul>
+        </li>
         <li>
             <a href="javascript: void(0);"> <i data-feather="home"
                     class="align-self-center menu-icon"></i><span>Продукты</span><span class="menu-arrow"><i
