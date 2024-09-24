@@ -19,7 +19,7 @@ if (!function_exists('kko_express_check')) {
 
         if ($value == 'yes' || $value === true) {
             $status = "<i data-feather='check' style='color: green;'></i>";
-        } elseif ($value == 'no' || $value === false) {
+        } elseif ($value == 'no' || $value === false || $value === null) {
             $status = "<i data-feather='x' style='color: red;'></i>";
         } else {
             $status = Operator::tryFrom($value)->name() ?? (string)$value;

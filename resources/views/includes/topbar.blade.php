@@ -104,7 +104,8 @@
                     <img src="/assets/images/users/user-5.jpg" alt="profile-user" class="rounded-circle thumb-xs" />
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
-                    {{-- <a class="dropdown-item" href="#"><i data-feather="user" class="align-self-center icon-xs icon-dual me-1"></i> Profile</a> --}}
+                    <a class="dropdown-item" href="{{ route('user.orders') }}"><i data-feather="shopping-cart"
+                            class="align-self-center icon-xs icon-dual me-1"></i>Заказы</a>
                     <a class="dropdown-item" href="{{ route('user.settings') }}"><i data-feather="settings"
                             class="align-self-center icon-xs icon-dual me-1"></i>Настройки</a>
                     <div class="dropdown-divider mb-0"></div>

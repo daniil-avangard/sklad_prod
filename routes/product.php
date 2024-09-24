@@ -30,6 +30,7 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::get('/products/{product}/divisions/create', [ProductController::class, 'createDivision'])->name('products.divisions.create');
     Route::post('/products/{product}/divisions', [ProductController::class, 'addDivision'])->name('products.divisions.addDivision');
     Route::delete('/products/{product}/divisions/{division}', [ProductController::class, 'removeDivision'])->name('products.divisions.removeDivision');
+    Route::get('/products/{product}/divisionsall', [ProductController::class, 'addAllDivisions'])->name('products.divisions.addAllDivisions');
 
 
     Route::get('/products/{product}/variants', [ProductVariantsController::class, 'index'])->name('products.variants');
@@ -63,6 +64,7 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::get('/divisions/{division}/products/modal', [DivisionController::class, 'getProductsForModal'])->name('divisions.products.modal');
     Route::post('/divisions/{division}/products', [DivisionController::class, 'addProduct'])->name('divisions.addProduct');
     Route::delete('/divisions/{division}/products/{product}', [DivisionController::class, 'removeProduct'])->name('divisions.removeProduct');
+
 
     Route::get('/companies', [CompanyController::class, 'index'])->name('companies');
     Route::get('companies/create', [CompanyController::class, 'create'])->name('companies.create');

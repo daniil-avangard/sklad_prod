@@ -101,7 +101,6 @@
                         <tr>
                             <th>Артикул</th>
                             <th>Дата актуализации</th>
-                            <th>Доступно к заказу</th>
                             <th>Макет</th>
                         </tr>
                     </thead>
@@ -110,9 +109,6 @@
                             <tr>
                                 <td>{{ $variant->sku }}</td>
                                 <td>{{ $variant->date_of_actuality ? date('d.m.Y', strtotime($variant->date_of_actuality)) : 'Нет даты' }}
-                                </td>
-                                <td>{{ $variant->is_active ? 'Да' : 'Нет' }}
-                                    ({{ $variant->quantity - $variant->reserved }})
                                 </td>
                                 <td>
                                     @if ($variant->image)

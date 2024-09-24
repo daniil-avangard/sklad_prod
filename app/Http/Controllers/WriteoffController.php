@@ -94,6 +94,10 @@ class WriteoffController extends Controller
             }
             $productItem->quantity -= $writeoffProduct->quantity;
 
+            if ($productItem->quantity == 0) {
+                $productItem->is_active = false;
+            }
+
             $productItem->save();
         }
 

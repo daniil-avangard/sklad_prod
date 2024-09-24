@@ -42,4 +42,9 @@ class User extends Authenticatable
     {
         return $this->created_at->format('Y');
     }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

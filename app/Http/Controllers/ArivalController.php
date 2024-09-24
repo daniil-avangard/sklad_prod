@@ -83,12 +83,12 @@ class ArivalController extends Controller
 
         $arival->status = \App\Enum\ArivalStatusEnum::accepted->value;
 
-        
+
         foreach ($arival->products as $item) {
             $variant = ProductVariant::where('product_id', $item->product_id)
-                                     ->where('date_of_actuality', $item->date_of_actuality)
-                                     ->first();
-            
+                ->where('date_of_actuality', $item->date_of_actuality)
+                ->first();
+
             if ($variant) {
                 $variant->quantity += $item->quantity;
                 $variant->save();
@@ -102,6 +102,7 @@ class ArivalController extends Controller
                 $variant->product_id = $item->product_id;
                 $variant->sku = $sku;
                 $variant->quantity = $item->quantity;
+                $variant->is_active = true;
                 $variant->date_of_actuality = $item->date_of_actuality;
                 $variant->save();
             }

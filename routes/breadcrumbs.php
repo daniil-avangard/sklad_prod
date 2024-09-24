@@ -248,3 +248,32 @@ Breadcrumbs::for('basket', function ($trail) {
     $trail->parent('main');
     $trail->push('Корзина', route('basket'));
 });
+
+
+// Заказы юзера
+
+Breadcrumbs::for('user.orders', function ($trail, $user) {
+    $trail->parent('main');
+    $trail->push('Заказы', route('user.orders', $user));
+});
+
+// Просмотр заказа юзера
+
+Breadcrumbs::for('user.order', function ($trail) {
+    $trail->parent('user.orders');
+    $trail->push('Просмотр заказа', route('user.order'));
+});
+
+// Заказы
+
+Breadcrumbs::for('orders', function ($trail) {
+    $trail->parent('main');
+    $trail->push('Заказы', route('orders'));
+});
+
+// Просмотр нескольких заказов
+
+Breadcrumbs::for('orders.selected', function ($trail) {
+    $trail->parent('orders');
+    $trail->push('Просмотр нескольких заказов', route('orders.selected'));
+});

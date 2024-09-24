@@ -53,22 +53,22 @@ class ProductController extends Controller
             'name',
             'description',
             'company_id',
-            'kko_hall',
-            'kko_account_opening',
-            'kko_manager',
             'kko_operator',
-            'express_hall',
             'express_operator',
             'sku',
             'category_id'
         ]);
         $data['user_id'] = Auth::user()->id;
 
+        // Обработка чекбоксов
+        $checkboxFields = ['kko_hall', 'kko_account_opening', 'kko_manager', 'express_hall'];
+        foreach ($checkboxFields as $field) {
+            $data[$field] = $productRequest->has($field);
+        }
+
 
         // Создаем новый продукт для получения его ID
         $product = Product::create($data);
-
-
 
         // Создаем директорию для изображений продукта
         $imagePath = 'products/' . $product->id;
@@ -237,6 +237,8 @@ class ProductController extends Controller
         return view('products.divisions.create', compact('divisions', 'product'));
     }
 
+
+
     public function addDivision(Product $product, Request $request)
     {
         if (Gate::denies('update', $product)) {
@@ -246,6 +248,17 @@ class ProductController extends Controller
         $product->divisions()->syncWithoutDetaching($request->division_id);
 
         return redirect()->route('products.show', $product)->with('success', 'Подразделение успешно добавлено');
+    }
+
+    public function addAllDivisions(Product $product)
+    {
+        if (Gate::denies('update', $product)) {
+            throw new AuthorizationException('У вас нет разрешения на редактирование продуктов.');
+        }
+
+        $product->divisions()->syncWithoutDetaching(Division::pluck('id'));
+
+        return redirect()->route('products.show', $product)->with('success', 'Все подразделения успешно добавлены');
     }
 
     public function removeDivision(Product $product, Division $division)
