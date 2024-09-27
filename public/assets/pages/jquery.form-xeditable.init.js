@@ -4,7 +4,7 @@
  * X-Editable Js
  */
 
- 
+
 $(function () {
 
   //modify buttons style
@@ -17,12 +17,12 @@ $(function () {
 
 
   $('#inline-username').editable({
-      type: 'text',
-      pk: 1,
-      name: 'username',
-      title: 'Enter username',
-      mode: 'inline',
-      inputclass: 'form-control-sm'
+    type: 'number',
+    pk: 1,
+    name: 'quantity',
+    title: 'Введите количество',
+    mode: 'inline',
+    inputclass: 'form-control-sm'
   });
 
   $('#inline-firstname').editable({

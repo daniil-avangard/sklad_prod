@@ -16,11 +16,11 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Наименование товара</th>
-                            <th>Доступное кол-во</th>
-                            <th>Заказаное кол-во</th>
+                            <th scope="col">Наименование товара</th>
+                            <th scope="col">Доступное кол-во</th>
+                            <th scope="col">Заказаное кол-во</th>
                             @foreach ($orders as $order)
-                                <th>
+                                <th scope="col">
                                     <a href="{{ route('orders.show', $order->id) }}">
                                         {{ $order->division->name }}
                                         <br>
@@ -36,7 +36,7 @@
                             <tr>
                                 <td>{{ $item['name'] }}</td>
                                 <td>{{ $item['total_variants'] }}</td>
-                                <td class="@if ($item['total_variants'] < $item['quantity'] || $item['total_variants'] == 0) bg-danger text-white @endif">
+                                <td class="@if ($item['total_variants'] < $item['quantity']) bg-danger text-white @endif">
                                     {{ $item['quantity'] }}
                                 </td>
                                 @foreach ($orders as $order)
@@ -44,7 +44,7 @@
                                         @php
                                             $quantity =
                                                 $order->items->where('product_id', $item['product_id'] ?? null)->first()
-                                                    ->quantity ?? null;
+                                                    ->quantity ?? '-';
                                         @endphp
                                         {{ $quantity }}
                                     </td>

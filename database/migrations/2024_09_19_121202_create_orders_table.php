@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id()->from(1001);
             $table->timestamps();
             $table->text('comment')->nullable();
+            $table->text('comment_manager')->nullable();
 
             $table->foreignId('division_id')->constrained('divisions');
             $table->foreignId('user_id')->constrained('users');

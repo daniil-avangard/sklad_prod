@@ -1,5 +1,89 @@
 @extends('layouts.base')
 
+
+@section('title_page', 'Заказы')
+
+@push('styles-plugins')
+    <style>
+        /* Custom Checkbox */
+        .control {
+            display: block;
+            position: relative;
+            margin-bottom: 25px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .control input {
+            position: absolute;
+            z-index: -1;
+            opacity: 0;
+        }
+
+        .control__indicator {
+            position: absolute;
+            top: 2px;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            border-radius: 4px;
+            border: 2px solid #ccc;
+            background: transparent;
+        }
+
+        .control--radio .control__indicator {
+            border-radius: 50%;
+        }
+
+        .control:hover input~.control__indicator,
+        .control input:focus~.control__indicator {
+            border: 2px solid #007bff;
+        }
+
+        .control input:checked~.control__indicator {
+            border: 2px solid #007bff;
+            background: #007bff;
+        }
+
+        .control input:disabled~.control__indicator {
+            background: #e6e6e6;
+            opacity: 0.6;
+            pointer-events: none;
+            border: 2px solid #ccc;
+        }
+
+        .control__indicator:after {
+            font-family: 'icomoon';
+            content: '\e5ca';
+            position: absolute;
+            display: none;
+        }
+
+        .control input:checked~.control__indicator:after {
+            display: block;
+            color: #fff;
+        }
+
+        .control--checkbox .control__indicator:after {
+            top: 50%;
+            left: 50%;
+            -webkit-transform: translate(-50%, -52%);
+            -ms-transform: translate(-50%, -52%);
+            transform: translate(-50%, -52%);
+        }
+
+        .control--checkbox input:disabled~.control__indicator:after {
+            border-color: #7b7b7b;
+        }
+
+        .control--checkbox input:disabled:checked~.control__indicator {
+            background-color: #007bff;
+            opacity: .2;
+            border: 2px solid #007bff;
+        }
+    </style>
+@endpush
+
 @section('content')
     @include('includes.breadcrumb', [
         'title' => 'Заказы',
@@ -13,26 +97,40 @@
         <div class="col-12">
 
             <div class="table-responsive">
-
-                <table class="table table-bordered">
+                @can('view', \App\Models\Order::class)
+                    <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
+                @endcan
+                <table class="table table-bordered custom-table">
                     <thead>
                         <tr>
-                            <th>Выбрать</th>
-                            <th>ID</th>
-                            <th>Подразделение</th>
-                            <th>Статус</th>
-                            <th>Дата</th>
-                            <th>Действия</th>
+                            <th scope="col">
+                                <label class="control control--checkbox">
+                                    <input type="checkbox" class="js-check-all" />
+                                    <div class="control__indicator"></div>
+                                </label>
+                            </th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Подразделение</th>
+                            <th scope="col">Статус</th>
+                            <th scope="col">Дата</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($orders as $order)
                             <tr>
+                                <th scope="row">
+                                    <label class="control control--checkbox">
+                                        <input type="checkbox" class="order-checkbox" value="{{ $order->id }}">
+                                        <div class="control__indicator"></div>
+                                    </label>
+                                </th>
                                 <td>
-                                    <input type="checkbox" class="order-checkbox" value="{{ $order->id }}">
-                                </td>
-                                <td>
-                                    <a href="{{ route('orders.show', $order) }}">
+                                    <a
+                                        @can('view', $order)
+                                    href="{{ route('orders.show', $order) }}"
+                                    @else
+                                    href="#"
+                                    @endcan>
                                         Заказ № {{ $order->id }}
                                     </a>
                                 </td>
@@ -40,15 +138,12 @@
                                 <td><span class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}</span>
                                 </td>
                                 <td>{{ $order->created_at->format('d.m.Y H:i') }}</td>
-                                <td>
-                                    {{-- <a href="{{ route('orders.show', $order) }}"
-                                                class="btn btn-primary">Просмотр</a> --}}
-                                </td>
+
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                <button id="view-selected" class="btn btn-success">Просмотреть выбранные заказы</button>
+
             </div>
         </div>
     </div>
@@ -56,6 +151,37 @@
 
 @push('scripts-plugins')
     <script>
+        $(function() {
+
+            $('.js-check-all').on('click', function() {
+
+                if ($(this).prop('checked')) {
+                    $('th input[type="checkbox"]').each(function() {
+                        $(this).prop('checked', true);
+                        $(this).closest('tr').addClass('active');
+                    })
+                } else {
+                    $('th input[type="checkbox"]').each(function() {
+                        $(this).prop('checked', false);
+                        $(this).closest('tr').removeClass('active');
+                    })
+                }
+
+            });
+
+            $('th[scope="row"] input[type="checkbox"]').on('click', function() {
+                if ($(this).closest('tr').hasClass('active')) {
+                    $(this).closest('tr').removeClass('active');
+                } else {
+                    $(this).closest('tr').addClass('active');
+                }
+            });
+
+
+
+        });
+
+
         document.getElementById('view-selected').addEventListener('click', function() {
             const selectedOrders = Array.from(document.querySelectorAll('.order-checkbox:checked'))
                 .map(checkbox => checkbox.value);
@@ -84,7 +210,10 @@
                 document.body.appendChild(form);
                 form.submit();
             } else {
-                alert('Пожалуйста, выберите хотя бы один заказ.');
+                Toast.fire({
+                    icon: 'warning',
+                    title: 'Пожалуйста, выберите хотя бы один заказ!'
+                })
             }
         });
     </script>

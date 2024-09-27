@@ -2,47 +2,74 @@
 
 namespace App\Http\Controllers\Order;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
+use App\Enum\Order\StatusEnum;
 use Illuminate\Support\Facades\Auth;
 
 
 class OrderController extends Controller
 {
-
+    use AuthorizesRequests;
     public function index()
     {
-        $orders = Order::all();
+        $this->authorize('viewAny', Order::class);
+
+        $orders = Order::all()->sortByDesc('created_at');
         return view('orders.index', compact('orders'));
     }
 
     public function show(Order $order)
     {
-        $items = $order->items;
-        return view('orders.show', compact('order', 'items'));
+        $this->authorize('view', $order);
+
+        $order->load(['items.product.variants', 'items.product' => function ($query) {
+            $query->orderBy('name');
+        }]);
+
+        $order->items = $order->items->sortBy(function ($item) {
+            return $item->product->name;
+        });
+        return view('orders.show', compact('order'));
     }
 
     public function create()
     {
+        $this->authorize('create', Order::class);
+
         return view('orders.create');
     }
 
     public function edit(Order $order)
     {
+        $this->authorize('update', $order);
+
+        $order->load(['items.product.variants', 'items.product' => function ($query) {
+            $query->orderBy('name');
+        }]);
+
+        $order->items = $order->items->sortBy(function ($item) {
+            return $item->product->name;
+        });
         return view('orders.edit', compact('order'));
     }
 
     public function update(Request $request, Order $order)
     {
-        // $order->update($request->all());
+        $this->authorize('update', $order);
+
+        $order->update($request->all());
         return redirect()->route('orders.show', $order);
     }
 
     public function delete(Order $order)
     {
+        $this->authorize('delete', $order);
+
         // $order->delete();
         return redirect()->route('orders.index');
     }
@@ -50,6 +77,8 @@ class OrderController extends Controller
 
     public function selected(Request $request)
     {
+        $this->authorize('view', Order::class);
+
         $orderIds = $request->input('ids', []);
         $orders = Order::whereIn('id', explode(',', $orderIds))->get();
 
@@ -70,5 +99,77 @@ class OrderController extends Controller
         }
 
         return view('orders.selected', compact('allItems', 'orders'));
+    }
+
+    public function updateQuantity(Request $request)
+    {
+        $this->authorize('updateQuantity', Order::class);
+        $item = OrderItem::find($request->id);
+        $item->quantity = $request->quantity;
+        $item->save();
+        return response()->json(['success' => true]);
+    }
+
+    public function updateCommentManager(Request $request)
+    {
+        $this->authorize('update', Order::class);
+
+        $order = Order::find($request->id);
+        $order->comment_manager = $request->comment_manager;
+        $order->save();
+        return response()->json(['success' => true]);
+    }
+
+
+    // Статуты бля заказаков
+
+    public function statusProcessing(Order $order)
+    {
+        $this->authorize('processingStatus', $order);
+
+        $order->status = StatusEnum::PROCESSING->value;
+        $order->save();
+        return redirect()->back()->with('success', 'Заказ успешно проверен');
+    }
+
+
+    public function statusTransferredToWarehouse(Order $order)
+    {
+        // Получаем все варианты продукта для заказа
+        foreach ($order->items as $item) {
+
+            $variants = $item->product->variants()->orderBy('date_of_actuality')->get();
+            $totalQuantity = $variants->sum('quantity') - $variants->sum('reserved'); // Общее кол-во минус резерв.
+            $totalQuantityToReserveOrder = $variants->sum('reserved_order'); // Общее кол-во зарезервированного товара для заказа
+            $quantityToReserve = $item->quantity; // Кол-во товара в заказе
+
+            // Если недостаточно товара на складе, то возвращаемся назад с ошибкой
+            if (($totalQuantity - $totalQuantityToReserveOrder) < $item->quantity) {
+                return redirect()->back()->withErrors('Недостаточное количество товара на складе или товар уже был зарезервирован для заказа');
+            } else {
+                foreach ($variants as $variant) {
+                    if ($variant->quantity < $quantityToReserve) {
+                        $quantityToReserve -= $variant->quantity;
+                        $variant->reserved_order += $variant->quantity;
+                        $variant->save();
+                    } else {
+                        $variant->reserved_order += $quantityToReserve;
+                        $variant->save();
+                        $quantityToReserve = 0;
+                    }
+                }
+            }
+        }
+
+        $order->status = StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
+        $order->save();
+        return redirect()->back()->with('success', 'Заказ успешно подтвержден');
+    }
+
+    public function statusCanceled(Order $order)
+    {
+        $order->status = StatusEnum::CANCELED->value;
+        $order->save();
+        return redirect()->back()->with('success', 'Заказ успешно отменен');
     }
 }

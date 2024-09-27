@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Gate;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Support\Str;
+
+
 class CreatePermissionsCommand extends Command
 {
 
@@ -51,9 +53,9 @@ class CreatePermissionsCommand extends Command
         $policies = Gate::policies();
 
         foreach ($policies as $model => $policy) {
-            if (class_exists($policy)) { 
-                $methods = $this->getPolicyMethods($policy); 
-                $policyNames = $this->getPolicyNames($policy); 
+            if (class_exists($policy)) {
+                $methods = $this->getPolicyMethods($policy);
+                $policyNames = $this->getPolicyNames($policy);
                 foreach ($methods as $method) {
                     $permissionName = $policyNames[$method] ?? $method;
                     Permission::query()
@@ -66,11 +68,11 @@ class CreatePermissionsCommand extends Command
             }
         }
     }
-    
+
     private function getPolicyMethods(string $policy)
     {
-        $methods = get_class_methods($policy); 
-    
+        $methods = get_class_methods($policy);
+
         return array_filter($methods, function (string $method) {
             return !in_array($method, [
                 'denyWithStatus',
@@ -78,12 +80,12 @@ class CreatePermissionsCommand extends Command
             ]);
         });
     }
-    
+
     private function getPolicyNames(string $policy): array
     {
         $reflection = new \ReflectionClass($policy);
         $docComment = $reflection->getDocComment();
-    
+
         if ($docComment) {
             preg_match('/@PolicyName\((.*?)\)/', $docComment, $matches);
             if (isset($matches[1])) {
@@ -96,8 +98,7 @@ class CreatePermissionsCommand extends Command
                 return $policyNamesArray;
             }
         }
-    
+
         return [];
     }
-
 }

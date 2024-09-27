@@ -10,6 +10,7 @@ use App\Models\ArivalProduct;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\ProductVariant;
+use Illuminate\Support\Facades\Auth;
 
 
 class ArivalController extends Controller
@@ -31,7 +32,7 @@ class ArivalController extends Controller
     {
         $arival = new Arival();
 
-        $arival->user_id = auth()->user()->id;
+        $arival->user_id = Auth::user()->id;
         $arival->invoice = $request->invoice;
         $arival->arrival_date = $request->arrival_date;
         $arival->save();

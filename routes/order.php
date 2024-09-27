@@ -35,6 +35,19 @@ Route::post('/basket/saveorder', [BasketController::class, 'saveOrder'])->name('
 
 Route::get('/orders', [OrderController::class, 'index'])->name('orders');
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
+Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
+
+Route::post('/orders/update-quantity', [OrderController::class, 'updateQuantity'])->name('orders.update-quantity');
+Route::post('/orders/update-comment-manager', [OrderController::class, 'updateCommentManager'])->name('orders.update-comment-manager');
+
+// Кастыль. Роут на каждый статус заказа, для разгроничения политики доступа
+Route::get('/orders/{order}/status/processing', [OrderController::class, 'statusProcessing'])->name('orders.status.processing');
+Route::get('/orders/{order}/status/transferred-to-warehouse', [OrderController::class, 'statusTransferredToWarehouse'])->name('orders.status.transferred-to-warehouse');
+Route::get('/orders/{order}/status/shipped', [OrderController::class, 'statusShipped'])->name('orders.status.shipped');
+Route::get('/orders/{order}/status/delivered', [OrderController::class, 'statusDelivered'])->name('orders.status.delivered');
+Route::get('/orders/{order}/status/canceled', [OrderController::class, 'statusCanceled'])->name('orders.status.canceled');
+
 
 // Просмотр выбранных заказов
 Route::post('/orders/selected', [OrderController::class, 'selected'])->name('orders.selected');

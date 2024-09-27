@@ -1,5 +1,10 @@
 @if (session('success'))
-    <div class="alert alert-success border-0">
-        {{ session('success') }}
-    </div>
+    @push('alert')
+        <script>
+            Toast.fire({
+                icon: 'success',
+                title: ' {{ session('success') }}'
+            });
+        </script>
+    @endpush
 @endif

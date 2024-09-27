@@ -4,14 +4,16 @@
     <link type="text/css" href="/plugins/x-editable/css/bootstrap-editable.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
+
 @section('content')
     @include('includes.breadcrumb', [
         'title' => 'Заказ №' . $order->id,
-        'route' => 'orders.show',
+        'route' => 'orders.edit',
         'breadcrumbs' => 'Заказы',
         'param' => $order,
         'back_route' => 'orders',
     ])
+
 
     <div class="row">
         <div class="col-9">
@@ -19,25 +21,16 @@
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h4 class="card-title">Статус: <span
-                                    class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}
-                                </span>
+                            <h4 class="card-title">Статус: {{ $order->status->name() }}
                             </h4>
                         </div><!--end col-->
                     </div> <!--end row-->
                 </div>
                 <div class="card-body">
-                    @can('processingStatus', $order)
-                        <a class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
-                            куратором</a>
-                    @endcan
-                    @can('transferToWarehouse', $order)
-                        <a class="btn btn-warning" href="{{ route('orders.status.transferred-to-warehouse', $order) }}">Передать
-                            на склад</a>
-                    @endcan
-                    @can('canceledStatus', $order)
-                        <a class="btn btn-danger" href="{{ route('orders.status.canceled', $order) }}">Отменить</a>
-                    @endcan
+                    <a class="btn btn-primary" href="#" target="_blank">Проверено куратором</a>
+                    <a class="btn btn-success" href="#" target="_blank">Одобрено</a>
+                    <a class="btn btn-warning" href="#" target="_blank">Передать на склад</a>
+                    <a class="btn btn-danger" href="#" target="_blank">Отменить</a>
                 </div>
             </div>
 
@@ -78,22 +71,10 @@
                                         <td>{{ $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved') }}
                                         </td>
                                         <td>
-                                            @if (
-                                                $order->status->value === \App\Enum\Order\StatusEnum::NEW->value ||
-                                                    $order->status->value === \App\Enum\Order\StatusEnum::PROCESSING->value)
-                                                <a
-                                                    @can('updateQuantity', $order)
-                                                    href="#"
-                                                     class="quantity-input"
-                                                        id="order_quantity_{{ $item->id }}" data-type="number"
-                                                        data-pk="{{ $item->id }}" data-title="Введите количество"
-                                                        @endcan>
-                                                    {{ $item->quantity }}
-                                                </a>
-                                            @else
-                                                {{ $item->quantity }}
-                                            @endif
-
+                                            <a href="#" class="editable-input" id="order_quantity_{{ $item->id }}"
+                                                data-type="number" data-pk="{{ $item->id }}"
+                                                data-title="Введите количество"
+                                                onkeypress="return event.charCode >= 48 && event.charCode <= 57">{{ $item->quantity }}</a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -115,20 +96,10 @@
                 </div>
                 <div class="row">
                     <div class="card-body col-6">
-                        Комментарий заказчика:
-                        <p class="m-0">{{ $order->comment }}</p>
+                        Комментарий заказчика: {{ $order->comment }}
                     </div>
                     <div class="card-body col-6">
-                        Комментарий куратора:
-                        <p class="m-0">
-                            <a
-                                @can('update', $order)
-                            href="#" class="comments-manager" id="comments-manager" data-type="textarea"
-                                data-pk="{{ $order->id }}" data-title="Введите комментарий"
-                                @endcan>
-                                {{ $order->comment_manager }}
-                            </a>
-                        </p>
+                        Комментарий куратора: {{ $order->comment }}
                     </div>
 
                 </div>

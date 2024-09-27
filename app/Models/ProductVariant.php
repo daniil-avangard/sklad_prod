@@ -16,11 +16,11 @@ class ProductVariant extends Model
         'reserved',
         'date_of_actuality',
         'image',
+        'reserved_order',
     ];
 
     public function product()
     {
         return $this->belongsTo(Product::class);
     }
-
 }

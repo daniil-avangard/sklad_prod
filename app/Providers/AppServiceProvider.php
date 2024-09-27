@@ -15,6 +15,8 @@ use App\Models\Product;
 use App\Policies\ProductPolicy;
 use App\Models\ProductVariant;
 use App\Policies\ProductVariantPolicy;
+use App\Models\Order;
+use App\Policies\OrderPolicy;
 use DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
         Writeoff::class => WriteoffPolicy::class,
         Product::class => ProductPolicy::class,
         ProductVariant::class => ProductVariantPolicy::class,
+        Order::class => OrderPolicy::class,
+
     ];
 
     public function boot(): void
@@ -53,12 +57,13 @@ class AppServiceProvider extends ServiceProvider
             ->get();
 
         foreach ($permissions as $permission) {
-            Gate::define($permission->action, 
+            Gate::define(
+                $permission->action,
                 function (User $user) use ($permission) {
                     return $user->permissions
                         ->contains('id', $permission->id);
-            });
+                }
+            );
         }
-
     }
 }

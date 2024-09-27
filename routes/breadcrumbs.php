@@ -1,6 +1,7 @@
 <?php
 
 use DaveJamesMiller\Breadcrumbs\Facades\Breadcrumbs;
+use Termwind\Components\BreakLine;
 
 // Главная
 Breadcrumbs::for('main', function ($trail) {
@@ -276,4 +277,14 @@ Breadcrumbs::for('orders', function ($trail) {
 Breadcrumbs::for('orders.selected', function ($trail) {
     $trail->parent('orders');
     $trail->push('Просмотр нескольких заказов', route('orders.selected'));
+});
+
+Breadcrumbs::for('orders.show', function ($trail, $order) {
+    $trail->parent('orders');
+    $trail->push('Просмотр заказа', route('orders.show', $order));
+});
+
+Breadcrumbs::for('orders.edit', function ($trail, $order) {
+    $trail->parent('orders');
+    $trail->push('Редактирование заказа', route('orders.edit', $order));
 });

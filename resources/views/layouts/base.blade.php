@@ -21,6 +21,8 @@
     <link href="/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
     <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
 
+
+
     @stack('scripts')
 
 </head>
@@ -72,6 +74,21 @@
         <script src="/assets/js/simplebar.min.js"></script>
         <script src="/assets/js/moment.js"></script>
         <script src="/plugins/daterangepicker/daterangepicker.js"></script>
+
+        <link href="/plugins/sweet-alert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
+
+        <script src="/plugins/sweet-alert2/sweetalert2.min.js"></script>
+        <script>
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+            });
+        </script>
+
+        @stack('alert')
 
         @stack('scripts-plugins')
         <!-- App js -->
