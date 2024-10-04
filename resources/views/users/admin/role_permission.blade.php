@@ -1,8 +1,8 @@
 <div class="tab-pane fade show active" id="Role_Permission" role="tabpanel" aria-labelledby="Role_Permission_tab">
     <div class="row">
-        <div class="col-lg-9">
+        <div class="col-lg-12">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body  report-card">
                             <div class="row">
@@ -50,7 +50,7 @@
                         </div>
                     </div>
                 </div><!--end col-->
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="card">
                         <div class="card-body  report-card">
                             <div class="row">
@@ -95,6 +95,10 @@
                         </div>
                     </div>
                 </div><!--end col-->
+
+                @include('users.admin.groupsDivisions')
+
+
             </div><!--end col-->
         </div><!--end row-->
         <div class="row">

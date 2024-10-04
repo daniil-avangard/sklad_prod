@@ -14,10 +14,14 @@ class Division extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
+
     public function products()
     {
         return $this->belongsToMany(Product::class);
     }
 
+    public function divisionGroups()
+    {
+        return $this->belongsToMany(DivisionGroup::class, 'division_division_group');
+    }
 }

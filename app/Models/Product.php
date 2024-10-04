@@ -72,6 +72,11 @@ class Product extends Model
         return $this->belongsToMany(Division::class);
     }
 
+    public function divisionGroups()
+    {
+        return $this->belongsToMany(DivisionGroup::class, 'division_group_product', 'product_id', 'division_group_id');
+    }
+
     public function variants()
     {
         return $this->hasMany(ProductVariant::class);

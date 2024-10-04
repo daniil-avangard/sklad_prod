@@ -6,6 +6,7 @@ use App\Http\Controllers\UserPermissionController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Roles\RolePermissionController;
 use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\UserGroupDivisionController;
 
 
 
@@ -19,17 +20,22 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('users/{user}/roles/detach', [UserRoleController::class, 'detach'])->name('user.roles.detach');
 
     Route::get('users/{user}/roles/modal', [UserRoleController::class, 'getRolesForModal'])
-    ->name('user.roles.modal');
+        ->name('user.roles.modal');
+
+    // группы подразделений админа
+    Route::get('users/{user}/groups/division/create', [UserGroupDivisionController::class, 'create'])->name('user.groups.division.create');
+    Route::post('users/{user}/groups/division/attach', [UserGroupDivisionController::class, 'attach'])->name('user.groups.division.attach');
+    Route::post('users/{user}/groups/division/detach', [UserGroupDivisionController::class, 'detach'])->name('user.groups.division.detach');
 
 
-// полномочия админа
+    // полномочия админа
     Route::get('/users/{user}/permissions/create', [UserPermissionController::class, 'create'])->name('user.permissions.create');
     Route::post('/users/{user}/permissions/attach', [UserPermissionController::class, 'attach'])->name('user.permissions.attach');
     Route::post('/users/{user}/permissions/detach', [UserPermissionController::class, 'detach'])->name('user.permissions.detach');
 
-    
+
     Route::get('/users/{user}/permissions/modal', [UserPermissionController::class, 'getPermissionsForModal'])
-    ->name('users.permissions.modal');
+        ->name('users.permissions.modal');
 
 
     // Роли
@@ -46,7 +52,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/roles/{role}/permissions/detach', [RolePermissionController::class, 'detach'])->name('roles.permissions.detach');
 
     Route::get('/roles/{role}/permissions/modal', [RolePermissionController::class, 'getPermissionsForModal'])
-    ->name('roles.permissions.modal');
+        ->name('roles.permissions.modal');
 
 
     // Полномочия
@@ -58,5 +64,3 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/permissions/{permission}', [PermissionController::class, 'show'])->name('permissions.show');
     Route::delete('/permissions/{permission}', [PermissionController::class, 'delete'])->name('permissions.delete');
 });
-
-

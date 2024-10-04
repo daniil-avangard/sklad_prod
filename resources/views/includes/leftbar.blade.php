@@ -37,6 +37,9 @@
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('divisions') }}"><i
                             class="ti-control-record"></i>Подразделения</a></li>
+
+                <li class="nav-item"><a class="nav-link" href="{{ route('groups.divisions') }}"><i
+                            class="ti-control-record"></i>Группы подразделений</a></li>
             </ul>
         </li>
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Traits\HasPermissions;
@@ -36,6 +37,11 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_admin' => 'boolean',
         ];
+    }
+
+    public function divisionGroups(): BelongsToMany
+    {
+        return $this->belongsToMany(DivisionGroup::class, 'division_group_user');
     }
 
     public function getCreatedAtYearAttribute()

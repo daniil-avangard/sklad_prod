@@ -10,7 +10,7 @@ use App\Http\Requests\User\UpdatePasswordRequest;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\Division;
-
+use App\Models\DivisionGroup;
 
 
 class UserController extends Controller
@@ -93,7 +93,9 @@ class UserController extends Controller
         $permissions = $user->permissions()->get();
         $roles = $user->roles()->get();
 
-        return view('users.show', compact('user', 'permissions', 'roles'));
+        $groups = $user->divisionGroups()->get();
+
+        return view('users.show', compact('user', 'permissions', 'roles', 'groups'));
     }
 
     public function delete(User $user)

@@ -14,7 +14,6 @@
             <div class="tab-content" id="pills-tabContent">
 
                 @include('users.admin.role_permission')
-
             </div>
 
         </div><!--end tab-content-->

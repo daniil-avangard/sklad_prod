@@ -288,3 +288,25 @@ Breadcrumbs::for('orders.edit', function ($trail, $order) {
     $trail->parent('orders');
     $trail->push('Редактирование заказа', route('orders.edit', $order));
 });
+
+// Группы подразделений
+
+Breadcrumbs::for('groups.divisions', function ($trail) {
+    $trail->parent('main');
+    $trail->push('Группы подразделений', route('groups.divisions'));
+});
+
+Breadcrumbs::for('groups.divisions.create', function ($trail) {
+    $trail->parent('groups.divisions');
+    $trail->push('Добавление группы подразделений', route('groups.divisions.create'));
+});
+
+Breadcrumbs::for('groups.divisions.edit', function ($trail, $group) {
+    $trail->parent('groups.divisions');
+    $trail->push('Редактирование группы подразделений', route('groups.divisions.edit', $group));
+});
+
+Breadcrumbs::for('groups.divisions.show', function ($trail, $group) {
+    $trail->parent('groups.divisions');
+    $trail->push('Просмотр группы подразделений', route('groups.divisions.show', $group));
+});

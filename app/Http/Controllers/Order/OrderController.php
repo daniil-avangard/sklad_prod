@@ -10,7 +10,7 @@ use App\Models\OrderItem;
 use App\Models\User;
 use App\Enum\Order\StatusEnum;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\DivisionGroup;
 
 class OrderController extends Controller
 {
@@ -19,7 +19,12 @@ class OrderController extends Controller
     {
         $this->authorize('viewAny', Order::class);
 
-        $orders = Order::all()->sortByDesc('created_at');
+        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+
+        $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
+            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
+        })->get()->sortByDesc('created_at');
+
         return view('orders.index', compact('orders'));
     }
 
@@ -135,6 +140,8 @@ class OrderController extends Controller
 
     public function statusTransferredToWarehouse(Order $order)
     {
+        $this->authorize('transferToWarehouse', $order);
+
         // Получаем все варианты продукта для заказа
         foreach ($order->items as $item) {
 
@@ -168,6 +175,8 @@ class OrderController extends Controller
 
     public function statusCanceled(Order $order)
     {
+        $this->authorize('canceledStatus', $order);
+
         $order->status = StatusEnum::CANCELED->value;
         $order->save();
         return redirect()->back()->with('success', 'Заказ успешно отменен');
