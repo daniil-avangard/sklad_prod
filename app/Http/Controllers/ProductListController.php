@@ -33,6 +33,10 @@ class ProductListController extends Controller
                 $query->where('division_id', $this->divisionId);
             })->orderBy('name')->get();
 
+        // dd($this->divisionId);
+        // dd($divisionGroupProducts);
+        // dd($products);
+
         return view('products.list.index', compact('products'));
     }
 

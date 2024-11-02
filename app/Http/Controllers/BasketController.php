@@ -33,29 +33,61 @@ class BasketController extends Controller
     }
 
 
+    // Старый метод
+    // public function add(Request $request, Product $product)
+    // {
 
+    //     // Получение корзины из текущего объекта
+    //     $basket = $this->basket;
+    //     // Получение количества из запроса, если не указано, то по умолчанию 1
+    //     $quantity = $request->input('quantity', 1);
+
+    //     // Проверка, существует ли продукт в корзине
+    //     if ($basket->products()->where('product_id', $product->id)->exists()) {
+    //         // Если продукт существует, то получаем его и увеличиваем количество
+    //         $basket_product = $basket->products()->where('product_id', $product->id)->first();
+    //         $basket_product->pivot->quantity += $quantity;
+    //         // Сохраняем изменения в количестве
+    //         $basket_product->pivot->save();
+    //     } else {
+    //         // Если продукт не существует в корзине, то добавляем его с указанным количеством
+    //         $basket->products()->attach($product, ['quantity' => $quantity]);
+    //     }
+
+    //     return redirect()->back()->with('success', 'Добавлено');
+    // }
+
+    // Новый метод с json ответом
     public function add(Request $request, Product $product)
     {
+        // Проверка на наличие продукта
+        if (!$product) {
+            return response()->json(['error' => 'Товар не найден.'], 404);
+        }
 
         // Получение корзины из текущего объекта
         $basket = $this->basket;
+
         // Получение количества из запроса, если не указано, то по умолчанию 1
-        $quantity = $request->input('quantity', 1);
+        $quantity = max(1, (int)$request->input('quantity', 1)); // Убедитесь, что количество не меньше 1
 
         // Проверка, существует ли продукт в корзине
-        if ($basket->products()->where('product_id', $product->id)->exists()) {
-            // Если продукт существует, то получаем его и увеличиваем количество
-            $basket_product = $basket->products()->where('product_id', $product->id)->first();
-            $basket_product->pivot->quantity += $quantity;
-            // Сохраняем изменения в количестве
-            $basket_product->pivot->save();
+        $basketProduct = $basket->products()->where('product_id', $product->id)->first();
+
+        if ($basketProduct) {
+            // Если продукт существует, увеличиваем количество
+            $basketProduct->pivot->quantity += $quantity;
+            $basketProduct->pivot->save(); // Сохраняем изменения в количестве
         } else {
             // Если продукт не существует в корзине, то добавляем его с указанным количеством
             $basket->products()->attach($product, ['quantity' => $quantity]);
         }
 
-        return redirect()->back()->with('success', 'Добавлено');
+        return response()->json([
+            'success' => 'Добавлено',
+        ]);
     }
+
 
 
     public function updateQuantity(Request $request, Product $product)
