@@ -1,5 +1,10 @@
 @extends('layouts.base')
 
+@push('styles-plugins')
+    <link type="text/css" href="/plugins/x-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endpush
+
 @section('content')
     @include('includes.breadcrumb', [
         'title' => 'Просмотр нескольких заказов',
@@ -46,16 +51,20 @@
                                                 $order->items->where('product_id', $item['product_id'] ?? null)->first()
                                                     ->quantity ?? '-';
                                         @endphp
-                                        {{ $quantity }}
+                                        <input type="text" id="{{ 'order-quant-value-' . $item['item-id'] }}" name="order-quant-value" data-pk="{{ $item['item-id'] }}" value='{{ $quantity }}'>
                                     </td>
                                 @endforeach
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+                <button id="update-orders-quont">Обновить данные</button>
 
             </div>
 
         </div>
     </div>
 @endsection
+@push('scripts-plugins')
+    <script src="/assets/js/test.js"></script>
+@endpush
