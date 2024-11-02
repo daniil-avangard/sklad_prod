@@ -97,6 +97,7 @@ class OrderController extends Controller
                         'name' => $item->product->name,
                         'quantity' => 0,
                         'total_variants' => $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved'),
+                        'item-id' => $item->id,
                     ];
                 }
                 $allItems[$item->product_id]['quantity'] += $item->quantity;
@@ -109,9 +110,20 @@ class OrderController extends Controller
     public function updateQuantity(Request $request)
     {
         $this->authorize('updateQuantity', Order::class);
-        $item = OrderItem::find($request->id);
-        $item->quantity = $request->quantity;
-        $item->save();
+        if (!(is_array($request->id))) {
+            $item = OrderItem::find($request->id);
+            $item->quantity = $request->quantity;
+            $item->save();
+        } else {
+            foreach($request->id as $key=>$value) {
+                $item = OrderItem::find($value);
+                $item->quantity = $request->quantity[$key];
+                $item->save();
+            }
+        }
+//        $item = OrderItem::find($request->id);
+//        $item->quantity = $request->quantity;
+//        $item->save();
         return response()->json(['success' => true]);
     }
 
