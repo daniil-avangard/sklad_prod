@@ -86,3 +86,5 @@
 @push('scripts-plugins')
 <script src="/assets/pages/product/add-product-to-basket.js"></script>
 @endpush
+
+<!-- Тест -->
