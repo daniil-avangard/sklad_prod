@@ -60,6 +60,12 @@ Breadcrumbs::for('arivals', function ($trail) {
     $trail->push('Приходы', route('arivals'));
 });
 
+// Сборка
+Breadcrumbs::for('assembly', function ($trail) {
+    $trail->parent('main');
+    $trail->push('Сборка', route('assembly'));
+});
+
 // Просмотр прихода
 
 Breadcrumbs::for('arivals.show', function ($trail, $arival) {
