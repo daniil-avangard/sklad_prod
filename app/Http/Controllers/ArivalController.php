@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
 
 
 class ArivalController extends Controller
@@ -124,5 +125,31 @@ class ArivalController extends Controller
         $arival->save();
 
         return redirect()->route('arivals')->with('success', 'Приход отклонен');
+    }
+    
+    public function assembly()
+    {
+//        $arivals = Arival::all()->sortByDesc('created_at');
+        
+        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+     
+        $listOforders = [];
+        $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
+            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
+        })->get()->sortByDesc('created_at');
+        
+        foreach ($orders as $order) {
+//            dd($order->status->value);
+            if ($order->status->value == "transferred_to_warehouse") {
+                $listOforders[] = $order;
+                
+            }
+        }
+        
+//        $orders1 = Order::where('votes', '>', 100)->take(10)->get();
+        
+//        $orders1 = Order::wh
+        
+        return view('arivals.assembly', compact('listOforders'));
     }
 }
