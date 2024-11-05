@@ -56,6 +56,8 @@
                             class="ti-control-record"></i>Приход</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('writeoffs') }}"><i
                             class="ti-control-record"></i>Списание</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('assembly') }}"><i
+                            class="ti-control-record"></i>Сборка</a></li>
             </ul>
         </li>
 
