@@ -11,10 +11,13 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
 
 
 class ArivalController extends Controller
 {
+//    use AuthorizesRequests;
+    
     public function index()
     {
         $arivals = Arival::all()->sortByDesc('created_at');
@@ -124,5 +127,36 @@ class ArivalController extends Controller
         $arival->save();
 
         return redirect()->route('arivals')->with('success', 'Приход отклонен');
+    }
+    
+    public function assembly()
+    {
+        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+
+        $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
+            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
+        })->get()->sortByDesc('created_at');
+        
+        $listForAssmbling = [];
+        foreach ($orders as $order) {
+            if ($order->status->value == "transferred_to_warehouse"){ 
+                $listForAssmbling[] = $order;
+            }
+        }
+        return view('arivals.assembly', compact('listForAssmbling'));
+    }
+    
+    public function showAssembl(Order $order)
+    {
+//        $this->authorize('view', $order);
+
+        $order->load(['items.product.variants', 'items.product' => function ($query) {
+            $query->orderBy('name');
+        }]);
+
+        $order->items = $order->items->sortBy(function ($item) {
+            return $item->product->name;
+        });
+        return view('arivals.show-assemble', compact('order'));
     }
 }
