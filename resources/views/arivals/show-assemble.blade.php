@@ -153,6 +153,26 @@
                     </div>
 
                 </div>
+                @foreach ($korobkas as $korobka)
+                    <div class="row assembly-korobka-row">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Коробка 1</td>
+                                        <td>
+                                            <label>Трек-номер</label>
+                                            <input type="text" id="" name="korobka" value='{{ $korobka->track_number }}'>
+                                            <button>Удалить</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                @endforeach
                 <div class="row">
                     <div class="card-body"><button id="korobka-add" class="btn btn-primary">Добавить коробку</button></div>
                 </div>
