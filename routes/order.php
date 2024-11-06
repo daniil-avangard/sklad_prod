@@ -11,6 +11,7 @@ use App\Http\Controllers\Order\OrderController;
 Route::get('/product/list', [ProductListController::class, 'index'])->name('products.list');
 Route::get('/product/list/{product}', [ProductListController::class, 'show'])->name('products.info');
 
+
 Route::get('/basket', [BasketController::class, 'index'])->name('basket');
 Route::post('/basket/add/{product}', [BasketController::class, 'add'])
     ->where('product', '[0-9]+')
