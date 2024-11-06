@@ -31,7 +31,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($listOforders as $order)
+                        @foreach ($listForAssmbling as $order)
                             <tr>
                                 <th scope="row">
                                     <label class="control control--checkbox">
