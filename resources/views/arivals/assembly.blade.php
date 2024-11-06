@@ -42,7 +42,7 @@
                                 <td>
                                     <a
                                         @can('view', $order)
-                                    href="{{ route('orders.show', $order) }}"
+                                    href="{{ route('assembly.show', $order) }}"
                                     @else
                                     href="#"
                                     @endcan>

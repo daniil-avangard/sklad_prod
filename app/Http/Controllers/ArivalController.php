@@ -16,6 +16,8 @@ use App\Models\Order;
 
 class ArivalController extends Controller
 {
+//    use AuthorizesRequests;
+    
     public function index()
     {
         $arivals = Arival::all()->sortByDesc('created_at');
@@ -142,5 +144,19 @@ class ArivalController extends Controller
             }
         }
         return view('arivals.assembly', compact('listForAssmbling'));
+    }
+    
+    public function showAssembl(Order $order)
+    {
+//        $this->authorize('view', $order);
+
+        $order->load(['items.product.variants', 'items.product' => function ($query) {
+            $query->orderBy('name');
+        }]);
+
+        $order->items = $order->items->sortBy(function ($item) {
+            return $item->product->name;
+        });
+        return view('arivals.show-assemble', compact('order'));
     }
 }
