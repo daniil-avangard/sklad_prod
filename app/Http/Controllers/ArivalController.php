@@ -158,8 +158,9 @@ class ArivalController extends Controller
             return $item->product->name;
         });
         $korobkas = Korobka::where('order_id', $order->id)->get();
-//        dd($korobkas);
+        $flagKorobka = "no";
+        if (count($korobkas) > 0) {$flagKorobka = "yes";}
         
-        return view('arivals.show-assemble', compact('order', 'korobkas'));
+        return view('arivals.show-assemble', compact('order', 'korobkas', 'flagKorobka'));
     }
 }

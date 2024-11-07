@@ -2,6 +2,7 @@
 
 @push('styles-plugins')
     <link type="text/css" href="/plugins/x-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
 @section('content')
@@ -27,9 +28,9 @@
                     </div> <!--end row-->
                 </div>
                 <div class="card-body">
-                    <a class="btn btn-primary" href="">Начать сборку</a>
-                    <a class="btn btn-warning" href="">Собран</a>
-                    <a class="btn btn-danger" href="">Отправлен</a>
+                    <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}">Начать сборку</button>
+                    <button class="btn btn-warning">Собран</button>
+                    <button class="btn btn-danger">Отправлен</button>
                 </div>
             </div>
 
@@ -135,7 +136,7 @@
                         </div><!--end col-->
                     </div> <!--end row-->
                 </div>
-                <div class="row assembly-korobka-row">
+                <div id="korobka-block-item" class="row assembly-korobka-row korobka-item-none">
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead></thead>
@@ -145,6 +146,9 @@
                                     <td>
                                         <label>Трек-номер</label>
                                         <input type="text" id="" name="korobka" value=''>
+                                        <button>Очистить</button>
+                                    </td>
+                                    <td>
                                         <button>Удалить</button>
                                     </td>
                                 </tr>
@@ -164,6 +168,9 @@
                                         <td>
                                             <label>Трек-номер</label>
                                             <input type="text" id="" name="korobka" value='{{ $korobka->track_number }}'>
+                                            <button>Очисить</button>
+                                        </td>
+                                        <td>
                                             <button>Удалить</button>
                                         </td>
                                     </tr>
@@ -173,10 +180,9 @@
 
                     </div>
                 @endforeach
-                <div class="row">
-                    <div class="card-body"><button id="korobka-add" class="btn btn-primary">Добавить коробку</button></div>
-                </div>
-
+                    <div class="row {{ $flagKorobka =='yes' ? 'korobka-item-show' : 'korobka-item-none'  }}" id="korobka-add-wrap">
+                        <div class="card-body"><button id="korobka-add" class="btn btn-primary">Добавить коробку</button></div>
+                    </div>
             </div>
 
         </div>
