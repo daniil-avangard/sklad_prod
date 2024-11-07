@@ -18,7 +18,7 @@ use App\Models\Korobka;
 class ArivalController extends Controller
 {
 //    use AuthorizesRequests;
-    
+
     public function index()
     {
         $arivals = Arival::all()->sortByDesc('created_at');
@@ -129,7 +129,7 @@ class ArivalController extends Controller
 
         return redirect()->route('arivals')->with('success', 'Приход отклонен');
     }
-    
+
     public function assembly()
     {
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
@@ -137,16 +137,16 @@ class ArivalController extends Controller
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get()->sortByDesc('created_at');
-        
+
         $listForAssmbling = [];
         foreach ($orders as $order) {
-            if ($order->status->value == "transferred_to_warehouse"){ 
+            if ($order->status->value == "transferred_to_warehouse"){
                 $listForAssmbling[] = $order;
             }
         }
         return view('arivals.assembly', compact('listForAssmbling'));
     }
-    
+
     public function showAssembl(Order $order)
     {
 //        $this->authorize('view', $order);
@@ -160,7 +160,7 @@ class ArivalController extends Controller
         $korobkas = Korobka::where('order_id', $order->id)->get();
         $flagKorobka = "no";
         if (count($korobkas) > 0) {$flagKorobka = "yes";}
-        
+
         return view('arivals.show-assemble', compact('order', 'korobkas', 'flagKorobka'));
     }
 }
