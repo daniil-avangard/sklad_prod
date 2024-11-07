@@ -5,9 +5,13 @@ buttons.forEach((item, index) => {
 });
 
 const createKorobkaElement = async () => {
-    let initKorobkaList = document.querySelectorAll('.assembly-korobka-row');
+//    document.getElementById("Button").disabled=true
+let initKorobkaList = document.querySelectorAll('.assembly-korobka-row');
     let parentKorobkaNode = initKorobkaList[0].parentNode;
     let counter = initKorobkaList.length;
+    let data = {name: counter, orderId: document.getElementById("start-assembl").dataset.pk, action: "create"};
+    let idKorobka = await sendToKorobkaToApi(data);
+    
     let clone = initKorobkaList[0].cloneNode(true);
     clone.classList.remove("korobka-item-none");
     clone.classList.add("korobka-item-show");
@@ -16,15 +20,29 @@ const createKorobkaElement = async () => {
     clone.getElementsByTagName("TR")[0].firstElementChild.innerHTML = "Коробка " + counter;
     clone.getElementsByTagName("INPUT")[0].value = "";
     clone.querySelectorAll('.delete-korobka')[0].onclick = () => {deleteKorobka(clone.querySelectorAll('.delete-korobka')[0], clone);};
+    clone.querySelectorAll('.delete-korobka')[0].dataset.pk = idKorobka;
     
     parentKorobkaNode.insertBefore(clone, parentKorobkaNode.lastChild.previousElementSibling);
-    let data = {name: counter, orderId: document.getElementById("start-assembl").dataset.pk, action: "create"};
-    await sendToKorobkaToApi(data);
-    Toast.getPopup();
-    for (let proper in Toast) {console.log(proper);};
+    
+//    let idKorobka = await sendToKorobkaToApi(data);
+//    Toast.getPopup({
+//                    icon: 'success',
+//                    title: 'Количество обновлено'
+//                });
+//    for (let proper in Toast) {console.log(proper);};
 }
 
-document.getElementById("korobka-add").onclick = createKorobkaElement;
+document.getElementById("korobka-add").onclick = async () => {
+    document.getElementById("korobka-add").disabled=true;
+    document.querySelectorAll('.delete-korobka').forEach((item, index) => {
+        item.disabled=true;
+    });
+    await createKorobkaElement();
+    document.getElementById("korobka-add").disabled=false;
+    document.querySelectorAll('.delete-korobka').forEach((item, index) => {
+        item.disabled=false;
+    });
+}
 
 document.getElementById("start-assembl").onclick = async () => {
     console.log(document.getElementById("start-assembl").dataset.korobkaflag);
@@ -40,8 +58,14 @@ document.getElementById("start-assembl").onclick = async () => {
 
 const deleteKorobka = async (item, parent) => {
     parent.remove();
+    document.querySelectorAll('.delete-korobka').forEach((item, index) => {
+        item.disabled=true;
+    });
     let data = {name: "", orderId: item.dataset.pk, action: "delete"};
     await sendToKorobkaToApi(data);
+    document.querySelectorAll('.delete-korobka').forEach((item, index) => {
+        item.disabled=false;
+    });
 }
 
 const sendToKorobkaToApi = async (data) => {
@@ -55,17 +79,20 @@ const sendToKorobkaToApi = async (data) => {
                                         },
                                 body: JSON.stringify(dataToSend)
                                 });
+                                
+    let res = "";
     try {
         const response = await fetch(request);  
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
-        const data = await response.json();
+        res = await response.json();
         
-        console.log(data);
+        console.log(res);
     }
     catch(error) {
         console.log(error.message);
     }
+    return res.data;
 }
 

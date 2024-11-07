@@ -178,6 +178,6 @@ class ArivalController extends Controller
             
         }
         
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'data' => $korobka->id]);
     }
 }
