@@ -28,7 +28,7 @@
                     </div> <!--end row-->
                 </div>
                 <div class="card-body">
-                    <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}">Начать сборку</button>
+                    <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}">Начать сборку</button>
                     <button class="btn btn-warning">Собран</button>
                     <button class="btn btn-danger">Отправлен</button>
                 </div>
@@ -147,10 +147,11 @@
                                     <td>
                                         <label>Трек-номер</label>
                                         <input type="text" id="" name="korobka" value=''>
+                                        <button class="add-track">Добавить</button>
                                         <button class="clean-track">Очистить</button>
                                     </td>
                                     <td>
-                                        <button class="delete-korobka">Удалить</button>
+                                        <button class="delete-korobka" data-pk="{{ $order->id }}">Удалить</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -170,10 +171,11 @@
                                         <td>
                                             <label>Трек-номер</label>
                                             <input type="text" id="" name="korobka" value='{{ $korobka->track_number }}'>
+                                            <button class="add-track">Добавить</button>
                                             <button class="clean-track">Очисить</button>
                                         </td>
                                         <td>
-                                            <button class="delete-korobka">Удалить</button>
+                                            <button class="delete-korobka" data-pk="{{ $korobka->id }}">Удалить</button>
                                         </td>
                                     </tr>
                                 </tbody>

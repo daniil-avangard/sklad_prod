@@ -1,13 +1,13 @@
 let buttons = document.querySelectorAll('.delete-korobka');
 buttons.forEach((item, index) => {
     let parent = document.querySelectorAll('.assembly-korobka-row')[index];
-    item.onclick = () => {parent.remove();}
+    item.onclick = () => {deleteKorobka(item, parent);};
 });
 
-const createKorobkaElement = () => {
+const createKorobkaElement = async () => {
     let initKorobkaList = document.querySelectorAll('.assembly-korobka-row');
     let parentKorobkaNode = initKorobkaList[0].parentNode;
-    let counter = initKorobkaList.length + 1;
+    let counter = initKorobkaList.length;
     let clone = initKorobkaList[0].cloneNode(true);
     clone.classList.remove("korobka-item-none");
     clone.classList.add("korobka-item-show");
@@ -15,23 +15,57 @@ const createKorobkaElement = () => {
     
     clone.getElementsByTagName("TR")[0].firstElementChild.innerHTML = "Коробка " + counter;
     clone.getElementsByTagName("INPUT")[0].value = "";
-    clone.querySelectorAll('.delete-korobka')[0].onclick = () => {deleteKorobka(clone);};
+    clone.querySelectorAll('.delete-korobka')[0].onclick = () => {deleteKorobka(clone.querySelectorAll('.delete-korobka')[0], clone);};
     
     parentKorobkaNode.insertBefore(clone, parentKorobkaNode.lastChild.previousElementSibling);
+    let data = {name: counter, orderId: document.getElementById("start-assembl").dataset.pk, action: "create"};
+    await sendToKorobkaToApi(data);
+    Toast.getPopup();
+    for (let proper in Toast) {console.log(proper);};
 }
 
 document.getElementById("korobka-add").onclick = createKorobkaElement;
 
-document.getElementById("start-assembl").onclick = () => {
+document.getElementById("start-assembl").onclick = async () => {
     console.log(document.getElementById("start-assembl").dataset.korobkaflag);
     if (document.getElementById("start-assembl").dataset.korobkaflag == "no") {
         createKorobkaElement();
         document.getElementById("korobka-add-wrap").classList.remove("korobka-item-none");
         document.getElementById("korobka-add-wrap").classList.add("korobka-item-show");
+        document.getElementById("start-assembl").dataset.korobkaflag = "yes";
+//        let data = {name: "1", orderId: document.getElementById("start-assembl").dataset.pk, action: "create"};
+//        await sendToKorobkaToApi(data);
     }
 }
 
-const deleteKorobka = (parent) => {
+const deleteKorobka = async (item, parent) => {
     parent.remove();
+    let data = {name: "", orderId: item.dataset.pk, action: "delete"};
+    await sendToKorobkaToApi(data);
+}
+
+const sendToKorobkaToApi = async (data) => {
+    let url = '/assembly/createKorobka';
+    let dataToSend = {name: data.name, orderId: data.orderId, action:data.action, _token: $('meta[name="csrf-token"]').attr('content') };
+    console.log(dataToSend);
+    const request = new Request(url, {
+                                method: "POST",
+                                headers: {
+                                            'Content-Type': 'application/json;charset=utf-8',
+                                        },
+                                body: JSON.stringify(dataToSend)
+                                });
+    try {
+        const response = await fetch(request);  
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        console.log(data);
+    }
+    catch(error) {
+        console.log(error.message);
+    }
 }
 

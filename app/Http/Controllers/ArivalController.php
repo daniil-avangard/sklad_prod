@@ -163,4 +163,21 @@ class ArivalController extends Controller
         
         return view('arivals.show-assemble', compact('order', 'korobkas', 'flagKorobka'));
     }
+    
+    public function createKorobka(Request $request)
+    {
+        if ($request->action == "create") {
+            $korobka = new Korobka();
+            $korobka->counter_number = $request->name;
+            $korobka->order_id = $request->orderId;
+            $korobka->save();
+            
+        } else {
+            $korobka = Korobka::find($request->orderId);
+            $korobka->delete();
+            
+        }
+        
+        return response()->json(['success' => true]);
+    }
 }
