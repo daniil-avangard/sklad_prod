@@ -136,6 +136,7 @@
                         </div><!--end col-->
                     </div> <!--end row-->
                 </div>
+
                 <div id="korobka-block-item" class="row assembly-korobka-row korobka-item-none">
                     <div class="table-responsive">
                         <table class="table table-bordered">
@@ -146,10 +147,10 @@
                                     <td>
                                         <label>Трек-номер</label>
                                         <input type="text" id="" name="korobka" value=''>
-                                        <button>Очистить</button>
+                                        <button class="clean-track">Очистить</button>
                                     </td>
                                     <td>
-                                        <button>Удалить</button>
+                                        <button class="delete-korobka">Удалить</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -157,6 +158,7 @@
                     </div>
 
                 </div>
+                
                 @foreach ($korobkas as $korobka)
                     <div class="row assembly-korobka-row">
                         <div class="table-responsive">
@@ -164,14 +166,14 @@
                                 <thead></thead>
                                 <tbody>
                                     <tr>
-                                        <td>Коробка 1</td>
+                                        <td>Коробка {{ $korobka->counter_number }}</td>
                                         <td>
                                             <label>Трек-номер</label>
                                             <input type="text" id="" name="korobka" value='{{ $korobka->track_number }}'>
-                                            <button>Очисить</button>
+                                            <button class="clean-track">Очисить</button>
                                         </td>
                                         <td>
-                                            <button>Удалить</button>
+                                            <button class="delete-korobka">Удалить</button>
                                         </td>
                                     </tr>
                                 </tbody>
