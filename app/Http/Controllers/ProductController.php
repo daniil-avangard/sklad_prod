@@ -20,9 +20,9 @@ class ProductController extends Controller
     public function index()
     {
 
-        if (Gate::denies('view', Product::class)) {
-            throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
-        }
+    if (Gate::denies('view', Product::class)) {
+        throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
+    }
 
         $products = Product::with('variants')->get()->map(function ($product) {
             $product->total_quantity = $product->variants->sum('quantity');
