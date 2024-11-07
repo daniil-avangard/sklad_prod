@@ -17,7 +17,7 @@ class OrderController extends Controller
     use AuthorizesRequests;
     public function index()
     {
-        $this->authorize('Order ViewAny', Order::class);
+        $this->authorize('viewAny', Order::class);
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
 
@@ -30,7 +30,7 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        $this->authorize('Order View', $order);
+        $this->authorize('view', $order);
 
         $order->load(['items.product.variants', 'items.product' => function ($query) {
             $query->orderBy('name');

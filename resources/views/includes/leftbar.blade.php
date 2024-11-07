@@ -8,14 +8,16 @@
                     class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span>
             </a>
             <ul class="nav-second-level" aria-expanded="false">
-                @can('Order ViewAny', \App\Models\Order::class)
+                @can('viewAny', \App\Models\Order::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('orders') }}"><i
                             class="ti-control-record"></i>Заказы</a></li>
                 @endcan
                 <li class="nav-item"><a class="nav-link" href="{{ route('basket') }}"><i
                             class="ti-control-record"></i>Корзина</a></li>
+                @can('create', \App\Models\Order::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('products.list') }}"><i
                             class="ti-control-record"></i>Товары</a></li>
+                @endcan
             </ul>
         </li>
         <li>
