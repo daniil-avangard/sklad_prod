@@ -2,11 +2,12 @@
 
 @push('styles-plugins')
     <link type="text/css" href="/plugins/x-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
 @section('content')
     @include('includes.breadcrumb', [
-        'title' => 'Заказ №' . $order->id,
+        'title' => 'Сборка заказа №' . $order->id,
         'route' => 'assembly.show',
         'breadcrumbs' => 'Сборка',
         'param' => $order,
@@ -27,17 +28,9 @@
                     </div> <!--end row-->
                 </div>
                 <div class="card-body">
-                    @can('processingStatus', $order)
-                        <a class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
-                            куратором</a>
-                    @endcan
-                    @can('transferToWarehouse', $order)
-                        <a class="btn btn-warning" href="{{ route('orders.status.transferred-to-warehouse', $order) }}">Передать
-                            на склад</a>
-                    @endcan
-                    @can('canceledStatus', $order)
-                        <a class="btn btn-danger" href="{{ route('orders.status.canceled', $order) }}">Отменить</a>
-                    @endcan
+                    <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}">Начать сборку</button>
+                    <button class="btn btn-warning">Собран</button>
+                    <button class="btn btn-danger">Отправлен</button>
                 </div>
             </div>
 
@@ -134,6 +127,63 @@
                 </div>
 
             </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h2 class="card-title">Информация по сборке</h2>
+                        </div><!--end col-->
+                    </div> <!--end row-->
+                </div>
+                <div id="korobka-block-item" class="row assembly-korobka-row korobka-item-none">
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead></thead>
+                            <tbody>
+                                <tr>
+                                    <td>Коробка 1</td>
+                                    <td>
+                                        <label>Трек-номер</label>
+                                        <input type="text" id="" name="korobka" value=''>
+                                        <button>Очистить</button>
+                                    </td>
+                                    <td>
+                                        <button>Удалить</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                @foreach ($korobkas as $korobka)
+                    <div class="row assembly-korobka-row">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Коробка 1</td>
+                                        <td>
+                                            <label>Трек-номер</label>
+                                            <input type="text" id="" name="korobka" value='{{ $korobka->track_number }}'>
+                                            <button>Очисить</button>
+                                        </td>
+                                        <td>
+                                            <button>Удалить</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                @endforeach
+                    <div class="row {{ $flagKorobka =='yes' ? 'korobka-item-show' : 'korobka-item-none'  }}" id="korobka-add-wrap">
+                        <div class="card-body"><button id="korobka-add" class="btn btn-primary">Добавить коробку</button></div>
+                    </div>
+            </div>
 
         </div>
         <div class="col-3">
@@ -164,4 +214,5 @@
     <script src="/plugins/x-editable/js/bootstrap-editable.min.js"></script>
 
     <script src="/assets/pages/orders/update.quantity.js"></script>
+    <script src="/assets/js/assemblyKorobka.js"></script>
 @endpush

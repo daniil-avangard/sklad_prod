@@ -9200,4 +9200,7 @@ input.add-file-input {
     margin-top: 0;
   }
 }
+.korobka-item-none {
+    display: none;
+}
 /*# sourceMappingURL=app.css.map */

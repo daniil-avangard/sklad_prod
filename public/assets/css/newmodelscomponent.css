@@ -1,0 +1,6 @@
+.korobka-item-none {
+    display: none !important;
+}
+.korobka-item-show {
+    display: block;
+}

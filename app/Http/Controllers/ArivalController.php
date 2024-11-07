@@ -12,6 +12,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
+use App\Models\Korobka;
 
 
 class ArivalController extends Controller
@@ -153,10 +154,13 @@ class ArivalController extends Controller
         $order->load(['items.product.variants', 'items.product' => function ($query) {
             $query->orderBy('name');
         }]);
-
         $order->items = $order->items->sortBy(function ($item) {
             return $item->product->name;
         });
-        return view('arivals.show-assemble', compact('order'));
+        $korobkas = Korobka::where('order_id', $order->id)->get();
+        $flagKorobka = "no";
+        if (count($korobkas) > 0) {$flagKorobka = "yes";}
+        
+        return view('arivals.show-assemble', compact('order', 'korobkas', 'flagKorobka'));
     }
 }
