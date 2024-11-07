@@ -12,8 +12,10 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('orders') }}"><i
                             class="ti-control-record"></i>Заказы</a></li>
                 @endcan
+                @can('create', \App\Models\Order::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('basket') }}"><i
                             class="ti-control-record"></i>Корзина</a></li>
+                @endcan
                 @can('create', \App\Models\Order::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('products.list') }}"><i
                             class="ti-control-record"></i>Товары</a></li>
