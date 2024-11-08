@@ -82,7 +82,7 @@ class OrderController extends Controller
 
     public function selected(Request $request)
     {
-        $this->authorize('view', Order::class);
+        $this->authorize('viewAny', Order::class);
 
         $orderIds = $request->input('ids', []);
         $orders = Order::whereIn('id', explode(',', $orderIds))->get();

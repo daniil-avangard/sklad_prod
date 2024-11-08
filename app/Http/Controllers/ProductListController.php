@@ -47,6 +47,8 @@ class ProductListController extends Controller
 
     public function show(Product $product)
     {
+        $this->authorize('view', $product);
+
         $variants = $product->variants()->where('is_active', true)->orderBy('date_of_actuality', 'desc')->get();
         return view('products.list.show', compact('product', 'variants'));
     }
