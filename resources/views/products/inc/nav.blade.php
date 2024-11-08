@@ -10,10 +10,12 @@
                 href="{{ route('products.edit', $product->id) }}">Редактировать</a>
         </li>
         @endcan
+        @can('view', App\Models\Arival::class)
         <li class="nav-item">
             <a class="nav-link {{ is_active('products.arival') }}"
                 href="{{ route('products.arival', $product) }}">Приходы</a>
         </li>
+        @endcan
         <li class="nav-item">
             <a class="nav-link {{ is_active('products.writeoff') }}"
                 href="{{ route('products.writeoff', $product) }}">Списания</a>

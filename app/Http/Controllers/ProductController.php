@@ -9,14 +9,18 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Company;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Product\UpdateProductRequest;
+use App\Models\Arival;
 use App\Models\ProductVariant;
 use App\Models\Division;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\Category;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProductController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
 
@@ -193,9 +197,11 @@ class ProductController extends Controller
 
     public function arival(Product $product)
     {
-        if (Gate::denies('view', $product)) {
-            throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
-        }
+        // if (Gate::denies('view', $product)) {
+        //     throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
+        // }
+
+        $this->authorize('view', Arival::class);
 
         $arivals = $product->arivalProduct()->with('arival')->orderByDesc('created_at')->get()->map(function ($arivalProduct) {
             return [
@@ -211,6 +217,8 @@ class ProductController extends Controller
         if (Gate::denies('view', $product)) {
             throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
         }
+
+        $this->authorize('view', Arival::class);
 
         $writeoffs = $product->writeOffProduct()->with('writeOff')->get()->map(function ($writeOffProduct) {
             return [
