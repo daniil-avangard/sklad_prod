@@ -16,9 +16,11 @@
                 href="{{ route('products.arival', $product) }}">Приходы</a>
         </li>
         @endcan
+        @can('view', App\Models\Writeoff::class)
         <li class="nav-item">
             <a class="nav-link {{ is_active('products.writeoff') }}"
                 href="{{ route('products.writeoff', $product) }}">Списания</a>
         </li>
+        @endcan
     </ul>
 </div>
