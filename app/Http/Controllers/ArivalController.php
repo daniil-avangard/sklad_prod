@@ -13,6 +13,7 @@ use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\Korobka;
+use App\Enum\Order\StatusEnum;
 
 
 class ArivalController extends Controller
@@ -139,8 +140,9 @@ class ArivalController extends Controller
         })->get()->sortByDesc('created_at');
         
         $listForAssmbling = [];
+        $statusList = array("transferred_to_warehouse",'warehouse_started');
         foreach ($orders as $order) {
-            if ($order->status->value == "transferred_to_warehouse"){ 
+            if (in_array($order->status->value, $statusList)) { 
                 $listForAssmbling[] = $order;
             }
         }
@@ -179,5 +181,22 @@ class ArivalController extends Controller
         }
         
         return response()->json(['success' => true, 'data' => $korobka->id]);
+    }
+    
+    public function updateKorobka(Request $request)
+    {
+        $korobka = Korobka::find($request->orderId);
+        $korobka->track_number = $request->track;
+        $korobka->save();
+        return response()->json(['success' => true]);
+    }
+    
+    public function korobkaChangeStatus(Request $request)
+    {
+        $myVar = $request->orderId;
+        $order = Order::find($request->orderId);
+        $order->status = StatusEnum::WAREHOUSE_START->value;
+        $order->save();
+        return response()->json(['success' => true]);
     }
 }

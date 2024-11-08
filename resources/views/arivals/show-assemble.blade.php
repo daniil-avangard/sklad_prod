@@ -217,6 +217,6 @@
 @push('scripts-plugins')
     <script src="/plugins/x-editable/js/bootstrap-editable.min.js"></script>
 
-    <script src="/assets/pages/orders/update.quantity.js"></script>
+<!--    <script src="/assets/pages/orders/update.quantity.js"></script>-->
     <script src="/assets/js/assemblyKorobka.js"></script>
 @endpush

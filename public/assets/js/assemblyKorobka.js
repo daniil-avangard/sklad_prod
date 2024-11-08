@@ -1,12 +1,20 @@
-let buttons = document.querySelectorAll('.delete-korobka');
-buttons.forEach((item, index) => {
+let buttonsDelete = document.querySelectorAll('.delete-korobka');
+let buttonsTrack = document.querySelectorAll('.add-track');
+buttonsDelete.forEach((item, index) => {
     let parent = document.querySelectorAll('.assembly-korobka-row')[index];
+    
     item.onclick = () => {deleteKorobka(item, parent);};
+});
+
+buttonsTrack.forEach((item, index) => {
+    let parent = document.querySelectorAll('.assembly-korobka-row')[index];
+    let itemForPK = document.querySelectorAll('.delete-korobka')[index];
+    item.onclick = () => {addTrackToKorobka(itemForPK, parent);};
 });
 
 const createKorobkaElement = async () => {
 //    document.getElementById("Button").disabled=true
-let initKorobkaList = document.querySelectorAll('.assembly-korobka-row');
+    let initKorobkaList = document.querySelectorAll('.assembly-korobka-row');
     let parentKorobkaNode = initKorobkaList[0].parentNode;
     let counter = initKorobkaList.length;
     let data = {name: counter, orderId: document.getElementById("start-assembl").dataset.pk, action: "create"};
@@ -21,6 +29,7 @@ let initKorobkaList = document.querySelectorAll('.assembly-korobka-row');
     clone.getElementsByTagName("INPUT")[0].value = "";
     clone.querySelectorAll('.delete-korobka')[0].onclick = () => {deleteKorobka(clone.querySelectorAll('.delete-korobka')[0], clone);};
     clone.querySelectorAll('.delete-korobka')[0].dataset.pk = idKorobka;
+    clone.querySelectorAll('.add-track')[0].onclick = () => {addTrackToKorobka(clone.querySelectorAll('.delete-korobka')[0], clone);};
     
     parentKorobkaNode.insertBefore(clone, parentKorobkaNode.lastChild.previousElementSibling);
     
@@ -47,12 +56,38 @@ document.getElementById("korobka-add").onclick = async () => {
 document.getElementById("start-assembl").onclick = async () => {
     console.log(document.getElementById("start-assembl").dataset.korobkaflag);
     if (document.getElementById("start-assembl").dataset.korobkaflag == "no") {
-        createKorobkaElement();
+        await createKorobkaElement();
         document.getElementById("korobka-add-wrap").classList.remove("korobka-item-none");
         document.getElementById("korobka-add-wrap").classList.add("korobka-item-show");
         document.getElementById("start-assembl").dataset.korobkaflag = "yes";
-//        let data = {name: "1", orderId: document.getElementById("start-assembl").dataset.pk, action: "create"};
-//        await sendToKorobkaToApi(data);
+        
+        await changeOrderStatus();
+
+    }
+}
+
+const changeOrderStatus = async () => {
+    let dataToSend = {orderId: document.getElementById("start-assembl").dataset.pk, _token: $('meta[name="csrf-token"]').attr('content')}; 
+    let url = '/assembly/korobkaChangeStatus';
+    console.log(dataToSend);
+    const request = new Request(url, {
+                                method: "POST",
+                                headers: {
+                                            'Content-Type': 'application/json;charset=utf-8',
+                                        },
+                                body: JSON.stringify(dataToSend)
+                                });
+    try {
+        const response = await fetch(request);  
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        res = await response.json();
+        
+        console.log(res);
+    }
+    catch(error) {
+        console.log(error.message);
     }
 }
 
@@ -66,6 +101,39 @@ const deleteKorobka = async (item, parent) => {
     document.querySelectorAll('.delete-korobka').forEach((item, index) => {
         item.disabled=false;
     });
+}
+
+const addTrackToKorobka = async (itemForPK, parent) => {
+    parent.querySelectorAll('.add-track')[0].disabled=true;
+    let url = '/assembly/updateKorobka';
+    let trackNumber = parent.getElementsByTagName("INPUT")[0].value;
+    if (trackNumber == "") {
+        parent.querySelectorAll('.add-track')[0].disabled=false;
+        return;
+    }
+    let dataToSend = {track: trackNumber, orderId: itemForPK.dataset.pk, _token: $('meta[name="csrf-token"]').attr('content') };
+    console.log(dataToSend);
+    const request = new Request(url, {
+                                method: "POST",
+                                headers: {
+                                            'Content-Type': 'application/json;charset=utf-8',
+                                        },
+                                body: JSON.stringify(dataToSend)
+                                });
+    
+    try {
+        const response = await fetch(request);  
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        res = await response.json();
+        
+        console.log(res);
+    }
+    catch(error) {
+        console.log(error.message);
+    }
+    parent.querySelectorAll('.add-track')[0].disabled=false;
 }
 
 const sendToKorobkaToApi = async (data) => {
