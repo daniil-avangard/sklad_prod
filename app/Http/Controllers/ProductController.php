@@ -15,6 +15,7 @@ use App\Models\Division;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\Category;
+use App\Models\Writeoff;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProductController extends Controller
@@ -214,11 +215,11 @@ class ProductController extends Controller
 
     public function writeoff(Product $product)
     {
-        if (Gate::denies('view', $product)) {
-            throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
-        }
+        // if (Gate::denies('view', $product)) {
+        //     throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
+        // }
 
-        $this->authorize('view', Arival::class);
+        $this->authorize('view', Writeoff::class);
 
         $writeoffs = $product->writeOffProduct()->with('writeOff')->get()->map(function ($writeOffProduct) {
             return [
