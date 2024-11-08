@@ -5,7 +5,7 @@
         'title' => 'Категории',
         'route' => 'categories',
         'breadcrumbs' => 'Категории',
-        'add_route' => 'categories.create',
+        'add_route' => $canCreateProduct ? 'categories.create' : null
     ])
 
     <div class="row">

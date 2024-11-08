@@ -5,18 +5,28 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Http\Requests\Category\CreateCategoryRequest;
+use App\Models\Product;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Str;
+use \Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
+        $this->authorize('view', Product::class);
+        $canCreateProduct = Gate::allows('create', Product::class);
+
         $categories = Category::orderBy('name')->get();
-        return view('categories.index', compact('categories'));
+        return view('categories.index', compact('categories', 'canCreateProduct'));
     }
 
     public function create()
     {
+        $this->authorize('create', Product::class);
+
         return view('categories.create');
     }
 

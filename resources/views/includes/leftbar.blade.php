@@ -33,9 +33,11 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('products') }}"><i
                             class="ti-control-record"></i>Продукты</a></li>
                 @endcan
+                @can('view', \App\Models\Product::class)
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('categories') }}"><i class="ti-control-record"></i>Категории</a>
                 </li>
+                @endcan
                 <li class="nav-item"><a class="nav-link" href="{{ route('companies') }}"><i
                             class="ti-control-record"></i>Компании</a>
                 </li>
