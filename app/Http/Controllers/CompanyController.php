@@ -5,13 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Company;
 use App\Http\Requests\Company\CreateCompanyRequest;
+use App\Models\Product;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Gate;
 
 class CompanyController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
+        $canCreateProduct = Gate::allows('create', Product::class);
+
         $companies = Company::orderBy('name')->get();
-        return view('companies.index', compact('companies'));
+        return view('companies.index', compact('companies', 'canCreateProduct'));
     }
 
     public function create()
@@ -29,6 +36,8 @@ class CompanyController extends Controller
 
     public function edit(Company $company)
     {
+        $this->authorize('update', Product::class);
+
         return view('companies.edit', compact('company'));
     }
 
@@ -42,6 +51,8 @@ class CompanyController extends Controller
 
     public function delete(Company $company)
     {
+        $this->authorize('delete', Product::class);
+
         $company->delete();
         return redirect()->route('companies')->with('success', 'Компания успешно удалена');
     }

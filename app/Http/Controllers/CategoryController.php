@@ -42,6 +42,8 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
+        $this->authorize('update', Product::class);
+
         return view('categories.edit', compact('category'));
     }
 

@@ -24,17 +24,18 @@ class ProductController extends Controller
 
     public function index()
     {
+        if (Gate::denies('view', Product::class)) {
+            throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
+        }
 
-    if (Gate::denies('view', Product::class)) {
-        throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
-    }
+        $canCreateProduct = Gate::allows('create', Product::class);
 
         $products = Product::with('variants')->get()->map(function ($product) {
             $product->total_quantity = $product->variants->sum('quantity');
             $product->total_reserved = $product->variants->sum('reserved');
             return $product;
         });
-        return view('products.index', compact('products'));
+        return view('products.index', compact('products', 'canCreateProduct'));
     }
 
     public function create()
