@@ -71,6 +71,7 @@ document.getElementById("package-assembled").onclick = async () => {
 }
 
 const changeOrderStatus = async (status="started") => {
+    console.log(status);
     let dataToSend = {status: status, orderId: document.getElementById("start-assembl").dataset.pk, _token: $('meta[name="csrf-token"]').attr('content')}; 
     let url = '/assembly/korobkaChangeStatus';
     console.log(dataToSend);
