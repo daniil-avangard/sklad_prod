@@ -9,27 +9,33 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Company;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\Product\UpdateProductRequest;
+use App\Models\Arival;
 use App\Models\ProductVariant;
 use App\Models\Division;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\Category;
+use App\Models\Writeoff;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProductController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
-
         if (Gate::denies('view', Product::class)) {
             throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
         }
+
+        $canCreateProduct = Gate::allows('create', Product::class);
 
         $products = Product::with('variants')->get()->map(function ($product) {
             $product->total_quantity = $product->variants->sum('quantity');
             $product->total_reserved = $product->variants->sum('reserved');
             return $product;
         });
-        return view('products.index', compact('products'));
+        return view('products.index', compact('products', 'canCreateProduct'));
     }
 
     public function create()
@@ -193,9 +199,11 @@ class ProductController extends Controller
 
     public function arival(Product $product)
     {
-        if (Gate::denies('view', $product)) {
-            throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
-        }
+        // if (Gate::denies('view', $product)) {
+        //     throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
+        // }
+
+        $this->authorize('view', Arival::class);
 
         $arivals = $product->arivalProduct()->with('arival')->orderByDesc('created_at')->get()->map(function ($arivalProduct) {
             return [
@@ -208,9 +216,11 @@ class ProductController extends Controller
 
     public function writeoff(Product $product)
     {
-        if (Gate::denies('view', $product)) {
-            throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
-        }
+        // if (Gate::denies('view', $product)) {
+        //     throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
+        // }
+
+        $this->authorize('view', Writeoff::class);
 
         $writeoffs = $product->writeOffProduct()->with('writeOff')->get()->map(function ($writeOffProduct) {
             return [

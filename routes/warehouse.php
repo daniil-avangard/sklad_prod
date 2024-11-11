@@ -5,8 +5,6 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ArivalController;
 use App\Http\Controllers\WriteoffController;
 
-
-
 Route::middleware('auth', 'admin')->group(function () {
 
 
@@ -40,4 +38,11 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::get('/writeoffs/{writeoff}/accepted', [WriteoffController::class, 'accepted'])->name('writeoffs.accepted');
     // Отклонение списания
     Route::get('/writeoffs/{writeoff}/rejected', [WriteoffController::class, 'rejected'])->name('writeoffs.rejected');
+
+    // Сборка
+    Route::get('/assembly', [ArivalController::class, 'assembly'])->name('assembly');
+    Route::get('/assembly/{order}', [ArivalController::class, 'showAssembl'])->name('assembly.show');
+    Route::post('/assembly/createKorobka', [ArivalController::class, 'createKorobka'])->name('assembly.createKorobka');
+    Route::post('/assembly/updateKorobka', [ArivalController::class, 'updateKorobka'])->name('assembly.updateKorobka');
+    Route::post('/assembly/korobkaChangeStatus', [ArivalController::class, 'korobkaChangeStatus'])->name('assembly.korobkaChangeStatus');
 });

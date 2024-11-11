@@ -82,7 +82,7 @@ class OrderController extends Controller
 
     public function selected(Request $request)
     {
-        $this->authorize('view', Order::class);
+        $this->authorize('viewAny', Order::class);
 
         $orderIds = $request->input('ids', []);
         $orders = Order::whereIn('id', explode(',', $orderIds))->get();
@@ -115,15 +115,15 @@ class OrderController extends Controller
             $item->quantity = $request->quantity;
             $item->save();
         } else {
-            foreach($request->id as $key=>$value) {
+            foreach ($request->id as $key => $value) {
                 $item = OrderItem::find($value);
                 $item->quantity = $request->quantity[$key];
                 $item->save();
             }
         }
-//        $item = OrderItem::find($request->id);
-//        $item->quantity = $request->quantity;
-//        $item->save();
+        //        $item = OrderItem::find($request->id);
+        //        $item->quantity = $request->quantity;
+        //        $item->save();
         return response()->json(['success' => true]);
     }
 

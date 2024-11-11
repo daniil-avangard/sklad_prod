@@ -11,10 +11,15 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
+use App\Models\Korobka;
+use App\Enum\Order\StatusEnum;
 
 
 class ArivalController extends Controller
 {
+//    use AuthorizesRequests;
+
     public function index()
     {
         $arivals = Arival::all()->sortByDesc('created_at');
@@ -124,5 +129,74 @@ class ArivalController extends Controller
         $arival->save();
 
         return redirect()->route('arivals')->with('success', 'Приход отклонен');
+    }
+
+    public function assembly()
+    {
+        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+
+        $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
+            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
+        })->get()->sortByDesc('created_at');
+
+        $listForAssmbling = [];
+        $statusList = array("transferred_to_warehouse",'warehouse_started','assembled','shipped');
+        foreach ($orders as $order) {
+            if (in_array($order->status->value, $statusList)) { 
+                $listForAssmbling[] = $order;
+            }
+        }
+        return view('arivals.assembly', compact('listForAssmbling'));
+    }
+
+    public function showAssembl(Order $order)
+    {
+//        $this->authorize('view', $order);
+
+        $order->load(['items.product.variants', 'items.product' => function ($query) {
+            $query->orderBy('name');
+        }]);
+        $order->items = $order->items->sortBy(function ($item) {
+            return $item->product->name;
+        });
+        $korobkas = Korobka::where('order_id', $order->id)->get();
+        $flagKorobka = "no";
+        if (count($korobkas) > 0) {$flagKorobka = "yes";}
+
+        return view('arivals.show-assemble', compact('order', 'korobkas', 'flagKorobka'));
+    }
+    
+    public function createKorobka(Request $request)
+    {
+        if ($request->action == "create") {
+            $korobka = new Korobka();
+            $korobka->counter_number = $request->name;
+            $korobka->order_id = $request->orderId;
+            $korobka->save();
+            
+        } else {
+            $korobka = Korobka::find($request->orderId);
+            $korobka->delete();
+            
+        }
+        
+        return response()->json(['success' => true, 'data' => $korobka->id]);
+    }
+    
+    public function updateKorobka(Request $request)
+    {
+        $korobka = Korobka::find($request->orderId);
+        $korobka->track_number = $request->track;
+        $korobka->save();
+        return response()->json(['success' => true]);
+    }
+    
+    public function korobkaChangeStatus(Request $request)
+    {
+//        $myVar = $request->orderId;
+        $order = Order::find($request->orderId);
+        $order->status = $request->orderId == "started" ? StatusEnum::WAREHOUSE_START->value: StatusEnum::ASSEMBLED->value;
+        $order->save();
+        return response()->json(['success' => true]);
     }
 }
