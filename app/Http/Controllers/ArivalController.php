@@ -23,9 +23,10 @@ class ArivalController extends Controller
     public function index()
     {
         $this->authorize('viewAny', Arival::class);
+        $canCreateArival = Gate::allows('create', Arival::class);
 
         $arivals = Arival::all()->sortByDesc('created_at');
-        return view('arivals.index', compact('arivals'));
+        return view('arivals.index', compact('arivals', 'canCreateArival'));
     }
 
     public function create()

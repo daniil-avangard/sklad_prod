@@ -66,11 +66,15 @@
                     class="align-self-center menu-icon"></i><span>Склад</span><span class="menu-arrow"><i
                         class="mdi mdi-chevron-right"></i></span></a>
             <ul class="nav-second-level" aria-expanded="false">
-
-                <li class="nav-item"><a class="nav-link" href="{{ route('arivals') }}"><i
-                            class="ti-control-record"></i>Приход</a></li>
+                @can('viewAny', \App\Models\Arival::class)
+                    <li class="nav-item"><a class="nav-link" href="{{ route('arivals') }}"><i
+                            class="ti-control-record"></i>Приход</a>
+                        </li>
+                @endcan
+                @can('view', \App\Models\Writeoff::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('writeoffs') }}"><i
                             class="ti-control-record"></i>Списание</a></li>
+                @endcan
                 <li class="nav-item"><a class="nav-link" href="{{ route('assembly') }}"><i
                             class="ti-control-record"></i>Сборка</a></li>
             </ul>
@@ -78,6 +82,7 @@
 
         <hr class="hr-dashed hr-menu">
 
+        {{-- @can('view', \App\Models\::class) --}}
         <li class="menu-label mt-0">Администрирование</li>
 
         <li>
@@ -93,6 +98,7 @@
                             class="ti-control-record"></i>Роли</a></li>
             </ul>
         </li>
+        {{-- @endcan --}}
 
 
         <li class="menu-label my-2">Коммент внизу</li>
