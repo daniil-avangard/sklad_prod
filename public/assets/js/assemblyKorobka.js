@@ -42,15 +42,18 @@ const createKorobkaElement = async () => {
 }
 
 document.getElementById("korobka-add").onclick = async () => {
-    document.getElementById("korobka-add").disabled=true;
-    document.querySelectorAll('.delete-korobka').forEach((item, index) => {
-        item.disabled=true;
-    });
-    await createKorobkaElement();
-    document.getElementById("korobka-add").disabled=false;
-    document.querySelectorAll('.delete-korobka').forEach((item, index) => {
-        item.disabled=false;
-    });
+    if (document.getElementById("order-status").dataset.status == "warehouse_started") {
+        document.getElementById("korobka-add").disabled=true;
+        document.querySelectorAll('.delete-korobka').forEach((item, index) => {
+            item.disabled=true;
+        });
+        await createKorobkaElement();
+        document.getElementById("korobka-add").disabled=false;
+        document.querySelectorAll('.delete-korobka').forEach((item, index) => {
+            item.disabled=false;
+        });
+        
+    }
 }
 
 document.getElementById("start-assembl").onclick = async () => {
@@ -62,18 +65,49 @@ document.getElementById("start-assembl").onclick = async () => {
         document.getElementById("start-assembl").dataset.korobkaflag = "yes";
         
         await changeOrderStatus("started");
+        document.getElementById("order-status").dataset.status = "warehouse_started";
+        document.getElementById("order-status").innerHTML = "Началась сборка";
+        
 
     }
 }
 
 document.getElementById("package-assembled").onclick = async () => {
     await changeOrderStatus("assembled");
+    document.getElementById("order-status").dataset.status = "assembled";
+    document.getElementById("order-status").innerHTML = "Собран";
 }
 
-const changeOrderStatus = async (status="started") => {
+document.getElementById("package-shipped").onclick = async () => {
+    let inputsFields = document.querySelectorAll('input[type=text]');
+    
+    let res = Array.from(inputsFields).slice(1, inputsFields.length).filter((el) => el.value != "");
+    if (res.length == inputsFields.length -1) {
+        await changeOrderStatus("shipped");
+        document.getElementById("order-status").dataset.status = "shipped";
+        document.getElementById("order-status").innerHTML = "Отгружен";
+    }
+}
+
+document.getElementById("status-back").onclick = async () => {
+    if (document.getElementById("order-status").dataset.status != "transferred_to_warehouse") {
+        let data = await changeOrderStatus("back-status", document.getElementById("order-status").dataset.status);
+        console.log(data);
+        document.getElementById("order-status").dataset.status = data.data;
+        document.getElementById("order-status").innerHTML = data.name;
+    }
+    
+}
+
+const changeOrderStatus = async (status="started", name="none") => {
+    let newLoader = document.createElement('span');
+    newLoader.setAttribute("class", "loader-assembled");
+    newLoader.id = "loader-status";
+    document.getElementById("status-title").appendChild(newLoader);
     console.log(status);
-    let dataToSend = {status: status, orderId: document.getElementById("start-assembl").dataset.pk, _token: $('meta[name="csrf-token"]').attr('content')}; 
+    let dataToSend = {status: status, name: name, orderId: document.getElementById("start-assembl").dataset.pk, _token: $('meta[name="csrf-token"]').attr('content')}; 
     let url = '/assembly/korobkaChangeStatus';
+    let res = "";
     console.log(dataToSend);
     const request = new Request(url, {
                                 method: "POST",
@@ -94,6 +128,8 @@ const changeOrderStatus = async (status="started") => {
     catch(error) {
         console.log(error.message);
     }
+    document.getElementById("status-title").removeChild(document.getElementById("loader-status"));
+    return res;
 }
 
 const deleteKorobka = async (item, parent) => {
@@ -168,4 +204,3 @@ const sendToKorobkaToApi = async (data) => {
     }
     return res.data;
 }
-

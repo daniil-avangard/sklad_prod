@@ -19,8 +19,8 @@
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
-                        <div class="col">
-                            <h4 class="card-title">Статус: <span
+                        <div class="col" >
+                            <h4 id="status-title" class="card-title">Статус: <span id="order-status" data-status="{{ $order->status->value }}"
                                     class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}
                                 </span>
                             </h4>
