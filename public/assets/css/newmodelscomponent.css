@@ -4,3 +4,9 @@
 .korobka-item-show {
     display: block;
 }
+.bg-started-war {
+    background-color: #0e77ac !important;
+}
+.bg-assembled {
+    background-color: #0a567c !important;
+}

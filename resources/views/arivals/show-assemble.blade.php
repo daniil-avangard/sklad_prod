@@ -28,9 +28,10 @@
                     </div> <!--end row-->
                 </div>
                 <div class="card-body">
-                    <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}">Начать сборку</button>
-                    <button class="btn btn-warning">Собран</button>
-                    <button class="btn btn-danger">Отправлен</button>
+                    <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}">Начать сборку</button>
+                    <button id="package-assembled" class="btn btn-warning">Собран</button>
+                    <button id="package-shipped" class="btn btn-danger">Отправлен</button>
+                    <button id="status-back" class="btn btn-warning">Статус Назад</button>
                 </div>
             </div>
 
@@ -136,6 +137,7 @@
                         </div><!--end col-->
                     </div> <!--end row-->
                 </div>
+
                 <div id="korobka-block-item" class="row assembly-korobka-row korobka-item-none">
                     <div class="table-responsive">
                         <table class="table table-bordered">
@@ -146,10 +148,11 @@
                                     <td>
                                         <label>Трек-номер</label>
                                         <input type="text" id="" name="korobka" value=''>
-                                        <button>Очистить</button>
+                                        <button class="add-track">Добавить</button>
+                                        <button class="clean-track">Очистить</button>
                                     </td>
                                     <td>
-                                        <button>Удалить</button>
+                                        <button class="delete-korobka" data-pk="{{ $order->id }}">Удалить</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -157,6 +160,7 @@
                     </div>
 
                 </div>
+                
                 @foreach ($korobkas as $korobka)
                     <div class="row assembly-korobka-row">
                         <div class="table-responsive">
@@ -164,14 +168,15 @@
                                 <thead></thead>
                                 <tbody>
                                     <tr>
-                                        <td>Коробка 1</td>
+                                        <td>Коробка {{ $korobka->counter_number }}</td>
                                         <td>
                                             <label>Трек-номер</label>
                                             <input type="text" id="" name="korobka" value='{{ $korobka->track_number }}'>
-                                            <button>Очисить</button>
+                                            <button class="add-track">Добавить</button>
+                                            <button class="clean-track">Очисить</button>
                                         </td>
                                         <td>
-                                            <button>Удалить</button>
+                                            <button class="delete-korobka" data-pk="{{ $korobka->id }}">Удалить</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -213,6 +218,6 @@
 @push('scripts-plugins')
     <script src="/plugins/x-editable/js/bootstrap-editable.min.js"></script>
 
-    <script src="/assets/pages/orders/update.quantity.js"></script>
+<!--    <script src="/assets/pages/orders/update.quantity.js"></script>-->
     <script src="/assets/js/assemblyKorobka.js"></script>
 @endpush
