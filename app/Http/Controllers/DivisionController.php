@@ -8,13 +8,20 @@ use App\Http\Requests\Division\CreateDisionRequest;
 use App\Http\Requests\Division\Product\AddProductRequest;
 use App\Http\Requests\Division\Product\RemoveProductRequest;
 use App\Models\Product;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Gate;
 
 class DivisionController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
+        $this->authorize('view', Product::class);
+        $canCreateProduct = Gate::allows('create', Product::class);
+
         $divisions = Division::all();
-        return view('divisions.index', compact('divisions'));
+        return view('divisions.index', compact('divisions', 'canCreateProduct'));
     }
 
     public function create()
@@ -40,6 +47,8 @@ class DivisionController extends Controller
 
     public function edit(Division $division)
     {
+        $this->authorize('update', Product::class);
+
         return view('divisions.edit', compact('division'));
     }
 
@@ -51,6 +60,8 @@ class DivisionController extends Controller
 
     public function delete(Division $division)
     {
+        $this->authorize('delete', Product::class);
+
         $division->products()->detach();
         $division->delete();
         return redirect()->route('divisions')->with('success', 'Подразделение успешно удалено');

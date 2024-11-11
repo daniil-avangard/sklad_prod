@@ -15,8 +15,9 @@
         'title' => 'Продукты',
         'route' => 'products',
         'breadcrumbs' => 'Продукты',
-        'add_route' => 'products.create',
+        'add_route' => $canCreateProduct ? 'products.create' : null
     ])
+
     <div class="row">
         <div class="col-12">
             <div class="card">

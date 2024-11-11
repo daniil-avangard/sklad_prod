@@ -8,14 +8,18 @@
                     class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span>
             </a>
             <ul class="nav-second-level" aria-expanded="false">
-                @can('Order ViewAny', \App\Models\Order::class)
+                @can('viewAny', \App\Models\Order::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('orders') }}"><i
                             class="ti-control-record"></i>Заказы</a></li>
                 @endcan
+                @can('create', \App\Models\Order::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('basket') }}"><i
                             class="ti-control-record"></i>Корзина</a></li>
+                @endcan
+                @can('create', \App\Models\Order::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('products.list') }}"><i
                             class="ti-control-record"></i>Товары</a></li>
+                @endcan
             </ul>
         </li>
         <li>
@@ -29,17 +33,28 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('products') }}"><i
                             class="ti-control-record"></i>Продукты</a></li>
                 @endcan
+                @can('view', \App\Models\Product::class)
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('categories') }}"><i class="ti-control-record"></i>Категории</a>
                 </li>
+                @endcan
+                @can('view', \App\Models\Product::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('companies') }}"><i
                             class="ti-control-record"></i>Компании</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="{{ route('divisions') }}"><i
-                            class="ti-control-record"></i>Подразделения</a></li>
-
-                <li class="nav-item"><a class="nav-link" href="{{ route('groups.divisions') }}"><i
-                            class="ti-control-record"></i>Группы подразделений</a></li>
+                @endcan
+                @can('view', \App\Models\Product::class)
+                <li class="nav-item">
+                        <a class="nav-link" href="{{ route('divisions') }}"><i
+                                class="ti-control-record"></i>Подразделения</a>
+                </li>
+                @endcan
+                @can('view', \App\Models\Product::class)
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('groups.divisions') }}"><i
+                            class="ti-control-record"></i>Группы подразделений</a>
+                        </li>
+                @endcan
             </ul>
         </li>
 

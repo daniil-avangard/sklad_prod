@@ -7,11 +7,13 @@ use App\Models\Basket;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Order;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
 
 class BasketController extends Controller
 {
+    use AuthorizesRequests;
 
     private $basket;
     public function __construct()
@@ -21,6 +23,8 @@ class BasketController extends Controller
 
     public function index()
     {
+        $this->authorize('create');
+
         // $categories = Category::with(['products' => function ($query) {
         //     $query->whereHas('baskets', function ($query) {
         //         $query->where('basket_id', $this->basket->id);

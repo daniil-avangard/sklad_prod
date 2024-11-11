@@ -5,7 +5,7 @@
         'title' => 'Компании',
         'route' => 'companies',
         'breadcrumbs' => 'Компании',
-        'add_route' => 'companies.create',
+        'add_route' => $canCreateProduct ? 'companies.create' : null,
     ])
 
     <div class="row">
@@ -31,12 +31,16 @@
                             <td>{{ $company->site }}</td>
                             <td>
                                 <a href="" class="btn btn-primary">Просмотр</a>
-                                <a href="{{ route('companies.edit', $company) }}" class="btn btn-warning">Редактировать</a>
-                                <x-form action="{{ route('companies.delete', $company) }}" method="DELETE"
-                                    style="display: inline-block;">
-                                    <button type="submit" onclick="return confirm('Вы уверены?')"
-                                        class="btn btn-danger">Удалить</button>
-                                </x-form>
+                                @can('update', \App\Models\Product::class)
+                                    <a href="{{ route('companies.edit', $company) }}" class="btn btn-warning">Редактировать</a>
+                                @endcan
+                                @can('delete', \App\Models\Product::class)
+                                    <x-form action="{{ route('companies.delete', $company) }}" method="DELETE"
+                                        style="display: inline-block;">
+                                        <button type="submit" onclick="return confirm('Вы уверены?')"
+                                            class="btn btn-danger">Удалить</button>
+                                    </x-form>
+                                @endcan
                             </td>
                         </tr>
                     @endforeach
