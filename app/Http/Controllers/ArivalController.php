@@ -140,7 +140,7 @@ class ArivalController extends Controller
         })->get()->sortByDesc('created_at');
         
         $listForAssmbling = [];
-        $statusList = array("transferred_to_warehouse",'warehouse_started', 'assembled');
+        $statusList = array("transferred_to_warehouse",'warehouse_started','assembled','shipped');
         foreach ($orders as $order) {
             if (in_array($order->status->value, $statusList)) { 
                 $listForAssmbling[] = $order;
