@@ -1,5 +1,10 @@
 @extends('layouts.base')
 
+@push('styles-plugins')
+    <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endpush
+
 @section('content')
 
 @include('includes.breadcrumb', [

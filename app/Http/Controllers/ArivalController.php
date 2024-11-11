@@ -140,7 +140,7 @@ class ArivalController extends Controller
         })->get()->sortByDesc('created_at');
         
         $listForAssmbling = [];
-        $statusList = array("transferred_to_warehouse",'warehouse_started');
+        $statusList = array("transferred_to_warehouse",'warehouse_started', 'assembled');
         foreach ($orders as $order) {
             if (in_array($order->status->value, $statusList)) { 
                 $listForAssmbling[] = $order;
@@ -193,9 +193,9 @@ class ArivalController extends Controller
     
     public function korobkaChangeStatus(Request $request)
     {
-        $myVar = $request->orderId;
+//        $myVar = $request->orderId;
         $order = Order::find($request->orderId);
-        $order->status = StatusEnum::WAREHOUSE_START->value;
+        $order->status = $request->orderId == "started" ? StatusEnum::WAREHOUSE_START->value: StatusEnum::ASSEMBLED->value;
         $order->save();
         return response()->json(['success' => true]);
     }

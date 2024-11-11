@@ -61,13 +61,17 @@ document.getElementById("start-assembl").onclick = async () => {
         document.getElementById("korobka-add-wrap").classList.add("korobka-item-show");
         document.getElementById("start-assembl").dataset.korobkaflag = "yes";
         
-        await changeOrderStatus();
+        await changeOrderStatus("started");
 
     }
 }
 
-const changeOrderStatus = async () => {
-    let dataToSend = {orderId: document.getElementById("start-assembl").dataset.pk, _token: $('meta[name="csrf-token"]').attr('content')}; 
+document.getElementById("package-assembled").onclick = async () => {
+    await changeOrderStatus("assembled");
+}
+
+const changeOrderStatus = async (status="started") => {
+    let dataToSend = {status: status, orderId: document.getElementById("start-assembl").dataset.pk, _token: $('meta[name="csrf-token"]').attr('content')}; 
     let url = '/assembly/korobkaChangeStatus';
     console.log(dataToSend);
     const request = new Request(url, {

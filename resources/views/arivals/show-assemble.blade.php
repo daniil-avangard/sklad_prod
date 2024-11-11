@@ -29,8 +29,9 @@
                 </div>
                 <div class="card-body">
                     <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}">Начать сборку</button>
-                    <button class="btn btn-warning">Собран</button>
-                    <button class="btn btn-danger">Отправлен</button>
+                    <button id="package-assembled" class="btn btn-warning">Собран</button>
+                    <button id="package-shipped" class="btn btn-danger">Отправлен</button>
+                    <button id="status-back" class="btn btn-warning">Статус Назад</button>
                 </div>
             </div>
 
