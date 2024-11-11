@@ -12,7 +12,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        DB::statement('');
+        // Удаляем старое ограничение
+        DB::statement('ALTER TABLE orders DROP CONSTRAINT orders_status_check');
+
+        // Добавляем новое ограничение с новыми статусами
+        DB::statement(
+            "ALTER TABLE orders ADD CONSTRAINT orders_status_check CHECK (status::text = ANY (ARRAY[
+            'new'::character varying::text,
+            'processing'::character varying::text,
+            'transferred_to_warehouse'::character varying::text,
+            'shipped'::character varying::text,
+            'delivered'::character varying::text,
+            'canceled'::character varying::text,
+            'warehouse_started'::character varying::text,
+            'assembled'::character varying::text]))"
+        );
     }
 
     /**
@@ -20,6 +34,18 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement('');
+        // Удаляем новое ограничение
+        DB::statement('ALTER TABLE orders DROP CONSTRAINT orders_status_check');
+
+        // Восстанавливаем старое ограничение
+        DB::statement(
+            "ALTER TABLE orders ADD CONSTRAINT orders_status_check CHECK (status::text = ANY (ARRAY[
+                 'new'::character varying::text,
+                 'processing'::character varying::text,
+                 'transferred_to_warehouse'::character varying::text,
+                 'shipped'::character varying::text,
+                 'delivered'::character varying::text,
+                 'canceled'::character varying::text]))"
+        );
     }
 };
