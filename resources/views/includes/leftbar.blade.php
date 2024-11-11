@@ -8,9 +8,9 @@
                     class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span>
             </a>
             <ul class="nav-second-level" aria-expanded="false">
-                @can('viewAny', \App\Models\Order::class)
-                    <li class="nav-item"><a class="nav-link" href="{{ route('orders') }}"><i
-                                class="ti-control-record"></i>Заказы</a></li>
+                @can('Order ViewAny', \App\Models\Order::class)
+                <li class="nav-item"><a class="nav-link" href="{{ route('orders') }}"><i
+                            class="ti-control-record"></i>Заказы</a></li>
                 @endcan
                 <li class="nav-item"><a class="nav-link" href="{{ route('basket') }}"><i
                             class="ti-control-record"></i>Корзина</a></li>
@@ -26,8 +26,8 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('login') }}"><i
                             class="ti-control-record"></i>Вход</a></li>
                 @can('view', \App\Models\Product::class)
-                    <li class="nav-item"><a class="nav-link" href="{{ route('products') }}"><i
-                                class="ti-control-record"></i>Продукты</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('products') }}"><i
+                            class="ti-control-record"></i>Продукты</a></li>
                 @endcan
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('categories') }}"><i class="ti-control-record"></i>Категории</a>
