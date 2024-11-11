@@ -12,21 +12,33 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Удаляем старое ограничение
-        DB::statement('ALTER TABLE orders DROP CONSTRAINT orders_status_check');
+        // Шаг 1: Удаляем старое ограничение, если оно существует
+        DB::statement('ALTER TABLE orders DROP CONSTRAINT IF EXISTS orders_status_check');
 
-        // Добавляем новое ограничение с новыми статусами
-        DB::statement(
-            "ALTER TABLE orders ADD CONSTRAINT orders_status_check CHECK (status::text = ANY (ARRAY[
-            'new'::character varying::text,
-            'processing'::character varying::text,
-            'transferred_to_warehouse'::character varying::text,
-            'shipped'::character varying::text,
-            'delivered'::character varying::text,
-            'canceled'::character varying::text,
-            'warehouse_started'::character varying::text,
-            'assembled'::character varying::text]))"
-        );
+        // Создаем новый тип ENUM (если он еще не существует)
+        DB::statement("DO $$ BEGIN
+            CREATE TYPE status_enum AS ENUM (
+                'new',
+                'processing',
+                'transferred_to_warehouse',
+                'warehouse_started',
+                'assembled',
+                'shipped',
+                'delivered',
+                'canceled'
+            );
+        EXCEPTION
+            WHEN duplicate_object THEN null;
+        END $$;");
+
+        // Удаляем значение по умолчанию из столбца `status`
+        DB::statement("ALTER TABLE orders ALTER COLUMN status DROP DEFAULT");
+
+        // Меняем тип столбца на ENUM
+        DB::statement("ALTER TABLE orders ALTER COLUMN status TYPE status_enum USING status::status_enum");
+
+        // Восстанавливаем значение по умолчанию для столбца `status`
+        DB::statement("ALTER TABLE orders ALTER COLUMN status SET DEFAULT 'new'");
     }
 
     /**
@@ -34,18 +46,13 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Удаляем новое ограничение
-        DB::statement('ALTER TABLE orders DROP CONSTRAINT orders_status_check');
+        // Удаляем значение по умолчанию из столбца `status`
+        DB::statement("ALTER TABLE orders ALTER COLUMN status DROP DEFAULT");
 
-        // Восстанавливаем старое ограничение
-        DB::statement(
-            "ALTER TABLE orders ADD CONSTRAINT orders_status_check CHECK (status::text = ANY (ARRAY[
-                 'new'::character varying::text,
-                 'processing'::character varying::text,
-                 'transferred_to_warehouse'::character varying::text,
-                 'shipped'::character varying::text,
-                 'delivered'::character varying::text,
-                 'canceled'::character varying::text]))"
-        );
+        // Изменяем тип столбца `status` обратно на `VARCHAR(255)`
+        DB::statement("ALTER TABLE orders ALTER COLUMN status TYPE VARCHAR(255) USING status::text");
+
+        // Удаляем тип ENUM, если он больше не используется
+        DB::statement("DROP TYPE IF EXISTS status_enum");
     }
 };

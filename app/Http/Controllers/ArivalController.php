@@ -14,14 +14,16 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\Korobka;
 use App\Enum\Order\StatusEnum;
-
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ArivalController extends Controller
 {
-//    use AuthorizesRequests;
+    use AuthorizesRequests;
 
     public function index()
     {
+        $this->authorize('viewAny', Arival::class);
+
         $arivals = Arival::all()->sortByDesc('created_at');
         return view('arivals.index', compact('arivals'));
     }
@@ -140,9 +142,9 @@ class ArivalController extends Controller
         })->get()->sortByDesc('created_at');
 
         $listForAssmbling = [];
-        $statusList = array("transferred_to_warehouse",'warehouse_started','assembled','shipped');
+        $statusList = array("transferred_to_warehouse", 'warehouse_started', 'assembled', 'shipped');
         foreach ($orders as $order) {
-            if (in_array($order->status->value, $statusList)) { 
+            if (in_array($order->status->value, $statusList)) {
                 $listForAssmbling[] = $order;
             }
         }
@@ -151,7 +153,7 @@ class ArivalController extends Controller
 
     public function showAssembl(Order $order)
     {
-//        $this->authorize('view', $order);
+        //        $this->authorize('view', $order);
 
         $order->load(['items.product.variants', 'items.product' => function ($query) {
             $query->orderBy('name');
@@ -161,11 +163,13 @@ class ArivalController extends Controller
         });
         $korobkas = Korobka::where('order_id', $order->id)->get();
         $flagKorobka = "no";
-        if (count($korobkas) > 0) {$flagKorobka = "yes";}
+        if (count($korobkas) > 0) {
+            $flagKorobka = "yes";
+        }
 
         return view('arivals.show-assemble', compact('order', 'korobkas', 'flagKorobka'));
     }
-    
+
     public function createKorobka(Request $request)
     {
         if ($request->action == "create") {
@@ -173,16 +177,14 @@ class ArivalController extends Controller
             $korobka->counter_number = $request->name;
             $korobka->order_id = $request->orderId;
             $korobka->save();
-            
         } else {
             $korobka = Korobka::find($request->orderId);
             $korobka->delete();
-            
         }
-        
+
         return response()->json(['success' => true, 'data' => $korobka->id]);
     }
-    
+
     public function updateKorobka(Request $request)
     {
         $korobka = Korobka::find($request->orderId);
@@ -190,12 +192,12 @@ class ArivalController extends Controller
         $korobka->save();
         return response()->json(['success' => true]);
     }
-    
+
     public function korobkaChangeStatus(Request $request)
     {
-//        $myVar = $request->orderId;
+        //        $myVar = $request->orderId;
         $order = Order::find($request->orderId);
-        $order->status = $request->orderId == "started" ? StatusEnum::WAREHOUSE_START->value: StatusEnum::ASSEMBLED->value;
+        $order->status = $request->orderId == "started" ? StatusEnum::WAREHOUSE_START->value : StatusEnum::ASSEMBLED->value;
         $order->save();
         return response()->json(['success' => true]);
     }
