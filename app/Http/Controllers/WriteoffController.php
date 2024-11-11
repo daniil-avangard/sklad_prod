@@ -52,8 +52,9 @@ class WriteoffController extends Controller
             $writeoffProduct->quantity = $product['quantity'];
 
             // Преобразуем дату из формата DD.MM.YYYY в формат YYYY-MM-DD
-            $writeoffProduct->date_of_actuality = \Carbon\Carbon::createFromFormat('d.m.Y', $product['date_of_actuality'])->format('Y-m-d');
-            // $writeoffProduct->date_of_actuality = $product['date_of_actuality'];
+            $writeoffProduct->date_of_actuality = !empty($product['date_of_actuality'])
+                ? \Carbon\Carbon::createFromFormat('d.m.Y', $product['date_of_actuality'])->format('Y-m-d')
+                : null; // Если дата пустая, значение будет null
 
             $writeoffProduct->save();
         }
