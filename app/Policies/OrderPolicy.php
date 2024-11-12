@@ -8,7 +8,7 @@ use Illuminate\Auth\Access\Response;
 
 
 /**
- * @PolicyName(viewAny="Просмотр всех заказов", view="Просмотр заказа", create="Создание заказа", update="Редактирование заказа", delete="Удаление заказа", updateQuantity="Изменение количества заказа", processingStatus="Изменение статуса Проверено куратором", transferToWarehouse="Изменение статуса Передано на склад", canceledStatus="Изменение статуса Отмена заказа")
+ * @PolicyName(viewAny="Просмотр всех заказов", view="Просмотр заказа", create="Создание заказа", update="Редактирование заказа", delete="Удаление заказа", updateQuantity="Изменение количества заказа", processingStatus="Изменение статуса Проверено куратором", transferToWarehouse="Изменение статуса Передано на склад", canceledStatus="Изменение статуса Отмена заказа", viewQuantity="Просмотр количества в заказе")
  */
 class OrderPolicy
 {
