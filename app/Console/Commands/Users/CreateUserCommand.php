@@ -7,9 +7,7 @@ use App\Models\User;
 
 class CreateUserCommand extends Command
 {
-
     protected $signature = 'users:create';
-
 
     protected $description = 'Command description';
 
@@ -22,12 +20,10 @@ class CreateUserCommand extends Command
             'password' => $this->ask('Ваш пароль'),
         ]);
 
-
         $this->warn("ID {$user->id}");
-        
+
         $this->info('Пользователь создан');
 
         return Command::SUCCESS;
-
     }
 }
