@@ -43,10 +43,12 @@
                                                 </td>
 
                                                 <td>
+                                                    @can('update', \App\Models\User::class)
                                                     <a href="{{ route('permissions.edit', $permission->id) }}"
                                                         class="btn btn-primary">
                                                         Редактировать
                                                     </a>
+                                                    @endcan
                                                     <!-- <form action="" method="POST">
                                             @csrf
 

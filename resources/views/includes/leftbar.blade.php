@@ -94,10 +94,14 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}"><i
                             class="ti-control-record"></i>Пользователи</a></li>
                 @endcan
+                @can('create', \App\Models\User::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('permissions') }}"><i
                             class="ti-control-record"></i>Полномочия</a></li>
+                            @endcan
+                            @can('create', \App\Models\User::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('roles') }}"><i
                             class="ti-control-record"></i>Роли</a></li>
+                            @endcan
             </ul>
         </li>
         {{-- @endcan --}}
