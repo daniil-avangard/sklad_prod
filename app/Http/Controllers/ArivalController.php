@@ -15,19 +15,19 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\Korobka;
 use App\Enum\Order\StatusEnum;
-
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ArivalController extends Controller
 {
-//    use AuthorizesRequests;
-//    public function __construct(){
-//        $this->middleware('csrf')->only('createKorobka');
-//    }
+    use AuthorizesRequests;
 
     public function index()
     {
+        $this->authorize('viewAny', Arival::class);
+        $canCreateArival = Gate::allows('create', Arival::class);
+
         $arivals = Arival::all()->sortByDesc('created_at');
-        return view('arivals.index', compact('arivals'));
+        return view('arivals.index', compact('arivals', 'canCreateArival'));
     }
 
     public function create()
@@ -137,6 +137,8 @@ class ArivalController extends Controller
 
     public function assembly()
     {
+        $this->authorize('viewAny', Korobka::class);
+
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
 
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
@@ -144,9 +146,9 @@ class ArivalController extends Controller
         })->get()->sortByDesc('created_at');
 
         $listForAssmbling = [];
-        $statusList = array("transferred_to_warehouse",'warehouse_started','assembled','shipped');
+        $statusList = array("transferred_to_warehouse", 'warehouse_started', 'assembled', 'shipped');
         foreach ($orders as $order) {
-            if (in_array($order->status->value, $statusList)) { 
+            if (in_array($order->status->value, $statusList)) {
                 $listForAssmbling[] = $order;
             }
         }
@@ -155,7 +157,7 @@ class ArivalController extends Controller
 
     public function showAssembl(Order $order)
     {
-//        $this->authorize('view', $order);
+        $this->authorize('view', Korobka::class);
 
         $order->load(['items.product.variants', 'items.product' => function ($query) {
             $query->orderBy('name');
@@ -165,36 +167,55 @@ class ArivalController extends Controller
         });
         $korobkas = Korobka::where('order_id', $order->id)->get();
         $flagKorobka = "no";
-        if (count($korobkas) > 0) {$flagKorobka = "yes";}
+        if (count($korobkas) > 0) {
+            $flagKorobka = "yes";
+        }
 
-        return view('arivals.show-assemble', compact('order', 'korobkas', 'flagKorobka'));
+        // Проверка статуса заказа
+        $currentStatus = $this->checkOrderStatus($order);
+
+        return view('arivals.show-assemble', compact('order', 'korobkas', 'flagKorobka', 'currentStatus'));
     }
-    
+
+    private function checkOrderStatus(Order $order)
+    {
+        $status = StatusEnum::from($order->status->value);
+
+        // Если статус из перечисленных для сборки, возвращаем объект для дальнейшего сравнения
+        if ($status === StatusEnum::TRANSFERRED_TO_WAREHOUSE || $status === StatusEnum::WAREHOUSE_START || $status === StatusEnum::ASSEMBLED || $status === StatusEnum::SHIPPED) {
+            return $status;
+        }
+
+        return null;
+    }
+
     public function createKorobka(Request $request)
     {
+        $this->authorize('create', Korobka::class);
+
         if ($request->action == "create") {
             $korobka = new Korobka();
             $korobka->counter_number = $request->name;
             $korobka->order_id = $request->orderId;
             $korobka->save();
-            
         } else {
             $korobka = Korobka::find($request->orderId);
             $korobka->delete();
-            
         }
-        
+
         return response()->json(['success' => true, 'data' => $korobka->id]);
     }
-    
+
     public function updateKorobka(Request $request)
     {
+        $this->authorize('update', Korobka::class);
+
         $korobka = Korobka::find($request->orderId);
         $korobka->track_number = $request->track;
         $korobka->save();
         return response()->json(['success' => true]);
     }
-    
+
     public function korobkaChangeStatus(Request $request)
     {
         $arrayOfStatuses = array(StatusEnum::TRANSFERRED_TO_WAREHOUSE->value, StatusEnum::WAREHOUSE_START->value, StatusEnum::ASSEMBLED->value, StatusEnum::SHIPPED->value);

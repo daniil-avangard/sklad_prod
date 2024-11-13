@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('action');
             $table->string('model');
-
         });
     }
 

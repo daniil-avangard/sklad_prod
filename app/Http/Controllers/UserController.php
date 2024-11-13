@@ -11,14 +11,16 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\Division;
 use App\Models\DivisionGroup;
-
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class UserController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
-
         if (Gate::denies('view', User::class)) {
+            // Выводим подробное сообщение или логируем информацию
             throw new AuthorizationException('У вас нет разрешения на просмотр пользователей.');
         }
 
@@ -54,6 +56,8 @@ class UserController extends Controller
         if (Gate::denies('update', $user)) {
             throw new AuthorizationException('У вас нет разрешения на редактирование пользователя.');
         }
+
+        $this->authorize('update', User::class);
 
         $divisions = Division::all();
 
