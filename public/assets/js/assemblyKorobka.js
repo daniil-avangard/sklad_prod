@@ -18,27 +18,23 @@ const createKorobkaElement = async () => {
     let parentKorobkaNode = initKorobkaList[0].parentNode;
     let counter = initKorobkaList.length;
     let data = {name: counter, orderId: document.getElementById("start-assembl").dataset.pk, action: "create"};
-    let idKorobka = await sendToKorobkaToApi(data);
+    let resultApi = await sendToKorobkaToApi(data);
+    console.log(resultApi);
+    if (resultApi.result) {
+        let clone = initKorobkaList[0].cloneNode(true);
+        clone.classList.remove("korobka-item-none");
+        clone.classList.add("korobka-item-show");
+        let textElement = clone.getElementsByTagName("TR")[0].firstChild;
+
+        clone.getElementsByTagName("TR")[0].firstElementChild.innerHTML = "Коробка " + counter;
+        clone.getElementsByTagName("INPUT")[0].value = "";
+        clone.querySelectorAll('.delete-korobka')[0].onclick = () => {deleteKorobka(clone.querySelectorAll('.delete-korobka')[0], clone);};
+        clone.querySelectorAll('.delete-korobka')[0].dataset.pk = resultApi.data;
+        clone.querySelectorAll('.add-track')[0].onclick = () => {addTrackToKorobka(clone.querySelectorAll('.delete-korobka')[0], clone);};
+
+        parentKorobkaNode.insertBefore(clone, parentKorobkaNode.lastChild.previousElementSibling);
+    }
     
-    let clone = initKorobkaList[0].cloneNode(true);
-    clone.classList.remove("korobka-item-none");
-    clone.classList.add("korobka-item-show");
-    let textElement = clone.getElementsByTagName("TR")[0].firstChild;
-    
-    clone.getElementsByTagName("TR")[0].firstElementChild.innerHTML = "Коробка " + counter;
-    clone.getElementsByTagName("INPUT")[0].value = "";
-    clone.querySelectorAll('.delete-korobka')[0].onclick = () => {deleteKorobka(clone.querySelectorAll('.delete-korobka')[0], clone);};
-    clone.querySelectorAll('.delete-korobka')[0].dataset.pk = idKorobka;
-    clone.querySelectorAll('.add-track')[0].onclick = () => {addTrackToKorobka(clone.querySelectorAll('.delete-korobka')[0], clone);};
-    
-    parentKorobkaNode.insertBefore(clone, parentKorobkaNode.lastChild.previousElementSibling);
-    
-//    let idKorobka = await sendToKorobkaToApi(data);
-//    Toast.getPopup({
-//                    icon: 'success',
-//                    title: 'Количество обновлено'
-//                });
-//    for (let proper in Toast) {console.log(proper);};
 }
 
 document.getElementById("korobka-add").onclick = async () => {
@@ -180,6 +176,7 @@ const addTrackToKorobka = async (itemForPK, parent) => {
 const sendToKorobkaToApi = async (data) => {
     let url = '/assembly/createKorobka';
     let dataToSend = {name: data.name, orderId: data.orderId, action:data.action, _token: $('meta[name="csrf-token"]').attr('content') };
+//    let dataToSend = {name: data.name, orderId: data.orderId, action:data.action };
     console.log(dataToSend);
     const request = new Request(url, {
                                 method: "POST",
@@ -189,18 +186,20 @@ const sendToKorobkaToApi = async (data) => {
                                 body: JSON.stringify(dataToSend)
                                 });
                                 
-    let res = "";
+    let res = {};
     try {
         const response = await fetch(request);  
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`);
         }
         res = await response.json();
+        res.result = true;
         
         console.log(res);
     }
     catch(error) {
         console.log(error.message);
+        res.result = false;
     }
-    return res.data;
+    return res;
 }

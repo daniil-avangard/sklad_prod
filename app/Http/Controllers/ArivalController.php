@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ArivalProduct;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
+//use Illuminate\Foundation\Configuration\Middleware;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
@@ -19,6 +20,9 @@ use App\Enum\Order\StatusEnum;
 class ArivalController extends Controller
 {
 //    use AuthorizesRequests;
+//    public function __construct(){
+//        $this->middleware('csrf')->only('createKorobka');
+//    }
 
     public function index()
     {

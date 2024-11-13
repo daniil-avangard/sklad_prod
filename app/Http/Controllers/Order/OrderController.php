@@ -15,6 +15,11 @@ use App\Models\DivisionGroup;
 class OrderController extends Controller
 {
     use AuthorizesRequests;
+    
+//    public function __construct(){
+//        $this->middleware('csrf')->only('updateCommentManager');
+//    }
+
     public function index()
     {
         $this->authorize('viewAny', Order::class);

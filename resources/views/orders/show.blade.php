@@ -18,13 +18,14 @@
         $type = "";
     @endphp
 
+    
     <div class="row">
         <div class="col-9">
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h4 class="card-title">Статус: <span
+                            <h4 id="status-order" data-pk="{{ $order->id }}" class="card-title">Статус: <span
                                     class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}
                                 </span>
                             </h4>
