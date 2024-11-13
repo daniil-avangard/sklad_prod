@@ -16,7 +16,7 @@
 
     <div class="row">
         <div class="col-9">
-            @can('changeStatus', \App\Models\Korobka::class)
+<!--            @can('changeStatus', \App\Models\Korobka::class)-->
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
@@ -29,21 +29,21 @@
                     </div> <!--end row-->
                 </div>
                 <div class="card-body">
-                    @if($currentStatus->value === 'transferred_to_warehouse')
+<!--                    @if($currentStatus->value === 'transferred_to_warehouse')-->
                         <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}">Начать сборку</button>
-                    @endif
-                    @if($currentStatus->value === 'warehouse_started')
+<!--                    @endif-->
+<!--                    @if($currentStatus->value === 'warehouse_started')-->
                         <button id="package-assembled" class="btn btn-warning">Собран</button>
-                    @endif
-                    @if($currentStatus->value === 'assembled')
+<!--                    @endif-->
+<!--                    @if($currentStatus->value === 'assembled')-->
                         <button id="package-shipped" class="btn btn-danger">Отправлен</button>
-                    @endif
-                    @if($currentStatus !== null && $currentStatus !== 'transferred_to_warehouse')
+<!--                    @endif-->
+<!--                    @if($currentStatus !== null && $currentStatus !== 'transferred_to_warehouse')-->
                         <button id="status-back" class="btn btn-warning">Статус Назад</button>
-                    @endif
+<!--                    @endif-->
                 </div>
             </div>
-            @endcan
+<!--            @endcan-->
 
             <div class="card">
                 <div class="card-body">
