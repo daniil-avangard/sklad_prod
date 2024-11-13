@@ -80,7 +80,7 @@ const changeOrderStatus = async (status="started", name="none") => {
     newLoader.id = "loader-status";
     document.getElementById("status-title").appendChild(newLoader);
     console.log(status);
-    let dataToSend = {status: status, name: name, orderId: document.getElementById("start-assembl").dataset.pk, _token: $('meta[name="csrf-token"]').attr('content')}; 
+    let dataToSend = {status: status, name: name, orderId: document.getElementById("order-status").dataset.pk, _token: $('meta[name="csrf-token"]').attr('content')}; 
     let url = '/assembly/korobkaChangeStatus';
     let res = "";
     console.log(dataToSend);
@@ -127,7 +127,7 @@ const createKorobkaElement = async () => {
     let initKorobkaList = document.querySelectorAll('.assembly-korobka-row');
     let parentKorobkaNode = initKorobkaList[0].parentNode;
     let counter = initKorobkaList.length;
-    let data = {name: counter, orderId: document.getElementById("start-assembl").dataset.pk, action: "create"};
+    let data = {name: counter, orderId: document.getElementById("order-status").dataset.pk, action: "create"};
     let resultApi = await sendToKorobkaToApi(data);
     console.log(resultApi);
     if (resultApi.result) {
@@ -147,60 +147,70 @@ const createKorobkaElement = async () => {
     
 }
 
-document.getElementById("korobka-add").onclick = async () => {
-    if (document.getElementById("order-status").dataset.status == "warehouse_started") {
-        document.getElementById("korobka-add").disabled=true;
-        document.querySelectorAll('.delete-korobka').forEach((item, index) => {
-            item.disabled=true;
-        });
-        await createKorobkaElement();
-        document.getElementById("korobka-add").disabled=false;
-        document.querySelectorAll('.delete-korobka').forEach((item, index) => {
-            item.disabled=false;
-        });
-        
+if (document.getElementById("korobka-add")) {
+    document.getElementById("korobka-add").onclick = async () => {
+        if (document.getElementById("order-status").dataset.status == "warehouse_started") {
+            document.getElementById("korobka-add").disabled=true;
+            document.querySelectorAll('.delete-korobka').forEach((item, index) => {
+                item.disabled=true;
+            });
+            await createKorobkaElement();
+            document.getElementById("korobka-add").disabled=false;
+            document.querySelectorAll('.delete-korobka').forEach((item, index) => {
+                item.disabled=false;
+            });
+
+        }
     }
 }
 
-document.getElementById("start-assembl").onclick = async () => {
-    console.log(document.getElementById("start-assembl").dataset.korobkaflag);
-    if (document.getElementById("start-assembl").dataset.korobkaflag == "no") {
-        await createKorobkaElement();
-        document.getElementById("korobka-add-wrap").classList.remove("korobka-item-none");
-        document.getElementById("korobka-add-wrap").classList.add("korobka-item-show");
-        document.getElementById("start-assembl").dataset.korobkaflag = "yes";
-        
-        await changeOrderStatus("started");
-        document.getElementById("order-status").dataset.status = "warehouse_started";
-        document.getElementById("order-status").innerHTML = "Началась сборка";
-        
+if (document.getElementById("start-assembl")) {
+    document.getElementById("start-assembl").onclick = async () => {
+        console.log(document.getElementById("start-assembl").dataset.korobkaflag);
+        if (document.getElementById("start-assembl").dataset.korobkaflag == "no") {
+            await createKorobkaElement();
+            document.getElementById("korobka-add-wrap").classList.remove("korobka-item-none");
+            document.getElementById("korobka-add-wrap").classList.add("korobka-item-show");
+            document.getElementById("start-assembl").dataset.korobkaflag = "yes";
 
+            await changeOrderStatus("started");
+            document.getElementById("order-status").dataset.status = "warehouse_started";
+            document.getElementById("order-status").innerHTML = "Началась сборка";
+
+
+        }
     }
 }
 
-document.getElementById("package-assembled").onclick = async () => {
-    await changeOrderStatus("assembled");
-    document.getElementById("order-status").dataset.status = "assembled";
-    document.getElementById("order-status").innerHTML = "Собран";
-}
-
-document.getElementById("package-shipped").onclick = async () => {
-    let inputsFields = document.querySelectorAll('input[type=text]');
-    
-    let res = Array.from(inputsFields).slice(1, inputsFields.length).filter((el) => el.value != "");
-    if (res.length == inputsFields.length -1) {
-        await changeOrderStatus("shipped");
-        document.getElementById("order-status").dataset.status = "shipped";
-        document.getElementById("order-status").innerHTML = "Отгружен";
+if (document.getElementById("package-assembled")) {
+    document.getElementById("package-assembled").onclick = async () => {
+        await changeOrderStatus("assembled");
+        document.getElementById("order-status").dataset.status = "assembled";
+        document.getElementById("order-status").innerHTML = "Собран";
     }
 }
 
-document.getElementById("status-back").onclick = async () => {
-    if (document.getElementById("order-status").dataset.status != "transferred_to_warehouse") {
-        let data = await changeOrderStatus("back-status", document.getElementById("order-status").dataset.status);
-        console.log(data);
-        document.getElementById("order-status").dataset.status = data.data;
-        document.getElementById("order-status").innerHTML = data.name;
+if (document.getElementById("package-shipped")) {
+    document.getElementById("package-shipped").onclick = async () => {
+        let inputsFields = document.querySelectorAll('input[type=text]');
+
+        let res = Array.from(inputsFields).slice(1, inputsFields.length).filter((el) => el.value != "");
+        if (res.length == inputsFields.length -1) {
+            await changeOrderStatus("shipped");
+            document.getElementById("order-status").dataset.status = "shipped";
+            document.getElementById("order-status").innerHTML = "Отгружен";
+        }
     }
-    
+}
+
+if (document.getElementById("status-back")) {
+    document.getElementById("status-back").onclick = async () => {
+        if (document.getElementById("order-status").dataset.status != "transferred_to_warehouse") {
+            let data = await changeOrderStatus("back-status", document.getElementById("order-status").dataset.status);
+            console.log(data);
+            document.getElementById("order-status").dataset.status = data.data;
+            document.getElementById("order-status").innerHTML = data.name;
+        }
+
+    }
 }
