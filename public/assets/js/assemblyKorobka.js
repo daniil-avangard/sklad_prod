@@ -1,5 +1,115 @@
+const sendToKorobkaToApi = async (data) => {
+    let url = '/assembly/createKorobka';
+    let dataToSend = {name: data.name, orderId: data.orderId, action:data.action, _token: $('meta[name="csrf-token"]').attr('content') };
+//    let dataToSend = {name: data.name, orderId: data.orderId, action:data.action };
+    console.log(dataToSend);
+    const request = new Request(url, {
+                                method: "POST",
+                                headers: {
+                                            'Content-Type': 'application/json;charset=utf-8',
+                                        },
+                                body: JSON.stringify(dataToSend)
+                                });
+                                
+    let res = {};
+    try {
+        const response = await fetch(request);  
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        res = await response.json();
+        res.result = true;
+        
+        console.log(res);
+    }
+    catch(error) {
+        console.log(error.message);
+        res.result = false;
+    }
+    return res;
+}
+
+const addTrackToKorobka = async (itemForPK, parent) => {
+    parent.querySelectorAll('.add-track')[0].disabled=true;
+    let url = '/assembly/updateKorobka';
+    let trackNumber = parent.getElementsByTagName("INPUT")[0].value;
+    if (trackNumber == "") {
+        parent.querySelectorAll('.add-track')[0].disabled=false;
+        return;
+    }
+    let dataToSend = {track: trackNumber, orderId: itemForPK.dataset.pk, _token: $('meta[name="csrf-token"]').attr('content') };
+    console.log(dataToSend);
+    const request = new Request(url, {
+                                method: "POST",
+                                headers: {
+                                            'Content-Type': 'application/json;charset=utf-8',
+                                        },
+                                body: JSON.stringify(dataToSend)
+                                });
+    
+    try {
+        const response = await fetch(request);  
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        res = await response.json();
+        
+        console.log(res);
+    }
+    catch(error) {
+        console.log(error.message);
+    }
+    parent.querySelectorAll('.add-track')[0].disabled=false;
+}
+
+const deleteKorobka = async (item, parent) => {
+    parent.remove();
+    document.querySelectorAll('.delete-korobka').forEach((item, index) => {
+        item.disabled=true;
+    });
+    let data = {name: "", orderId: item.dataset.pk, action: "delete"};
+    await sendToKorobkaToApi(data);
+    document.querySelectorAll('.delete-korobka').forEach((item, index) => {
+        item.disabled=false;
+    });
+}
+
+const changeOrderStatus = async (status="started", name="none") => {
+    let newLoader = document.createElement('span');
+    newLoader.setAttribute("class", "loader-assembled");
+    newLoader.id = "loader-status";
+    document.getElementById("status-title").appendChild(newLoader);
+    console.log(status);
+    let dataToSend = {status: status, name: name, orderId: document.getElementById("start-assembl").dataset.pk, _token: $('meta[name="csrf-token"]').attr('content')}; 
+    let url = '/assembly/korobkaChangeStatus';
+    let res = "";
+    console.log(dataToSend);
+    const request = new Request(url, {
+                                method: "POST",
+                                headers: {
+                                            'Content-Type': 'application/json;charset=utf-8',
+                                        },
+                                body: JSON.stringify(dataToSend)
+                                });
+    try {
+        const response = await fetch(request);  
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        res = await response.json();
+        
+        console.log(res);
+    }
+    catch(error) {
+        console.log(error.message);
+    }
+    document.getElementById("status-title").removeChild(document.getElementById("loader-status"));
+    return res;
+}
+
 let buttonsDelete = document.querySelectorAll('.delete-korobka');
 let buttonsTrack = document.querySelectorAll('.add-track');
+
 buttonsDelete.forEach((item, index) => {
     let parent = document.querySelectorAll('.assembly-korobka-row')[index];
     
@@ -95,111 +205,3 @@ document.getElementById("status-back").onclick = async () => {
     
 }
 
-const changeOrderStatus = async (status="started", name="none") => {
-    let newLoader = document.createElement('span');
-    newLoader.setAttribute("class", "loader-assembled");
-    newLoader.id = "loader-status";
-    document.getElementById("status-title").appendChild(newLoader);
-    console.log(status);
-    let dataToSend = {status: status, name: name, orderId: document.getElementById("start-assembl").dataset.pk, _token: $('meta[name="csrf-token"]').attr('content')}; 
-    let url = '/assembly/korobkaChangeStatus';
-    let res = "";
-    console.log(dataToSend);
-    const request = new Request(url, {
-                                method: "POST",
-                                headers: {
-                                            'Content-Type': 'application/json;charset=utf-8',
-                                        },
-                                body: JSON.stringify(dataToSend)
-                                });
-    try {
-        const response = await fetch(request);  
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
-        res = await response.json();
-        
-        console.log(res);
-    }
-    catch(error) {
-        console.log(error.message);
-    }
-    document.getElementById("status-title").removeChild(document.getElementById("loader-status"));
-    return res;
-}
-
-const deleteKorobka = async (item, parent) => {
-    parent.remove();
-    document.querySelectorAll('.delete-korobka').forEach((item, index) => {
-        item.disabled=true;
-    });
-    let data = {name: "", orderId: item.dataset.pk, action: "delete"};
-    await sendToKorobkaToApi(data);
-    document.querySelectorAll('.delete-korobka').forEach((item, index) => {
-        item.disabled=false;
-    });
-}
-
-const addTrackToKorobka = async (itemForPK, parent) => {
-    parent.querySelectorAll('.add-track')[0].disabled=true;
-    let url = '/assembly/updateKorobka';
-    let trackNumber = parent.getElementsByTagName("INPUT")[0].value;
-    if (trackNumber == "") {
-        parent.querySelectorAll('.add-track')[0].disabled=false;
-        return;
-    }
-    let dataToSend = {track: trackNumber, orderId: itemForPK.dataset.pk, _token: $('meta[name="csrf-token"]').attr('content') };
-    console.log(dataToSend);
-    const request = new Request(url, {
-                                method: "POST",
-                                headers: {
-                                            'Content-Type': 'application/json;charset=utf-8',
-                                        },
-                                body: JSON.stringify(dataToSend)
-                                });
-    
-    try {
-        const response = await fetch(request);  
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
-        res = await response.json();
-        
-        console.log(res);
-    }
-    catch(error) {
-        console.log(error.message);
-    }
-    parent.querySelectorAll('.add-track')[0].disabled=false;
-}
-
-const sendToKorobkaToApi = async (data) => {
-    let url = '/assembly/createKorobka';
-    let dataToSend = {name: data.name, orderId: data.orderId, action:data.action, _token: $('meta[name="csrf-token"]').attr('content') };
-//    let dataToSend = {name: data.name, orderId: data.orderId, action:data.action };
-    console.log(dataToSend);
-    const request = new Request(url, {
-                                method: "POST",
-                                headers: {
-                                            'Content-Type': 'application/json;charset=utf-8',
-                                        },
-                                body: JSON.stringify(dataToSend)
-                                });
-                                
-    let res = {};
-    try {
-        const response = await fetch(request);  
-        if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
-        }
-        res = await response.json();
-        res.result = true;
-        
-        console.log(res);
-    }
-    catch(error) {
-        console.log(error.message);
-        res.result = false;
-    }
-    return res;
-}
