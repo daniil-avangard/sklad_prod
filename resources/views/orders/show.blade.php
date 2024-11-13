@@ -13,12 +13,12 @@
         'param' => $order,
         'back_route' => 'orders',
     ])
-    
+
     @php
         $type = "";
     @endphp
 
-    
+
     <div class="row">
         <div class="col-9">
             <div class="card">
@@ -33,18 +33,25 @@
                     </div> <!--end row-->
                 </div>
                 <div class="card-body">
-                    @if ($index < 1)
-                        @can('processingStatus', $order)
+                    {{$currentStatus}}
+                    {{-- @can('processingStatus', $order)
+                        @if ($currentStatus === 'new')
+                            <a class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
+                                начальником кураторов</a>
+                                @endif
+                        @endcan --}}
+                    @can('processingStatus', $order)
+                        @if ($currentStatus === 'new')
                             <a class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
                                 куратором</a>
-                        @endcan
-                    @endif
-                    @if ($index < 2)
-                        @can('transferToWarehouse', $order)
+                        @endif
+                    @endcan
+                    @can('transferToWarehouse', $order)
+                        @if ($currentStatus === 'processing')
                             <a class="btn btn-warning" href="{{ route('orders.status.transferred-to-warehouse', $order) }}">Передать
                                 на склад</a>
-                        @endcan
-                    @endif
+                        @endif
+                    @endcan
                     @can('canceledStatus', $order)
                         <a class="btn btn-danger" href="{{ route('orders.status.canceled', $order) }}">Отменить</a>
                     @endcan
@@ -174,7 +181,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Доставка</h4> 
+                    <h4 class="modal-title">Доставка</h4>
                     <span id="close-modal" class="close">&times;</span>
                 </div>
                 <div class="modal-body">
