@@ -75,8 +75,10 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('writeoffs') }}"><i
                             class="ti-control-record"></i>Списание</a></li>
                 @endcan
+                @can('view', \App\Models\Korobka::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('assembly') }}"><i
                             class="ti-control-record"></i>Сборка</a></li>
+                            @endcan
             </ul>
         </li>
 

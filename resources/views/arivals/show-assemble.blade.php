@@ -16,6 +16,7 @@
 
     <div class="row">
         <div class="col-9">
+            @can('changeStatus', \App\Models\Korobka::class)
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
@@ -34,6 +35,7 @@
                     <button id="status-back" class="btn btn-warning">Статус Назад</button>
                 </div>
             </div>
+            @endcan
 
             <div class="card">
                 <div class="card-body">
@@ -128,7 +130,8 @@
                 </div>
 
             </div>
-            
+
+            @can('create', \App\Models\Korobka::class)
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
@@ -160,7 +163,7 @@
                     </div>
 
                 </div>
-                
+
                 @foreach ($korobkas as $korobka)
                     <div class="row assembly-korobka-row">
                         <div class="table-responsive">
@@ -172,11 +175,17 @@
                                         <td>
                                             <label>Трек-номер</label>
                                             <input type="text" id="" name="korobka" value='{{ $korobka->track_number }}'>
-                                            <button class="add-track">Добавить</button>
+
+                                            @can('update', \App\Models\Korobka::class)
+                                                <button class="add-track">Добавить</button>
+                                            @endcan
+
                                             <button class="clean-track">Очисить</button>
                                         </td>
                                         <td>
-                                            <button class="delete-korobka" data-pk="{{ $korobka->id }}">Удалить</button>
+                                            @can('delete', \App\Models\Korobka::class)
+                                                <button class="delete-korobka" data-pk="{{ $korobka->id }}">Удалить</button>
+                                            @endcan
                                         </td>
                                     </tr>
                                 </tbody>
@@ -189,6 +198,7 @@
                         <div class="card-body"><button id="korobka-add" class="btn btn-primary">Добавить коробку</button></div>
                     </div>
             </div>
+            @endcan
 
         </div>
         <div class="col-3">

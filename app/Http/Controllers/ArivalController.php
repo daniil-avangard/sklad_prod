@@ -136,6 +136,8 @@ class ArivalController extends Controller
 
     public function assembly()
     {
+        $this->authorize('viewAny', Korobka::class);
+
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
 
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
@@ -154,7 +156,7 @@ class ArivalController extends Controller
 
     public function showAssembl(Order $order)
     {
-        //        $this->authorize('view', $order);
+        $this->authorize('view', Korobka::class);
 
         $order->load(['items.product.variants', 'items.product' => function ($query) {
             $query->orderBy('name');
@@ -173,6 +175,8 @@ class ArivalController extends Controller
 
     public function createKorobka(Request $request)
     {
+        $this->authorize('create', Korobka::class);
+
         if ($request->action == "create") {
             $korobka = new Korobka();
             $korobka->counter_number = $request->name;
@@ -188,6 +192,8 @@ class ArivalController extends Controller
 
     public function updateKorobka(Request $request)
     {
+        $this->authorize('update', Korobka::class);
+
         $korobka = Korobka::find($request->orderId);
         $korobka->track_number = $request->track;
         $korobka->save();
