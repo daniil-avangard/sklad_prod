@@ -55,4 +55,30 @@ enum StatusEnum: string
     {
         return $this->colors()[$this->value];
     }
+
+    // // Метод для получения следующего статуса
+    // public static function getNextStatus(self $currentStatus): ?self
+    // {
+    //     $statuses = self::cases();
+    //     $currentIndex = array_search($currentStatus, $statuses);
+
+    //     if ($currentIndex === false || $currentIndex === count($statuses) - 1) {
+    //         return null; // Если это последний статус, возвращаем null
+    //     }
+
+    //     return $statuses[$currentIndex + 1];
+    // }
+
+    // // Метод для получения предыдущего статуса
+    // public static function getPreviousStatus(self $currentStatus): ?self
+    // {
+    //     $statuses = self::cases();
+    //     $currentIndex = array_search($currentStatus, $statuses);
+
+    //     if ($currentIndex === false || $currentIndex === 0) {
+    //         return null; // Если это первый статус, возвращаем null
+    //     }
+
+    //     return $statuses[$currentIndex - 1];
+    // }
 }

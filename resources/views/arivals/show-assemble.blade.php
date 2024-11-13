@@ -29,10 +29,18 @@
                     </div> <!--end row-->
                 </div>
                 <div class="card-body">
-                    <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}">Начать сборку</button>
-                    <button id="package-assembled" class="btn btn-warning">Собран</button>
-                    <button id="package-shipped" class="btn btn-danger">Отправлен</button>
-                    <button id="status-back" class="btn btn-warning">Статус Назад</button>
+                    @if($currentStatus->value === 'transferred_to_warehouse')
+                        <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}">Начать сборку</button>
+                    @endif
+                    @if($currentStatus->value === 'warehouse_started')
+                        <button id="package-assembled" class="btn btn-warning">Собран</button>
+                    @endif
+                    @if($currentStatus->value === 'assembled')
+                        <button id="package-shipped" class="btn btn-danger">Отправлен</button>
+                    @endif
+                    @if($currentStatus !== null && $currentStatus !== 'transferred_to_warehouse')
+                        <button id="status-back" class="btn btn-warning">Статус Назад</button>
+                    @endif
                 </div>
             </div>
             @endcan

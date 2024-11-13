@@ -170,7 +170,22 @@ class ArivalController extends Controller
             $flagKorobka = "yes";
         }
 
-        return view('arivals.show-assemble', compact('order', 'korobkas', 'flagKorobka'));
+        // Проверка статуса заказа
+        $currentStatus = $this->checkOrderStatus($order);
+
+        return view('arivals.show-assemble', compact('order', 'korobkas', 'flagKorobka', 'currentStatus'));
+    }
+
+    private function checkOrderStatus(Order $order)
+    {
+        $status = StatusEnum::from($order->status->value);
+
+        // Если статус из перечисленных для сборки, возвращаем объект для дальнейшего сравнения
+        if ($status === StatusEnum::TRANSFERRED_TO_WAREHOUSE || $status === StatusEnum::WAREHOUSE_START || $status === StatusEnum::ASSEMBLED || $status === StatusEnum::SHIPPED) {
+            return $status;
+        }
+
+        return null;
     }
 
     public function createKorobka(Request $request)
