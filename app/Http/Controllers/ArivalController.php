@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\ArivalProduct;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
+//use Illuminate\Foundation\Configuration\Middleware;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
@@ -19,6 +20,9 @@ use App\Enum\Order\StatusEnum;
 class ArivalController extends Controller
 {
 //    use AuthorizesRequests;
+//    public function __construct(){
+//        $this->middleware('csrf')->only('createKorobka');
+//    }
 
     public function index()
     {
@@ -193,10 +197,28 @@ class ArivalController extends Controller
     
     public function korobkaChangeStatus(Request $request)
     {
-//        $myVar = $request->orderId;
+        $arrayOfStatuses = array(StatusEnum::TRANSFERRED_TO_WAREHOUSE->value, StatusEnum::WAREHOUSE_START->value, StatusEnum::ASSEMBLED->value, StatusEnum::SHIPPED->value);
+        $orderStatus = StatusEnum::WAREHOUSE_START->value;
+        switch ($request->status) {
+            case "started":
+              $orderStatus = StatusEnum::WAREHOUSE_START->value;
+              break;
+            case "assembled":
+              $orderStatus = StatusEnum::ASSEMBLED->value;
+              break;
+            case "shipped":
+              $orderStatus = StatusEnum::SHIPPED->value;
+              break;
+            case "back-status":
+              $i = array_search($request->name, $arrayOfStatuses);
+              $orderStatus = $arrayOfStatuses[$i - 1];
+              break;
+          }
         $order = Order::find($request->orderId);
-        $order->status = $request->orderId == "started" ? StatusEnum::WAREHOUSE_START->value: StatusEnum::ASSEMBLED->value;
+//        $order->status = $request->status == "started" ? StatusEnum::WAREHOUSE_START->value: StatusEnum::ASSEMBLED->value;
+        $order->status = $orderStatus;
         $order->save();
-        return response()->json(['success' => true]);
+        $name = $order->status->name();
+        return response()->json(['success' => true, 'data' => $orderStatus, 'name' => $name]);
     }
 }
