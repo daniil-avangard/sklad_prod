@@ -2,6 +2,7 @@
 
 @push('styles-plugins')
     <link type="text/css" href="/plugins/x-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
 @section('content')
@@ -12,14 +13,19 @@
         'param' => $order,
         'back_route' => 'orders',
     ])
+    
+    @php
+        $type = "";
+    @endphp
 
+    
     <div class="row">
         <div class="col-9">
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
-                            <h4 class="card-title">Статус: <span
+                            <h4 id="status-order" data-pk="{{ $order->id }}" class="card-title">Статус: <span
                                     class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}
                                 </span>
                             </h4>
@@ -27,16 +33,23 @@
                     </div> <!--end row-->
                 </div>
                 <div class="card-body">
-                    @can('processingStatus', $order)
-                        <a class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
-                            куратором</a>
-                    @endcan
-                    @can('transferToWarehouse', $order)
-                        <a class="btn btn-warning" href="{{ route('orders.status.transferred-to-warehouse', $order) }}">Передать
-                            на склад</a>
-                    @endcan
+                    @if ($index < 1)
+                        @can('processingStatus', $order)
+                            <a class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
+                                куратором</a>
+                        @endcan
+                    @endif
+                    @if ($index < 2)
+                        @can('transferToWarehouse', $order)
+                            <a class="btn btn-warning" href="{{ route('orders.status.transferred-to-warehouse', $order) }}">Передать
+                                на склад</a>
+                        @endcan
+                    @endif
                     @can('canceledStatus', $order)
                         <a class="btn btn-danger" href="{{ route('orders.status.canceled', $order) }}">Отменить</a>
+                    @endcan
+                    @can('canceledStatus', $order)
+                        <button id="package-shipped" class="btn btn-primary">Заказ доставлен</button>
                     @endcan
                 </div>
             </div>
@@ -157,11 +170,30 @@
             </div>
         </div>
     </div>
+    <div id="myModal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Доставка</h4> 
+                    <span id="close-modal" class="close">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <h3>Информация по доставке</h3>
+                    <textarea></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Все хорошо</button>
+                    <button id="loadpage" type="button" class="btn btn-warning">Другой Комментарий</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+    </div>
 @endsection
 
 
 @push('scripts-plugins')
     <script src="/plugins/x-editable/js/bootstrap-editable.min.js"></script>
-
     <script src="/assets/pages/orders/update.quantity.js"></script>
+    <script src="/assets/js/packageshipped.js"></script>
 @endpush

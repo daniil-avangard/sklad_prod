@@ -15,6 +15,11 @@ use App\Models\DivisionGroup;
 class OrderController extends Controller
 {
     use AuthorizesRequests;
+    
+//    public function __construct(){
+//        $this->middleware('csrf')->only('updateCommentManager');
+//    }
+
     public function index()
     {
         $this->authorize('viewAny', Order::class);
@@ -31,6 +36,8 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $this->authorize('view', $order);
+        $arrayOfStatuses = array_column(StatusEnum::cases(), 'value');
+        $index = array_search($order->status->value, $arrayOfStatuses);
 
         $order->load(['items.product.variants', 'items.product' => function ($query) {
             $query->orderBy('name');
@@ -39,7 +46,7 @@ class OrderController extends Controller
         $order->items = $order->items->sortBy(function ($item) {
             return $item->product->name;
         });
-        return view('orders.show', compact('order'));
+        return view('orders.show', compact('order', 'index'));
     }
 
     public function create()
