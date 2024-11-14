@@ -52,3 +52,6 @@ Route::get('/orders/{order}/status/canceled', [OrderController::class, 'statusCa
 
 // Просмотр выбранных заказов
 Route::post('/orders/selected', [OrderController::class, 'selected'])->name('orders.selected');
+
+// Груз доставлен
+Route::post('/orders/shipped', [OrderController::class, 'shipped'])->name('orders.shipped');
