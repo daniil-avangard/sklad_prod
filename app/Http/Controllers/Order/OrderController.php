@@ -200,4 +200,14 @@ class OrderController extends Controller
         $order->save();
         return redirect()->back()->with('success', 'Заказ успешно отменен');
     }
+    
+    public function shipped(Request $request)
+    {
+        $order = Order::find($request->orderId);
+
+        $order->status = StatusEnum::DELIVERED->value;
+        $order->shipped_comments = $request->message;
+        $order->save();
+        return response()->json(['success' => true]);
+    }
 }

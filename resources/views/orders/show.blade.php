@@ -182,8 +182,8 @@
                     <textarea></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Все хорошо</button>
-                    <button id="loadpage" type="button" class="btn btn-warning">Другой Комментарий</button>
+                    <button type="button" id="ok-comment" class="btn btn-info" data-dismiss="modal">Все хорошо</button>
+                    <button id="big-comment" type="button" class="btn btn-warning">Другой Комментарий</button>
                 </div>
             </div>
             <!-- /.modal-content -->
