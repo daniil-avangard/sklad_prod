@@ -23,7 +23,7 @@ class BasketController extends Controller
 
     public function index()
     {
-        $this->authorize('create');
+        $this->authorize('create', \App\Models\Order::class);
 
         // $categories = Category::with(['products' => function ($query) {
         //     $query->whereHas('baskets', function ($query) {

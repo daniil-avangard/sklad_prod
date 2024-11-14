@@ -23,8 +23,9 @@
 
         </div>
         <div class="col-lg-3">
-
-            @include('products.inc.list_division', ['divisions' => $divisions])
+            @can('create', \App\Models\Product::class)
+                @include('products.inc.list_division', ['divisions' => $divisions])
+            @endcan
         </div>
     </div>
     <div class="row">
