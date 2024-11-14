@@ -6,6 +6,7 @@ enum StatusEnum: string
 {
     case NEW = 'new';
     case PROCESSING = 'processing';
+    case MANAGER_PROCESSING = 'manager_processing';
     case TRANSFERRED_TO_WAREHOUSE = 'transferred_to_warehouse';
     case WAREHOUSE_START = 'warehouse_started';
     case ASSEMBLED = 'assembled';
@@ -23,6 +24,7 @@ enum StatusEnum: string
         return [
             self::NEW->value => 'В ожидании',
             self::PROCESSING->value => 'Проверено куратором',
+            self::MANAGER_PROCESSING->value => 'Проверено начальником кураторов',
             self::TRANSFERRED_TO_WAREHOUSE->value => 'Передан на склад',
             self::WAREHOUSE_START->value => 'Началась сборка',
             self::ASSEMBLED->value => 'Собран',
@@ -42,6 +44,7 @@ enum StatusEnum: string
         return [
             self::NEW->value => 'warning',
             self::PROCESSING->value => 'warning',
+            self::MANAGER_PROCESSING->value => 'warning',
             self::TRANSFERRED_TO_WAREHOUSE->value => 'info',
             self::WAREHOUSE_START->value => 'started-war',
             self::ASSEMBLED->value => 'assembled',

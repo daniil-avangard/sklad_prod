@@ -33,30 +33,11 @@ class OrderController extends Controller
         return view('orders.index', compact('orders'));
     }
 
-    // public function processingStatus(User $user, Order $order = null): bool
-    // {
-    //     return $user->hasPermission('processingStatus', Order::class);
-    // }
-
-    // public function transferToWarehouse(User $user, Order $order = null): bool
-    // {
-    //     return $user->hasPermission('transferToWarehouse', Order::class);
-    // }
-
-    // public function canceledStatus(User $user, Order $order = null): bool
-    // {
-    //     return $user->hasPermission('canceledStatus', Order::class);
-    // }
-
     public function show(Order $order)
     {
         $this->authorize('view', $order);
 
-        // $arrayOfStatuses = array_column(StatusEnum::cases(), 'value');
-        // $index = array_search($order->status->value, $arrayOfStatuses);
-        // dd($arrayOfStatuses);
-
-        $currentStatus = $this->checkOrderStatus($order);
+        $currentStatus = $order->status->value;
 
         $order->load(['items.product.variants', 'items.product' => function ($query) {
             $query->orderBy('name');
@@ -67,19 +48,6 @@ class OrderController extends Controller
         });
 
         return view('orders.show', compact('order', 'currentStatus'));
-        // return view('orders.show', compact('order', 'index'));
-    }
-
-    private function checkOrderStatus(Order $order)
-    {
-        $status = StatusEnum::from($order->status->value);
-
-        // Если статус из перечисленных для сборки, возвращаем объект для дальнейшего сравнения
-        if ($status === StatusEnum::NEW || $status === StatusEnum::PROCESSING || $status === StatusEnum::TRANSFERRED_TO_WAREHOUSE || $status === StatusEnum::CANCELED || $status === StatusEnum::DELIVERED) {
-            return $status;
-        }
-
-        return null;
     }
 
     public function create()
@@ -188,6 +156,14 @@ class OrderController extends Controller
         return redirect()->back()->with('success', 'Заказ успешно проверен');
     }
 
+    public function statusManagerProcessing(Order $order)
+    {
+        $this->authorize('managerProcessingStatus', $order);
+
+        $order->status = StatusEnum::MANAGER_PROCESSING->value;
+        $order->save();
+        return redirect()->back()->with('success', 'Заказ успешно проверен');
+    }
 
     public function statusTransferredToWarehouse(Order $order)
     {

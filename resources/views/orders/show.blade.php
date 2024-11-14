@@ -33,30 +33,35 @@
                     </div> <!--end row-->
                 </div>
                 <div class="card-body">
-                    {{$currentStatus}}
-                    {{-- @can('processingStatus', $order)
-                        @if ($currentStatus === 'new')
-                            <a class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
-                                начальником кураторов</a>
-                                @endif
-                        @endcan --}}
                     @can('processingStatus', $order)
                         @if ($currentStatus === 'new')
                             <a class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
                                 куратором</a>
                         @endif
                     @endcan
-                    @can('transferToWarehouse', $order)
+                    @can('managerProcessingStatus', $order)
                         @if ($currentStatus === 'processing')
+                            <a class="btn btn-primary" href="{{ route('orders.status.manager-processing', $order) }}">
+                                Проверено
+                            начальником кураторов
+                            </a>
+                        @endif
+                    @endcan
+                    @can('transferToWarehouse', $order)
+                        @if ($currentStatus === 'manager_processing')
                             <a class="btn btn-warning" href="{{ route('orders.status.transferred-to-warehouse', $order) }}">Передать
                                 на склад</a>
                         @endif
                     @endcan
                     @can('canceledStatus', $order)
+                        @if ($currentStatus !== 'shipped')
                         <a class="btn btn-danger" href="{{ route('orders.status.canceled', $order) }}">Отменить</a>
+                        @endif
                     @endcan
                     @can('canceledStatus', $order)
-                        <button id="package-shipped" class="btn btn-primary">Заказ доставлен</button>
+                        @if ($currentStatus === 'shipped')
+                            <button id="package-shipped" class="btn btn-primary">Заказ доставлен</button>
+                        @endif
                     @endcan
                 </div>
             </div>
