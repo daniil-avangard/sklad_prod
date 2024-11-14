@@ -54,11 +54,11 @@
                         @endif
                     @endcan
                     @can('canceledStatus', $order)
-                        @if ($currentStatus !== 'shipped')
-                        <a class="btn btn-danger" href="{{ route('orders.status.canceled', $order) }}">Отменить</a>
+                        @if ($currentStatus !== 'shipped' && $currentStatus !== 'delivered')
+                            <a class="btn btn-danger" href="{{ route('orders.status.canceled', $order) }}">Отменить</a>
                         @endif
                     @endcan
-                    @can('canceledStatus', $order)
+                    @can('create', $order)
                         @if ($currentStatus === 'shipped')
                             <button id="package-shipped" class="btn btn-primary">Заказ доставлен</button>
                         @endif
