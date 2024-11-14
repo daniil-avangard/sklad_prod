@@ -15,10 +15,10 @@ use App\Models\DivisionGroup;
 class OrderController extends Controller
 {
     use AuthorizesRequests;
-    
-//    public function __construct(){
-//        $this->middleware('csrf')->only('updateCommentManager');
-//    }
+
+    //    public function __construct(){
+    //        $this->middleware('csrf')->only('updateCommentManager');
+    //    }
 
     public function index()
     {
@@ -36,8 +36,8 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $this->authorize('view', $order);
-        $arrayOfStatuses = array_column(StatusEnum::cases(), 'value');
-        $index = array_search($order->status->value, $arrayOfStatuses);
+
+        $currentStatus = $order->status->value;
 
         $order->load(['items.product.variants', 'items.product' => function ($query) {
             $query->orderBy('name');
@@ -46,7 +46,8 @@ class OrderController extends Controller
         $order->items = $order->items->sortBy(function ($item) {
             return $item->product->name;
         });
-        return view('orders.show', compact('order', 'index'));
+
+        return view('orders.show', compact('order', 'currentStatus'));
     }
 
     public function create()
@@ -146,7 +147,6 @@ class OrderController extends Controller
 
 
     // Статуты бля заказаков
-
     public function statusProcessing(Order $order)
     {
         $this->authorize('processingStatus', $order);
@@ -156,6 +156,14 @@ class OrderController extends Controller
         return redirect()->back()->with('success', 'Заказ успешно проверен');
     }
 
+    public function statusManagerProcessing(Order $order)
+    {
+        $this->authorize('managerProcessingStatus', $order);
+
+        $order->status = StatusEnum::MANAGER_PROCESSING->value;
+        $order->save();
+        return redirect()->back()->with('success', 'Заказ успешно проверен');
+    }
 
     public function statusTransferredToWarehouse(Order $order)
     {

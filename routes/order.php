@@ -44,6 +44,7 @@ Route::post('/orders/update-comment-manager', [OrderController::class, 'updateCo
 
 // Кастыль. Роут на каждый статус заказа, для разгроничения политики доступа
 Route::get('/orders/{order}/status/processing', [OrderController::class, 'statusProcessing'])->name('orders.status.processing');
+Route::get('/orders/{order}/status/manager-processing', [OrderController::class, 'statusManagerProcessing'])->name('orders.status.manager-processing');
 Route::get('/orders/{order}/status/transferred-to-warehouse', [OrderController::class, 'statusTransferredToWarehouse'])->name('orders.status.transferred-to-warehouse');
 Route::get('/orders/{order}/status/shipped', [OrderController::class, 'statusShipped'])->name('orders.status.shipped');
 Route::get('/orders/{order}/status/delivered', [OrderController::class, 'statusDelivered'])->name('orders.status.delivered');
