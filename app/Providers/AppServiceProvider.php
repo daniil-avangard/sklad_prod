@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Policies\UserPolicy;
 use App\Models\Permission;
 use App\Models\Arival;
+use App\Models\Korobka;
 use App\Policies\ArivalPolicy;
 use App\Models\Writeoff;
 use App\Policies\WriteoffPolicy;
@@ -16,6 +17,7 @@ use App\Policies\ProductPolicy;
 use App\Models\ProductVariant;
 use App\Policies\ProductVariantPolicy;
 use App\Models\Order;
+use App\Policies\KorobkaPolicy;
 use App\Policies\OrderPolicy;
 use DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider;
 
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         Product::class => ProductPolicy::class,
         ProductVariant::class => ProductVariantPolicy::class,
         Order::class => OrderPolicy::class,
+        Korobka::class => KorobkaPolicy::class
 
     ];
 

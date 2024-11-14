@@ -17,7 +17,7 @@
         <div class="col-12">
 
             <div class="table-responsive">
-                @can('view', \App\Models\Order::class)
+                @can('viewAny', App\Models\Korobka::class)
                     <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
                 @endcan
                 <table class="table table-bordered custom-table">
@@ -46,7 +46,7 @@
                                 </th>
                                 <td>
                                     <a
-                                        @can('view', $order)
+                                    @can('view', App\Models\Korobka::class)
                                     href="{{ route('assembly.show', $order) }}"
                                     @else
                                     href="#"
@@ -68,4 +68,4 @@
         </div>
     </div>
 
-@endsection 
+@endsection

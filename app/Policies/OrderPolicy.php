@@ -8,7 +8,7 @@ use Illuminate\Auth\Access\Response;
 
 
 /**
- * @PolicyName(viewAny="Просмотр всех заказов", view="Просмотр заказа", create="Создание заказа", update="Редактирование заказа", delete="Удаление заказа", updateQuantity="Изменение количества заказа", processingStatus="Изменение статуса Проверено куратором", transferToWarehouse="Изменение статуса Передано на склад", canceledStatus="Изменение статуса Отмена заказа")
+ * @PolicyName(viewAny="Просмотр всех заказов", view="Просмотр заказа", create="Создание заказа", update="Редактирование заказа", delete="Удаление заказа", updateQuantity="Изменение количества заказа", processingStatus="Изменение статуса Проверено куратором", managerProcessingStatus="Изменение статуса Проверено начальником кураторов" transferToWarehouse="Изменение статуса Передано на склад", canceledStatus="Изменение статуса Отмена заказа", viewQuantity="Просмотр количества в заказе")
  */
 class OrderPolicy
 {
@@ -50,6 +50,11 @@ class OrderPolicy
     public function processingStatus(User $user, Order $order = null): bool
     {
         return $user->hasPermission('processingStatus', Order::class);
+    }
+
+    public function managerProcessingStatus(User $user, Order $order = null): bool
+    {
+        return $user->hasPermission('managerProcessingStatus', Order::class);
     }
 
     public function transferToWarehouse(User $user, Order $order = null): bool

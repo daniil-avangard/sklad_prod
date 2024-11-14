@@ -66,18 +66,25 @@
                     class="align-self-center menu-icon"></i><span>Склад</span><span class="menu-arrow"><i
                         class="mdi mdi-chevron-right"></i></span></a>
             <ul class="nav-second-level" aria-expanded="false">
-
-                <li class="nav-item"><a class="nav-link" href="{{ route('arivals') }}"><i
-                            class="ti-control-record"></i>Приход</a></li>
+                @can('viewAny', \App\Models\Arival::class)
+                    <li class="nav-item"><a class="nav-link" href="{{ route('arivals') }}"><i
+                            class="ti-control-record"></i>Приход</a>
+                        </li>
+                @endcan
+                @can('view', \App\Models\Writeoff::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('writeoffs') }}"><i
                             class="ti-control-record"></i>Списание</a></li>
+                @endcan
+                @can('view', \App\Models\Korobka::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('assembly') }}"><i
                             class="ti-control-record"></i>Сборка</a></li>
+                            @endcan
             </ul>
         </li>
 
         <hr class="hr-dashed hr-menu">
 
+        {{-- @can('view', \App\Models\::class) --}}
         <li class="menu-label mt-0">Администрирование</li>
 
         <li>
@@ -85,14 +92,21 @@
                     class="align-self-center menu-icon"></i><span>Полномочия и роли</span><span class="menu-arrow"><i
                         class="mdi mdi-chevron-right"></i></span></a>
             <ul class="nav-second-level" aria-expanded="false">
+                @can('view', \App\Models\User::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('users.index') }}"><i
                             class="ti-control-record"></i>Пользователи</a></li>
+                @endcan
+                @can('create', \App\Models\User::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('permissions') }}"><i
                             class="ti-control-record"></i>Полномочия</a></li>
+                            @endcan
+                            @can('create', \App\Models\User::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('roles') }}"><i
                             class="ti-control-record"></i>Роли</a></li>
+                            @endcan
             </ul>
         </li>
+        {{-- @endcan --}}
 
 
         <li class="menu-label my-2">Коммент внизу</li>
