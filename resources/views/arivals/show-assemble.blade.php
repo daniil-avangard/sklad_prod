@@ -16,28 +16,29 @@
 
     <div class="row">
         <div class="col-9">
-            @can('changeStatus', \App\Models\Korobka::class)
+            
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col" >
                             <h4 id="status-title" class="card-title">Статус: <span id="order-status" data-status="{{ $order->status->value }}"
-                                    class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}
+                                    data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}" class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}
                                 </span>
                             </h4>
                         </div><!--end col-->
                     </div> <!--end row-->
                 </div>
-                <div class="card-body">
-                    <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}">Начать сборку</button>
-                    {{-- @if($currentStatus->value === 'transferred_to_warehouse')
-                    @endif --}}
-                    <button id="package-assembled" class="btn btn-warning">Собран</button>
-                    <button id="package-shipped" class="btn btn-danger">Отправлен</button>
-                    <button id="status-back" class="btn btn-warning">Статус Назад</button>
+                <div class="card-body">                    
+                        <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}">Начать сборку</button>
+                    
+                        <button id="package-assembled" class="btn btn-warning">Собран</button>
+                    
+                        <button id="package-shipped" class="btn btn-danger">Отправлен</button>
+                    
+                        <button id="status-back" class="btn btn-warning">Статус Назад</button>
                 </div>
             </div>
-            @endcan
+            
 
             <div class="card">
                 <div class="card-body">
@@ -133,7 +134,7 @@
 
             </div>
 
-            @can('create', \App\Models\Korobka::class)
+            
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
@@ -200,7 +201,7 @@
                         <div class="card-body"><button id="korobka-add" class="btn btn-primary">Добавить коробку</button></div>
                     </div>
             </div>
-            @endcan
+           
 
         </div>
         <div class="col-3">
