@@ -103,16 +103,15 @@
                                         <td>{{ $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved') }}
                                         </td>
                                         <td>
-                                            @if (
-                                                $order->status->value === \App\Enum\Order\StatusEnum::NEW->value ||
-                                                    $order->status->value === \App\Enum\Order\StatusEnum::PROCESSING->value)
+                                            @if ($order->status->value === \App\Enum\Order\StatusEnum::NEW->value)
                                                 <a
                                                     @can('updateQuantity', $order)
                                                     href="#"
                                                      class="quantity-input"
                                                         id="order_quantity_{{ $item->id }}" data-type="number"
                                                         data-pk="{{ $item->id }}" data-title="Введите количество"
-                                                        @endcan>
+                                                    @endcan>
+
                                                     {{ $item->quantity }}
                                                 </a>
                                             @else

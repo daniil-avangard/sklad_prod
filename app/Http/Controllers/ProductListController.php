@@ -20,13 +20,11 @@ class ProductListController extends Controller
 
     public function index()
     {
-        $this->authorize('create');
+        $this->authorize('create', \App\Models\Order::class);
 
         // Продукт находится в группе division_group_product(product_id, division_group_id), division_group_id относится к division_groups(id), есть еще division_division_group(division_group_id, division_id), division_id относится к divisions(id)
         // У пользователя division_id = 7, нужно получить все product_id, которые находятся в division_group_product и в division_division_group(division_id = 7)
         // Пизда, не хотелось ебаться с этим с делать боллее элегантно
-
-        //        dd($this->divisionId);
 
         $divisionGroupProducts = DB::table('division_group_product')
             ->join('division_division_group', 'division_group_product.division_group_id', '=', 'division_division_group.division_group_id')
@@ -37,10 +35,6 @@ class ProductListController extends Controller
             ->orWhereHas('divisions', function ($query) {
                 $query->where('division_id', $this->divisionId);
             })->orderBy('name')->get();
-
-        // dd($this->divisionId);
-        // dd($divisionGroupProducts);
-        // dd($products);
 
         return view('products.list.index', compact('products'));
     }
