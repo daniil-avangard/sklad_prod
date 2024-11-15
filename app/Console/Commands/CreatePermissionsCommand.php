@@ -23,7 +23,7 @@ class CreatePermissionsCommand extends Command
         $this->createPolicyPermissions();
 
         // Создание ролей с правами
-        $this->createRoleWithPermissions('Супер админ', true, range(1001, 1039));
+        $this->createRoleWithPermissions('Супер админ', true, range(1001, 1040));
         $this->createRoleWithPermissions('Управляющий подразделения', false, [1016, 1026]);
         $this->createRoleWithPermissions('Куратор', false, [1001, 1016, 1024, 1025, 1027, 1029, 1030]);
         $this->createRoleWithPermissions('Начальник кураторов', false, [1001, 1003, 1006, 1010, 1011, 1015, 1016, 1020, 1024, 1025, 1027, 1028, 1029, 1030, 1031, 1032, 1034, 1035]);
