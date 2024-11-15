@@ -16,10 +16,12 @@
                             <div class="row">
                                 <div class="col d-flex justify-content-between">
                                     <p class="text-dark mb-1 fw-semibold">Список подразделений</p>
+                                    @can('create', App\Models\Product::class)
                                     <a href="{{ route('groups.divisions.division.create', $group) }}"
                                         class="col-auto align-self-center btn btn-primary">
                                         Добавить
                                     </a>
+                                    @endcan
                                 </div>
 
                                 <table id="permissions-table" class="bootstable table-responsive">
@@ -36,6 +38,7 @@
                                                 <td>{{ $division->id }}</td>
                                                 <td>{{ $division->name }}</td>
                                                 <td>
+                                                    @can('create', App\Models\Product::class)
                                                     <x-form
                                                         action="{{ route('groups.divisions.division.detach', [$group, $division]) }}"
                                                         method="POST" style="display: inline-block;">
@@ -43,6 +46,7 @@
                                                             value="{{ $division->id }}">
                                                         <button type="submit" class="btn btn-danger">Удалить</button>
                                                     </x-form>
+                                                    @endcan
                                                 </td>
                                             </tr>
                                         @endforeach
