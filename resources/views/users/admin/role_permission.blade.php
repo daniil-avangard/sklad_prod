@@ -1,4 +1,4 @@
-@can('update', \App\Models\User::class)
+@can('create', \App\Models\User::class)
 <div class="tab-pane fade show active" id="Role_Permission" role="tabpanel" aria-labelledby="Role_Permission_tab">
     <div class="row">
         <div class="col-lg-12">
