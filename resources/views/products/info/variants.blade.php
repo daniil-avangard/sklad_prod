@@ -1,6 +1,9 @@
 <div class="d-flex justify-content-between align-items-center">
     <h3>Варианты</h3>
-    <a href="{{ route('products.variants.create', $product) }}" class="btn btn-primary">Добавить вариант</a>
+
+    @can('create', \App\Models\ProductVariant::class)
+        <a href="{{ route('products.variants.create', $product) }}" class="btn btn-primary">Добавить вариант</a>
+    @endcan
 </div>
 
 <table class="table table-bordered">
