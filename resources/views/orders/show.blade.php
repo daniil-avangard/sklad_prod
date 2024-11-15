@@ -54,11 +54,11 @@
                         @endif
                     @endcan
                     @can('canceledStatus', $order)
-                        @if ($currentStatus !== 'shipped')
-                        <a class="btn btn-danger" href="{{ route('orders.status.canceled', $order) }}">Отменить</a>
+                        @if ($currentStatus !== 'shipped' && $currentStatus !== 'delivered')
+                            <a class="btn btn-danger" href="{{ route('orders.status.canceled', $order) }}">Отменить</a>
                         @endif
                     @endcan
-                    @can('canceledStatus', $order)
+                    @can('create', $order)
                         @if ($currentStatus === 'shipped')
                             <button id="package-shipped" class="btn btn-primary">Заказ доставлен</button>
                         @endif
@@ -194,8 +194,8 @@
                     <textarea></textarea>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info" data-dismiss="modal">Все хорошо</button>
-                    <button id="loadpage" type="button" class="btn btn-warning">Другой Комментарий</button>
+                    <button type="button" id="ok-comment" class="btn btn-info" data-dismiss="modal">Все хорошо</button>
+                    <button id="big-comment" type="button" class="btn btn-warning">Другой Комментарий</button>
                 </div>
             </div>
             <!-- /.modal-content -->
