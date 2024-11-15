@@ -1,3 +1,4 @@
+@can('update', \App\Models\User::class)
 <div class="pb-4">
     <ul class="nav-border nav nav-pills mb-0" id="pills-tab" role="tablist">
         <li class="nav-item">
@@ -9,3 +10,4 @@
         </li>
     </ul>
 </div><!--end card-body-->
+@endcan
