@@ -50,7 +50,7 @@
   border: 1px solid #888;
   width: 80%;
   transform: translateY(-700px);
-  animation: modal-animate 0.15s linear forwards;
+  animation: modal-animate 0.15s ease-in-out forwards;
 }
 @keyframes modal-animate {
     0% {
