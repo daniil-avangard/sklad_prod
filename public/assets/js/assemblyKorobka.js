@@ -172,6 +172,10 @@ buttonsTrack.forEach((item, index) => {
 
 const createKorobkaElement = async () => {
 //    document.getElementById("Button").disabled=true
+    let newLoader = document.createElement('span');
+    newLoader.setAttribute("class", "loader-assembled");
+    newLoader.id = "loader-status";
+    document.getElementById("status-title").appendChild(newLoader);
     let initKorobkaList = document.querySelectorAll('.assembly-korobka-row');
     let parentKorobkaNode = initKorobkaList[0].parentNode;
     let counter = initKorobkaList.length;
@@ -192,6 +196,7 @@ const createKorobkaElement = async () => {
 
         parentKorobkaNode.insertBefore(clone, parentKorobkaNode.lastChild.previousElementSibling);
     }
+    document.getElementById("status-title").removeChild(document.getElementById("loader-status"));
     
 }
 
@@ -259,7 +264,7 @@ if (document.getElementById("status-back")) {
     document.getElementById("status-back").onclick = async () => {
         let status = document.getElementById("order-status").dataset.status;
         console.log("Hello world");
-        if (status != "transferred_to_warehouse" && status != "warehouse_started") {
+        if (status != "transferred_to_warehouse" && status != "warehouse_started" && status != "shipped") {
             let data = await changeOrderStatus("back-status", document.getElementById("order-status").dataset.status);
             console.log(data);
             document.getElementById("order-status").dataset.status = data.data;
