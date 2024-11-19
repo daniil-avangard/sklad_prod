@@ -13,8 +13,6 @@
 
     @include('products.info.header')
 
-
-
     <div class="row">
         <div class="col-lg-9">
             @can('view', App\Models\ProductVariant::class)
@@ -30,7 +28,7 @@
     </div>
     <div class="row">
         <div class="col-3">
-
+            
         </div>
     </div>
 @endsection

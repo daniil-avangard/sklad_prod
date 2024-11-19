@@ -44,7 +44,10 @@
                         <x-form
                             action="{{ route('products.variants.delete', ['product' => $product, 'variant' => $variant]) }}"
                             method="DELETE" style="display: inline-block;">
-                            <button type="submit" class="btn btn-danger">Удалить</button>
+                            <button type="submit" class="btn btn-danger" style="padding: .2rem 0.5rem; ">
+                                <i data-feather="trash" class="align-self-center topbar-icon" style="width: 20px; height: 20px;"></i>
+                                {{-- Удалить --}}
+                            </button>
                         </x-form>
                     @endcan
                 </td>
