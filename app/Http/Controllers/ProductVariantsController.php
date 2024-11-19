@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Http\Requests\Product\Variant\CreateVariantRequest;
 use App\Models\ProductVariant;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ProductVariantsController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index(Product $product)
     {
 
@@ -17,6 +20,8 @@ class ProductVariantsController extends Controller
 
     public function create(Product $product)
     {
+        $this->authorize('create', \App\Models\ProductVariant::class);
+
         return view('products.variants.create', compact('product'));
     }
 
@@ -119,5 +124,6 @@ class ProductVariantsController extends Controller
     {
         $variant->delete();
         return redirect()->route('products.show', $product)->with('success', 'Вариант успешно удален');
-    }
+
+   }
 }

@@ -13,12 +13,12 @@
         'param' => $order,
         'back_route' => 'orders',
     ])
-    
+
     @php
         $type = "";
     @endphp
 
-    
+
     <div class="row">
         <div class="col-9">
             <div class="card">
@@ -33,23 +33,35 @@
                     </div> <!--end row-->
                 </div>
                 <div class="card-body">
-                    @if ($index < 1)
-                        @can('processingStatus', $order)
+                    @can('processingStatus', $order)
+                        @if ($currentStatus === 'new')
                             <a class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
                                 куратором</a>
-                        @endcan
-                    @endif
-                    @if ($index < 2)
-                        @can('transferToWarehouse', $order)
+                        @endif
+                    @endcan
+                    @can('managerProcessingStatus', $order)
+                        @if ($currentStatus === 'processing')
+                            <a class="btn btn-primary" href="{{ route('orders.status.manager-processing', $order) }}">
+                                Проверено
+                            начальником кураторов
+                            </a>
+                        @endif
+                    @endcan
+                    @can('transferToWarehouse', $order)
+                        @if ($currentStatus === 'manager_processing')
                             <a class="btn btn-warning" href="{{ route('orders.status.transferred-to-warehouse', $order) }}">Передать
                                 на склад</a>
-                        @endcan
-                    @endif
-                    @can('canceledStatus', $order)
-                        <a class="btn btn-danger" href="{{ route('orders.status.canceled', $order) }}">Отменить</a>
+                        @endif
                     @endcan
                     @can('canceledStatus', $order)
-                        <button id="package-shipped" class="btn btn-primary">Заказ доставлен</button>
+                        @if ($currentStatus !== 'shipped' && $currentStatus !== 'delivered')
+                            <a class="btn btn-danger" href="{{ route('orders.status.canceled', $order) }}">Отменить</a>
+                        @endif
+                    @endcan
+                    @can('create', $order)
+                        @if ($currentStatus === 'shipped')
+                            <button id="package-shipped" class="btn btn-primary">Заказ доставлен</button>
+                        @endif
                     @endcan
                 </div>
             </div>
@@ -91,16 +103,15 @@
                                         <td>{{ $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved') }}
                                         </td>
                                         <td>
-                                            @if (
-                                                $order->status->value === \App\Enum\Order\StatusEnum::NEW->value ||
-                                                    $order->status->value === \App\Enum\Order\StatusEnum::PROCESSING->value)
+                                            @if ($order->status->value === \App\Enum\Order\StatusEnum::NEW->value)
                                                 <a
                                                     @can('updateQuantity', $order)
                                                     href="#"
                                                      class="quantity-input"
                                                         id="order_quantity_{{ $item->id }}" data-type="number"
                                                         data-pk="{{ $item->id }}" data-title="Введите количество"
-                                                        @endcan>
+                                                    @endcan>
+
                                                     {{ $item->quantity }}
                                                 </a>
                                             @else
@@ -174,7 +185,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Доставка</h4> 
+                    <h4 class="modal-title">Доставка</h4>
                     <span id="close-modal" class="close">&times;</span>
                 </div>
                 <div class="modal-body">

@@ -15,6 +15,7 @@ class CreateUserCommand extends Command
     public function handle()
     {
         mb_internal_encoding("UTF-8");
+
         // Запрашиваем данные пользователя с валидацией
         $surname = $this->cleanInput($this->ask('Ваша фамилия'));
         $firstName = $this->cleanInput($this->ask('Ваше имя'));
@@ -46,7 +47,7 @@ class CreateUserCommand extends Command
 
         return Command::SUCCESS;
     }
-    
+
     private function cleanInput(string $input): string
     {
         // Удаляем пробелы в начале и конце
@@ -62,7 +63,7 @@ class CreateUserCommand extends Command
 
         return $cleaned;
     }
-    
+
     private function cleanEmail(string $email): string
     {
         $cleaned = trim($email);
@@ -77,7 +78,7 @@ class CreateUserCommand extends Command
 
         return $cleaned;
     }
-    
+
     private function cleanPassword(string $password): string
     {
         $cleaned = trim($password);

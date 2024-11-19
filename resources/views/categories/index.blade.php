@@ -24,7 +24,9 @@
                             <td>{{ $category->id }}</td>
                             <td>{{ $category->name }}</td>
                             <td>
-                                <a href="{{ route('categories.show', $category) }}" class="btn btn-primary">Просмотр</a>
+                                {{-- Не работает --}}
+                                {{-- <a href="{{ route('categories.show', $category) }}" class="btn btn-primary">Просмотр</a> --}}
+                                <a href="#" class="btn btn-primary">Просмотр</a>
                                 @can('update', \App\Models\Product::class)
                                     <a href="{{ route('categories.edit', $category) }}" class="btn btn-warning">Редактировать</a>
                                 @endcan
