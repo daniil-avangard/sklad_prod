@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Redis;
+use App\Models\Order;
 
 class checkredis extends Command
 {
@@ -27,9 +28,13 @@ class checkredis extends Command
      */
     public function handle()
     {
-        echo "vibhore is saying hello world by making his own command\n";
-        Redis::set("NewRafael", "Hello world");
-        $v = Redis::get("NewRafael");
+//        $orderStatus = StatusEnum::WAREHOUSE_START->value;
+        $index = 1008;
+        $order = Order::find($index);
+//        dd($order);
+        echo "Receiving data from Postgres  \n";
+        Redis::set("NewOrder_" . $index, $order);
+        $v = Redis::get("NewOrder_" . $index);
         echo $v;
 //        $redis = Redis::connection();
 //        $redis->set('name', 'Taylor');

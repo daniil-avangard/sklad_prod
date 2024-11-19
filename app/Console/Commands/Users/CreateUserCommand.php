@@ -14,11 +14,12 @@ class CreateUserCommand extends Command
 
     public function handle()
     {
+        mb_internal_encoding("UTF-8");
         // Запрашиваем данные пользователя с валидацией
-        $surname = $this->ask('Ваша фамилия');
-        $firstName = $this->ask('Ваше имя');
-        $email = $this->ask('Ваш email');
-        $password = $this->ask('Ваш пароль'); // Используем secret для пароля
+        $surname = $this->cleanInput($this->ask('Ваша фамилия'));
+        $firstName = $this->cleanInput($this->ask('Ваше имя'));
+        $email = $this->cleanEmail($this->ask('Ваш email'));
+        $password = $this->cleanPassword($this->ask('Ваш пароль')); // Используем secret для пароля
 
         // Проверяем, существует ли пользователь с таким email
         $user = User::firstOrCreate(
@@ -44,5 +45,48 @@ class CreateUserCommand extends Command
         $this->info('Роль успешно назначена пользователю.');
 
         return Command::SUCCESS;
+    }
+    
+    private function cleanInput(string $input): string
+    {
+        // Удаляем пробелы в начале и конце
+        $cleaned = trim($input);
+
+        // Удаляем спецсимволы, кроме букв, цифр, пробелов и дефисов
+        $cleaned = preg_replace('/[^\p{L}\p{N}\s-]/u', '', $cleaned);
+
+        // Проверяем кодировку
+        if (!mb_check_encoding($cleaned, 'UTF-8')) {
+            $cleaned = mb_convert_encoding($cleaned, 'UTF-8', 'auto');
+        }
+
+        return $cleaned;
+    }
+    
+    private function cleanEmail(string $email): string
+    {
+        $cleaned = trim($email);
+
+        // Разрешаем буквы, цифры, @, точки, дефисы и подчёркивания
+        $cleaned = preg_replace('/[^\p{L}\p{N}@._-]/u', '', $cleaned);
+
+        // Проверяем кодировку
+        if (!mb_check_encoding($cleaned, 'UTF-8')) {
+            $cleaned = mb_convert_encoding($cleaned, 'UTF-8', 'auto');
+        }
+
+        return $cleaned;
+    }
+    
+    private function cleanPassword(string $password): string
+    {
+        $cleaned = trim($password);
+
+        // Проверяем и приводим к кодировке UTF-8, если нужно
+        if (!mb_check_encoding($cleaned, 'UTF-8')) {
+            $cleaned = mb_convert_encoding($cleaned, 'UTF-8', 'auto');
+        }
+
+        return $cleaned;
     }
 }
