@@ -12,27 +12,30 @@
 
     @include('products.info.header')
 
-    @include('products.info.nav')
+    <div class="" id="products-info">
+        @include('products.info.nav')
 
-    <div class="row">
-        <div class="">
-            @if (!is_null($variants))
+        <div class="row">
+            <div class="" id="products-info-variants">
                 @can('view', App\Models\ProductVariant::class)
                     @include('products.info.variants')
                 @endcan
-            @endif
-        </div>
-        <div class="">
-            @if (!is_null($divisions))
+            </div>
+            <div class="" id="products-info-division">
                 @can('create', \App\Models\Product::class)
                     @include('products.inc.list_division', ['divisions' => $divisions])
                 @endcan
-            @endif
+            </div>
         </div>
     </div>
-    <div class="row">
+
+    {{-- <div class="row">
         <div class="col-3">
 
         </div>
-    </div>
+    </div> --}}
 @endsection
+
+@push('scripts-plugins')
+    <script src="/assets/js/toggleProductInfo.js"></script>
+@endpush

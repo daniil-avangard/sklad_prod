@@ -38,14 +38,17 @@
                 <td>
                     @can('update', App\Models\ProductVariant::class)
                         <a href="{{ route('products.variants.edit', ['product' => $product, 'variant' => $variant]) }}"
-                            class="btn btn-primary">Редактировать</a>
+                            class="btn btn-primary button-icon-wrapper">
+                                <i data-feather="edit" class="align-self-center topbar-icon button-icon"></i>
+                                {{-- Редактировать --}}
+                            </a>
                     @endcan
                     @can('delete', App\Models\ProductVariant::class)
                         <x-form
                             action="{{ route('products.variants.delete', ['product' => $product, 'variant' => $variant]) }}"
                             method="DELETE" style="display: inline-block;">
-                            <button type="submit" class="btn btn-danger" style="padding: .2rem 0.5rem; ">
-                                <i data-feather="trash" class="align-self-center topbar-icon" style="width: 14px; height: 14px;"></i>
+                            <button type="submit" class="btn btn-danger button-icon-wrapper">
+                                <i data-feather="trash" class="align-self-center topbar-icon button-icon"></i>
                                 {{-- Удалить --}}
                             </button>
                         </x-form>
