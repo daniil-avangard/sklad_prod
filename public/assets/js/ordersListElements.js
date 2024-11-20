@@ -2,6 +2,7 @@ let popUps = document.querySelectorAll('.order-popup-parent');
 let popUpsChilds = document.querySelectorAll('.order-popup-child');
 
 Array.from(popUps).forEach((el, index) => {
+    let test = "";
     const listener = () => {
         popUpsChilds[index].classList.toggle("show");
     }
