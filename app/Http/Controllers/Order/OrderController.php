@@ -35,7 +35,7 @@ class OrderController extends Controller
         foreach ($orders as $order) {
             $allItems[$order->id] = array();
             foreach ($order->items as $item) {
-                $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity);
+                $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity, 'image' => $item->product->image);
             }
         }
 
