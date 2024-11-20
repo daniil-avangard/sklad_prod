@@ -100,14 +100,24 @@ class ProductController extends Controller
         return redirect()->route('products.show', $product)->with('success', 'Продукт успешно добавлен');
     }
 
-    public function show(Product $product)
+
+    // Обновляю
+    public function show(Request $request, Product $product)
     {
         if (Gate::denies('view', $product)) {
             throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
         }
 
-        $divisions = $product->divisions()->get();
-        $variants = $product->variants()->orderBy('date_of_actuality', 'desc')->get();
+        $viewType = $request->route()->getName();
+
+        $divisions = null;
+        $variants= null;
+        if ($viewType === "products.variants") {
+            $divisions = $product->divisions()->get();
+        } else if ($viewType === "products.division") {
+            $variants = $product->variants()->orderBy('date_of_actuality', 'desc')->get();
+        }
+
         $arivals = $product->arivalProduct()->with('arival')->get()->map(function ($arivalProduct) {
             return [
                 'arival' => $arivalProduct->arival,
@@ -124,6 +134,31 @@ class ProductController extends Controller
 
         return view('products.show', compact('product', 'divisions', 'arivals', 'writeOffs', 'variants'));
     }
+
+    // public function variants(Product $product)
+    // {
+    //     if (Gate::denies('view', $product)) {
+    //         throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
+    //     }
+
+    //     // $divisions = $product->divisions()->get();
+    //     $variants = $product->variants()->orderBy('date_of_actuality', 'desc')->get();
+    //     $arivals = $product->arivalProduct()->with('arival')->get()->map(function ($arivalProduct) {
+    //         return [
+    //             'arival' => $arivalProduct->arival,
+    //             'quantity' => $arivalProduct->quantity
+    //         ];
+    //     })->unique('arival.id');
+
+    //     $writeOffs = $product->writeOffProduct()->with('writeOff')->get()->map(function ($writeOffProduct) {
+    //         return [
+    //             'writeOff' => $writeOffProduct->writeOff,
+    //             'quantity' => $writeOffProduct->quantity
+    //         ];
+    //     })->unique('writeOff.id');
+
+    //     return view('products.show', compact('product', 'arivals', 'writeOffs', 'variants'));
+    // }
 
     public function edit(Product $product)
     {
