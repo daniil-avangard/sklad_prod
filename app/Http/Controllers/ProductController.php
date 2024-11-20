@@ -108,7 +108,10 @@ class ProductController extends Controller
             throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
         }
 
-        $divisions = $product->divisions()->get();
+        // $divisions = $product->divisions()->get();
+
+        $divisionList = divisions()->get();
+
         $variants = $product->variants()->orderBy('date_of_actuality', 'desc')->get();
 
         $arivals = $product->arivalProduct()->with('arival')->get()->map(function ($arivalProduct) {
