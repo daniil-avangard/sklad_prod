@@ -9,6 +9,7 @@ use App\Enum\Products\PointsSale\Operator;
 use App\Models\ProductVariant;
 use App\Models\Division;
 use App\Models\Basket;
+use App\Models\WriteoffProduct;
 
 
 class Product extends Model
@@ -62,9 +63,9 @@ class Product extends Model
         return $this->hasMany(ArivalProduct::class);
     }
 
-    public function writeOffProduct()
+    public function writeoffProduct()
     {
-        return $this->hasMany(WriteOffProduct::class);
+        return $this->hasMany(WriteoffProduct::class);
     }
 
     public function divisions()
