@@ -24,9 +24,9 @@
             position: absolute;
             top: 2px;
             left: 0;
-            height: 20px;
-            width: 20px;
-            border-radius: 4px;
+            height: 11px;
+            width: 11px;
+            border-radius: 2px;
             border: 2px solid #ccc;
             background: transparent;
         }
@@ -87,6 +87,36 @@
         .bg-assembled {
             background-color: #0a567c !important;
         }
+        tr p {
+            margin-bottom: 5px !important;
+        }
+        .order-popup-parent {
+            position: relative;
+            display: block;
+            cursor: pointer;
+            user-select: none;
+        }
+        .order-popup-child {
+            position: absolute;
+            visibility: hidden;
+            width: 160px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -80px;
+        }
+        .order-popup-parent .show {
+            visibility: visible;
+            animation: fadeIn 0.1s;
+        }
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
     </style>
 @endpush
 
@@ -115,8 +145,10 @@
                                     <div class="control__indicator"></div>
                                 </label>
                             </th>
-                            <th scope="col">ID</th>
+<!--                            <th scope="col">ID</th>-->
                             <th scope="col">Подразделение</th>
+                            <th scope="col">Товары</th>
+                            <th scope="col">Количество</th>
                             <th scope="col">Статус</th>
                             <th scope="col">Дата</th>
                         </tr>
@@ -137,10 +169,25 @@
                                     @else
                                     href="#"
                                     @endcan>
-                                        Заказ № {{ $order->id }}
+                                        {{ $order->division->name }}
                                     </a>
                                 </td>
-                                <td>{{ $order->division->name }}</td>
+<!--                                <td>  Было
+                                     $order->division->name 
+                                </td>-->
+                                <td>
+                                    @foreach ($allItems[$order->id] as $item)
+                                        <div class="order-popup-parent">
+                                            <p>{{ $item['name'] }}</p>
+                                            <div class="order-popup-child">A simple Popup!</div>
+                                        </div>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach ($allItems[$order->id] as $item)
+                                        <p><span>{{ $item['quantity'] }}</span></p>
+                                    @endforeach
+                                </td>
                                 <td><span class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}</span>
                                 </td>
                                 <td>{{ $order->created_at->format('d.m.Y H:i') }}</td>
@@ -221,6 +268,18 @@
                     title: 'Пожалуйста, выберите хотя бы один заказ!'
                 })
             }
+        });
+        
+        let popUps = document.querySelectorAll('.order-popup-parent');
+        let popUpsChilds = document.querySelectorAll('.order-popup-child');
+        Array.from(popUps).forEach((el, index) => {
+            el.onmouseover = () => {
+                popUpsChilds[index].classList.toggle("show");
+            }
+            el.onmouseleave = () => {
+                popUpsChilds[index].classList.toggle("show");
+            }
+            
         });
     </script>
 @endpush
