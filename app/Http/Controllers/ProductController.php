@@ -108,9 +108,12 @@ class ProductController extends Controller
             throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
         }
 
-        // $divisions = $product->divisions()->get();
-
-        $divisionList = divisions()->get();
+        $allDivisions = Division::all()->map(function ($division) use ($product) {
+            return [
+                'division' => $division,
+                'is_active' => $product->divisions->contains($division)
+            ];
+        });
 
         $variants = $product->variants()->orderBy('date_of_actuality', 'desc')->get();
 
@@ -128,33 +131,8 @@ class ProductController extends Controller
             ];
         })->unique('writeOff.id');
 
-        return view('products.show', compact('product', 'divisions', 'arivals', 'writeOffs', 'variants'));
+        return view('products.show', compact('product', 'allDivisions', 'arivals', 'writeOffs', 'variants'));
     }
-
-    // public function variants(Product $product)
-    // {
-    //     if (Gate::denies('view', $product)) {
-    //         throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
-    //     }
-
-    //     // $divisions = $product->divisions()->get();
-    //     $variants = $product->variants()->orderBy('date_of_actuality', 'desc')->get();
-    //     $arivals = $product->arivalProduct()->with('arival')->get()->map(function ($arivalProduct) {
-    //         return [
-    //             'arival' => $arivalProduct->arival,
-    //             'quantity' => $arivalProduct->quantity
-    //         ];
-    //     })->unique('arival.id');
-
-    //     $writeOffs = $product->writeOffProduct()->with('writeOff')->get()->map(function ($writeOffProduct) {
-    //         return [
-    //             'writeOff' => $writeOffProduct->writeOff,
-    //             'quantity' => $writeOffProduct->quantity
-    //         ];
-    //     })->unique('writeOff.id');
-
-    //     return view('products.show', compact('product', 'arivals', 'writeOffs', 'variants'));
-    // }
 
     public function edit(Product $product)
     {

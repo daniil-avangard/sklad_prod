@@ -23,17 +23,11 @@
             </div>
             <div class="" id="products-info-division">
                 @can('create', \App\Models\Product::class)
-                    @include('products.inc.list_division', ['divisions' => $divisions])
+                    @include('products.inc.list_division', ['allDivisions' => $allDivisions])
                 @endcan
             </div>
         </div>
     </div>
-
-    {{-- <div class="row">
-        <div class="col-3">
-
-        </div>
-    </div> --}}
 @endsection
 
 @push('scripts-plugins')
