@@ -122,17 +122,17 @@ class BasketController extends Controller
         
         // начинаем схлопывать заказы в статусе 'в ожидании'
         
-        $lengthNew = $this->createOneNewOrder($divisionGroups);
-        dd($lengthNew['10004']['quantity']);
+        $newComposerOrder = $this->createOneNewOrder($divisionGroups, $order);
+//        dd($lengthNew['10004']['quantity']);
         
 
         $basket->products()->detach(); // Удаляет записи из таблицы product_basket
 
 
-        return redirect()->to(route('user.order', $order))->with('success', 'Заказ сохранен');
+        return redirect()->to(route('user.order', $newComposerOrder))->with('success', 'Заказ сохранен');
     }
     
-    private function createOneNewOrder($divisionGroups)
+    private function createOneNewOrder($divisionGroups, $createdOrder)
     {
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
@@ -170,8 +170,6 @@ class BasketController extends Controller
                         $composerArray[$item->product_id]['quantity'] += $item->quantity;
                     }
                 }
-                
-                
             }
             
             foreach ($composerArray as $k => $v) {
@@ -180,9 +178,16 @@ class BasketController extends Controller
                     'quantity' => $v['quantity'], // Установка количества продукта
                 ]);
             }
+            
+            foreach ($divisionNewOrders as $order) {
+                $order->items()->delete();
+                $order->delete();
+            }
+        } else {
+            $orderCompose = $createdOrder;
         }
         
-        return $composerArray;
+        return $orderCompose;
     }
 }
 
