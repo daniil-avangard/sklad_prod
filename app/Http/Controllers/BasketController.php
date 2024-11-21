@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Order;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
+use App\Enum\Order\StatusEnum;
 
 
 class BasketController extends Controller
@@ -103,6 +104,7 @@ class BasketController extends Controller
 
     public function saveOrder(Request $request)
     {
+        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
 
         $basket = $this->basket; // Получение корзины из текущего объекта
         $order = new Order(); // Создание нового заказа
@@ -110,16 +112,77 @@ class BasketController extends Controller
         $order->user_id = Auth::user()->id;
         $order->division_id = Auth::user()->division_id; // Получение ID подразделения из данных юзера
         $order->save(); // Сохранение заказа
+           
         foreach ($basket->products as $product) { // Цикл по продуктам в корзине
             $order->items()->create([ // Создание нового элемента заказа
                 'product_id' => $product->id, // Установка ID продукта
                 'quantity' => $product->pivot->quantity, // Установка количества продукта
             ]);
         }
+        
+        // начинаем схлопывать заказы в статусе 'в ожидании'
+        
+        $lengthNew = $this->createOneNewOrder($divisionGroups);
+        dd($lengthNew['10004']['quantity']);
+        
 
         $basket->products()->detach(); // Удаляет записи из таблицы product_basket
 
 
         return redirect()->to(route('user.order', $order))->with('success', 'Заказ сохранен');
     }
+    
+    private function createOneNewOrder($divisionGroups)
+    {
+        $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
+            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
+            })->get()->sortByDesc('created_at');
+            
+        $divisionNewOrders = array();
+        
+        foreach ($orders as $order) {
+            if ($order->status->value == StatusEnum::NEW->value) {
+                $divisionNewOrders[] = $order;
+            }
+        }
+        
+        $lengthNew = count($divisionNewOrders);
+        
+        if ($lengthNew > 1) {
+            $orderCompose = new Order(); // Создание нового заказа
+            $orderCompose->comment = ""; // Установка комментария к заказу из запроса
+            $orderCompose->user_id = Auth::user()->id;
+            $orderCompose->division_id = Auth::user()->division_id; // Получение ID подразделения из данных юзера
+            $orderCompose->save(); // Сохранение заказа
+            
+            $composerArray = array();
+            foreach ($divisionNewOrders as $newOrder) {
+                foreach ($newOrder->items as $item) {
+                    if (!isset($composerArray[$item->product_id])) {
+                        $composerArray[$item->product_id] = [
+                            'product_id' => $item->product_id,
+                            'name' => $item->product->name,
+                            'quantity' => $item->quantity,
+                            //'total_variants' => $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved'),
+                            'item-id' => $item->id,
+                        ];
+                    } else {
+                        $composerArray[$item->product_id]['quantity'] += $item->quantity;
+                    }
+                }
+                
+                
+            }
+            
+            foreach ($composerArray as $k => $v) {
+                $orderCompose->items()->create([ // Создание нового элемента заказа
+                    'product_id' => $k, // Установка ID продукта
+                    'quantity' => $v['quantity'], // Установка количества продукта
+                ]);
+            }
+        }
+        
+        return $composerArray;
+    }
 }
+
