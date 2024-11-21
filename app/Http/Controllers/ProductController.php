@@ -115,6 +115,17 @@ class ProductController extends Controller
             ];
         });
 
+        // Фильтруем выбранные подразделения (где is_active = true)
+        $selectedDivisions = $allDivisions->filter(function ($item) {
+            return $item['is_active'];
+        });
+
+        // Получаем количество выбранных подразделений
+        $selectedDivisionsCount = $selectedDivisions->count();
+
+        // Проверка, выбраны ли все подразделения
+        $isAllDivisionsSelected = $selectedDivisionsCount === $allDivisions->count();
+
         $variants = $product->variants()->orderBy('date_of_actuality', 'desc')->get();
 
         $arivals = $product->arivalProduct()->with('arival')->get()->map(function ($arivalProduct) {
@@ -131,7 +142,7 @@ class ProductController extends Controller
             ];
         })->unique('writeOff.id');
 
-        return view('products.show', compact('product', 'allDivisions', 'arivals', 'writeOffs', 'variants'));
+        return view('products.show', compact('product', 'allDivisions', 'isAllDivisionsSelected', 'arivals', 'writeOffs', 'variants'));
     }
 
     public function edit(Product $product)
@@ -241,53 +252,59 @@ class ProductController extends Controller
         return view('products.writeoffs.index', compact('product', 'writeoffs'));
     }
 
-    public function createDivision(Product $product)
+    public function addAllDivisions(Request $request)
     {
-        if (Gate::denies('update', $product)) {
+        if (Gate::denies('update', \App\Models\Product::class)) {
             throw new AuthorizationException('У вас нет разрешения на редактирование продуктов.');
         }
 
-        $divisions = Division::query()
-            ->whereNotIn('id', $product->divisions()->pluck('id'))
-            ->oldest('name')
-            ->get();
+        // Приводим значения к числовым типам
+        $product_id = (int) $request->product_id;
+        $product = Product::findOrFail($product_id);
+        $divisionIds = Division::pluck('id');
+        $product->divisions()->syncWithoutDetaching($divisionIds);
 
-
-        return view('products.divisions.create', compact('divisions', 'product'));
+        return response()->json([
+            'success' => true,
+        ]);
     }
 
-
-
-    public function addDivision(Product $product, Request $request)
+    public function deleteAllDivisions(Request $request)
     {
-        if (Gate::denies('update', $product)) {
+        if (Gate::denies('update', \App\Models\Product::class)) {
             throw new AuthorizationException('У вас нет разрешения на редактирование продуктов.');
         }
 
-        $product->divisions()->syncWithoutDetaching($request->division_id);
+        // Приводим значения к числовым типам
+        $product_id = (int) $request->product_id;
+        $product = Product::findOrFail($product_id);
+        // $divisionIds = Division::pluck('id');
+        $product->divisions()->detach();
 
-        return redirect()->route('products.show', $product)->with('success', 'Подразделение успешно добавлено');
+        return response()->json([
+            'success' => true,
+        ]);
     }
 
-    public function addAllDivisions(Product $product)
+    public function toggleDivision(Request $request)
     {
-        if (Gate::denies('update', $product)) {
+        if (Gate::denies('update', \App\Models\Product::class)) {
             throw new AuthorizationException('У вас нет разрешения на редактирование продуктов.');
         }
 
-        $product->divisions()->syncWithoutDetaching(Division::pluck('id'));
+        // Приводим значения к числовым типам
+        $product_id = $request->product_id;
+        $division_id = $request->division_id;
 
-        return redirect()->route('products.show', $product)->with('success', 'Все подразделения успешно добавлены');
-    }
+        $product = Product::findOrFail($product_id);
 
-    public function removeDivision(Product $product, Division $division)
-    {
-        if (Gate::denies('update', $product)) {
-            throw new AuthorizationException('У вас нет разрешения на редактирование продуктов.');
-        }
+        // Выполняем toggle и получаем добавленные/удалённые ID
+        $changes = $product->divisions()->toggle($division_id);
 
-        $product->divisions()->detach($division->id);
-
-        return redirect()->route('products.show', $product)->with('success', 'Подразделение успешно удалено');
+        return response()->json([
+            'success' => true,
+            'added' => $changes['attached'],
+            'removed' => $changes['detached']
+        ]);
     }
 }

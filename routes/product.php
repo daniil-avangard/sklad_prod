@@ -33,10 +33,9 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::get('/products/{product}/writeoffs', [ProductController::class, 'writeoff'])->name('products.writeoff');
 
     // Подразделения
-    Route::get('/products/{product}/divisions/create', [ProductController::class, 'createDivision'])->name('products.divisions.create');
-    Route::post('/products/{product}/divisions', [ProductController::class, 'addDivision'])->name('products.divisions.addDivision');
-    Route::delete('/products/{product}/divisions/{division}', [ProductController::class, 'removeDivision'])->name('products.divisions.removeDivision');
-    Route::get('/products/{product}/divisionsall', [ProductController::class, 'addAllDivisions'])->name('products.divisions.addAllDivisions');
+    Route::post('/products/{product}/divisions/', [ProductController::class, 'toggleDivision'])->name('products.divisions.toggleDivision');
+    Route::post('/products/{product}/divisions-all', [ProductController::class, 'addAllDivisions'])->name('products.divisions.addAllDivisions');
+    Route::delete('/products/{product}/divisions-all', [ProductController::class, 'deleteAllDivisions'])->name('products.divisions.deleteAllDivisions');
 
     // Группы подразделений
     Route::get('/products/{product}/groups/divisions/create', [ProductGroupDivisionController::class, 'create'])->name('products.groups.divisions.create');

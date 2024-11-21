@@ -7,28 +7,26 @@
                     <h4 class="card-title">Список доступных подразделений</h4>
                 </div><!--end col-->
                 <div class="col-auto">
-                    <a href="{{ route('products.divisions.create', $product) }}" class="btn btn-primary">Добавить подразделение</a>
+                    {{-- <a href="{{ route('products.divisions.create', $product) }}" class="btn btn-primary">Добавить подразделение</a> --}}
                 </div><!--end col-->
             </div>  <!--end row-->
         </div><!--end card-header-->
         <div class="card-body">
             <div style="max-height: 300px; overflow-y: auto;">
-                <button class="btn btn-primary">Добавить все</button>
-                        <ul class="m-0 p-0 list-unstyled d-flex flex-wrap mt-3">
+                <button class="btn {{ $isAllDivisionsSelected ? 'btn-danger' : 'btn-primary'}}" id="add-all-divisions">
+                    {{ $isAllDivisionsSelected ? 'Удалить все' : 'Добавить все'}}
+                </button>
+
+                <ul class="m-0 p-0 list-unstyled d-flex flex-wrap mt-3" id="list-divisions" data-product-id="{{ $product->id }}">
                             @foreach ($allDivisions as $divisionItem)
-                                <li class="p-2 ps-4 pe-4 rounded text-center me-3 border
+                                <li class="division__item p-2 ps-4 pe-4 rounded text-center me-3 border
                                         {{ $divisionItem['is_active'] ? 'border-primary' : 'border-dark-subtle' }}"
-                                    >
+                                        data-division-id="{{ $divisionItem['division']->id }}"
+                                        >
                                     {{ $divisionItem['division']->name }}
                                 </li>
                             @endforeach
-                        </ul>
-
-                        {{-- <li class="list-group-item align-items-center d-flex justify-content-between">
-                            <x-form action="{{ route('products.divisions.removeDivision', [$product, $division]) }}" method="DELETE">
-                                <button type="submit" class="btn btn-danger">Удалить</button>
-                            </x-form>
-                        </li> --}}
+                </ul>
             </div>
         </div><!--end card-body-->
     </div><!--end card-->

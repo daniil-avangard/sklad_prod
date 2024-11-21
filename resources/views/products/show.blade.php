@@ -1,5 +1,9 @@
 @extends('layouts.base')
 
+@push('styles-plugins')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endpush
+
 @section('title_page', $product->name)
 
 @section('content')
@@ -23,7 +27,7 @@
             </div>
             <div class="" id="products-info-division">
                 @can('create', \App\Models\Product::class)
-                    @include('products.inc.list_division', ['allDivisions' => $allDivisions])
+                    @include('products.inc.list_division', ['allDivisions' => $allDivisions, 'isAllDivisionsSelected' => $isAllDivisionsSelected])
                 @endcan
             </div>
         </div>
@@ -32,4 +36,5 @@
 
 @push('scripts-plugins')
     <script src="/assets/js/toggleProductInfo.js"></script>
+    <script src="/assets/js/toggleDivisionsInProduct.js"></script>
 @endpush
