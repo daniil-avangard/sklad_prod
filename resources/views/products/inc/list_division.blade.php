@@ -18,9 +18,9 @@
         </div><!--end card-header-->
         <div class="card-body">
             <div style="max-height: 300px; overflow-y: auto;">
-                <ul class="m-0 p-0 list-unstyled d-flex flex-wrap" id="list-divisions" data-product-id="{{ $product->id }}">
+                <ul class="m-0 p-0 list-unstyled d-flex flex-wrap gap-2" id="list-divisions" data-product-id="{{ $product->id }}">
                             @foreach ($allDivisions as $divisionItem)
-                                <li class="division__item p-2 ps-4 pe-4 rounded text-center me-3 border
+                                <li class="division__item p-2 ps-4 pe-4 rounded text-center border
                                         {{ $divisionItem['is_active'] ? 'border-primary' : 'border-dark-subtle' }}"
                                         data-division-id="{{ $divisionItem['division']->id }}"
                                         >

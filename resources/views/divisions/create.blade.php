@@ -4,10 +4,10 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h1>Создание деления</h1>
+                <h1>Создание подразделения</h1>
             </div>
         </div>
-    </div>  
+    </div>
 
     <x-form action="{{ route('divisions.store') }}" method="POST">
         <div class="form-group">
