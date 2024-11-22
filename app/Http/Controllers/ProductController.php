@@ -202,6 +202,9 @@ class ProductController extends Controller
             throw new AuthorizationException('У вас нет разрешения на удаление продуктов.');
         }
 
+        // Удаляем связанные записи в division_product
+        $product->divisions()->detach();
+
         $product->arivalProduct()->delete();
         $product->writeOffProduct()->delete();
 
