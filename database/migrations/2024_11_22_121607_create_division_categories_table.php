@@ -22,10 +22,8 @@ return new class extends Migration
         });
 
         Schema::create('division_category_division', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('division_id')->constrained()->onDelete('cascade');
             $table->foreignId('division_category_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
         });
     }
 
