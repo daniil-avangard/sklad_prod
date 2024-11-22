@@ -35,8 +35,8 @@
                         <span class="text-muted">Нет макета</span>
                     @endif
                 </td>
-                <td class="w-max">
-                    <div class="d-flex gap-1">
+                <td class="w-max text-center">
+                    <div class="d-flex gap-1 justify-content-center">
                         @can('update', App\Models\ProductVariant::class)
                         <a href="{{ route('products.variants.edit', ['product' => $product, 'variant' => $variant]) }}"
                             class="btn btn-primary button-icon-wrapper">

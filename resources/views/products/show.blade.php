@@ -9,8 +9,8 @@
 @section('content')
     @include('includes.breadcrumb', [
         'title' => 'Продукт ' . $product->name,
-        'route' => 'products',
-        'breadcrumbs' => 'Продукты',
+        'route' => 'products.show',
+        'breadcrumbs' => $product,
         'back_route' => 'products',
     ])
 

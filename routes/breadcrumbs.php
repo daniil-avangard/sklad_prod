@@ -91,11 +91,11 @@ Breadcrumbs::for('products', function ($trail) {
 });
 
 // Просмотр продукта
-
 Breadcrumbs::for('products.show', function ($trail, $product) {
     $trail->parent('products');
     $trail->push($product->name, route('products.show', $product));
 });
+
 
 Breadcrumbs::for('products.create', function ($trail) {
     $trail->parent('products');
