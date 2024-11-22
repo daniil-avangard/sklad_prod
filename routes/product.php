@@ -53,7 +53,6 @@ Route::middleware('auth', 'admin')->group(function () {
 
 
     // Категории
-
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
     Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
@@ -62,7 +61,8 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{category}', [CategoryController::class, 'delete'])->name('categories.delete');
 
-
+    
+    // Подразделения
     Route::get('/divisions', [DivisionController::class, 'index'])->name('divisions');
     Route::get('/divisions/create', [DivisionController::class, 'create'])->name('divisions.create');
     Route::post('/divisions', [DivisionController::class, 'store'])->name('divisions.store');
