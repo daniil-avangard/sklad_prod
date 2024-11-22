@@ -7,7 +7,8 @@
                     <h4 class="card-title">Список доступных подразделений</h4>
                 </div><!--end col-->
                 <div class="col-auto">
-                    <button class="btn {{ $isAllDivisionsSelected ? 'btn-danger' : 'btn-primary'}}" id="add-all-divisions">
+                    <button class="btn {{ $isAllDivisionsSelected ? 'btn-danger' : 'btn-primary'}}" id="add-all-divisions"
+                        data-is-all-selected="{{ $isAllDivisionsSelected ? 1 : 0 }}">
                         {{ $isAllDivisionsSelected ? 'Удалить все' : 'Добавить все'}}
                     </button>
 
@@ -17,8 +18,6 @@
         </div><!--end card-header-->
         <div class="card-body">
             <div style="max-height: 300px; overflow-y: auto;">
-
-
                 <ul class="m-0 p-0 list-unstyled d-flex flex-wrap" id="list-divisions" data-product-id="{{ $product->id }}">
                             @foreach ($allDivisions as $divisionItem)
                                 <li class="division__item p-2 ps-4 pe-4 rounded text-center me-3 border

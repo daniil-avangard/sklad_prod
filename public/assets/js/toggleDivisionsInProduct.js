@@ -22,7 +22,7 @@ function toggleDivisionsInProduct() {
     };
 
     // Функция для добавления/удаления подразделения
-    const toggleDivision = async (productId, divisionId, target) => {
+    const toggleDivision = async (productId, divisionId, target, buttonAddAllDivisions) => {
         const dataToSend = {
             product_id: productId,
             division_id: divisionId,
@@ -32,6 +32,11 @@ function toggleDivisionsInProduct() {
         const result = await sendRequest(`./${productId}/divisions`, 'POST', dataToSend);
 
         if (result && result.success) {
+            buttonAddAllDivisions.dataset.isAllSelected = result.isAllSelected ? 1 : 0;
+            buttonAddAllDivisions.classList.remove('btn-primary', 'btn-danger');
+            buttonAddAllDivisions.classList.add(result.isAllSelected ? 'btn-danger' : 'btn-primary');
+            buttonAddAllDivisions.textContent = result.isAllSelected ? 'Удалить все' : 'Добавить все';
+
             // Проверяем, была ли связь добавлена или удалена
             if (result.added.length > 0) {
                 target.classList.remove('border-dark-subtle'); // Удаляем старый цвет
@@ -45,14 +50,14 @@ function toggleDivisionsInProduct() {
 
 
     // Функция для добавления или удаления всех подразделений
-    const toggleAllDivisions = async (productId) => {
+    const toggleAllDivisions = async (productId, buttonAddAllDivisions) => {
         const dataToSend = {
             product_id: productId,
             _token: $('meta[name="csrf-token"]').attr('content')
         };
 
         // Определяем URL и метод в зависимости от состояния
-        const isAdding = buttonAddAllDivisions.classList.contains('btn-primary');
+        const isAdding = Number(buttonAddAllDivisions.dataset.isAllSelected) === 0;
         const method = isAdding ? 'POST' : 'DELETE';
         const url = `./${productId}/divisions-all`;
 
@@ -72,6 +77,7 @@ function toggleDivisionsInProduct() {
             });
 
             // Обновляем кнопку
+            buttonAddAllDivisions.dataset.isAllSelected = isAdding ? 1 : 0;
             buttonAddAllDivisions.classList.toggle('btn-primary');
             buttonAddAllDivisions.classList.toggle('btn-danger');
             buttonAddAllDivisions.textContent = isAdding ? 'Удалить все' : 'Добавить все';
@@ -85,7 +91,7 @@ function toggleDivisionsInProduct() {
         evt.preventDefault();
 
         const productId = divisionList.dataset.productId;
-        toggleAllDivisions(productId);
+        toggleAllDivisions(productId, buttonAddAllDivisions);
     });
 
     // Обработчик для клика по отдельному подразделению
@@ -98,7 +104,7 @@ function toggleDivisionsInProduct() {
             const divisionId = target.dataset.divisionId;
             const productId = divisionList.dataset.productId;
 
-            toggleDivision(productId, divisionId, target);
+            toggleDivision(productId, divisionId, target, buttonAddAllDivisions);
         }
     });
 }

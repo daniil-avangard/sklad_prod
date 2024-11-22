@@ -278,7 +278,6 @@ class ProductController extends Controller
         // Приводим значения к числовым типам
         $product_id = (int) $request->product_id;
         $product = Product::findOrFail($product_id);
-        // $divisionIds = Division::pluck('id');
         $product->divisions()->detach();
 
         return response()->json([
@@ -293,18 +292,19 @@ class ProductController extends Controller
         }
 
         // Приводим значения к числовым типам
-        $product_id = $request->product_id;
+        $product_id = (int) $request->product_id;
         $division_id = $request->division_id;
-
         $product = Product::findOrFail($product_id);
 
         // Выполняем toggle и получаем добавленные/удалённые ID
         $changes = $product->divisions()->toggle($division_id);
+        $isAllDivisionSelected = $product->divisions()->count() === Division::all()->count();
 
         return response()->json([
             'success' => true,
             'added' => $changes['attached'],
-            'removed' => $changes['detached']
+            'removed' => $changes['detached'],
+            'isAllSelected' => $isAllDivisionSelected,
         ]);
     }
 }
