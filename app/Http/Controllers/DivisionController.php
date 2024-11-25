@@ -36,7 +36,11 @@ class DivisionController extends Controller
 
     public function create()
     {
+        // Получает все подразделения
         $divisionCategory = DivisionCategory::select('id', 'category_name')->get();
+
+        // Получает все подразделения
+        // $divisions = DivisionCategory::pluck('division_category');
 
         return view('divisions.create', compact('divisionCategory'));
     }

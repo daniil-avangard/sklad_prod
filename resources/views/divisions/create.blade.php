@@ -5,7 +5,7 @@
         'title' => 'Подразделения',
         'route' => 'divisions.create',
         'breadcrumbs' => 'Подразделения',
-        'back_route' => 'divisions'
+        'back_route' => 'divisions',
     ])
 
     {{-- <div>
@@ -123,64 +123,7 @@
 
 
     <div class="row justify-content-between">
-        <div class="card col-5 mb-0">
-            <div class="card-header">
-                <h4 class="card-title">
-                    Добавить категорию
-                </h4>
-            </div>
-
-            <div class="card-body">
-                <x-form class="mb-4" action="#" method="POST" id="add-category-division">
-                    <p class="mb-0">
-                        Добавить категорию
-                    </p>
-
-                    <div class="form-group mb-0">
-                        {{-- <label for="name">Название</label> --}}
-                        <input type="text" class="form-control" id="division_category" name="division_category"
-                            value="" placeholder="Название категории" required="">
-                    </div>
-
-                    <button class="btn btn-primary">Добавить категорию</button>
-                </x-form>
-
-                <div>
-                    <p class="mb-0">
-                        Список категорий
-                    </p>
-
-                    <ul class="m-0 p-0 list-unstyled d-flex flex-wrap gap-2" id="list-divisions" data-product-id="10002">
-                        <li class="division__item p-2 ps-4 pe-4 rounded text-center border
-                        border-dark-subtle"
-                            data-division-id="1">
-                            Полянка
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-        </div>
-
-        {{-- <div class="col-3">
-            <div class="d-flex">
-                <x-form action="#" method="POST" id="add-category-division">
-                    <p class="mb-0">
-                        Добавить категорию
-                    </p>
-
-                    <div class="form-group mb-0">
-                        <label for="name">Название</label>
-                        <input type="text" class="form-control" id="division_category" name="division_category"
-                            value="" placeholder="Название категории" required="">
-                    </div>
-
-                    <button class="btn btn-primary">Добавить категорию</button>
-                </x-form>
-            </div>
-        </div> --}}
-
-        <div class="row col-7">
+        <div class="row col-8">
             <div class="card mb-0">
                 <div class="card-header">
                     <h4 class="card-title">
@@ -211,6 +154,46 @@
 
                         <button type="submit" class="btn btn-primary">Создать</button>
                     </x-form>
+                </div>
+            </div>
+        </div>
+
+        <div class="card col-4 mb-0">
+            <div class="card-header">
+                <h4 class="card-title">
+                    Категории подразделений
+                </h4>
+            </div>
+
+            <div class="card-body">
+                <div>
+                    <h5 class="text-muted mb-2">
+                        Добавить категорию
+                    </h5>
+
+                    <x-form class="flex-grow-0 mb-4" action="#" method="POST" id="add-category-division">
+                        <div class="d-flex">
+                            <input type="text" class="form-control me-2" id="division_category" name="division_category"
+                                value="" placeholder="Название категории" required="">
+
+                            <button class="btn btn-primary">Добавить</button>
+                        </div>
+                    </x-form>
+                </div>
+
+
+                <div>
+                    <h5 class="text-muted mb-2">
+                        Список категорий
+                    </h5>
+
+                    <ul class="m-0 p-0 list-unstyled d-flex flex-wrap gap-2">
+                        @foreach ($divisionCategory as $category)
+                            <li class="division__item p-2 ps-4 pe-4 rounded text-center border border-dark-subtle">
+                                {{ $category->category_name }}
+                            </li>
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
