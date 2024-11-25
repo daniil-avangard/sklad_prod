@@ -81,16 +81,36 @@ class OrderController extends Controller
         
         $allGoodsInOrders = array();
         $allDivisions = array();
+        $allDivisionsData = array();
         
         foreach ($divisionStateOrders as $order) {
-            $allDivisions[] = $order->division->name;
+//            $allDivisions[] = $order->division->name;
             foreach ($order->items as $item) {
+                if (!isset($allDivisionsData[$order->division->name])) {
+                    if (!isset($allDivisionsData[$order->division->name][$item->product->name])) {
+                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
+                    } else {
+                        $allDivisionsData[$order->division->name][$item->product->name] += $item->quantity;
+                    }
+                } else {
+                    if (!isset($allDivisionsData[$order->division->name][$item->product->name])) {
+                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
+                    } else {
+                        $allDivisionsData[$order->division->name][$item->product->name] += $item->quantity;
+                    }
+                }
+                
+                // --------
                 $allGoodsInOrders[] = array('name' => $item->product->name, 'image' => $item->product->image);
             }
         }
         
+        foreach ($allDivisionsData as $k => $v) {
+            $allDivisions[] = $k;
+        }
+        
         $allGoodsInOrders = array_unique($allGoodsInOrders, SORT_REGULAR);
-        $allDivisions = array_unique($allDivisions);
+//        $allDivisions = array_unique($allDivisions);
         $result = array($allGoodsInOrders, $allDivisions);
         
         return $result;
