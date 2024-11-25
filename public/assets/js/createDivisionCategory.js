@@ -1,15 +1,17 @@
-const addDivisionForm = document.querySelector('#add-division-form');
+const addCategoryDivisionForm = document.querySelector('#add-category-division');
 
-addDivisionForm.addEventListener('submit', function (evt) {
+addCategoryDivisionForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
 
-    const formData = new FormData(addDivisionForm);
+    const formData = new FormData(addCategoryDivisionForm);
 
     // Преобразуем FormData в объект для удобства работы
     const dataObject = {};
     formData.forEach((value, key) => {
         dataObject[key] = value;
     });
+    console.log(dataObject);
+
 
     // Универсальная функция для отправки запросов
     const sendRequest = async (url, method, data) => {
@@ -33,16 +35,15 @@ addDivisionForm.addEventListener('submit', function (evt) {
         }
     };
 
-
     // Функция для добавления/удаления подразделения
-    const toggleDivision = async (data) => {
+    const addCategoryDivision = async (data) => {
         console.log(data);
 
-        const result = await sendRequest(`/divisions`, 'POST', data);
+        const result = await sendRequest(`/divisions/division-category/create`, 'POST', data);
         console.log(result);
 
         if (result.success) {
-            window.location.href = '/divisions';
+            // window.location.href = '/divisions';
 
             // Toast.fire({
             //     icon: 'success',
@@ -51,7 +52,7 @@ addDivisionForm.addEventListener('submit', function (evt) {
         }
     }
 
-    toggleDivision(dataObject);
+    addCategoryDivision(dataObject);
 
 });
 

@@ -27,6 +27,6 @@ class Division extends Model
 
     public function divisionCategory()
     {
-        return $this->belongsToMany(DivisionCategory::class, 'division_category_division')->withTimestamps();  // Связь с категорией
+        return $this->belongsToMany(DivisionCategory::class, 'division_category_division');  // Связь с категорией
     }
 }

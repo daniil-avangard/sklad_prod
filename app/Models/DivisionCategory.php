@@ -11,7 +11,8 @@ class DivisionCategory extends Model
 
     protected $fillable = ['category_name', 'user_id'];
 
-    public function divisions() {
+    public function divisions()
+    {
         return $this->belongsToMany(Division::class, 'division_category_division');
     }
 
