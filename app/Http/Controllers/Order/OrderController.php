@@ -85,11 +85,11 @@ class OrderController extends Controller
         foreach ($divisionStateOrders as $order) {
             $allDivisions[] = $order->division->name;
             foreach ($order->items as $item) {
-                $allGoodsInOrders[] = $item->product->name;
+                $allGoodsInOrders[] = array('name' => $item->product->name, 'image' => $item->product->image);
             }
         }
         
-        $allGoodsInOrders = array_unique($allGoodsInOrders);
+        $allGoodsInOrders = array_unique($allGoodsInOrders, SORT_REGULAR);
         $allDivisions = array_unique($allDivisions);
         $result = array($allGoodsInOrders, $allDivisions);
         

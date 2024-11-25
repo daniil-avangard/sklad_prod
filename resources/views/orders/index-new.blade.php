@@ -117,6 +117,13 @@
             from {opacity: 0;}
             to {opacity: 1;}
         }
+        .v-table-text {
+            writing-mode: vertical-lr !important;
+            text-orientation: upright !important;
+        }
+        .new-table-row {
+            width: 25% !important;
+        }
     </style>
 @endpush
 
@@ -210,22 +217,34 @@
                 @can('view', \App\Models\Order::class)
                     <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
                 @endcan
-                <table class="table table-bordered custom-table">
+                <table class="table table-bordered custom-table new-table">
                     <thead>
                         <tr>
-                            <th scope="col">Товары</th>
+                            <th scope="col" class"new-table-row">Товары</th>
                             @foreach ($divisionNames as $divisionName)
-                                <th scope="col">{{ $divisionName }}</th>
+                                <th scope="col" class="v-table-text">{{ $divisionName }}</th>
                             @endforeach
+                            <th scope="col" class="v-table-text">Заказано</th>
+                            <th scope="col" class="v-table-text">На складе</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($uniqGoods as $good)
                             <tr>
-                                <td>{{ $good }}</td>
+                                <td class="new-table-row">
+                                    <div class="order-popup-parent">
+                                        <p>{{ $good['name'] }}</p>
+                                        <div class="order-popup-child">
+                                            <img src="{{ asset('storage/' . $good['image']) }}" alt="" class=" mx-auto  d-block" height="150">
+                                        </div>
+                                    </div>
+                                    
+                                </td>
                                 @foreach ($divisionNames as $divisionName)
                                     <td></td>
                                 @endforeach
+                                <td></td>
+                                <td></td>
                             </tr>
                         @endforeach
                     </tbody>
