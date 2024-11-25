@@ -102,10 +102,6 @@
 
             </div><!--end col-->
         </div><!--end row-->
-        <div class="row">
-            tutu3
-        </div>
-
     </div><!--end col-->
 </div><!--end row-->
 @endcan
