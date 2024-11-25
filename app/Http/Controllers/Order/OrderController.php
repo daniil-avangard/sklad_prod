@@ -60,10 +60,42 @@ class OrderController extends Controller
                 $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity, 'image' => $item->product->image);
             }
         }
-
-        return view('orders.index-new', compact('orders', 'allItems'));
+        
+        $result = $this->forNewTable($divisionGroups, $orders);
+        $uniqGoods = $result[0];
+        $divisionNames = $result[1];
+        return view('orders.index-new', compact('orders', 'allItems', 'uniqGoods', 'divisionNames'));
     }
-
+    
+    private function forNewTable($divisionGroups, $orders)
+    {
+        $divisionStateOrders = array();
+        
+        $arrayOfStatuses = array(StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value);
+        
+        foreach ($orders as $order) {
+            if (in_array($order->status->value, $arrayOfStatuses)) {
+                $divisionStateOrders[] = $order;
+            }
+        }
+        
+        $allGoodsInOrders = array();
+        $allDivisions = array();
+        
+        foreach ($divisionStateOrders as $order) {
+            $allDivisions[] = $order->division->name;
+            foreach ($order->items as $item) {
+                $allGoodsInOrders[] = $item->product->name;
+            }
+        }
+        
+        $allGoodsInOrders = array_unique($allGoodsInOrders);
+        $allDivisions = array_unique($allDivisions);
+        $result = array($allGoodsInOrders, $allDivisions);
+        
+        return $result;
+        
+    }
 
     public function show(Order $order)
     {

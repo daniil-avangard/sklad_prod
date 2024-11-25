@@ -202,6 +202,37 @@
             </div>
         </div>
     </div>
+    
+    <div class="row">
+        <div class="col-12">
+
+            <div class="table-responsive">
+                @can('view', \App\Models\Order::class)
+                    <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
+                @endcan
+                <table class="table table-bordered custom-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Товары</th>
+                            @foreach ($divisionNames as $divisionName)
+                                <th scope="col">{{ $divisionName }}</th>
+                            @endforeach
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($uniqGoods as $good)
+                            <tr>
+                                <td>{{ $good }}</td>
+                                @foreach ($divisionNames as $divisionName)
+                                    <td></td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @push('scripts-plugins')
