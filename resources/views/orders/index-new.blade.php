@@ -241,7 +241,7 @@
                                     
                                 </td>
                                 @foreach ($divisionNames as $divisionName)
-                                    <td></td>
+                                    <td>{{ $allDivisionsData[$divisionName][$good['name']] }}</td>
                                 @endforeach
                                 <td></td>
                                 <td></td>

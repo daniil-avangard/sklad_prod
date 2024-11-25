@@ -64,7 +64,11 @@ class OrderController extends Controller
         $result = $this->forNewTable($divisionGroups, $orders);
         $uniqGoods = $result[0];
         $divisionNames = $result[1];
-        return view('orders.index-new', compact('orders', 'allItems', 'uniqGoods', 'divisionNames'));
+        $allDivisionsData = $result[2];
+        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
+//        $test = $uniqGoods[1]['name'];
+//        dd($allDivisionsData);
+        return view('orders.index-new', compact('orders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData'));
     }
     
     private function forNewTable($divisionGroups, $orders)
@@ -89,6 +93,7 @@ class OrderController extends Controller
                 if (!isset($allDivisionsData[$order->division->name])) {
                     if (!isset($allDivisionsData[$order->division->name][$item->product->name])) {
                         $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
+//                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
                     } else {
                         $allDivisionsData[$order->division->name][$item->product->name] += $item->quantity;
                     }
@@ -109,9 +114,19 @@ class OrderController extends Controller
             $allDivisions[] = $k;
         }
         
+        foreach ($allDivisionsData as $k => $v) {
+//            dd($v);
+            foreach ($allGoodsInOrders as $x) {
+//                dd($x);
+                if (!(array_key_exists($x['name'] ,$v))) {
+                    $allDivisionsData[$k][$x['name']] = 0;
+                }
+            }
+        }
+        
         $allGoodsInOrders = array_unique($allGoodsInOrders, SORT_REGULAR);
 //        $allDivisions = array_unique($allDivisions);
-        $result = array($allGoodsInOrders, $allDivisions);
+        $result = array($allGoodsInOrders, $allDivisions, $allDivisionsData);
         
         return $result;
         
