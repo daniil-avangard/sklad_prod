@@ -22,9 +22,7 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::get('/products', [ProductController::class, 'index'])->name('products');
     Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-
     Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
-
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'delete'])->name('products.delete');
@@ -61,11 +59,12 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
     Route::delete('/categories/{category}', [CategoryController::class, 'delete'])->name('categories.delete');
 
-    
+
     // Подразделения
     Route::get('/divisions', [DivisionController::class, 'index'])->name('divisions');
     Route::get('/divisions/create', [DivisionController::class, 'create'])->name('divisions.create');
     Route::post('/divisions', [DivisionController::class, 'store'])->name('divisions.store');
+
     Route::get('/divisions/{division}', [DivisionController::class, 'show'])->name('divisions.show');
     Route::get('/divisions/{division}/edit', [DivisionController::class, 'edit'])->name('divisions.edit');
     Route::put('/divisions/{division}', [DivisionController::class, 'update'])->name('divisions.update');

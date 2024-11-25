@@ -29,14 +29,29 @@ class DivisionController extends Controller
         return view('divisions.create');
     }
 
-    public function store(CreateDisionRequest $request)
+    public function store(Request $request)
     {
         $division = new Division();
-        $division->name = $request->name;
+
+        $category_id = $request->category_id;
+
+        // Проверка на допустимые категории
+        if (!in_array($category_id, [1, 2, 3])) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Невалидная категория',
+            ]);
+        }
+
+        $division->city = $request->city;
+        $division->name = $request->department;
         $division->user_id = auth()->user()->id;
         $division->save();
 
-        return redirect()->route('divisions', $division)->with('success', 'Подразделение успешно создано');
+        return response()->json([
+            'success' => true,
+            'message' => 'Подразделение успешно создано',
+        ]);
     }
 
     public function show(Division $division)
