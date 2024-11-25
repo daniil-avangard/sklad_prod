@@ -11,7 +11,8 @@
     {{-- @include('divisions.inc.nav') --}}
 
     <div class="d-flex justify-content-between">
-        <div class="col-3 max-h-40 mb-4" id="division-category" {{-- style="display: none" --}}>
+        {{-- <div class="col-3 max-h-40 mb-4" id="division-category" --}}
+        {{-- style="display: none" --}}
             {{-- <button class="btn btn-primary">Добавить категорию</button> --}}
 
             {{-- <div class="d-flex">
@@ -38,7 +39,7 @@
 
                         </div> --}}
 
-            <div class="card">
+            {{-- <div class="card">
                 <div class="card-header">
                     <div class="d-flex align-items-center justify-content-between">
                         <h4 class="card-title">Фильтрация</h4>
@@ -52,7 +53,7 @@
                                 Категория
                             </p>
 
-                            {{-- <i data-feather="plus" class="align-self-center topbar-icon button-icon"></i> --}}
+                            <i data-feather="plus" class="align-self-center topbar-icon button-icon"></i>
                         </div>
 
                         <div class="form-group col-lg-6 mb-0">
@@ -91,10 +92,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div> --}}
+        {{-- </div> --}}
 
-        <div class="col-9 row" id="division-list" {{-- style="display: none" --}}>
+        <div class="col-12 row" id="division-list" {{-- style="display: none" --}}>
             <table class="table table-bordered">
                 <thead>
                     <tr>

@@ -43,6 +43,14 @@ addDivisionForm.addEventListener('submit', function (evt) {
         const result = await sendRequest(`/divisions`, 'POST', data);
         console.log(result);
 
+        if (result.success) {
+            window.location.href = '/divisions';
+
+            // Toast.fire({
+            //     icon: 'success',
+            //     title: result.message
+            // })
+        }
     }
 
     toggleDivision(dataObject);
