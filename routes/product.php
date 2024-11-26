@@ -66,9 +66,9 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::post('/divisions', [DivisionController::class, 'store'])->name('divisions.store');
 
     // Новые
+    Route::get('/divisions/division-category', [DivisionController::class, 'getDivisionList'])->name('divisions.division-category');
     Route::post('/divisions/division-category/create', [DivisionController::class, 'addCategory'])->name('divisions.division-category.create');
     Route::delete('/divisions/division-category/delete', [DivisionController::class, 'deleteCategory'])->name('divisions.division-category.delete');
-    Route::get('/division-list', [DivisionController::class, 'getDivisionList'])->name('division-list');
 
 
     Route::get('/divisions/{division}', [DivisionController::class, 'show'])->name('divisions.show');

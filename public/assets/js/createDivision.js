@@ -22,6 +22,38 @@ const sendRequest = async (url, method, data) => {
     }
 };
 
+// Функция для обновления списка категорий
+const updateCategoriesList = async (categories) => {
+    divisionCategoryList.innerHTML = '';
+
+    categories.forEach(category => {
+        const categoryItemNode = document.createElement('li');
+        categoryItemNode.classList.add('division__item', 'p-2', 'ps-4', 'pe-4', 'rounded', 'text-center', 'border', 'border-dark-subtle');
+        categoryItemNode.textContent = category.category_name;
+        categoryItemNode.setAttribute('data-division-id', category.id);
+
+        divisionCategoryList.appendChild(categoryItemNode);
+    });
+};
+
+// Функция для обновления выпалающего списка
+const updateOptionsInSelect = async (categories) => {
+    const categorySelect = document.querySelector('#category_id');
+
+    categorySelect.innerHTML = '';
+
+    const defaultOption = document.createElement('option');
+    defaultOption.value = '0';
+    defaultOption.textContent = 'Выберите категорию';
+    categorySelect.appendChild(defaultOption);
+
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category.id;
+        option.textContent = category.category_name;
+        categorySelect.appendChild(option);
+    });
+}
 
 const addDivisionForm = document.querySelector('#add-division-form');
 addDivisionForm.addEventListener('submit', function (evt) {
@@ -91,56 +123,36 @@ addCategoryDivisionForm.addEventListener('submit', function (evt) {
         dataObject[key] = value;
     });
 
-    // Функция для обновления списка категорий
-    const updateCategoriesList = async (categories) => {
-        divisionCategoryList.innerHTML = '';
+    const getDivisionCategory = async () => {
+        const response = await fetch('/divisions/division-category');
+        const result = await response.json();
 
-        categories.forEach(category => {
-            const categoryItemNode = document.createElement('li');
-            categoryItemNode.classList.add('division__item', 'p-2', 'ps-4', 'pe-4', 'rounded', 'text-center', 'border', 'border-dark-subtle');
-            categoryItemNode.textContent = category.category_name;
-            categoryItemNode.setAttribute('data-division-id', category.id);
-
-            divisionCategoryList.appendChild(categoryItemNode);
-        });
-    };
-
-    const updateOptionsInSelect = async (categories) => {
-        const categorySelect = document.querySelector('#category_id');
-
-        categorySelect.innerHTML = '';
-
-        const defaultOption = document.createElement('option');
-        defaultOption.value = '0';
-        defaultOption.textContent = 'Выберите категорию';
-        categorySelect.appendChild(defaultOption);
-
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category.id;
-            option.textContent = category.category_name;
-            categorySelect.appendChild(option);
-        });
+        if (result.success) {
+            return result.body;
+        } else {
+            console.error('Ошибка при загрузке категорий');
+        }
     }
 
     // Функция для добавления/удаления подразделения
     const addCategoryDivision = async (data) => {
         const result = await sendRequest(`/divisions/division-category/create`, 'POST', data);
-        Toast.fire({
-            icon: 'success',
-            title: result.message
-        })
+        // console.log(result);
 
         if (result.success) {
-            const response = await fetch('/division-list');
-            const result = await response.json();
+            Toast.fire({
+                icon: 'success',
+                title: result.message
+            })
 
-            if (result.success) {
-                const divisions = result.body;
+            addCategoryDivisionForm.reset();
 
-                updateCategoriesList(divisions);
-                updateOptionsInSelect(divisions);
-            }
+            // Получает обновленный список категорий
+            const divisions = await getDivisionCategory()
+
+            // Обновляет список категорий
+            updateCategoriesList(divisions);
+            updateOptionsInSelect(divisions);
         } else {
             console.error('Ошибка при загрузке категорий');
         }
@@ -190,8 +202,6 @@ divisionCategoryList.addEventListener('click', function (evt) {
 
 
 deleteCategoryButton.addEventListener('click', () => {
-    console.log(divisionIds);
-
     // Функция удаления категории подразделения
     const deleteDivisionCategory = async (divisionIds) => {
         const dataToSend = {
@@ -200,24 +210,19 @@ deleteCategoryButton.addEventListener('click', () => {
         };
 
         const result = await sendRequest(`/divisions/division-category/delete`, 'DELETE', dataToSend);
-        console.log(result);
-        Toast.fire({
-            icon: 'success',
-            title: result.message
-        })
+        // console.log(result);
 
         if (result && result.success) {
-            const divisions = result.body;
-            divisionCategoryList.innerHTML = '';
-
-            divisions.forEach(category => {
-                const categoryItemNode = document.createElement('li');
-                categoryItemNode.classList.add('division__item', 'p-2', 'ps-4', 'pe-4', 'rounded', 'text-center', 'border', 'border-dark-subtle');
-                categoryItemNode.textContent = category.category_name;
-                categoryItemNode.setAttribute('data-division-id', category.id);
-
-                divisionCategoryList.appendChild(categoryItemNode);
+            Toast.fire({
+                icon: 'success',
+                title: result.message
             });
+
+            const divisions = result.body;
+
+            // Обновляет список категорий
+            updateCategoriesList(divisions);
+            updateOptionsInSelect(divisions);
         }
     };
 
