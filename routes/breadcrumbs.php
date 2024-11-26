@@ -104,26 +104,23 @@ Breadcrumbs::for('products.create', function ($trail) {
 
 // Редактирование продукта
 Breadcrumbs::for('products.edit', function ($trail, $product) {
-    $trail->parent('products');
+    $trail->parent('products.show', $product);
     $trail->push('Редактирование продукта', route('products.edit', $product));
 });
 
 // Приходы продукта
-
 Breadcrumbs::for('products.arival', function ($trail, $product) {
     $trail->parent('products.show', $product);
     $trail->push('Приходы', route('products.arival', $product));
 });
 
 // Списание продукта
-
 Breadcrumbs::for('products.writeoff', function ($trail, $product) {
     $trail->parent('products.show', $product);
     $trail->push('Списание', route('products.writeoff', $product));
 });
 
 // Списание
-
 Breadcrumbs::for('writeoffs', function ($trail) {
     $trail->parent('main');
     $trail->push('Списание', route('writeoffs'));
