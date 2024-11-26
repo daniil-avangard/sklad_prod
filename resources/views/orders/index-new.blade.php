@@ -4,127 +4,9 @@
 @section('title_page', 'Заказы')
 
 @push('styles-plugins')
-    <style>
-        /* Custom Checkbox */
-        .control {
-            display: block;
-            position: relative;
-            margin-bottom: 25px;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        .control input {
-            position: absolute;
-            z-index: -1;
-            opacity: 0;
-        }
-
-        .control__indicator {
-            position: absolute;
-            top: 2px;
-            left: 0;
-            height: 11px;
-            width: 11px;
-            border-radius: 2px;
-            border: 2px solid #ccc;
-            background: transparent;
-        }
-
-        .control--radio .control__indicator {
-            border-radius: 50%;
-        }
-
-        .control:hover input~.control__indicator,
-        .control input:focus~.control__indicator {
-            border: 2px solid #007bff;
-        }
-
-        .control input:checked~.control__indicator {
-            border: 2px solid #007bff;
-            background: #007bff;
-        }
-
-        .control input:disabled~.control__indicator {
-            background: #e6e6e6;
-            opacity: 0.6;
-            pointer-events: none;
-            border: 2px solid #ccc;
-        }
-
-        .control__indicator:after {
-            font-family: 'icomoon';
-            content: '\e5ca';
-            position: absolute;
-            display: none;
-        }
-
-        .control input:checked~.control__indicator:after {
-            display: block;
-            color: #fff;
-        }
-
-        .control--checkbox .control__indicator:after {
-            top: 50%;
-            left: 50%;
-            -webkit-transform: translate(-50%, -52%);
-            -ms-transform: translate(-50%, -52%);
-            transform: translate(-50%, -52%);
-        }
-
-        .control--checkbox input:disabled~.control__indicator:after {
-            border-color: #7b7b7b;
-        }
-
-        .control--checkbox input:disabled:checked~.control__indicator {
-            background-color: #007bff;
-            opacity: .2;
-            border: 2px solid #007bff;
-        }
-        .bg-started-war {
-            background-color: #0e77ac !important;
-        }
-        .bg-assembled {
-            background-color: #0a567c !important;
-        }
-        tr p {
-            margin-bottom: 5px !important;
-        }
-        .order-popup-parent {
-            position: relative;
-            display: block;
-            cursor: pointer;
-            user-select: none;
-        }
-        .order-popup-child {
-            position: absolute;
-            visibility: hidden;
-            width: 160px;
-            background-color: #555;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -80px;
-        }
-        .order-popup-parent .show {
-            visibility: visible;
-            animation: fadeIn 0.1s;
-        }
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
-        }
-        .v-table-text {
-            writing-mode: vertical-lr !important;
-            text-orientation: upright !important;
-        }
-        .new-table-row {
-            width: 25% !important;
-        }
-    </style>
+    <link type="text/css" href="/plugins/x-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
 
 @section('content')
@@ -241,9 +123,13 @@
                                     
                                 </td>
                                 @foreach ($divisionNames as $divisionName)
-                                    <td>{{ $allDivisionsData[$divisionName][$good['name']] }}</td>
+                                    <td>
+                                        <a href="#" class="quantity-input editable editable-click">
+                                            {{ $allDivisionsData[$divisionName][$good['name']] }}
+                                        </a>
+                                    </td>
                                 @endforeach
-                                <td></td>
+                                <td>{{ $good['total'] }}</td>
                                 <td></td>
                             </tr>
                         @endforeach
@@ -255,6 +141,8 @@
 @endsection
 
 @push('scripts-plugins')
+    <script src="/plugins/x-editable/js/bootstrap-editable.min.js"></script>
+    <script src="/assets/pages/orders/update.quantity.js"></script>
     <script src="/assets/js/checkBoxesOrdersList.js"></script>
     <script src="/assets/js/ordersListElements.js"></script>
 @endpush

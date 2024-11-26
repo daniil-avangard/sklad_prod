@@ -65,7 +65,7 @@ class OrderController extends Controller
         $uniqGoods = $result[0];
         $divisionNames = $result[1];
         $allDivisionsData = $result[2];
-        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
+//        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
 //        $test = $uniqGoods[1]['name'];
 //        dd($allDivisionsData);
         return view('orders.index-new', compact('orders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData'));
@@ -125,6 +125,16 @@ class OrderController extends Controller
         }
         
         $allGoodsInOrders = array_unique($allGoodsInOrders, SORT_REGULAR);
+        
+        foreach ($allGoodsInOrders as $index => $x) {
+            $total = 0;
+            foreach ($allDivisionsData as $k => $v) {
+                $total += $allDivisionsData[$k][$x['name']];
+            }
+            $x['total'] = $total;
+            $allGoodsInOrders[$index] = $x;
+        }
+        
 //        $allDivisions = array_unique($allDivisions);
         $result = array($allGoodsInOrders, $allDivisions, $allDivisionsData);
         
