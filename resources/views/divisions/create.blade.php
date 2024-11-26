@@ -1,5 +1,9 @@
 @extends('layouts.base')
 
+@push('styles-plugins')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+@endpush
+
 @section('content')
     @include('includes.breadcrumb', [
         'title' => 'Подразделения',
@@ -136,6 +140,7 @@
                         <div class="form-group">
                             <label for="category_id">Категория</label>
                             <select class="form-select" id="category_id" name="category_id">
+                                <option value="0">Выберите категорию</option>
                                 @foreach ($divisionCategory as $category)
                                     <option value="{{ $category->id }}">{{ $category->category_name }}</option>
                                 @endforeach
@@ -181,15 +186,21 @@
                     </x-form>
                 </div>
 
-
                 <div>
-                    <h5 class="text-muted mb-2">
-                        Список категорий
-                    </h5>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="text-muted m-0">
+                            Список категорий
+                        </h5>
 
-                    <ul class="m-0 p-0 list-unstyled d-flex flex-wrap gap-2">
+                        <button class="btn btn-danger button-icon-wrapper" id="delete-category-button">
+                            <i data-feather="trash" class="align-self-center topbar-icon button-icon"></i>
+                        </button>
+                    </div>
+
+                    <ul class="m-0 p-0 list-unstyled d-flex flex-wrap gap-2" id="division-category-list">
                         @foreach ($divisionCategory as $category)
-                            <li class="division__item p-2 ps-4 pe-4 rounded text-center border border-dark-subtle">
+                            <li class="division__item p-2 ps-4 pe-4 rounded text-center border border-dark-subtle"
+                                data-division-id="{{ $category->id }}">
                                 {{ $category->category_name }}
                             </li>
                         @endforeach
@@ -202,7 +213,4 @@
 
 @push('scripts-plugins')
     <script src="/assets/js/createDivision.js"></script>
-
-    <!-- Добавляет категорию -->
-    <script src="/assets/js/createDivisionCategory.js"></script>
 @endpush

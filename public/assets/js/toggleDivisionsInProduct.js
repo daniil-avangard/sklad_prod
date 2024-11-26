@@ -84,7 +84,6 @@ function toggleDivisionsInProduct() {
         }
     };
 
-
     // Обработчик для кнопки добавления всех подразделений
     const buttonAddAllDivisions = document.querySelector('#add-all-divisions');
     buttonAddAllDivisions.addEventListener('click', async (evt) => {

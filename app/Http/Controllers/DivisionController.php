@@ -39,9 +39,6 @@ class DivisionController extends Controller
         // Получает все подразделения
         $divisionCategory = DivisionCategory::select('id', 'category_name')->get();
 
-        // Получает все подразделения
-        // $divisions = DivisionCategory::pluck('division_category');
-
         return view('divisions.create', compact('divisionCategory'));
     }
 
@@ -58,7 +55,6 @@ class DivisionController extends Controller
                 'message' => 'Невалидная категория',
             ]);
         }
-
 
         $division = new Division();
         $division->city = $request->city;
@@ -134,6 +130,30 @@ class DivisionController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Категория ' . $divisionCategory->category_name . ' успешно создана',
+        ]);
+    }
+
+    public function deleteCategory(Request $request)
+    {
+        $divisionCategoryIds = $request->division_ids;
+
+        DivisionCategory::destroy($divisionCategoryIds);
+        $divisionCategory = DivisionCategory::select('id', 'category_name')->get();
+
+        return response()->json([
+            'success' => true,
+            'body' => $divisionCategory,
+            'message' => count($divisionCategoryIds) > 1 ? 'Категории успешно удалены' : 'Категория успешно удалена'
+        ]);
+    }
+
+    public function getDivisionList(Request $request)
+    {
+        $divisionCategory = DivisionCategory::select('id', 'category_name')->get();
+
+        return response()->json([
+            'success' => true,
+            'body' => $divisionCategory,
         ]);
     }
 }

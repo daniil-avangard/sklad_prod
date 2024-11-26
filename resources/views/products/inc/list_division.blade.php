@@ -11,8 +11,6 @@
                         data-is-all-selected="{{ $isAllDivisionsSelected ? 1 : 0 }}">
                         {{ $isAllDivisionsSelected ? 'Удалить все' : 'Добавить все'}}
                     </button>
-
-                    {{-- <a href="{{ route('products.divisions.create', $product) }}" class="btn btn-primary">Добавить подразделение</a> --}}
                 </div><!--end col-->
             </div>  <!--end row-->
         </div><!--end card-header-->
