@@ -15,6 +15,7 @@ use App\Models\Division;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\Category;
+use App\Models\DivisionCategory;
 use App\Models\Writeoff;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
@@ -72,7 +73,6 @@ class ProductController extends Controller
             $data[$field] = $productRequest->has($field);
         }
 
-
         // Создаем новый продукт для получения его ID
         $product = Product::create($data);
 
@@ -87,7 +87,6 @@ class ProductController extends Controller
             $product->update(['image' => $data['image']]);
         }
 
-
         $variant = new ProductVariant();
         $variant->product_id = $product->id;
         $variant->quantity = 0;
@@ -95,7 +94,6 @@ class ProductController extends Controller
         $variant->reserved = 0;
         $variant->sku = $product->sku;
         $variant->save();
-
 
         return redirect()->route('products.show', $product)->with('success', 'Продукт успешно добавлен');
     }
@@ -108,23 +106,38 @@ class ProductController extends Controller
             throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
         }
 
-        $allDivisions = Division::all()->map(function ($division) use ($product) {
+        $allDivisions = DivisionCategory::with('divisions')->get()->map(function ($category) use ($product) {
             return [
-                'division' => $division,
-                'is_active' => $product->divisions->contains($division)
+                'category_name' => $category->category_name, // Имя категории
+                'divisions' => $category->divisions->map(function ($division) use ($product) {
+                    return [
+                        'division' => $division,
+                        'is_active' => $product->divisions->contains($division)
+                    ];
+                })
             ];
         });
 
-        // Фильтруем выбранные подразделения (где is_active = true)
-        $selectedDivisions = $allDivisions->filter(function ($item) {
-            return $item['is_active'];
+        // dd($allDivisions[0]['divisions']->toArray());
+
+        // Фильтруем все выбранные активные подразделения
+        $selectedDivisions = $allDivisions->flatMap(function ($category) {
+            // Для каждой категории фильтруем активные подразделения
+            return $category['divisions']->filter(function ($division) {
+                return $division['is_active'];
+            });
         });
 
-        // Получаем количество выбранных подразделений
+        // Получаем количество выбранных активных подразделений
         $selectedDivisionsCount = $selectedDivisions->count();
 
+        // Получаем общее количество всех подразделений (по категориям)
+        $allDivisionsCount = $allDivisions->flatMap(function ($category) {
+            return $category['divisions'];
+        })->count();
+
         // Проверка, выбраны ли все подразделения
-        $isAllDivisionsSelected = $selectedDivisionsCount === $allDivisions->count();
+        $isAllDivisionsSelected = $selectedDivisionsCount === $allDivisionsCount;
 
         $variants = $product->variants()->orderBy('date_of_actuality', 'desc')->get();
 
