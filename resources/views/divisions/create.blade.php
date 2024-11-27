@@ -12,40 +12,38 @@
         'back_route' => 'divisions',
     ])
 
-    <div class="row justify-content-between">
-        <div class="col-8">
-            <div class="card mb-0">
-                <div class="card-header">
-                    <h4 class="card-title">
-                        Добавить подразделение
-                    </h4>
-                </div>
+    <div class="d-flex gap-4">
+        <div class="col card mb-0">
+            <div class="card-header">
+                <h4 class="card-title">
+                    Добавить подразделение
+                </h4>
+            </div>
 
-                <div class="card-body">
-                    <x-form class="" action="#" method="POST" id="add-division-form">
-                        <div class="form-group">
-                            <label for="category_id">Категория</label>
-                            <select class="form-select" id="category_id" name="category_id">
-                                <option value="0">Выберите категорию</option>
-                                @foreach ($divisionCategory as $category)
-                                    <option value="{{ $category->id }}">{{ $category->category_name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
+            <div class="card-body">
+                <x-form class="" action="#" method="POST" id="add-division-form">
+                    <div class="form-group">
+                        <label for="category_id">Категория</label>
+                        <select class="form-select" id="category_id" name="category_id">
+                            <option value="0">Выберите категорию</option>
+                            @foreach ($divisionCategory as $category)
+                                <option value="{{ $category->id }}">{{ $category->category_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="name">Город</label>
-                            <input type="text" name="city" id="city" class="form-control" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="name">Город</label>
+                        <input type="text" name="city" id="city" class="form-control" required>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="name">Отдел</label>
-                            <input type="text" name="department" id="department" class="form-control" required>
-                        </div>
+                    <div class="form-group">
+                        <label for="name">Отдел</label>
+                        <input type="text" name="department" id="department" class="form-control" required>
+                    </div>
 
-                        <button type="submit" class="btn btn-primary">Создать</button>
-                    </x-form>
-                </div>
+                    <button type="submit" class="btn btn-primary">Создать</button>
+                </x-form>
             </div>
         </div>
 

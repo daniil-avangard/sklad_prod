@@ -12,7 +12,7 @@
         <div class="col p-0">
             <div class="card mb-0">
                 <div class="card-header">
-                    <h5 class="card-title">Название: {{ $division->name }}</h5>
+                    <h4 class="card-title">Название: {{ $division->name }}</h4>
                 </div>
 
                 <div class="card-body">

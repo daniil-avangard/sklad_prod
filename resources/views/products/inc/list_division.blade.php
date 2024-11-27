@@ -14,13 +14,12 @@
     </div><!--end card-header-->
 
     <div class="
-    {{-- d-flex flex-column  --}}
+        ps-3
         card-body
-        {{-- gap-4 --}}
         list-group custom-list-group">
         @foreach ($allDivisions as $divisionCategory)
-            <div>
-                <h4 class="card-title text-muted mb-2 pb-1 border-bottom border-color-dark">
+            <div class="list-group-item">
+                <h4 class="card-title text-muted mb-2 pb-1">
                     {{ $divisionCategory['category_name'] }}
                 </h4>
 
