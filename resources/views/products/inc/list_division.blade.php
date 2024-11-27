@@ -13,7 +13,11 @@
         </div> <!--end row-->
     </div><!--end card-header-->
 
-    <div class="d-flex flex-column card-body gap-4">
+    <div class="
+    {{-- d-flex flex-column  --}}
+        card-body
+        {{-- gap-4 --}}
+        list-group custom-list-group">
         @foreach ($allDivisions as $divisionCategory)
             <div>
                 <h4 class="card-title text-muted mb-2 pb-1 border-bottom border-color-dark">

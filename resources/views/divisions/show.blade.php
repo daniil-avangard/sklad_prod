@@ -16,7 +16,8 @@
                 </div>
 
                 <div class="card-body">
-                    <x-form class="" action="#" method="POST" id="add-division-form">
+                    {{-- <x-form action="{{ route('divisions.update', $division) }}" method="PUT" class="form-horizontal well"> --}}
+                    <x-form class="" action="#" method="POST" id="update-division-form">
                         <div class="form-group">
                             <label for="category_id">Категория</label>
                             <select class="form-select" id="category_id" name="category_id">

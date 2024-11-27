@@ -72,8 +72,6 @@ Route::middleware('auth', 'admin')->group(function () {
 
 
     Route::get('/divisions/{division}', [DivisionController::class, 'show'])->name('divisions.show');
-    // Route::get('/divisions/{division}/edit', [DivisionController::class, 'edit'])->name('divisions.edit');
-
     Route::put('/divisions/{division}', [DivisionController::class, 'update'])->name('divisions.update');
     Route::delete('/divisions/{division}', [DivisionController::class, 'delete'])->name('divisions.delete');
 
