@@ -16,9 +16,6 @@
         'add_route' => $canCreateProduct ? 'divisions.create' : null,
     ])
 
-    {{-- @include('divisions.inc.nav') --}}
-
-
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -47,7 +44,7 @@
                                             <i data-feather="eye" class="align-self-center topbar-icon button-icon"></i>
                                         </a>
                                         @can('update', \App\Models\Product::class)
-                                            <a href="{{ route('divisions.edit', $division) }}"
+                                            <a href="{{ route('divisions.show', $division) }}"
                                                 class="btn btn-warning button-icon-wrapper">
                                                 <i data-feather="edit" class="align-self-center topbar-icon button-icon"></i>
                                             </a>

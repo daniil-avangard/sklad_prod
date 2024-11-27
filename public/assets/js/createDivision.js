@@ -67,43 +67,20 @@ addDivisionForm.addEventListener('submit', function (evt) {
         dataObject[key] = value;
     });
 
-    // Универсальная функция для отправки запросов
-    const sendRequest = async (url, method, data) => {
-        try {
-            const response = await fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
-                },
-                body: JSON.stringify(data),
-            });
-
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-
-            return await response.json(); // Возвращаем ответ в случае успеха
-        } catch (error) {
-            console.log(error.message);
-            return null; // Возвращаем null в случае ошибки
-        }
-    };
-
-
     // Функция для добавления/удаления подразделения
     const toggleDivision = async (data) => {
-        console.log(data);
+        // console.log(data);
 
         const result = await sendRequest(`/divisions`, 'POST', data);
-        console.log(result);
+        // console.log(result);
 
         if (result.success) {
             window.location.href = '/divisions';
-
-            // Toast.fire({
-            //     icon: 'success',
-            //     title: result.message
-            // })
+        } else {
+            Toast.fire({
+                icon: 'error',
+                title: result.message
+            })
         }
     }
 
@@ -124,7 +101,7 @@ addCategoryDivisionForm.addEventListener('submit', function (evt) {
     });
 
     const getDivisionCategory = async () => {
-        const response = await fetch('/divisions/division-category');
+        const response = await fetch('/division-category');
         const result = await response.json();
 
         if (result.success) {
@@ -136,7 +113,7 @@ addCategoryDivisionForm.addEventListener('submit', function (evt) {
 
     // Функция для добавления/удаления подразделения
     const addCategoryDivision = async (data) => {
-        const result = await sendRequest(`/divisions/division-category/create`, 'POST', data);
+        const result = await sendRequest(`/division-category`, 'POST', data);
         // console.log(result);
 
         if (result.success) {
@@ -209,7 +186,7 @@ deleteCategoryButton.addEventListener('click', () => {
             _token: $('meta[name="csrf-token"]').attr('content')
         };
 
-        const result = await sendRequest(`/divisions/division-category/delete`, 'DELETE', dataToSend);
+        const result = await sendRequest(`/division-category`, 'DELETE', dataToSend);
         // console.log(result);
 
         if (result && result.success) {

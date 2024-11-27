@@ -36,7 +36,7 @@ class DivisionController extends Controller
 
     public function create()
     {
-        // Получает все подразделения
+        // Получает все категории подразделений
         $divisionCategory = DivisionCategory::select('id', 'category_name')->get();
 
         return view('divisions.create', compact('divisionCategory'));
@@ -52,7 +52,7 @@ class DivisionController extends Controller
         if (!in_array($category_id, $divisionCategoryIds)) {
             return response()->json([
                 'success' => false,
-                'message' => 'Невалидная категория',
+                'message' => 'Выбрана несуществующая категория',
             ]);
         }
 
@@ -74,8 +74,13 @@ class DivisionController extends Controller
 
     public function show(Division $division)
     {
+        // Получает все категории подразделений
+        $divisionCategory = DivisionCategory::select('id', 'category_name')->get();
+
         $products = $division->products()->get();
-        return view('divisions.show', compact('division', 'products'));
+        $currentCategory = $division->divisionCategory->first();
+
+        return view('divisions.show', compact('division', 'products', 'divisionCategory', 'currentCategory'));
     }
 
     public function edit(Division $division)
@@ -118,6 +123,7 @@ class DivisionController extends Controller
         $division->products()->detach($request->product_id);
         return redirect()->route('divisions.show', $division);
     }
+
 
     public function addCategory(Request $request)
     {
