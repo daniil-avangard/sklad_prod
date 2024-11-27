@@ -14,6 +14,7 @@ $(document).ready(function() {
             mode: 'inline',
             inputclass: 'form-control-sm',
             success: function(response, newValue) {
+                originalValue = $(this).data('origin');
                 // Проверка на пустое значение
                 if (newValue === '') {
                     Toast.fire({
@@ -31,13 +32,22 @@ $(document).ready(function() {
                     return; // Прерываем выполнение, если количество отрицательное
                 }
 
+                nextNewValue = newValue - originalValue + $(this).data('new');
+                
+                if (nextNewValue < 0) {
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'Количество не может быть меньше 0'
+                    });
+                    return; // Прерываем выполнение, если количество отрицательное
+                }
                 // Обновление количества через Ajax
                 $.ajax({
                     url: '/orders/update-quantity',
                     method: 'POST',
                     data: {
                         id: $(this).data('pk'),
-                        quantity: newValue,
+                        quantity: nextNewValue,
                         _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(data) {

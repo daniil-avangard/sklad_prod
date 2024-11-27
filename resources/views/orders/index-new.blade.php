@@ -124,14 +124,19 @@
                                 </td>
                                 @foreach ($divisionNames as $divisionName)
                                     <td>
-                                        <p>{{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}</p>
-                                        <p><a href="#" class="quantity-input editable editable-click"
-                                           data-type="number" 
-                                           data-pk="{{ $allDivisionsDataNew[$divisionName][$good['name']]['id'] }}" 
-                                           data-title="Введите количество"
-                                        >
-                                            {{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}
-                                            </a></p>
+                                        @if ($allDivisionsDataNew[$divisionName][$good['name']]['id'] == 0)
+                                            <p>{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}</p>
+                                        @else
+                                            <a href="#" class="quantity-input editable editable-click"
+                                               data-type="number" 
+                                               data-pk="{{ $allDivisionsDataNew[$divisionName][$good['name']]['id'] }}" 
+                                               data-title="Введите количество"
+                                               data-origin="{{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}"
+                                               data-new="{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}"
+                                            >
+                                                {{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}
+                                            </a>
+                                        @endif
                                     </td>
                                 @endforeach
                                 <td>{{ $good['total'] }}</td>
@@ -147,7 +152,7 @@
 
 @push('scripts-plugins')
     <script src="/plugins/x-editable/js/bootstrap-editable.min.js"></script>
-    <script src="/assets/pages/orders/update.quantity.js"></script>
+    <script src="/assets/pages/orders/update_new.quantity.js"></script>
     <script src="/assets/js/checkBoxesOrdersList.js"></script>
     <script src="/assets/js/ordersListElements.js"></script>
 @endpush
