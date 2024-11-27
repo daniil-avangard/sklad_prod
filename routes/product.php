@@ -35,6 +35,11 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::post('/products/{product}/divisions-all', [ProductController::class, 'addAllDivisions'])->name('products.divisions.addAllDivisions');
     Route::delete('/products/{product}/divisions-all', [ProductController::class, 'deleteAllDivisions'])->name('products.divisions.deleteAllDivisions');
 
+
+    Route::post('/products/{product}/divisions-by-category', [ProductController::class, 'addDivisionsByCategory'])->name('products.divisions.addDivisionsByCategory');
+    Route::delete('/products/{product}/divisions-by-category', [ProductController::class, 'deleteDivisionsByCategory'])->name('products.divisions.deleteDivisionsByCategory');
+
+    
     // Группы подразделений
     Route::get('/products/{product}/groups/divisions/create', [ProductGroupDivisionController::class, 'create'])->name('products.groups.divisions.create');
     Route::post('/products/{product}/groups/divisions', [ProductGroupDivisionController::class, 'attach'])->name('products.groups.divisions.attach');

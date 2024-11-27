@@ -13,22 +13,19 @@
         </div> <!--end row-->
     </div><!--end card-header-->
 
-    <div class="
-        ps-3
-        card-body
-        list-group custom-list-group">
+    <div class="ps-3 card-body list-group custom-list-group" id="division-list" data-product-id="{{ $product->id }}">
         @foreach ($allDivisions as $divisionCategory)
             <div class="list-group-item">
-                <h4 class="card-title text-muted mb-2 pb-1">
+                <h4 class="division__item-category card-title text-muted mb-2 pb-1"
+                    data-division-category-id="{{ $divisionCategory['category_id'] }}"
+                    data-is-category-selected="{{ false ? 1 : 0 }}">
                     {{ $divisionCategory['category_name'] }}
                 </h4>
 
-                <ul class="m-0 p-0 list-unstyled d-flex flex-wrap gap-2" id="list-divisions"
-                    data-product-id="{{ $product->id }}">
-
+                <ul class="m-0 p-0 list-unstyled d-flex flex-wrap gap-2">
                     @foreach ($divisionCategory['divisions'] as $divisionItem)
                         <li class="division__item p-2 ps-4 pe-4 rounded text-center border
-                                {{ $divisionItem['is_active'] ? 'border-primary' : 'border-dark-subtle' }}"
+                            {{ $divisionItem['is_active'] ? 'border-primary' : 'border-dark-subtle' }}"
                             data-division-id="{{ $divisionItem['division']->id }}">
                             {{ $divisionItem['division']->name }}
                         </li>

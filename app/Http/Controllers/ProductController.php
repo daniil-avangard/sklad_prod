@@ -108,6 +108,7 @@ class ProductController extends Controller
 
         $allDivisions = DivisionCategory::with('divisions')->get()->map(function ($category) use ($product) {
             return [
+                'category_id' => $category->id, // Id категории
                 'category_name' => $category->category_name, // Имя категории
                 'divisions' => $category->divisions->map(function ($division) use ($product) {
                     return [
@@ -117,8 +118,6 @@ class ProductController extends Controller
                 })
             ];
         });
-
-        // dd($allDivisions[0]['divisions']->toArray());
 
         // Фильтруем все выбранные активные подразделения
         $selectedDivisions = $allDivisions->flatMap(function ($category) {
@@ -298,6 +297,31 @@ class ProductController extends Controller
 
         return response()->json([
             'success' => true,
+        ]);
+    }
+
+
+
+    public function addDivisionsByCategory(Request $request)
+    {
+        if (Gate::denies('update', \App\Models\Product::class)) {
+            throw new AuthorizationException('У вас нет разрешения на редактирование продуктов.');
+        }
+
+        // Приводим значения к числовым типам
+        $product_id = (int) $request->product_id;
+        $division_category_id = (int) $request->division_category_id;
+
+        // Получаем все подразделения, относящиеся к указанной категории
+        $divisionIds = Division::whereHas('divisionCategory', function ($query) use ($division_category_id) {
+            $query->where('id', $division_category_id);
+        })->pluck('id');
+        $product = Product::findOrFail($product_id);
+        $product->divisions()->syncWithoutDetaching($divisionIds);
+
+        return response()->json([
+            'success' => true,
+            'body' => $divisionIds->toArray(),
         ]);
     }
 
