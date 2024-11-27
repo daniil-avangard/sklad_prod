@@ -124,9 +124,14 @@
                                 </td>
                                 @foreach ($divisionNames as $divisionName)
                                     <td>
-                                        <a href="#" class="quantity-input editable editable-click">
-                                            {{ $allDivisionsData[$divisionName][$good['name']] }}
-                                        </a>
+                                        <p>{{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}</p>
+                                        <p><a href="#" class="quantity-input editable editable-click"
+                                           data-type="number" 
+                                           data-pk="{{ $allDivisionsDataNew[$divisionName][$good['name']]['id'] }}" 
+                                           data-title="Введите количество"
+                                        >
+                                            {{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}
+                                            </a></p>
                                     </td>
                                 @endforeach
                                 <td>{{ $good['total'] }}</td>

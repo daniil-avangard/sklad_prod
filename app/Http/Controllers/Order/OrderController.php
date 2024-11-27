@@ -65,43 +65,51 @@ class OrderController extends Controller
         $uniqGoods = $result[0];
         $divisionNames = $result[1];
         $allDivisionsData = $result[2];
+        $allDivisionsDataNew = $result[3];
 //        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
 //        $test = $uniqGoods[1]['name'];
 //        dd($allDivisionsData);
-        return view('orders.index-new', compact('orders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData'));
+        return view('orders.index-new', compact('orders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew'));
     }
     
     private function forNewTable($divisionGroups, $orders)
     {
         $divisionStateOrders = array();
+        $divisionStateOrdersNew = array();
         
         $arrayOfStatuses = array(StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value);
         
         foreach ($orders as $order) {
             if (in_array($order->status->value, $arrayOfStatuses)) {
                 $divisionStateOrders[] = $order;
+                if ($order->status->value == StatusEnum::NEW->value) {
+                    $divisionStateOrdersNew[] = $order;
+                }
             }
         }
         
         $allGoodsInOrders = array();
         $allDivisions = array();
         $allDivisionsData = array();
+        $allDivisionsDataNew = array();
         
         foreach ($divisionStateOrders as $order) {
 //            $allDivisions[] = $order->division->name;
             foreach ($order->items as $item) {
                 if (!isset($allDivisionsData[$order->division->name])) {
                     if (!isset($allDivisionsData[$order->division->name][$item->product->name])) {
-                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
+                        $allDivisionsData[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id);
+//                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
 //                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
                     } else {
-                        $allDivisionsData[$order->division->name][$item->product->name] += $item->quantity;
+                        $allDivisionsData[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
                     }
                 } else {
                     if (!isset($allDivisionsData[$order->division->name][$item->product->name])) {
-                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
+                        $allDivisionsData[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id);
+//                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
                     } else {
-                        $allDivisionsData[$order->division->name][$item->product->name] += $item->quantity;
+                        $allDivisionsData[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
                     }
                 }
                 
@@ -109,6 +117,29 @@ class OrderController extends Controller
                 $allGoodsInOrders[] = array('name' => $item->product->name, 'image' => $item->product->image);
             }
         }
+        
+        // Только новые
+        
+        foreach ($divisionStateOrdersNew as $order) {
+            foreach ($order->items as $item) {
+                if (!isset($allDivisionsDataNew[$order->division->name])) {
+                    if (!isset($allDivisionsDataNew[$order->division->name][$item->product->name])) {
+                        $allDivisionsDataNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id);
+                    } else {
+                        $allDivisionsDataNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
+                    }
+                } else {
+                    if (!isset($allDivisionsDataNew[$order->division->name][$item->product->name])) {
+                        $allDivisionsDataNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id);
+                    } else {
+                        $allDivisionsDataNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
+                    }
+                }
+                
+            }
+        }
+        
+        //
         
         foreach ($allDivisionsData as $k => $v) {
             $allDivisions[] = $k;
@@ -119,7 +150,17 @@ class OrderController extends Controller
             foreach ($allGoodsInOrders as $x) {
 //                dd($x);
                 if (!(array_key_exists($x['name'] ,$v))) {
-                    $allDivisionsData[$k][$x['name']] = 0;
+                    $allDivisionsData[$k][$x['name']] = array('quontity' => 0, 'id' => 0);
+                }
+            }
+        }
+        
+        foreach ($allDivisionsDataNew as $k => $v) {
+//            dd($v);
+            foreach ($allGoodsInOrders as $x) {
+//                dd($x);
+                if (!(array_key_exists($x['name'] ,$v))) {
+                    $allDivisionsDataNew[$k][$x['name']] = array('quontity' => 0, 'id' => 0);
                 }
             }
         }
@@ -129,14 +170,14 @@ class OrderController extends Controller
         foreach ($allGoodsInOrders as $index => $x) {
             $total = 0;
             foreach ($allDivisionsData as $k => $v) {
-                $total += $allDivisionsData[$k][$x['name']];
+                $total += $allDivisionsData[$k][$x['name']]['quontity'];
             }
             $x['total'] = $total;
             $allGoodsInOrders[$index] = $x;
         }
         
 //        $allDivisions = array_unique($allDivisions);
-        $result = array($allGoodsInOrders, $allDivisions, $allDivisionsData);
+        $result = array($allGoodsInOrders, $allDivisions, $allDivisionsData, $allDivisionsDataNew);
         
         return $result;
         
