@@ -104,7 +104,8 @@ class BasketController extends Controller
 
     public function saveOrder(Request $request)
     {
-        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+//        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+        $divisionGroups = Auth::user()->division_id;
 
         $basket = $this->basket; // Получение корзины из текущего объекта
         $order = new Order(); // Создание нового заказа
@@ -134,9 +135,11 @@ class BasketController extends Controller
     
     private function createOneNewOrder($divisionGroups, $createdOrder)
     {
-        $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
-            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
-            })->get()->sortByDesc('created_at');
+//        $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
+//            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
+//            })->get()->sortByDesc('created_at');
+            
+        $orders = Order::where('division_id', $divisionGroups)->get()->sortByDesc('created_at');
             
         $divisionNewOrders = array();
         
