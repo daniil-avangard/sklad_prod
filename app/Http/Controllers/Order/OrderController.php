@@ -29,8 +29,17 @@ class OrderController extends Controller
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get()->sortByDesc('created_at');
+        
+        $allItems = [];
+        
+        foreach ($orders as $order) {
+            $allItems[$order->id] = array();
+            foreach ($order->items as $item) {
+                $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity, 'image' => $item->product->image);
+            }
+        }
 
-        return view('orders.index', compact('orders'));
+        return view('orders.index', compact('orders', 'allItems'));
     }
 
     public function show(Order $order)

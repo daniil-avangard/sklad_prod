@@ -24,9 +24,9 @@
             position: absolute;
             top: 2px;
             left: 0;
-            height: 20px;
-            width: 20px;
-            border-radius: 4px;
+            height: 11px;
+            width: 11px;
+            border-radius: 2px;
             border: 2px solid #ccc;
             background: transparent;
         }
@@ -87,6 +87,36 @@
         .bg-assembled {
             background-color: #0a567c !important;
         }
+        tr p {
+            margin-bottom: 5px !important;
+        }
+        .order-popup-parent {
+            position: relative;
+            display: block;
+            cursor: pointer;
+            user-select: none;
+        }
+        .order-popup-child {
+            position: absolute;
+            visibility: hidden;
+            width: 160px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -80px;
+        }
+        .order-popup-parent .show {
+            visibility: visible;
+            animation: fadeIn 0.1s;
+        }
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
     </style>
 @endpush
 
@@ -115,8 +145,10 @@
                                     <div class="control__indicator"></div>
                                 </label>
                             </th>
-                            <th scope="col">ID</th>
+<!--                            <th scope="col">ID</th>-->
                             <th scope="col">Подразделение</th>
+                            <th scope="col">Товары</th>
+                            <th scope="col">Количество</th>
                             <th scope="col">Статус</th>
                             <th scope="col">Дата</th>
                         </tr>
@@ -137,10 +169,27 @@
                                     @else
                                     href="#"
                                     @endcan>
-                                        Заказ № {{ $order->id }}
+                                        {{ $order->division->name }}
                                     </a>
                                 </td>
-                                <td>{{ $order->division->name }}</td>
+<!--                                <td>  Было
+                                     $order->division->name 
+                                </td>-->
+                                <td>
+                                    @foreach ($allItems[$order->id] as $item)
+                                        <div class="order-popup-parent">
+                                            <p>{{ $item['name'] }}</p>
+                                            <div class="order-popup-child">
+                                                <img src="{{ asset('storage/' . $item['image']) }}" alt="" class=" mx-auto  d-block" height="150">
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach ($allItems[$order->id] as $item)
+                                        <p><span>{{ $item['quantity'] }}</span></p>
+                                    @endforeach
+                                </td>
                                 <td><span class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}</span>
                                 </td>
                                 <td>{{ $order->created_at->format('d.m.Y H:i') }}</td>
@@ -156,71 +205,6 @@
 @endsection
 
 @push('scripts-plugins')
-    <script>
-        $(function() {
-
-            $('.js-check-all').on('click', function() {
-
-                if ($(this).prop('checked')) {
-                    $('th input[type="checkbox"]').each(function() {
-                        $(this).prop('checked', true);
-                        $(this).closest('tr').addClass('active');
-                    })
-                } else {
-                    $('th input[type="checkbox"]').each(function() {
-                        $(this).prop('checked', false);
-                        $(this).closest('tr').removeClass('active');
-                    })
-                }
-
-            });
-
-            $('th[scope="row"] input[type="checkbox"]').on('click', function() {
-                if ($(this).closest('tr').hasClass('active')) {
-                    $(this).closest('tr').removeClass('active');
-                } else {
-                    $(this).closest('tr').addClass('active');
-                }
-            });
-
-
-
-        });
-
-
-        document.getElementById('view-selected').addEventListener('click', function() {
-            const selectedOrders = Array.from(document.querySelectorAll('.order-checkbox:checked'))
-                .map(checkbox => checkbox.value);
-            console.log(selectedOrders);
-            if (selectedOrders.length > 0) {
-                // Создаем скрытую форму для отправки данных
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = "{{ route('orders.selected') }}";
-
-                // Добавляем CSRF токен
-                const csrfToken = document.createElement('input');
-                csrfToken.type = 'hidden';
-                csrfToken.name = '_token';
-                csrfToken.value = '{{ csrf_token() }}';
-                form.appendChild(csrfToken);
-
-                // Добавляем выбранные идентификаторы заказов
-                const orderIdsInput = document.createElement('input');
-                orderIdsInput.type = 'hidden';
-                orderIdsInput.name = 'ids';
-                orderIdsInput.value = selectedOrders.join(',');
-                form.appendChild(orderIdsInput);
-
-                // Добавляем форму в документ и отправляем
-                document.body.appendChild(form);
-                form.submit();
-            } else {
-                Toast.fire({
-                    icon: 'warning',
-                    title: 'Пожалуйста, выберите хотя бы один заказ!'
-                })
-            }
-        });
-    </script>
+    <script src="/assets/js/checkBoxesOrdersList.js"></script>
+    <script src="/assets/js/ordersListElements.js"></script>
 @endpush
