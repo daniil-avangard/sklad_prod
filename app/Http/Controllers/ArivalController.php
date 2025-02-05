@@ -9,17 +9,25 @@ use App\Models\Product;
 use App\Models\ArivalProduct;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
+//use Illuminate\Foundation\Configuration\Middleware;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
-
+use App\Models\Korobka;
+use App\Enum\Order\StatusEnum;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ArivalController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
+        $this->authorize('viewAny', Arival::class);
+        $canCreateArival = Gate::allows('create', Arival::class);
+
         $arivals = Arival::all()->sortByDesc('created_at');
-        return view('arivals.index', compact('arivals'));
+        return view('arivals.index', compact('arivals', 'canCreateArival'));
     }
 
     public function create()
@@ -126,30 +134,100 @@ class ArivalController extends Controller
 
         return redirect()->route('arivals')->with('success', 'Приход отклонен');
     }
-    
+
     public function assembly()
     {
-//        $arivals = Arival::all()->sortByDesc('created_at');
-        
+        $this->authorize('viewAny', Korobka::class);
+
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
-     
-        $listOforders = [];
+
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get()->sortByDesc('created_at');
-        
+
+        $listForAssmbling = [];
+        $statusList = array("transferred_to_warehouse", 'warehouse_started', 'assembled', 'shipped');
         foreach ($orders as $order) {
-//            dd($order->status->value);
-            if ($order->status->value == "transferred_to_warehouse") {
-                $listOforders[] = $order;
-                
+            if (in_array($order->status->value, $statusList)) {
+                $listForAssmbling[] = $order;
             }
         }
-        
-//        $orders1 = Order::where('votes', '>', 100)->take(10)->get();
-        
-//        $orders1 = Order::wh
-        
-        return view('arivals.assembly', compact('listOforders'));
+        return view('arivals.assembly', compact('listForAssmbling'));
+    }
+
+    public function showAssembl(Order $order)
+    {
+        $this->authorize('view', Korobka::class);
+
+        $order->load(['items.product.variants', 'items.product' => function ($query) {
+            $query->orderBy('name');
+        }]);
+        $order->items = $order->items->sortBy(function ($item) {
+            return $item->product->name;
+        });
+        $korobkas = Korobka::where('order_id', $order->id)->get();
+        $flagKorobka = "no";
+        if (count($korobkas) > 0) {
+            $flagKorobka = "yes";
+        }
+
+        // Проверка статуса заказа
+        $currentStatus = $order->status->value;
+
+        return view('arivals.show-assemble', compact('order', 'korobkas', 'flagKorobka', 'currentStatus'));
+    }
+
+    public function createKorobka(Request $request)
+    {
+        $this->authorize('create', Korobka::class);
+
+        if ($request->action == "create") {
+            $korobka = new Korobka();
+            $korobka->counter_number = $request->name;
+            $korobka->order_id = $request->orderId;
+            $korobka->save();
+        } else {
+            $korobka = Korobka::find($request->orderId);
+            $korobka->delete();
+        }
+
+        return response()->json(['success' => true, 'data' => $korobka->id]);
+    }
+
+    public function updateKorobka(Request $request)
+    {
+        $this->authorize('update', Korobka::class);
+
+        $korobka = Korobka::find($request->orderId);
+        $korobka->track_number = $request->track;
+        $korobka->save();
+        return response()->json(['success' => true]);
+    }
+
+    public function korobkaChangeStatus(Request $request)
+    {
+        $arrayOfStatuses = array(StatusEnum::TRANSFERRED_TO_WAREHOUSE->value, StatusEnum::WAREHOUSE_START->value, StatusEnum::ASSEMBLED->value, StatusEnum::SHIPPED->value);
+        $orderStatus = StatusEnum::WAREHOUSE_START->value;
+        switch ($request->status) {
+            case "started":
+              $orderStatus = StatusEnum::WAREHOUSE_START->value;
+              break;
+            case "assembled":
+              $orderStatus = StatusEnum::ASSEMBLED->value;
+              break;
+            case "shipped":
+              $orderStatus = StatusEnum::SHIPPED->value;
+              break;
+            case "back-status":
+              $i = array_search($request->name, $arrayOfStatuses);
+              $orderStatus = $arrayOfStatuses[$i - 1];
+              break;
+          }
+        $order = Order::find($request->orderId);
+//        $order->status = $request->status == "started" ? StatusEnum::WAREHOUSE_START->value: StatusEnum::ASSEMBLED->value;
+        $order->status = $orderStatus;
+        $order->save();
+        $name = $order->status->name();
+        return response()->json(['success' => true, 'data' => $orderStatus, 'name' => $name]);
     }
 }

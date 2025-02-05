@@ -1,6 +1,9 @@
 <div class="d-flex justify-content-between align-items-center">
     <h3>Варианты</h3>
-    <a href="{{ route('products.variants.create', $product) }}" class="btn btn-primary">Добавить вариант</a>
+
+    @can('create', \App\Models\ProductVariant::class)
+        <a href="{{ route('products.variants.create', $product) }}" class="btn btn-primary">Добавить вариант</a>
+    @endcan
 </div>
 
 <table class="table table-bordered">
@@ -32,18 +35,27 @@
                         <span class="text-muted">Нет макета</span>
                     @endif
                 </td>
-                <td>
-                    @can('update', App\Models\ProductVariant::class)
+                <td class="w-max text-center">
+                    <div class="d-flex gap-1 justify-content-center">
+                        @can('update', App\Models\ProductVariant::class)
                         <a href="{{ route('products.variants.edit', ['product' => $product, 'variant' => $variant]) }}"
-                            class="btn btn-primary">Редактировать</a>
-                    @endcan
-                    @can('delete', App\Models\ProductVariant::class)
+                            class="btn btn-primary button-icon-wrapper">
+                            <i data-feather="edit" class="align-self-center topbar-icon button-icon"></i>
+                            {{-- Редактировать --}}
+                        </a>
+                        @endcan
+
+                        @can('delete', App\Models\ProductVariant::class)
                         <x-form
-                            action="{{ route('products.variants.delete', ['product' => $product, 'variant' => $variant]) }}"
-                            method="DELETE" style="display: inline-block;">
-                            <button type="submit" class="btn btn-danger">Удалить</button>
-                        </x-form>
+                        action="{{ route('products.variants.delete', ['product' => $product, 'variant' => $variant]) }}"
+                        method="DELETE" style="display: inline-block;">
+                        <button type="submit" class="btn btn-danger button-icon-wrapper">
+                            <i data-feather="trash" class="align-self-center topbar-icon button-icon"></i>
+                            {{-- Удалить --}}
+                        </button>
+                    </x-form>
                     @endcan
+                </div>
                 </td>
             </tr>
         @endforeach

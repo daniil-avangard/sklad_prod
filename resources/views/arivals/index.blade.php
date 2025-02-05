@@ -6,7 +6,7 @@
     'title' => 'Приходы',
     'route' => 'arivals',
     'breadcrumbs' => 'Приходы',
-    'add_route' => 'arivals.create',
+    'add_route' => $canCreateArival ? 'arivals.create' : null
 ])
 
 <div class="row">
@@ -19,13 +19,13 @@
                     <th>Дата поставки</th>
                     <th>Пользователь</th>
                     <th>Статус</th>
-                    <th>Дата создания</th>                    
+                    <th>Дата создания</th>
                     <th>Действие</th>
                 </tr>
                 </thead>
                 <tbody>
 
-                @foreach ($arivals as $arival) 
+                @foreach ($arivals as $arival)
                 <tr>
                     <td>{{ $arival->invoice }}</td>
                     <td>{{ \Carbon\Carbon::parse($arival->arrival_date)->format('d.m.Y') }}</td>
@@ -46,8 +46,8 @@
                         @endif
                     </td>
                 </tr>
-                @endforeach                    
-                        
+                @endforeach
+
                 </tbody>
             </table>
         </div>
@@ -57,4 +57,4 @@
 
 
 
-@endsection 
+@endsection

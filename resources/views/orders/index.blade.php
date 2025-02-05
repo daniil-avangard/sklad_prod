@@ -81,6 +81,12 @@
             opacity: .2;
             border: 2px solid #007bff;
         }
+        .bg-started-war {
+            background-color: #0e77ac !important;
+        }
+        .bg-assembled {
+            background-color: #0a567c !important;
+        }
     </style>
 @endpush
 

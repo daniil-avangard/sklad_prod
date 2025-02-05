@@ -5,7 +5,7 @@
         'title' => 'Группы подразделений',
         'route' => 'groups.divisions',
         'breadcrumbs' => 'Группы подразделений',
-        'add_route' => 'groups.divisions.create',
+        'add_route' => $canCreateProduct ? 'groups.divisions.create' : null,
     ])
 
     <table class="table table-striped">
@@ -25,7 +25,9 @@
                     </td>
                     <td>{{ $group->description }}</td>
                     <td>
-                        <a href="{{ route('groups.divisions.edit', $group->id) }}" class="btn btn-warning">Изменить</a>
+                        @can('update', \App\Models\Product::class)
+                            <a href="{{ route('groups.divisions.edit', $group->id) }}" class="btn btn-warning">Изменить</a>
+                        @endcan
                     </td>
                 </tr>
             @endforeach

@@ -11,6 +11,7 @@ use App\Http\Controllers\Order\OrderController;
 Route::get('/product/list', [ProductListController::class, 'index'])->name('products.list');
 Route::get('/product/list/{product}', [ProductListController::class, 'show'])->name('products.info');
 
+
 Route::get('/basket', [BasketController::class, 'index'])->name('basket');
 Route::post('/basket/add/{product}', [BasketController::class, 'add'])
     ->where('product', '[0-9]+')
@@ -43,6 +44,7 @@ Route::post('/orders/update-comment-manager', [OrderController::class, 'updateCo
 
 // Кастыль. Роут на каждый статус заказа, для разгроничения политики доступа
 Route::get('/orders/{order}/status/processing', [OrderController::class, 'statusProcessing'])->name('orders.status.processing');
+Route::get('/orders/{order}/status/manager-processing', [OrderController::class, 'statusManagerProcessing'])->name('orders.status.manager-processing');
 Route::get('/orders/{order}/status/transferred-to-warehouse', [OrderController::class, 'statusTransferredToWarehouse'])->name('orders.status.transferred-to-warehouse');
 Route::get('/orders/{order}/status/shipped', [OrderController::class, 'statusShipped'])->name('orders.status.shipped');
 Route::get('/orders/{order}/status/delivered', [OrderController::class, 'statusDelivered'])->name('orders.status.delivered');
@@ -51,3 +53,6 @@ Route::get('/orders/{order}/status/canceled', [OrderController::class, 'statusCa
 
 // Просмотр выбранных заказов
 Route::post('/orders/selected', [OrderController::class, 'selected'])->name('orders.selected');
+
+// Груз доставлен
+Route::post('/orders/shipped', [OrderController::class, 'shipped'])->name('orders.shipped');

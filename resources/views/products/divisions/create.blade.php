@@ -14,7 +14,7 @@
 
     @include('products.info.header')
 
-    <x-form action="{{ route('products.divisions.addDivision', $product) }}" method="POST">
+    {{-- <x-form action="{{ route('products.divisions.addDivision', $product) }}" method="POST"> --}}
         <div class="row">
             <div class="col-lg-4">
                 <div class="card">
@@ -34,5 +34,5 @@
         <button type="submit" class="btn btn-primary">Добавить</button>
 
         <a href="{{ route('products.divisions.addAllDivisions', $product) }}" class="btn btn-primary">Добавить все</a>
-    </x-form>
+    {{-- </x-form> --}}
 @endsection

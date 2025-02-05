@@ -4,17 +4,23 @@
             <a class="nav-link {{ is_active('products.show') }}"
                 href="{{ route('products.show', $product->id) }}">Просмотр</a>
         </li>
+        @can('update', \App\Models\Product::class)
         <li class="nav-item">
             <a class="nav-link {{ is_active('products.edit') }}"
                 href="{{ route('products.edit', $product->id) }}">Редактировать</a>
         </li>
+        @endcan
+        @can('view', App\Models\Arival::class)
         <li class="nav-item">
             <a class="nav-link {{ is_active('products.arival') }}"
                 href="{{ route('products.arival', $product) }}">Приходы</a>
         </li>
+        @endcan
+        @can('view', App\Models\Writeoff::class)
         <li class="nav-item">
             <a class="nav-link {{ is_active('products.writeoff') }}"
                 href="{{ route('products.writeoff', $product) }}">Списания</a>
         </li>
+        @endcan
     </ul>
 </div>

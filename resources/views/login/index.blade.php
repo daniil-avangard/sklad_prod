@@ -48,9 +48,10 @@
                     <label class="form-label text-muted" for="customSwitchSuccess">Запомнить меня</label>
                 </div>
             </div><!--end col-->
-            <div class="col-sm-6 text-end">
+            
+            {{-- <div class="col-sm-6 text-end">
                 <a href="auth-recover-pw.html" class="text-muted font-13"><i class="dripicons-lock"></i> Забыли пароль?</a>
-            </div><!--end col-->
+            </div><!--end col--> --}}
         </div><!--end form-group-->
 
         <div class="form-group mb-0 row">
@@ -60,8 +61,9 @@
             </div><!--end col-->
         </div> <!--end form-group-->
     </x-form>
-    <div class="m-3 text-center text-muted">
+
+    {{-- <div class="m-3 text-center text-muted">
         <p class="mb-0">У вас нет аккаунта <a href="auth-register.html" class="text-primary ms-2">Зарегистрироваться</a>
         </p>
-    </div>
+    </div> --}}
 @endsection

@@ -35,6 +35,7 @@ const makeRequestSelectedToApi = async () => {
                         icon: 'success',
                         title: 'Количество обновлено'
                     });
+        
     }
     catch(error) {
         console.log(error.message);

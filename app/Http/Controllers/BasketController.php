@@ -7,11 +7,13 @@ use App\Models\Basket;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Order;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
 
 class BasketController extends Controller
 {
+    use AuthorizesRequests;
 
     private $basket;
     public function __construct()
@@ -21,6 +23,8 @@ class BasketController extends Controller
 
     public function index()
     {
+        $this->authorize('create', \App\Models\Order::class);
+
         // $categories = Category::with(['products' => function ($query) {
         //     $query->whereHas('baskets', function ($query) {
         //         $query->where('basket_id', $this->basket->id);
@@ -31,31 +35,6 @@ class BasketController extends Controller
 
         return view('order.cart.index', compact('products'));
     }
-
-
-    // Старый метод
-    // public function add(Request $request, Product $product)
-    // {
-
-    //     // Получение корзины из текущего объекта
-    //     $basket = $this->basket;
-    //     // Получение количества из запроса, если не указано, то по умолчанию 1
-    //     $quantity = $request->input('quantity', 1);
-
-    //     // Проверка, существует ли продукт в корзине
-    //     if ($basket->products()->where('product_id', $product->id)->exists()) {
-    //         // Если продукт существует, то получаем его и увеличиваем количество
-    //         $basket_product = $basket->products()->where('product_id', $product->id)->first();
-    //         $basket_product->pivot->quantity += $quantity;
-    //         // Сохраняем изменения в количестве
-    //         $basket_product->pivot->save();
-    //     } else {
-    //         // Если продукт не существует в корзине, то добавляем его с указанным количеством
-    //         $basket->products()->attach($product, ['quantity' => $quantity]);
-    //     }
-
-    //     return redirect()->back()->with('success', 'Добавлено');
-    // }
 
     // Новый метод с json ответом
     public function add(Request $request, Product $product)

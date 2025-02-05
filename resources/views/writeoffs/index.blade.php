@@ -6,7 +6,7 @@
     'title' => 'Списания',
     'route' => 'writeoffs',
     'breadcrumbs' => 'Списания',
-    'add_route' => 'writeoffs.create',
+    'add_route' => $canCreateWriteoff ? 'writeoffs.create' : null
 ])
 
 @if(session('error'))
@@ -22,13 +22,13 @@
                     <th>Дата списания</th>
                     <th>Пользователь</th>
                     <th>Статус</th>
-                    <th>Дата создания</th>                    
+                    <th>Дата создания</th>
                     <th>Действие</th>
                 </tr>
                 </thead>
                 <tbody>
 
-                @foreach ($writeoffs as $writeoff) 
+                @foreach ($writeoffs as $writeoff)
                 <tr>
                     <td>{{ \Carbon\Carbon::parse($writeoff->writeoff_date)->format('d.m.Y') }}</td>
                         <td>{{ $writeoff->user->surname }} {{ $writeoff->user->first_name }} {{ $writeoff->user->middle_name }}</td>
@@ -45,11 +45,11 @@
                                 <a href="{{ route('writeoffs.accepted', $writeoff->id) }}" class="btn btn-success">Принять</a>
                                 <a href="{{ route('writeoffs.rejected', $writeoff->id) }}" class="btn btn-danger">Отклонить</a>
                             @endcan
-                        @endif 
+                        @endif
                     </td>
                 </tr>
-                @endforeach                    
-                        
+                @endforeach
+
                 </tbody>
             </table>
         </div>
@@ -59,4 +59,4 @@
 
 
 
-@endsection 
+@endsection

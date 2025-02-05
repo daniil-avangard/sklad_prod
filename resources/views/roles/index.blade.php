@@ -5,14 +5,14 @@
         <link href="/plugins/datatables/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
         <link href="/plugins/datatables/buttons.bootstrap5.min.css" rel="stylesheet" type="text/css" />
         <!-- Responsive datatable examples -->
-        <link href="/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> 
+        <link href="/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 @endpush
 
 @section('content')
 
 @include('includes.breadcrumb', [
-    'title' => 'Роли', 
-    'route' => 'roles', 
+    'title' => 'Роли',
+    'route' => 'roles',
     'breadcrumbs' => 'Роли',
 ])
 
@@ -20,9 +20,11 @@
 
                            <div class="row">
                             <div class="col-12 mb-3">
-                            <button type="button" class="col-auto align-self-center btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_role_role">
+                                @can('create', \App\Models\User::class)
+                                <button type="button" class="col-auto align-self-center btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_role_role">
                                     Добавить
                                 </button>
+                                @endcan
                             </div>
                            </div>
 
@@ -48,9 +50,11 @@
                                             <a href="{{ route('roles.show', $role) }}">{{ $role->name }}</a>
                                             </td>
                                             <td>
+                                                @can('delete', \App\Models\User::class)
                                                 <x-form action="{{ route('roles.delete', $role) }}" method="DELETE">
                                                     <button onclick="return confirm('Вы уверены, что хотите удалить эту роль?')" type="submit" class="btn btn-danger">Удалить</button>
                                                </x-form>
+                                               @endcan
                                             </td>
                                        </tr>
                                    @endforeach
@@ -60,8 +64,8 @@
                     </div>
                 </div>
 
-                
-               @include('roles.modals.add_role') 
+
+               @include('roles.modals.add_role')
 
 @endsection
 

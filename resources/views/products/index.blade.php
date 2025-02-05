@@ -8,6 +8,7 @@
     <link href="/plugins/datatables/buttons.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     <!-- Responsive datatable examples -->
     <link href="/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
 @endpush
 
 @section('content')
@@ -15,17 +16,12 @@
         'title' => 'Продукты',
         'route' => 'products',
         'breadcrumbs' => 'Продукты',
-        'add_route' => 'products.create',
+        'add_route' => $canCreateProduct ? 'products.create' : null
     ])
+
     <div class="row">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Продукты</h4>
-                    <p class="text-muted mb-0">Список продуктов
-                    </p>
-                </div>
-
                 <div class="card-body">
                     <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap"
                         style="border-collapse: collapse; border-spacing: 0; width: 100%;">

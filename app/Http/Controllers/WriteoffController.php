@@ -10,22 +10,28 @@ use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\ProductVariant;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 
 class WriteoffController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
         if (Gate::denies('view', Writeoff::class)) {
             throw new AuthorizationException('У вас нет разрешения на просмотр списаний.');
         }
+        $canCreateWriteoff = Gate::allows('create', Writeoff::class);
 
         $writeoffs = Writeoff::all()->sortByDesc('created_at');
-        return view('writeoffs.index', compact('writeoffs'));
+        return view('writeoffs.index', compact('writeoffs', 'canCreateWriteoff'));
     }
 
     public function create()
     {
+        $this->authorize('create', Writeoff::class);
+
         $products = Product::all();
         return view('writeoffs.create', compact('products'));
     }
@@ -44,7 +50,12 @@ class WriteoffController extends Controller
             $writeoffProduct->writeoff_id = $writeoff->id;
             $writeoffProduct->product_id = $product['product_id'];
             $writeoffProduct->quantity = $product['quantity'];
-            $writeoffProduct->date_of_actuality = $product['date_of_actuality'];
+
+            // Преобразуем дату из формата DD.MM.YYYY в формат YYYY-MM-DD
+            $writeoffProduct->date_of_actuality = !empty($product['date_of_actuality'])
+                ? \Carbon\Carbon::createFromFormat('d.m.Y', $product['date_of_actuality'])->format('Y-m-d')
+                : null; // Если дата пустая, значение будет null
+
             $writeoffProduct->save();
         }
 

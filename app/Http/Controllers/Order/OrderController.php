@@ -15,6 +15,11 @@ use App\Models\DivisionGroup;
 class OrderController extends Controller
 {
     use AuthorizesRequests;
+
+    //    public function __construct(){
+    //        $this->middleware('csrf')->only('updateCommentManager');
+    //    }
+
     public function index()
     {
         $this->authorize('viewAny', Order::class);
@@ -32,6 +37,8 @@ class OrderController extends Controller
     {
         $this->authorize('view', $order);
 
+        $currentStatus = $order->status->value;
+
         $order->load(['items.product.variants', 'items.product' => function ($query) {
             $query->orderBy('name');
         }]);
@@ -39,7 +46,8 @@ class OrderController extends Controller
         $order->items = $order->items->sortBy(function ($item) {
             return $item->product->name;
         });
-        return view('orders.show', compact('order'));
+
+        return view('orders.show', compact('order', 'currentStatus'));
     }
 
     public function create()
@@ -82,7 +90,7 @@ class OrderController extends Controller
 
     public function selected(Request $request)
     {
-        $this->authorize('view', Order::class);
+        $this->authorize('viewAny', Order::class);
 
         $orderIds = $request->input('ids', []);
         $orders = Order::whereIn('id', explode(',', $orderIds))->get();
@@ -115,15 +123,15 @@ class OrderController extends Controller
             $item->quantity = $request->quantity;
             $item->save();
         } else {
-            foreach($request->id as $key=>$value) {
+            foreach ($request->id as $key => $value) {
                 $item = OrderItem::find($value);
                 $item->quantity = $request->quantity[$key];
                 $item->save();
             }
         }
-//        $item = OrderItem::find($request->id);
-//        $item->quantity = $request->quantity;
-//        $item->save();
+        //        $item = OrderItem::find($request->id);
+        //        $item->quantity = $request->quantity;
+        //        $item->save();
         return response()->json(['success' => true]);
     }
 
@@ -139,7 +147,6 @@ class OrderController extends Controller
 
 
     // Статуты бля заказаков
-
     public function statusProcessing(Order $order)
     {
         $this->authorize('processingStatus', $order);
@@ -149,6 +156,14 @@ class OrderController extends Controller
         return redirect()->back()->with('success', 'Заказ успешно проверен');
     }
 
+    public function statusManagerProcessing(Order $order)
+    {
+        $this->authorize('managerProcessingStatus', $order);
+
+        $order->status = StatusEnum::MANAGER_PROCESSING->value;
+        $order->save();
+        return redirect()->back()->with('success', 'Заказ успешно проверен');
+    }
 
     public function statusTransferredToWarehouse(Order $order)
     {
@@ -192,5 +207,15 @@ class OrderController extends Controller
         $order->status = StatusEnum::CANCELED->value;
         $order->save();
         return redirect()->back()->with('success', 'Заказ успешно отменен');
+    }
+    
+    public function shipped(Request $request)
+    {
+        $order = Order::find($request->orderId);
+
+        $order->status = StatusEnum::DELIVERED->value;
+        $order->shipped_comments = $request->message;
+        $order->save();
+        return response()->json(['success' => true]);
     }
 }

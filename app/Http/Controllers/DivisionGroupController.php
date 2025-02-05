@@ -4,14 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\DivisionGroup;
-use App\Models\Division;
+use App\Models\Product;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Gate;
 
 class DivisionGroupController extends Controller
 {
+    use AuthorizesRequests;
+
     public function index()
     {
+        $this->authorize('view', Product::class);
+        $canCreateProduct = Gate::allows('create', Product::class);
+
         $groups = DivisionGroup::all();
-        return view('groups.divisions.index', compact('groups'));
+        return view('groups.divisions.index', compact('groups', 'canCreateProduct'));
     }
 
     public function create()
@@ -29,6 +36,8 @@ class DivisionGroupController extends Controller
 
     public function edit(DivisionGroup $group)
     {
+        $this->authorize('update', Product::class);
+
         return view('groups.divisions.edit', compact('group'));
     }
 
