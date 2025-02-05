@@ -24,8 +24,6 @@
     {{-- Новые стили --}}
     <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
 
-
-
     @stack('scripts')
 
 </head>
