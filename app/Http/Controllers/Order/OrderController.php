@@ -22,6 +22,10 @@ class OrderController extends Controller
 
     public function index()
     {
+        //dd($_SERVER['HTTP_USER_AGENT']);
+        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        $browser = get_browser($user_agent, true);
+        dd($browser);
         $this->authorize('viewAny', Order::class);
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
