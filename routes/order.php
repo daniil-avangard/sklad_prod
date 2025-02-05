@@ -35,6 +35,7 @@ Route::post('basket/clear', [BasketController::class, 'clear'])->name('basket.cl
 Route::post('/basket/saveorder', [BasketController::class, 'saveOrder'])->name('basket.saveorder');
 
 Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+Route::get('/ordersNew', [OrderController::class, 'indexNew'])->name('orders.new');
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
 Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');

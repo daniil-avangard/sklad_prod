@@ -26,12 +26,14 @@ function toggleProductInfo() {
         }
     }
 
-    hideProductBlock('product-info-tab--variants');
+    // hideProductBlock('product-info-tab--variants');
+    hideProductBlock('product-info-tab--division');
 
     // Устанавливает выбранной по умолчанию первый таб
     const setActiveNavLink = () => {
         const navLinkInfo = document.querySelectorAll('.nav-link--info');
-        navLinkInfo[0].classList.add('active');
+        // navLinkInfo[0].classList.add('active');
+        navLinkInfo[1].classList.add('active');
     }
 
     setActiveNavLink();

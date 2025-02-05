@@ -1,31 +1,37 @@
+<div class="card">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h4 class="card-title">Список доступных подразделений</h4>
+            </div><!--end col-->
+            <div class="col-auto">
+                <button class="btn {{ $isAllDivisionsSelected ? 'btn-danger' : 'btn-primary' }}" id="add-all-divisions"
+                    data-is-all-selected="{{ $isAllDivisionsSelected ? 1 : 0 }}">
+                    {{ $isAllDivisionsSelected ? 'Удалить все' : 'Добавить все' }}
+                </button>
+            </div><!--end col-->
+        </div> <!--end row-->
+    </div><!--end card-header-->
 
-    
-    <div class="card">
-        <div class="card-header">
-            <div class="row align-items-center">
-                <div class="col">
-                    <h4 class="card-title">Список доступных подразделений</h4>
-                </div><!--end col-->
-                <div class="col-auto">
-                    <a href="{{ route('products.divisions.create', $product) }}" class="btn btn-primary">Добавить подразделение</a>
-                </div><!--end col-->
-            </div>  <!--end row-->
-        </div><!--end card-header-->
-        <div class="card-body">
-            <div style="max-height: 300px; overflow-y: auto;">
-                <ul class="list-group custom-list-group mb-n3">
-                    @foreach ($divisions as $division)
-                    <li class="list-group-item align-items-center d-flex justify-content-between">
-                            <div class="media-body align-self-center">
-                                <a href="#" class="m-0 d-block fw-semibold font-13">{{ $division->name }}</a>
-                                <!-- <a href="#" class="font-12 text-primary">analytic-index.html</a>                                                                                            -->
-                            </div><!--end media body-->
-                            <x-form action="{{ route('products.divisions.removeDivision', [$product, $division]) }}" method="DELETE">
-                                <button type="submit" class="btn btn-danger">Удалить</button>
-                            </x-form>
-                    </li>
+    <div class="ps-3 card-body list-group custom-list-group" id="division-list" data-product-id="{{ $product->id }}">
+        @foreach ($allDivisions as $divisionCategory)
+            <div class="list-group-item">
+                <h4 class="division__item-category card-title text-muted mb-2 pb-1"
+                    data-division-category-id="{{ $divisionCategory['category_id'] }}"
+                    data-is-category-selected="{{ false ? 1 : 0 }}">
+                    {{ $divisionCategory['category_name'] }}
+                </h4>
+
+                <ul class="m-0 p-0 list-unstyled d-flex flex-wrap gap-2">
+                    @foreach ($divisionCategory['divisions'] as $divisionItem)
+                        <li class="division__item p-2 ps-4 pe-4 rounded text-center border
+                            {{ $divisionItem['is_active'] ? 'border-primary' : 'border-dark-subtle' }}"
+                            data-division-id="{{ $divisionItem['division']->id }}">
+                            {{ $divisionItem['division']->name }}
+                        </li>
                     @endforeach
                 </ul>
             </div>
-        </div><!--end card-body-->
-    </div><!--end card-->
+        @endforeach
+    </div><!--end card-body-->
+</div><!--end card-->

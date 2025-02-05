@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Division extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'user_id'];
+    protected $fillable = ['city', 'name', 'user_id'];
 
     public function user()
     {
@@ -23,5 +23,10 @@ class Division extends Model
     public function divisionGroups()
     {
         return $this->belongsToMany(DivisionGroup::class, 'division_division_group');
+    }
+
+    public function divisionCategory()
+    {
+        return $this->belongsToMany(DivisionCategory::class, 'division_category_division');  // Связь с категорией
     }
 }
