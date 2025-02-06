@@ -25,7 +25,7 @@ class OrderController extends Controller
         //dd($_SERVER['HTTP_USER_AGENT']);
         $user_agent = $_SERVER['HTTP_USER_AGENT'];
         $browser = get_browser($user_agent, true);
-        dd($browser);
+        //dd($browser);
         $this->authorize('viewAny', Order::class);
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
@@ -51,6 +51,10 @@ class OrderController extends Controller
         $this->authorize('viewAny', Order::class);
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+//        auth()->user()->id;
+//        $role = Auth::user()->id;
+        $role = Auth::user()->rolesId()->pluck('id');
+//        dd($role1[0]);
 
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
@@ -72,12 +76,13 @@ class OrderController extends Controller
         $allDivisionsDataNew = $result[3];
 //        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
 //        $test = $uniqGoods[1]['name'];
-//        dd($allDivisionsData);
+//        dd($allDivisionsDataNew, $uniqGoods);
         return view('orders.index-new', compact('orders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew'));
     }
     
     private function forNewTable($divisionGroups, $orders)
     {
+        $test = 'processing';
         $divisionStateOrders = array();
         $divisionStateOrdersNew = array();
         
@@ -86,7 +91,8 @@ class OrderController extends Controller
         foreach ($orders as $order) {
             if (in_array($order->status->value, $arrayOfStatuses)) {
                 $divisionStateOrders[] = $order;
-                if ($order->status->value == StatusEnum::NEW->value) {
+//                if ($order->status->value == StatusEnum::NEW->value) {
+                if ($order->status->value == $test) {
                     $divisionStateOrdersNew[] = $order;
                 }
             }
@@ -178,6 +184,15 @@ class OrderController extends Controller
             }
             $x['total'] = $total;
             $allGoodsInOrders[$index] = $x;
+        }
+        
+        foreach ($allDivisions as $name) {
+            if (!isset($allDivisionsDataNew[$name])) {
+                foreach ($allGoodsInOrders as $item) {
+                    $allDivisionsDataNew[$name][$item['name']] = array('quontity' => 0, 'id' => 0);
+                }
+                
+            }
         }
         
 //        $allDivisions = array_unique($allDivisions);
@@ -303,11 +318,70 @@ class OrderController extends Controller
     // Статуты бля заказаков
     public function statusProcessing(Order $order)
     {
+        $divisionGroups = Auth::user()->division_id;
         $this->authorize('processingStatus', $order);
 
         $order->status = StatusEnum::PROCESSING->value;
         $order->save();
-        return redirect()->back()->with('success', 'Заказ успешно проверен');
+        // здесь схлопываем заказы, только после order->save
+        $newComposerOrder = $this->createOneProcessOrder($divisionGroups, $order);
+        
+//        return redirect()->back()->with('success', 'Заказ успешно проверен');
+        return redirect()->to(route('orders.show', $newComposerOrder->id))->with('success', 'Заказ сохранен');
+    }
+    
+    private function createOneProcessOrder($divisionGroups, $createdOrder)
+    {
+        $orders = Order::where('division_id', $divisionGroups)->get()->sortByDesc('created_at');
+        $divisionProcessOrders = array();
+        foreach ($orders as $order) {
+            if ($order->status->value == StatusEnum::PROCESSING->value) {
+                $divisionProcessOrders[] = $order;
+            }
+        }
+        $lengthNew = count($divisionProcessOrders);
+        
+        if ($lengthNew > 1) {
+            $orderCompose = new Order(); // Создание нового заказа
+            $orderCompose->comment = ""; // Установка комментария к заказу из запроса
+            $orderCompose->user_id = Auth::user()->id;
+            $orderCompose->division_id = Auth::user()->division_id; // Получение ID подразделения из данных юзера
+            $orderCompose->status = StatusEnum::PROCESSING->value;
+            $orderCompose->save(); // Сохранение заказа
+            
+            $composerArray = array();
+            foreach ($divisionProcessOrders as $newOrder) {
+                foreach ($newOrder->items as $item) {
+                    if (!isset($composerArray[$item->product_id])) {
+                        $composerArray[$item->product_id] = [
+                            'product_id' => $item->product_id,
+                            'name' => $item->product->name,
+                            'quantity' => $item->quantity,
+                            //'total_variants' => $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved'),
+                            'item-id' => $item->id,
+                        ];
+                    } else {
+                        $composerArray[$item->product_id]['quantity'] += $item->quantity;
+                    }
+                }
+            }
+            
+            foreach ($composerArray as $k => $v) {
+                $orderCompose->items()->create([ // Создание нового элемента заказа
+                    'product_id' => $k, // Установка ID продукта
+                    'quantity' => $v['quantity'], // Установка количества продукта
+                ]);
+            }
+            
+            foreach ($divisionProcessOrders as $order) {
+                $order->items()->delete();
+                $order->delete();
+            }
+        } else {
+            $orderCompose = $createdOrder;
+        }
+        
+        return $orderCompose;
     }
 
     public function statusManagerProcessing(Order $order)
