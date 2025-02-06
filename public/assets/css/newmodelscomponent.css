@@ -243,3 +243,6 @@ tr p {
 .new-table-row {
     width: 25% !important;
 }
+.clickForOrder {
+    cursor: pointer;
+}

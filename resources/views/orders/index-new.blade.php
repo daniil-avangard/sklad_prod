@@ -127,15 +127,16 @@
                                         @if ($allDivisionsDataNew[$divisionName][$good['name']]['id'] == 0)
                                             <p>{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}</p>
                                         @else
-                                            <a href="#" class="quantity-input editable editable-click"
+                                            <p class="quantity-input clickForOrder"
                                                data-type="number" 
                                                data-pk="{{ $allDivisionsDataNew[$divisionName][$good['name']]['id'] }}" 
                                                data-title="Введите количество"
                                                data-origin="{{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}"
                                                data-new="{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}"
+                                               data-orderid="{{ $allDivisionsDataNew[$divisionName][$good['name']]['orderId'] }}"
                                             >
                                                 {{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}
-                                            </a>
+                                            </p>
                                         @endif
                                     </td>
                                 @endforeach

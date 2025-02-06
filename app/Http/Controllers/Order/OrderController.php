@@ -108,7 +108,7 @@ class OrderController extends Controller
             foreach ($order->items as $item) {
                 if (!isset($allDivisionsData[$order->division->name])) {
                     if (!isset($allDivisionsData[$order->division->name][$item->product->name])) {
-                        $allDivisionsData[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id);
+                        $allDivisionsData[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order->id);
 //                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
 //                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
                     } else {
@@ -134,13 +134,13 @@ class OrderController extends Controller
             foreach ($order->items as $item) {
                 if (!isset($allDivisionsDataNew[$order->division->name])) {
                     if (!isset($allDivisionsDataNew[$order->division->name][$item->product->name])) {
-                        $allDivisionsDataNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id);
+                        $allDivisionsDataNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order->id);
                     } else {
                         $allDivisionsDataNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
                     }
                 } else {
                     if (!isset($allDivisionsDataNew[$order->division->name][$item->product->name])) {
-                        $allDivisionsDataNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id);
+                        $allDivisionsDataNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order->id);
                     } else {
                         $allDivisionsDataNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
                     }
