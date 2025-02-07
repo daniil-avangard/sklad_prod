@@ -82,7 +82,7 @@ class OrderController extends Controller
     
     private function forNewTable($divisionGroups, $orders)
     {
-        $test = 'processing';
+        $test = 'new';
         $divisionStateOrders = array();
         $divisionStateOrdersNew = array();
         

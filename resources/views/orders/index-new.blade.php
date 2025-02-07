@@ -95,19 +95,19 @@
     <div class="row">
         <div class="col-12">
 
-            <div class="table-responsive">
+            <div class="new-table-wrapper">
                 @can('view', \App\Models\Order::class)
                     <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
                 @endcan
-                <table class="table table-bordered custom-table new-table">
+                <table class="new-table">
                     <thead>
                         <tr>
-                            <th scope="col" class"new-table-row">Товары</th>
+                            <th class"new-table-row">Товары</th>
                             @foreach ($divisionNames as $divisionName)
-                                <th scope="col" class="v-table-text">{{ $divisionName }}</th>
+                                <th style="width: 200px" class="v-table-text overflowed-row">{{ $divisionName }}</th>
                             @endforeach
-                            <th scope="col" class="v-table-text">Заказано</th>
-                            <th scope="col" class="v-table-text">На складе</th>
+                            <th style="width: 200px" class="v-table-text overflowed-row">Заказано</th>
+                            <th style="width: 200px" class="v-table-text overflowed-row">На складе</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -123,30 +123,69 @@
                                     
                                 </td>
                                 @foreach ($divisionNames as $divisionName)
-                                    <td>
+                                    <td style="width: 200px" class="overflowed-row">
                                         @if ($allDivisionsDataNew[$divisionName][$good['name']]['id'] == 0)
                                             <p>{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}</p>
                                         @else
-                                            <a href="{{ route('orders.show', $allDivisionsDataNew[$divisionName][$good['name']]['orderId']) }}" 
-                                               class="clickForOrder"
-                                               data-type="number" 
-                                               data-pk="{{ $allDivisionsDataNew[$divisionName][$good['name']]['id'] }}" 
-                                               data-title="Введите количество"
-                                               data-origin="{{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}"
-                                               data-new="{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}"
-                                            >
-                                                {{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}
-                                            </a>
+                                            <div class="digits-order">
+                                                <a href="{{ route('orders.show', $allDivisionsDataNew[$divisionName][$good['name']]['orderId']) }}" 
+                                                   class="clickForOrder"
+                                                   data-type="number" 
+                                                   data-pk="{{ $allDivisionsDataNew[$divisionName][$good['name']]['id'] }}" 
+                                                   data-title="Введите количество"
+                                                   data-origin="{{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}"
+                                                   data-new="{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}"
+                                                >
+                                                    {{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}
+                                                </a>
+                                                <p>0</p>
+                                            </div>
                                         @endif
                                     </td>
                                 @endforeach
-                                <td>{{ $good['total'] }}</td>
-                                <td><p>{{ $good['warehouse'] }}</p></td>
+                                <td style="width: 200px" class="overflowed-row">{{ $good['total'] }}</td>
+                                <td style="width: 200px" class="overflowed-row"><p>{{ $good['warehouse'] }}</p></td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
             </div>
+            
+            <div class="view">
+            <div class="wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th class="sticky-col first-col">Number</th>
+                    <th class="sticky-col second-col">First Name</th>
+                    <th>Last Name</th>
+                    <th>Employer</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="sticky-col first-col">1</td>
+                    <td class="sticky-col second-col">Mark</td>
+                    <td>Ham</td>
+                    <td>Micro</td>
+                  </tr>
+                  <tr>
+                    <td class="sticky-col first-col">2</td>
+                    <td class="sticky-col second-col">Jacob</td>
+                    <td>Smith</td>
+                    <td>Adob Adob Adob AdobAdob Adob Adob Adob Adob</td>
+                  </tr>
+                  <tr>
+                    <td class="sticky-col first-col">3</td>
+                    <td class="sticky-col second-col">Larry</td>
+                    <td>Wen</td>
+                    <td>Goog Goog Goog GoogGoog Goog Goog Goog Goog Goog</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+            
         </div>
     </div>
 @endsection

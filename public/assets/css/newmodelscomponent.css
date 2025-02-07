@@ -240,9 +240,67 @@ tr p {
     writing-mode: vertical-lr !important;
     text-orientation: upright !important;
 }
+.new-table {
+    width: 100% !important;
+}
 .new-table-row {
+    position: -webkit-sticky;
     width: 25% !important;
+    white-space: nowrap !important;
+}
+.overflowed-row {
+    width: 20% !important;
+    white-space: nowrap !important;
+}
+.new-table-wrapper {
+    width: 70% !important;
+    overflow-x: scroll !important;
+}
+.new-table-wrapper table {
+    border-collapse: separate !important;
+    width: 100% !important;
 }
 .clickForOrder {
     cursor: pointer;
+}
+.digits-order {
+    display: flex;
+    flex-direction: column;
+}
+.digits-order p {
+    margin: 0 !important;
+}
+
+
+
+.view {
+  margin: 50px;
+  width: 600px;
+}
+
+.wrapper {
+  position: relative;
+  overflow: auto;
+  border: 1px solid black;
+  white-space: nowrap;
+}
+
+.sticky-col {
+  position: -webkit-sticky;
+  position: sticky;
+  background-color: white;
+}
+
+.first-col {
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+  left: 0px;
+}
+
+.second-col {
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
+  left: 100px;
 }
