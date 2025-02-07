@@ -127,21 +127,21 @@
                                         @if ($allDivisionsDataNew[$divisionName][$good['name']]['id'] == 0)
                                             <p>{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}</p>
                                         @else
-                                            <p class="quantity-input clickForOrder"
+                                            <a href="{{ route('orders.show', $allDivisionsDataNew[$divisionName][$good['name']]['orderId']) }}" 
+                                               class="clickForOrder"
                                                data-type="number" 
                                                data-pk="{{ $allDivisionsDataNew[$divisionName][$good['name']]['id'] }}" 
                                                data-title="Введите количество"
                                                data-origin="{{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}"
                                                data-new="{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}"
-                                               data-orderid="{{ $allDivisionsDataNew[$divisionName][$good['name']]['orderId'] }}"
                                             >
                                                 {{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}
-                                            </p>
+                                            </a>
                                         @endif
                                     </td>
                                 @endforeach
                                 <td>{{ $good['total'] }}</td>
-                                <td></td>
+                                <td><p>{{ $good['warehouse'] }}</p></td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -152,8 +152,8 @@
 @endsection
 
 @push('scripts-plugins')
-    <script src="/plugins/x-editable/js/bootstrap-editable.min.js"></script>
-    <script src="/assets/pages/orders/update_new.quantity.js"></script>
+<!--    <script src="/plugins/x-editable/js/bootstrap-editable.min.js"></script>-->
+<!--    <script src="/assets/pages/orders/update_new.quantity.js"></script>-->
     <script src="/assets/js/checkBoxesOrdersList.js"></script>
     <script src="/assets/js/ordersListElements.js"></script>
 @endpush

@@ -124,7 +124,7 @@ class OrderController extends Controller
                 }
                 
                 // --------
-                $allGoodsInOrders[] = array('name' => $item->product->name, 'image' => $item->product->image);
+                $allGoodsInOrders[] = array('name' => $item->product->name, 'image' => $item->product->image, 'warehouse' => $item->product->variants->sum('quantity'));
             }
         }
         
@@ -134,13 +134,13 @@ class OrderController extends Controller
             foreach ($order->items as $item) {
                 if (!isset($allDivisionsDataNew[$order->division->name])) {
                     if (!isset($allDivisionsDataNew[$order->division->name][$item->product->name])) {
-                        $allDivisionsDataNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order->id);
+                        $allDivisionsDataNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order);
                     } else {
                         $allDivisionsDataNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
                     }
                 } else {
                     if (!isset($allDivisionsDataNew[$order->division->name][$item->product->name])) {
-                        $allDivisionsDataNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order->id);
+                        $allDivisionsDataNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order);
                     } else {
                         $allDivisionsDataNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
                     }
