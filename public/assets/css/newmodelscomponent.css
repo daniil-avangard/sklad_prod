@@ -280,7 +280,6 @@ tr p {
 .wrapper {
   position: relative;
   overflow: auto;
-  border: 1px solid black;
   white-space: nowrap;
 }
 
@@ -290,14 +289,12 @@ tr p {
   background-color: white !important;
   z-index: 2 !important;
 }
-
 .first-col {
   width: 300px;
   min-width: 300px;
   max-width: 300px;
   left: 0px;
 }
-
 .second-col {
   width: 250px;
   min-width: 250px;
@@ -318,4 +315,10 @@ tr p {
 }
 .long-table th {
     border: 1px solid #eaf0f9;
+}
+.head-bold {
+    font-weight: bold;
+}
+.color-for-approve {
+    color: red;
 }
