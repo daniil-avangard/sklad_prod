@@ -152,35 +152,54 @@
             </div>
             
             <div class="view">
-            <div class="wrapper">
+            <div class="wrapper long-table">
               <table class="table">
                 <thead>
                   <tr>
-                    <th class="sticky-col first-col">Number</th>
-                    <th class="sticky-col second-col">First Name</th>
-                    <th>Last Name</th>
-                    <th>Employer</th>
+                    <th class="sticky-col first-col">Товары</th>
+                    @foreach ($divisionNames as $divisionName)
+                        <th class="v-table-text">{{ $divisionName }}</th>
+                    @endforeach
+                    <th>Заказано</th>
+                    <th>На складе</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td class="sticky-col first-col">1</td>
-                    <td class="sticky-col second-col">Mark</td>
-                    <td>Ham</td>
-                    <td>Micro</td>
-                  </tr>
-                  <tr>
-                    <td class="sticky-col first-col">2</td>
-                    <td class="sticky-col second-col">Jacob</td>
-                    <td>Smith</td>
-                    <td>Adob Adob Adob AdobAdob Adob Adob Adob Adob</td>
-                  </tr>
-                  <tr>
-                    <td class="sticky-col first-col">3</td>
-                    <td class="sticky-col second-col">Larry</td>
-                    <td>Wen</td>
-                    <td>Goog Goog Goog GoogGoog Goog Goog Goog Goog Goog</td>
-                  </tr>
+                    @foreach ($uniqGoods as $good)
+                        <tr>
+                            <td class="sticky-col first-col">
+                                <div class="order-popup-parent">
+                                    <p>{{ $good['name'] }}</p>
+                                    <div class="order-popup-child">
+                                        <img src="{{ asset('storage/' . $good['image']) }}" alt="" class=" mx-auto  d-block" height="150">
+                                    </div>
+                                </div>
+                            </td>
+                            @foreach ($divisionNames as $divisionName)
+                                <td class="another-col">
+                                    @if ($allDivisionsDataNew[$divisionName][$good['name']]['id'] == 0)
+                                        <p>{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}</p>
+                                    @else
+                                        <div class="digits-order">
+                                            <a href="{{ route('orders.show', $allDivisionsDataNew[$divisionName][$good['name']]['orderId']) }}" 
+                                               class="clickForOrder"
+                                               data-type="number" 
+                                               data-pk="{{ $allDivisionsDataNew[$divisionName][$good['name']]['id'] }}" 
+                                               data-title="Введите количество"
+                                               data-origin="{{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}"
+                                               data-new="{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}"
+                                            >
+                                                {{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}
+                                            </a>
+                                            <p>0</p>
+                                        </div>
+                                    @endif
+                                </td>
+                            @endforeach
+                            <td class="another-col">{{ $good['total'] }}</td>
+                            <td class="another-col">{{ $good['warehouse'] }}</td>
+                        </tr>
+                  @endforeach
                 </tbody>
               </table>
             </div>
