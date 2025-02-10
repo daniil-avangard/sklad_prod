@@ -82,7 +82,9 @@ class OrderController extends Controller
     
     private function forNewTable($divisionGroups, $orders)
     {
-        $test = 'new';
+        $role = Auth::user()->rolesId()->pluck('id');
+        $test = ($role[0] == 1001) ? 'new' : 'processing';
+        
         $divisionStateOrders = array();
         $divisionStateOrdersNew = array();
         
