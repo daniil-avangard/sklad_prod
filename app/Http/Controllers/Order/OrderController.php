@@ -84,7 +84,8 @@ class OrderController extends Controller
     private function forNewTable($divisionGroups, $orders)
     {
         $role = Auth::user()->rolesId()->pluck('id');
-        $test = ($role[0] == 1001) ? 'processing' : 'new' ;
+        //dd($role[0]);
+        $test = ($role[0] == 1004) ? 'processing' : 'new';
         $allDivisionsNames = Division::all()->map(function ($division) {
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
@@ -210,7 +211,7 @@ class OrderController extends Controller
         }
         array_multisort(array_column($allDivisionsNames, 'sort'), SORT_ASC, $allDivisionsNames);
 //        dd($allDivisionsNames, $allDivisions);
-        $result = array($allGoodsInOrders, $allDivisions, $allDivisionsData, $allDivisionsDataNew);
+        $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew);
         
         return $result;
         

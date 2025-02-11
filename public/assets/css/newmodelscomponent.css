@@ -270,19 +270,14 @@ tr p {
 .digits-order p {
     margin: 0 !important;
 }
-
-
-
 .view {
   width: 1250px;
 }
-
 .wrapper {
   position: relative;
   overflow: auto;
   white-space: nowrap;
 }
-
 .sticky-col {
   position: -webkit-sticky;
   position: sticky;
@@ -321,4 +316,10 @@ tr p {
 }
 .color-for-approve {
     color: red;
+}
+.color-division-1 {
+    background-color: #ff6666 !important;
+}
+.color-division-2 {
+    background-color: #6666ff !important;
 }

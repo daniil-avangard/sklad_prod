@@ -101,7 +101,7 @@
                       <tr>
                         <th class="sticky-col first-col head-bold">Товары</th>
                         @foreach ($divisionNames as $divisionName)
-                            <th class="v-table-text head-bold">{{ $divisionName }}</th>
+                            <th class="v-table-text head-bold color-division-{{ $divisionName['sort'] }}">{{ $divisionName['name'] }}</th>
                         @endforeach
                         <th class="head-bold">Заказано</th>
                         <th class="head-bold">На складе</th>
@@ -120,24 +120,24 @@
                                 </td>
                                 @foreach ($divisionNames as $divisionName)
                                     <td class="another-col">
-                                        @if ($allDivisionsDataNew[$divisionName][$good['name']]['id'] == 0)
+                                        @if ($allDivisionsDataNew[$divisionName['name']][$good['name']]['id'] == 0)
                                             <div class="digits-order">
-                                                <p>{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}</p>
-                                                <p>{{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}</p>
+                                                <p>{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}</p>
+                                                <p>{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}</p>
                                             </div>
                                         @else
                                             <div class="digits-order">
-                                                <a href="{{ route('orders.show', $allDivisionsDataNew[$divisionName][$good['name']]['orderId']) }}" 
+                                                <a href="{{ route('orders.show', $allDivisionsDataNew[$divisionName['name']][$good['name']]['orderId']) }}" 
                                                    class="clickForOrder color-for-approve"
                                                    data-type="number" 
-                                                   data-pk="{{ $allDivisionsDataNew[$divisionName][$good['name']]['id'] }}" 
+                                                   data-pk="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['id'] }}" 
                                                    data-title="Введите количество"
-                                                   data-origin="{{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}"
-                                                   data-new="{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}"
+                                                   data-origin="{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}"
+                                                   data-new="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}"
                                                 >
-                                                    {{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}
+                                                    {{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}
                                                 </a>
-                                                <p>{{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}</p>
+                                                <p>{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}</p>
                                             </div>
                                         @endif
                                     </td>
