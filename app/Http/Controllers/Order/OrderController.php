@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Enum\Order\StatusEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DivisionGroup;
+use App\Models\Division;
 
 class OrderController extends Controller
 {
@@ -83,7 +84,10 @@ class OrderController extends Controller
     private function forNewTable($divisionGroups, $orders)
     {
         $role = Auth::user()->rolesId()->pluck('id');
-        $test = ($role[0] == 1001) ? 'new' : 'processing';
+        $test = ($role[0] == 1001) ? 'processing' : 'new' ;
+        $allDivisionsNames = Division::all()->map(function ($division) {
+            return $division->name;
+        });
         
         $divisionStateOrders = array();
         $divisionStateOrdersNew = array();
@@ -158,9 +162,7 @@ class OrderController extends Controller
         }
         
         foreach ($allDivisionsData as $k => $v) {
-//            dd($v);
             foreach ($allGoodsInOrders as $x) {
-//                dd($x);
                 if (!(array_key_exists($x['name'] ,$v))) {
                     $allDivisionsData[$k][$x['name']] = array('quontity' => 0, 'id' => 0);
                 }
@@ -168,9 +170,7 @@ class OrderController extends Controller
         }
         
         foreach ($allDivisionsDataNew as $k => $v) {
-//            dd($v);
             foreach ($allGoodsInOrders as $x) {
-//                dd($x);
                 if (!(array_key_exists($x['name'] ,$v))) {
                     $allDivisionsDataNew[$k][$x['name']] = array('quontity' => 0, 'id' => 0);
                 }
@@ -188,16 +188,26 @@ class OrderController extends Controller
             $allGoodsInOrders[$index] = $x;
         }
         
+        foreach ($allDivisionsNames as $name) {
+            if (!(in_array($name, $allDivisions))) {
+                $allDivisions[] = $name;
+            }
+        }
+        
         foreach ($allDivisions as $name) {
             if (!isset($allDivisionsDataNew[$name])) {
                 foreach ($allGoodsInOrders as $item) {
                     $allDivisionsDataNew[$name][$item['name']] = array('quontity' => 0, 'id' => 0);
                 }
-                
             }
+            if (!isset($allDivisionsData[$name])) {
+                foreach ($allGoodsInOrders as $item) {
+                    $allDivisionsData[$name][$item['name']] = array('quontity' => 0, 'id' => 0);
+                }
+            }
+            
         }
-        
-//        $allDivisions = array_unique($allDivisions);
+//        dd($allDivisionsData, $allDivisions);
         $result = array($allGoodsInOrders, $allDivisions, $allDivisionsData, $allDivisionsDataNew);
         
         return $result;

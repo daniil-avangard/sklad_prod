@@ -121,7 +121,10 @@
                                 @foreach ($divisionNames as $divisionName)
                                     <td class="another-col">
                                         @if ($allDivisionsDataNew[$divisionName][$good['name']]['id'] == 0)
-                                            <p>{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}</p>
+                                            <div class="digits-order">
+                                                <p>{{ $allDivisionsDataNew[$divisionName][$good['name']]['quontity'] }}</p>
+                                                <p>{{ $allDivisionsData[$divisionName][$good['name']]['quontity'] }}</p>
+                                            </div>
                                         @else
                                             <div class="digits-order">
                                                 <a href="{{ route('orders.show', $allDivisionsDataNew[$divisionName][$good['name']]['orderId']) }}" 
