@@ -86,8 +86,9 @@ class OrderController extends Controller
         $role = Auth::user()->rolesId()->pluck('id');
         $test = ($role[0] == 1001) ? 'processing' : 'new' ;
         $allDivisionsNames = Division::all()->map(function ($division) {
-            return $division->name;
-        });
+            return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
+        })->toArray();
+//        $allDivisionsNames = Division::all();
         
         $divisionStateOrders = array();
         $divisionStateOrdersNew = array();
@@ -188,9 +189,9 @@ class OrderController extends Controller
             $allGoodsInOrders[$index] = $x;
         }
         
-        foreach ($allDivisionsNames as $name) {
-            if (!(in_array($name, $allDivisions))) {
-                $allDivisions[] = $name;
+        foreach ($allDivisionsNames as $division) {
+            if (!(in_array($division['name'], $allDivisions))) {
+                $allDivisions[] = $division['name'];
             }
         }
         
@@ -207,7 +208,8 @@ class OrderController extends Controller
             }
             
         }
-//        dd($allDivisionsData, $allDivisions);
+        array_multisort(array_column($allDivisionsNames, 'sort'), SORT_ASC, $allDivisionsNames);
+//        dd($allDivisionsNames, $allDivisions);
         $result = array($allGoodsInOrders, $allDivisions, $allDivisionsData, $allDivisionsDataNew);
         
         return $result;
