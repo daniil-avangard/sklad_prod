@@ -297,9 +297,9 @@ tr p {
   left: 200px;
 }
 .another-col {
-  width: 350px;
-  min-width: 350px;
-  max-width: 350px;
+  width: 150px;
+  min-width: 150px;
+  max-width: 150px;
   z-index: 1 !important;
 }
 .long-table table {

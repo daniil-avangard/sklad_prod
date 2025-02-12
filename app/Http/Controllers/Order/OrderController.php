@@ -84,8 +84,7 @@ class OrderController extends Controller
     private function forNewTable($divisionGroups, $orders)
     {
         $role = Auth::user()->rolesId()->pluck('id');
-        //dd($role[0]);
-        $test = ($role[0] == 1004) ? 'new' : 'processing';
+        $currentRole = ($role[0] == 1004) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
         $allDivisionsNames = Division::all()->map(function ($division) {
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
@@ -99,8 +98,7 @@ class OrderController extends Controller
         foreach ($orders as $order) {
             if (in_array($order->status->value, $arrayOfStatuses)) {
                 $divisionStateOrders[] = $order;
-//                if ($order->status->value == StatusEnum::NEW->value) {
-                if ($order->status->value == $test) {
+                if ($order->status->value == $currentRole) {
                     $divisionStateOrdersNew[] = $order;
                 }
             }
@@ -112,31 +110,25 @@ class OrderController extends Controller
         $allDivisionsDataNew = array();
         
         foreach ($divisionStateOrders as $order) {
-//            $allDivisions[] = $order->division->name;
             foreach ($order->items as $item) {
                 if (!isset($allDivisionsData[$order->division->name])) {
                     if (!isset($allDivisionsData[$order->division->name][$item->product->name])) {
                         $allDivisionsData[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order->id);
-//                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
-//                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
                     } else {
                         $allDivisionsData[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
                     }
                 } else {
                     if (!isset($allDivisionsData[$order->division->name][$item->product->name])) {
                         $allDivisionsData[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id);
-//                        $allDivisionsData[$order->division->name][$item->product->name] = $item->quantity;
                     } else {
                         $allDivisionsData[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
                     }
                 }
-                
-                // --------
                 $allGoodsInOrders[] = array('name' => $item->product->name, 'image' => $item->product->image, 'warehouse' => $item->product->variants->sum('quantity'));
             }
         }
         
-        // Только новые
+        // Только новые для этой роли
         
         foreach ($divisionStateOrdersNew as $order) {
             foreach ($order->items as $item) {
@@ -156,8 +148,6 @@ class OrderController extends Controller
                 
             }
         }
-        
-        //
         
         foreach ($allDivisionsData as $k => $v) {
             $allDivisions[] = $k;

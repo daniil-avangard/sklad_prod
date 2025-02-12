@@ -137,7 +137,7 @@
                                                 >
                                                     {{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}
                                                 </a>
-                                                <p>{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}</p>
+                                                <p>{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] - $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}</p>
                                             </div>
                                         @endif
                                     </td>
