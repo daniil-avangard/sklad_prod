@@ -85,7 +85,7 @@ class OrderController extends Controller
     {
         $role = Auth::user()->rolesId()->pluck('id');
         //dd($role[0]);
-        $test = ($role[0] == 1004) ? 'processing' : 'new';
+        $test = ($role[0] == 1004) ? 'new' : 'processing';
         $allDivisionsNames = Division::all()->map(function ($division) {
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
