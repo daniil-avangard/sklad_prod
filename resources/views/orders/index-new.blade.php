@@ -149,7 +149,6 @@
                                                         Sorry, your browser does not support inline SVG.
                                                     </svg>
                                                     </a>
-                                                    <button class="btn btn-success btn-sm waves-effect waves-light btn-excel"><i class="mdi mdi-check"></i></button>
                                                 </div>
                                                 <p>{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] - $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}</p>
                                             </div>

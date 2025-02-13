@@ -294,7 +294,7 @@ tr p {
 .second-col {
   width: 250px;
   min-width: 250px;
-  max-width: 250px;
+  max-width: 350px;
   left: 200px;
 }
 .another-col {
