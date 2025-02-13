@@ -272,6 +272,7 @@ tr p {
 }
 .view {
   width: 1250px;
+  margin-bottom: 20px;
 }
 .wrapper {
   position: relative;
@@ -322,4 +323,18 @@ tr p {
 }
 .color-division-2 {
     background-color: #c0c0ff !important;
+}
+.digits-row {
+    display: flex;
+    flex-direction: row;
+}
+.svg-digits-excel {
+    margin-left: 10px;
+    cursor: pointer;
+}
+.btn-excel {
+    transform: scale(0.7) !important;
+}
+.order-visible {
+    display: none;
 }

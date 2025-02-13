@@ -81,10 +81,27 @@ class OrderController extends Controller
         return view('orders.index-new', compact('orders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew'));
     }
     
+    public function indexNewUpdate()
+    {
+        $this->authorize('viewAny', Order::class);
+        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+        $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
+            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
+        })->get();
+        foreach ($orders as $order) {
+            if ($order->status->value == StatusEnum::NEW->value) {
+                $order->status = StatusEnum::MANAGER_PROCESSING->value;
+                $order->save();
+            }
+        }
+        return redirect()->to(route('orders.new'));
+    }
+    
     private function forNewTable($divisionGroups, $orders)
     {
-        $role = Auth::user()->rolesId()->pluck('id');
-        $currentRole = ($role[0] == 1004) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $role = Auth::user()->rolesId()->pluck('id')->toArray();
+//        $currentRole = ($role[0] == 1004) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $currentRole = (in_array(1004, $role)) ? StatusEnum::NEW->value : StatusEnum::PROCESSING->value;
         $allDivisionsNames = Division::all()->map(function ($division) {
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();

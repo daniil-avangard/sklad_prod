@@ -60,6 +60,7 @@ class DivisionController extends Controller
         $division->city = $request->city;
         $division->name = $request->department;
         $division->user_id = auth()->user()->id;
+        $division->sort_for_excel = 3;
         $division->save();
 
 

@@ -127,16 +127,30 @@
                                             </div>
                                         @else
                                             <div class="digits-order">
-                                                <a href="{{ route('orders.show', $allDivisionsDataNew[$divisionName['name']][$good['name']]['orderId']) }}" 
-                                                   class="clickForOrder color-for-approve"
-                                                   data-type="number" 
-                                                   data-pk="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['id'] }}" 
-                                                   data-title="Введите количество"
-                                                   data-origin="{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}"
-                                                   data-new="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}"
-                                                >
-                                                    {{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}
-                                                </a>
+                                                <div class="digits-row">
+                                                    <p 
+                                                       class="clickForOrder color-for-approve"
+                                                       data-type="number" 
+                                                       data-pk="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['id'] }}" 
+                                                       data-title="Введите количество"
+                                                       data-origin="{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}"
+                                                       data-new="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}"
+                                                    >
+                                                        {{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}
+                                                    </p>
+                                                    <a href="{{ route('orders.show', $allDivisionsDataNew[$divisionName['name']][$good['name']]['orderId']) }}" 
+                                                       data-pk="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['id'] }}" 
+                                                       data-title="Введите количество"
+                                                       data-origin="{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}"
+                                                       data-new="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}"
+                                                    >
+                                                    <svg class="svg-digits-excel" height="16" width="15" xmlns="http://www.w3.org/2000/svg">
+                                                        <polygon points="0,0 10,0 15,8 10,16 0,16" style="fill:red;" />
+                                                        Sorry, your browser does not support inline SVG.
+                                                    </svg>
+                                                    </a>
+                                                    <button class="btn btn-success btn-sm waves-effect waves-light btn-excel"><i class="mdi mdi-check"></i></button>
+                                                </div>
                                                 <p>{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] - $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}</p>
                                             </div>
                                         @endif
@@ -150,6 +164,9 @@
                   </table>
                 </div>
             </div>  
+            @can('view', \App\Models\Order::class)
+                <button id="acept-all-orders" class="btn btn-success mb-3">Утвердить все заказы</button>
+            @endcan
         </div>
     </div>
 @endsection
