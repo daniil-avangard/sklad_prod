@@ -240,6 +240,11 @@ tr p {
     writing-mode: vertical-lr !important;
     text-orientation: upright !important;
 }
+.rotated-table-text {
+    writing-mode: vertical-lr !important;
+    transform: rotate(-180deg) !important;
+    letter-spacing: 2px !important;
+}
 .new-table {
     width: 100% !important;
 }
@@ -331,6 +336,45 @@ tr p {
 .svg-digits-excel {
     margin-left: 10px;
     cursor: pointer;
+}
+.wrap-icon-digits-exell {
+    display: block;
+    position: relative;
+}
+.wrap-icon-digits-exell .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #888;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 6px;
+  padding: 3px 0;
+  position: absolute;
+  z-index: 1;
+  top: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+.wrap-icon-digits-exell .tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #888 transparent;
+}
+.wrap-icon-digits-exell:hover .tooltiptext {
+  visibility: visible;
+}
+.icon-digits-exell {
+    margin-left: 10px;
+    cursor: pointer;
+    transform: translateY(2px) !important;
+    color: #888;
+    font-size: 14px;
 }
 .btn-excel {
     transform: scale(0.7) !important;

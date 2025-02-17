@@ -5,6 +5,7 @@
 
 @push('styles-plugins')
     <link type="text/css" href="/plugins/x-editable/css/bootstrap-editable.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
@@ -101,7 +102,7 @@
                       <tr>
                         <th class="sticky-col first-col head-bold">Товары</th>
                         @foreach ($divisionNames as $divisionName)
-                            <th class="v-table-text head-bold color-division-{{ $divisionName['sort'] }}">{{ $divisionName['name'] }}</th>
+                            <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }}">{{ $divisionName['name'] }}</th>
                         @endforeach
                         <th class="head-bold">Заказано</th>
                         <th class="head-bold">На складе</th>
@@ -135,19 +136,24 @@
                                                        data-title="Введите количество"
                                                        data-origin="{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}"
                                                        data-new="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}"
+                                                       data-orderid="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['orderId']['id'] }}"
                                                     >
                                                         {{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}
-                                                    </p>
+                                                    </p>   
+                                                    <div class="wrap-icon-digits-exell">
+                                                        <i class="fa fa-pencil-square-o edit-button icon-digits-exell"></i>
+                                                        <span class="tooltiptext">Редактирование</span>
+                                                    </div>
                                                     <a href="{{ route('orders.show', $allDivisionsDataNew[$divisionName['name']][$good['name']]['orderId']) }}" 
                                                        data-pk="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['id'] }}" 
                                                        data-title="Введите количество"
                                                        data-origin="{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}"
                                                        data-new="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}"
                                                     >
-                                                    <svg class="svg-digits-excel" height="16" width="15" xmlns="http://www.w3.org/2000/svg">
-                                                        <polygon points="0,0 10,0 15,8 10,16 0,16" style="fill:red;" />
-                                                        Sorry, your browser does not support inline SVG.
-                                                    </svg>
+                                                        <div class="wrap-icon-digits-exell">
+                                                            <i class="fa fa-list-ul edit-button icon-digits-exell"></i>
+                                                            <span class="tooltiptext">Просмотр</span>
+                                                        </div>
                                                     </a>
                                                 </div>
                                                 <p>{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] - $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}</p>

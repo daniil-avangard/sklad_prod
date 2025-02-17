@@ -37,9 +37,22 @@ Array.from(pElementsOrders).forEach((el, index) => {
         let newIconDanger = document.createElement('i');
         newIconDanger.setAttribute("class", "mdi mdi-close");
         newDanger.appendChild(newIconDanger);
+        newDanger.onclick = () => {
+            newInput.remove();
+            newAccept.remove();
+            newDanger.remove();
+            el.classList.remove("order-visible");
+        }
         
         parentNode.insertBefore(newInput, parentNode.children[1]);
         parentNode.insertBefore(newAccept, parentNode.children[2]);
         parentNode.insertBefore(newDanger, parentNode.children[3]);
+    }
+    
+    el.ondblclick = () => {
+        let id = el.dataset.orderid;
+        const url = new URL(window.location.origin);
+        url.pathname = '/orders/' + id;
+        window.open(url, "_self");
     }
 });
