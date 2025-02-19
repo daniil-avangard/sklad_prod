@@ -207,13 +207,17 @@ button.btn-settings:active {
     background-color: #0a567c !important;
 }
 tr p {
-    margin-bottom: 5px !important;
+    height: 100%;
+/*    margin-bottom: 5px !important;*/
 }
 .order-popup-parent {
     position: relative;
     display: block;
     cursor: pointer;
-    user-select: none;
+/*    user-select: none;*/
+    overflow: visible !important;
+    height: 100% !important;
+    z-index: 100 !important;
 }
 .order-popup-child {
     position: absolute;
@@ -223,14 +227,15 @@ tr p {
     color: #fff;
     text-align: center;
     border-radius: 6px;
-    z-index: 1;
-    bottom: 125%;
+    bottom: -125%;
     left: 50%;
     margin-left: -80px;
+    z-index: 100 !important;
 }
-.order-popup-parent .show {
+.show {
     visibility: visible;
     animation: fadeIn 0.1s;
+    z-index: 100 !important;
 }
 @keyframes fadeIn {
     from {opacity: 0;}
@@ -306,7 +311,7 @@ tr p {
 .sticky-col {
 /*  position: -webkit-sticky;
   position: sticky;*/
-  background-color: white !important;
+/*  background-color: white !important;*/
 /*  z-index: 2 !important;*/
 }
 .sticky-head {
@@ -320,7 +325,15 @@ tr p {
   max-width: 300px;
   left: 0px;
 /*  overflow: hidden;*/
-  text-wrap: wrap
+  text-wrap: wrap;
+}
+.first-col-1 {
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  left: 0px;
+/*  overflow: hidden;*/
+  text-wrap: wrap;
 }
 .second-col {
   width: 250px;
@@ -441,5 +454,14 @@ tr p {
   position: sticky;
   top: 0;
   z-index: 9;
-  background: #fff;
+  background: transparent;
+}
+.table-container td {
+    overflow: visible !important;
+}
+.table-container table tr th{
+    background: #fff;
+}
+.tr-height {
+    height: 100px !important;
 }

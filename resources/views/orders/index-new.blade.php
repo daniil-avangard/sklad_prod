@@ -98,7 +98,7 @@
             <div class="view">
                 <div class="wrapper long-table">
                   <table class="table">
-                    <thead>
+                    
                       <tr>
                         <th class="sticky-col first-col head-bold">Товары</th>
                         @foreach ($divisionNames as $divisionName)
@@ -107,8 +107,8 @@
                         <th class="head-bold">Заказано</th>
                         <th class="head-bold">На складе</th>
                       </tr>
-                    </thead>
-                    <tbody>
+                    
+                    
                         @foreach ($uniqGoods as $good)
                             <tr>
                                 <td class="sticky-col first-col">
@@ -165,7 +165,7 @@
                                 <td class="another-col">{{ $good['warehouse'] }}</td>
                             </tr>
                       @endforeach
-                    </tbody>
+                    
                   </table>
                 </div>
             </div>  
@@ -178,9 +178,9 @@
     <div class="row">
         <div class="col-12">
                 <div class="table-container">
-			<table>
+			<table class="long-table">
                             <tr>
-                                <th class="sticky-col first-col head-bold">Товары</th>
+                                <th class="first-col head-bold">Товары</th>
                                 @foreach ($divisionNames as $divisionName)
                                     <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }}">{{ $divisionName['name'] }}</th>
                                 @endforeach
@@ -189,10 +189,10 @@
                             </tr>
                             @foreach ($uniqGoods as $good)
                                 <tr>
-                                    <td class="sticky-col first-col">
+                                    <td class="first-col-1">
                                         <div class="order-popup-parent">
                                             <p>{{ $good['name'] }}</p>
-                                            <div class="order-popup-child">
+                                            <div class="order-popup-child order-popup-child-1">
                                                 <img src="{{ asset('storage/' . $good['image']) }}" alt="" class=" mx-auto  d-block" height="150">
                                             </div>
                                         </div>

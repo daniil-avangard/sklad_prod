@@ -1,12 +1,16 @@
 let popUps = document.querySelectorAll('.order-popup-parent');
-let popUpsChilds = document.querySelectorAll('.order-popup-child');
+let popUps1 = document.querySelectorAll('.first-col-1');
+let popUpsChilds = document.querySelectorAll('.order-popup-child-1');
 let butonChangeOrderAllStatus = document.getElementById('acept-all-orders');
 let pElementsOrders = document.querySelectorAll('.clickForOrder');
 let editElementsOrders = document.querySelectorAll('.edit-button-excell');
 
-Array.from(popUps).forEach((el, index) => {
+Array.from(popUps1).forEach((el, index) => {
     const listener = () => {
+        let trParent = el.parentNode;
+        console.log("trParent = ", popUpsChilds[index]);
         popUpsChilds[index].classList.toggle("show");
+        trParent.classList.toggle("tr-height");
     }
 
     el.addEventListener("mouseover", listener, false);
