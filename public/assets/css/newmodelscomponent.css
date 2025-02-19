@@ -295,6 +295,8 @@ tr p {
   min-width: 300px;
   max-width: 300px;
   left: 0px;
+/*  overflow: hidden;*/
+  text-wrap: wrap
 }
 .second-col {
   width: 250px;
@@ -370,7 +372,7 @@ tr p {
   visibility: visible;
 }
 .icon-digits-exell {
-    margin-left: 10px;
+    margin-left: 5px;
     cursor: pointer;
     transform: translateY(2px) !important;
     color: #888;
