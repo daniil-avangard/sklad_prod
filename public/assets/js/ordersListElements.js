@@ -2,7 +2,7 @@ let popUps = document.querySelectorAll('.order-popup-parent');
 let popUpsChilds = document.querySelectorAll('.order-popup-child');
 let butonChangeOrderAllStatus = document.getElementById('acept-all-orders');
 let pElementsOrders = document.querySelectorAll('.clickForOrder');
-let editElementsOrders = document.querySelectorAll('.edit-button');
+let editElementsOrders = document.querySelectorAll('.edit-button-excell');
 
 Array.from(popUps).forEach((el, index) => {
     const listener = () => {
