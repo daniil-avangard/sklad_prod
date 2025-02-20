@@ -35,6 +35,7 @@ const excellCellClickFunction = (el) => {
     let newInput = document.createElement('input');
     newInput.setAttribute("type", "number");
     newInput.setAttribute("class", "form-control form-control-sm");
+    newInput.value = parseInt(dataOrigin.innerHTML);
     let newAccept = document.createElement('button');
     newAccept.setAttribute("class", "btn btn-success btn-sm waves-effect waves-light btn-excel");
     let newIcon = document.createElement('i');
@@ -42,7 +43,8 @@ const excellCellClickFunction = (el) => {
     newAccept.appendChild(newIcon);
     newAccept.onclick = async () => {
         let initialItemQuontity = parseInt(dataOrigin.innerHTML);
-        let updateItemQuontity = newInput.value != null ? parseInt(newInput.value) >= 0 ? parseInt(newInput.value) : 0 : 0;
+//        newInput.value = initialItemQuontity;
+        let updateItemQuontity = newInput.value != "" ? parseInt(newInput.value) >= 0 ? parseInt(newInput.value) : 0 : 0;
         let deltaItemQuontity = updateItemQuontity - initialItemQuontity;
         let url = '/orders/update-quantity';
         let dataToSend = {id: dataOrigin.dataset.pk, quantity: updateItemQuontity, _token: $('meta[name="csrf-token"]').attr('content')};
@@ -82,6 +84,7 @@ const excellCellClickFunction = (el) => {
     newIconDanger.setAttribute("class", "mdi mdi-close");
     newDanger.appendChild(newIconDanger);
     newDanger.onclick = () => {
+        console.log("Проверяем значение inputa = ", newInput.value);
         newInput.remove();
         newAccept.remove();
         newDanger.remove();

@@ -390,7 +390,7 @@ tr p {
   border-radius: 6px;
   padding: 3px 0;
   position: absolute;
-  z-index: 1;
+  z-index: 11 !important;
   top: 150%;
   left: 50%;
   margin-left: -60px;
@@ -456,7 +456,7 @@ tr p {
   background: #fff;
 }
 .table-container table tr th:first-child{
-  z-index: 11;
+  z-index: 10;
 }
 .table-container table tr th{
   position: sticky;
