@@ -26,6 +26,9 @@ butonChangeOrderAllStatus.onclick = () => {
 
 const excellCellClickFunction = (el) => {
     let parentNode = el.parentNode;
+    let dataOrigin = parentNode.firstElementChild;
+    let parentTR = parentNode.parentNode.parentNode.parentNode;
+    console.log("Данные о ряде = ", parentTR);
     let parentChildsArray = Array.from(parentNode.children);
     parentChildsArray.forEach((elm, index) => {elm.classList.add("order-visible");});
 
@@ -37,6 +40,41 @@ const excellCellClickFunction = (el) => {
     let newIcon = document.createElement('i');
     newIcon.setAttribute("class", "mdi mdi-check");
     newAccept.appendChild(newIcon);
+    newAccept.onclick = async () => {
+        let initialItemQuontity = parseInt(dataOrigin.innerHTML);
+        let updateItemQuontity = newInput.value != null ? parseInt(newInput.value) >= 0 ? parseInt(newInput.value) : 0 : 0;
+        let deltaItemQuontity = updateItemQuontity - initialItemQuontity;
+        let url = '/orders/update-quantity';
+        let dataToSend = {id: dataOrigin.dataset.pk, quantity: updateItemQuontity, _token: $('meta[name="csrf-token"]').attr('content')};
+        console.log("Данные о заказе = ", dataToSend);
+        const request = new Request(url, {
+                                method: "POST",
+                                headers: {
+                                            'Content-Type': 'application/json;charset=utf-8',
+                                        },
+                                body: JSON.stringify(dataToSend)
+                                });
+        try {
+            const response = await fetch(request);  
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+            res = await response.json();
+            console.log(res);
+            newInput.remove();
+            newAccept.remove();
+            newDanger.remove();
+            parentChildsArray.forEach((elm, index) => {elm.classList.remove("order-visible");});
+            dataOrigin.innerHTML = updateItemQuontity;
+            let arrayCurrentTD = parentTR.children;
+            console.log("Проверка кол-ва заказанного = ", arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML, deltaItemQuontity);
+            arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity;
+            arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
+        }
+        catch(error) {
+            console.log(error.message);
+        }
+    }
 
     let newDanger = document.createElement('button');
     newDanger.setAttribute("class", "btn btn-danger btn-sm waves-effect waves-light btn-excel");

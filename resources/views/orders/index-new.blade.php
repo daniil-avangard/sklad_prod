@@ -105,6 +105,7 @@
                                 <th class="head-bold">Минимально<br>допустимый<br>остаток</th>
                                 <th class="head-bold">Тираж<br>для<br>дозаказа</th>
                                 <th class="head-bold">На складе</th>
+                                <th class="head-bold">Остаток<br>после<br>заказов</th>
                             </tr>
                             @foreach ($uniqGoods as $good)
                                 <tr>
@@ -162,6 +163,7 @@
                                     <td class="another-col"> - </td>
                                     <td class="another-col"> - </td>
                                     <td class="another-col">{{ $good['warehouse'] }}</td>
+                                    <td class="another-col">{{ $good['warehouse']-$good['total'] }}</td>
                                 </tr>
                             @endforeach
 			</table>
