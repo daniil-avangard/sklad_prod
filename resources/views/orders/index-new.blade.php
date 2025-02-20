@@ -92,89 +92,6 @@
             </div>
         </div>
     </div>
-    
-    <div class="row">
-        <div class="col-12">
-            <div class="view">
-                <div class="wrapper long-table">
-                  <table class="table">
-                    
-                      <tr>
-                        <th class="sticky-col first-col head-bold">Товары</th>
-                        @foreach ($divisionNames as $divisionName)
-                            <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }}">{{ $divisionName['name'] }}</th>
-                        @endforeach
-                        <th class="head-bold">Заказано</th>
-                        <th class="head-bold">На складе</th>
-                      </tr>
-                    
-                    
-                        @foreach ($uniqGoods as $good)
-                            <tr>
-                                <td class="sticky-col first-col">
-                                    <div class="order-popup-parent">
-                                        <p>{{ $good['name'] }}</p>
-                                        <div class="order-popup-child">
-                                            <img src="{{ asset('storage/' . $good['image']) }}" alt="" class=" mx-auto  d-block" height="150">
-                                        </div>
-                                    </div>
-                                </td>
-                                @foreach ($divisionNames as $divisionName)
-                                    <td class="another-col">
-                                        @if ($allDivisionsDataNew[$divisionName['name']][$good['name']]['id'] == 0)
-                                            <div class="digits-order">
-                                                <p>{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}</p>
-                                                <p>{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}</p>
-                                            </div>
-                                        @else
-                                            <div class="digits-order">
-                                                <div class="digits-row">
-                                                    <p 
-                                                       class="clickForOrder color-for-approve"
-                                                       data-type="number" 
-                                                       data-pk="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['id'] }}" 
-                                                       data-title="Введите количество"
-                                                       data-origin="{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}"
-                                                       data-new="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}"
-                                                       data-orderid="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['orderId']['id'] }}"
-                                                    >
-                                                        {{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}
-                                                    </p>   
-                                                    <div class="wrap-icon-digits-exell">
-                                                        <i class="far fa-edit edit-button icon-digits-exell edit-button-excell"></i>
-                                                        <span class="tooltiptext">Редактирование</span>
-                                                    </div>
-                                                    <a href="{{ route('orders.show', $allDivisionsDataNew[$divisionName['name']][$good['name']]['orderId']) }}" 
-                                                       data-pk="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['id'] }}" 
-                                                       data-title="Введите количество"
-                                                       data-origin="{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}"
-                                                       data-new="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}"
-                                                    >
-                                                        <div class="wrap-icon-digits-exell">
-                                                            <i class="fa fa-list-ul edit-button icon-digits-exell"></i>
-                                                            <span class="tooltiptext">Просмотр</span>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                                <p>{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] - $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}</p>
-                                            </div>
-                                        @endif
-                                    </td>
-                                @endforeach
-                                <td class="another-col">{{ $good['total'] }}</td>
-                                <td class="another-col">{{ $good['warehouse'] }}</td>
-                            </tr>
-                      @endforeach
-                    
-                  </table>
-                </div>
-            </div>  
-            @can('view', \App\Models\Order::class)
-                <button id="acept-all-orders" class="btn btn-success mb-3">Утвердить все заказы</button>
-            @endcan
-        </div>
-    </div>
-    
     <div class="row">
         <div class="col-12">
                 <div class="table-container">
@@ -185,6 +102,8 @@
                                     <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }}">{{ $divisionName['name'] }}</th>
                                 @endforeach
                                 <th class="head-bold">Заказано</th>
+                                <th class="head-bold">Минимально<br>допустимый<br>остаток</th>
+                                <th class="head-bold">Тираж<br>для<br>дозаказа</th>
                                 <th class="head-bold">На складе</th>
                             </tr>
                             @foreach ($uniqGoods as $good)
@@ -240,11 +159,16 @@
                                         </td>
                                     @endforeach
                                     <td class="another-col">{{ $good['total'] }}</td>
+                                    <td class="another-col"> - </td>
+                                    <td class="another-col"> - </td>
                                     <td class="another-col">{{ $good['warehouse'] }}</td>
                                 </tr>
                             @endforeach
 			</table>
 		</div>
+            @can('view', \App\Models\Order::class)
+                <button id="acept-all-orders" class="btn btn-success mb-3">Утвердить все заказы</button>
+            @endcan
         </div>
     </div>
 @endsection

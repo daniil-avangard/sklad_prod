@@ -422,7 +422,12 @@ tr p {
     display: none;
 }
 
-.table-container{ width: 1250px; height: 500px; overflow: scroll;}
+.table-container { 
+    width: 1250px; 
+    height: 500px; 
+    overflow: scroll;
+    margin-bottom: 20px;
+}
 .table-container table th {
   white-space: nowrap;
   padding: 10px 20px;
@@ -439,6 +444,9 @@ tr p {
   left: 0;
   z-index: 10;
   background: #fff;
+}
+.table-container table tr {
+    transition: height 0.3s ease-in-out;
 }
 .table-container table td:first-child{
   position: sticky;
