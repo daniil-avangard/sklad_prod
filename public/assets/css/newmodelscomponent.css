@@ -456,7 +456,7 @@ tr p {
   background: #fff;
 }
 .table-container table tr th:first-child{
-  z-index: 10;
+  z-index: 15;
 }
 .table-container table tr th{
   position: sticky;

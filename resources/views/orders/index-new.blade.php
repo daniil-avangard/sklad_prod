@@ -120,10 +120,16 @@
                                     @foreach ($divisionNames as $divisionName)
                                         <td class="another-col">
                                             @if ($allDivisionsDataNew[$divisionName['name']][$good['name']]['id'] == 0)
-                                                <div class="digits-order">
-                                                    <p>{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}</p>
-                                                    <p>{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}</p>
-                                                </div>
+                                                @if ($allDivisionsData[$divisionName['name']][$good['name']]['quontity'] == 0)
+                                                    <div class="digits-order">
+                                                        <p>{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}</p>
+                                                    </div>
+                                                @else
+                                                    <div class="digits-order">
+                                                        <p>{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}</p>
+                                                        <p>{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}</p>
+                                                    </div>
+                                                @endif
                                             @else
                                                 <div class="digits-order">
                                                     <div class="digits-row">

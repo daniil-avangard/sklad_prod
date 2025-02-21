@@ -28,7 +28,6 @@ const excellCellClickFunction = (el) => {
     let parentNode = el.parentNode;
     let dataOrigin = parentNode.firstElementChild;
     let parentTR = parentNode.parentNode.parentNode.parentNode;
-    console.log("Данные о ряде = ", parentTR);
     let parentChildsArray = Array.from(parentNode.children);
     parentChildsArray.forEach((elm, index) => {elm.classList.add("order-visible");});
 
@@ -41,14 +40,22 @@ const excellCellClickFunction = (el) => {
     let newIcon = document.createElement('i');
     newIcon.setAttribute("class", "mdi mdi-check");
     newAccept.appendChild(newIcon);
+    let newDanger = document.createElement('button');
+    newDanger.setAttribute("class", "btn btn-danger btn-sm waves-effect waves-light btn-excel");
+    let newIconDanger = document.createElement('i');
+    newIconDanger.setAttribute("class", "mdi mdi-close");
+    newDanger.appendChild(newIconDanger);
+    
     newAccept.onclick = async () => {
+        newInput.disabled = true;
+        newAccept.disabled = true;
+        newDanger.disabled = true;
+        
         let initialItemQuontity = parseInt(dataOrigin.innerHTML);
-//        newInput.value = initialItemQuontity;
         let updateItemQuontity = newInput.value != "" ? parseInt(newInput.value) >= 0 ? parseInt(newInput.value) : 0 : 0;
         let deltaItemQuontity = updateItemQuontity - initialItemQuontity;
         let url = '/orders/update-quantity';
         let dataToSend = {id: dataOrigin.dataset.pk, quantity: updateItemQuontity, _token: $('meta[name="csrf-token"]').attr('content')};
-        console.log("Данные о заказе = ", dataToSend);
         const request = new Request(url, {
                                 method: "POST",
                                 headers: {
@@ -63,6 +70,17 @@ const excellCellClickFunction = (el) => {
             }
             res = await response.json();
             console.log(res);
+            if (res.success) {
+                Toast.fire({
+                            icon: 'success',
+                            title: 'Количество обновлено'
+                        });
+            } else {
+                Toast.fire({
+                            icon: 'error',
+                            title: 'Ошибка при обновлении количества'
+                        });
+            }
             newInput.remove();
             newAccept.remove();
             newDanger.remove();
@@ -78,11 +96,7 @@ const excellCellClickFunction = (el) => {
         }
     }
 
-    let newDanger = document.createElement('button');
-    newDanger.setAttribute("class", "btn btn-danger btn-sm waves-effect waves-light btn-excel");
-    let newIconDanger = document.createElement('i');
-    newIconDanger.setAttribute("class", "mdi mdi-close");
-    newDanger.appendChild(newIconDanger);
+    
     newDanger.onclick = () => {
         console.log("Проверяем значение inputa = ", newInput.value);
         newInput.remove();

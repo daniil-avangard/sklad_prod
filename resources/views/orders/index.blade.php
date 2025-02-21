@@ -206,5 +206,5 @@
 
 @push('scripts-plugins')
     <script src="/assets/js/checkBoxesOrdersList.js"></script>
-    <script src="/assets/js/ordersListElements.js"></script>
+    <script src="/assets/js/ordersIndex.js"></script>
 @endpush
