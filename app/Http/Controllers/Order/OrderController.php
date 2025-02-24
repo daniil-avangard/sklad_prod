@@ -12,6 +12,7 @@ use App\Enum\Order\StatusEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DivisionGroup;
 use App\Models\Division;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
@@ -227,6 +228,8 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $this->authorize('view', $order);
+        
+        $products = Product::all();
 
         $currentStatus = $order->status->value;
 
@@ -238,7 +241,7 @@ class OrderController extends Controller
             return $item->product->name;
         });
 
-        return view('orders.show', compact('order', 'currentStatus'));
+        return view('orders.show', compact('order', 'currentStatus', 'products'));
     }
 
     public function create()

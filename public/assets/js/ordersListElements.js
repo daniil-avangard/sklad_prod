@@ -82,6 +82,12 @@ const excellCellClickFunction = (el) => {
                     console.log("Проверка кол-ва заказанного = ", arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML, deltaItemQuontity);
                     arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity;
                     arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
+                    let compareToMinimumRatio = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) / parseInt(arrayCurrentTD[arrayCurrentTD.length - 4].innerHTML);
+                    if (compareToMinimumRatio > 2) {
+                        parentTR.classList.remove("row-color");
+                    } else {
+                        parentTR.classList.add("row-color");
+                    }
                 } else {
                     Toast.fire({
                                 icon: 'error',

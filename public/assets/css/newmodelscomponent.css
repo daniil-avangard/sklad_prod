@@ -473,3 +473,6 @@ tr p {
 .tr-height {
     height: 100px !important;
 }
+.row-color {
+    background-color: #ffe6e6;
+}

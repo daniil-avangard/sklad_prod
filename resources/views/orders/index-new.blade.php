@@ -108,7 +108,11 @@
                                 <th class="head-bold">Остаток<br>после<br>заказов</th>
                             </tr>
                             @foreach ($uniqGoods as $good)
+                                @if (($good['warehouse']-$good['total']) / $good['min_stock'] > 2)
                                 <tr>
+                                @else
+                                <tr class="row-color">
+                                @endif
                                     <td class="first-col-1">
                                         <div class="order-popup-parent">
                                             <p>{{ $good['name'] }}</p>

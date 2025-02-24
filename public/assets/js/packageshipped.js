@@ -30,9 +30,9 @@ const makeRequestToBackApi = async (status, url, message) => {
     return res;
 }
 
-document.getElementById("package-shipped").onclick = () => {
-    document.getElementById("myModal").style.display = "block";
-}
+//document.getElementById("package-shipped").onclick = () => {
+//    document.getElementById("myModal").style.display = "block";
+//}
 
 document.getElementById("close-modal").onclick = () => {
     document.getElementById("myModal").getElementsByTagName("TEXTAREA")[0].value = "";
@@ -61,4 +61,33 @@ document.getElementById("big-comment").onclick = async () => {
     status.classList.add("bg-success");
     document.getElementById("myModal").getElementsByTagName("TEXTAREA")[0].value = "";
 }
+
+$(document).ready(function() {
+    function updateSelectOptions() {
+            var selectedValues = [];
+            $('.product-select').each(function() {
+                var selectedValue = this.innerHTML;
+                if (selectedValue) {
+                    selectedValues.push(selectedValue);
+                }
+            });
+            console.log(selectedValues);
+            $('.product-select-option').each(function() {
+                console.log("1");
+                var $select = $(this);
+//                console.log($select.find('option'));
+                $select.find('option').each(function() {
+                    
+                    var $option = $(this);
+                    console.log($option.text());
+                    if ($option.text() && selectedValues.includes($option.text()) && $option.text() !== $select.val()) {
+                        $option.prop('disabled', true);
+                    } else {
+                        $option.prop('disabled', false);
+                    }
+                });
+            });
+        }
+        updateSelectOptions();
+});
 
