@@ -47,6 +47,7 @@ const excellCellClickFunction = (el) => {
     newDanger.appendChild(newIconDanger);
     
     newAccept.onclick = async () => {
+        let arrayCurrentTD = parentTR.children;
         newInput.disabled = true;
         newAccept.disabled = true;
         newDanger.disabled = true;
@@ -63,37 +64,47 @@ const excellCellClickFunction = (el) => {
                                         },
                                 body: JSON.stringify(dataToSend)
                                 });
-        try {
-            const response = await fetch(request);  
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
+        let compareMinumum = (parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity) >= (parseInt(arrayCurrentTD[arrayCurrentTD.length - 4].innerHTML));
+        if (compareMinumum) {
+            try {
+                const response = await fetch(request);  
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+                res = await response.json();
+                console.log(res);
+                if (res.success) {
+                    Toast.fire({
+                                icon: 'success',
+                                title: 'Количество обновлено'
+                            });
+                    dataOrigin.innerHTML = updateItemQuontity;
+                    console.log("Проверка кол-ва заказанного = ", arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML, deltaItemQuontity);
+                    arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity;
+                    arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
+                } else {
+                    Toast.fire({
+                                icon: 'error',
+                                title: 'Ошибка при обновлении количества'
+                            });
+                }
+                
+
             }
-            res = await response.json();
-            console.log(res);
-            if (res.success) {
-                Toast.fire({
-                            icon: 'success',
-                            title: 'Количество обновлено'
-                        });
-            } else {
-                Toast.fire({
-                            icon: 'error',
-                            title: 'Ошибка при обновлении количества'
-                        });
+            catch(error) {
+                console.log(error.message);
             }
-            newInput.remove();
-            newAccept.remove();
-            newDanger.remove();
-            parentChildsArray.forEach((elm, index) => {elm.classList.remove("order-visible");});
-            dataOrigin.innerHTML = updateItemQuontity;
-            let arrayCurrentTD = parentTR.children;
-            console.log("Проверка кол-ва заказанного = ", arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML, deltaItemQuontity);
-            arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity;
-            arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
+        } else {
+            Toast.fire({
+                                icon: 'error',
+                                title: 'Ошибка при обновлении количества'
+                            });
         }
-        catch(error) {
-            console.log(error.message);
-        }
+        
+        newInput.remove();
+        newAccept.remove();
+        newDanger.remove();
+        parentChildsArray.forEach((elm, index) => {elm.classList.remove("order-visible");});
     }
 
     

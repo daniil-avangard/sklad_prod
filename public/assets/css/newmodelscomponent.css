@@ -342,9 +342,9 @@ tr p {
   left: 200px;
 }
 .another-col {
-  width: 150px;
-  min-width: 150px;
-  max-width: 150px;
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px;
   z-index: 1 !important;
 }
 .long-table table {

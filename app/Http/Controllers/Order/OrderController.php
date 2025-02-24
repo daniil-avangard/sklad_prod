@@ -141,7 +141,7 @@ class OrderController extends Controller
                         $allDivisionsData[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
                     }
                 }
-                $allGoodsInOrders[] = array('name' => $item->product->name, 'image' => $item->product->image, 'warehouse' => $item->product->variants->sum('quantity'));
+                $allGoodsInOrders[] = array('name' => $item->product->name, 'image' => $item->product->image, 'warehouse' => $item->product->variants->sum('quantity'), 'min_stock' => $item->product->min_stock);
             }
         }
         
