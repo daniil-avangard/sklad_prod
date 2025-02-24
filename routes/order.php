@@ -42,6 +42,7 @@ Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orde
 Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
 
 Route::post('/orders/update-quantity', [OrderController::class, 'updateQuantity'])->name('orders.update-quantity');
+Route::post('/orders/update-full-order', [OrderController::class, 'updateFullOrder'])->name('orders.update-full-order');
 Route::post('/orders/update-comment-manager', [OrderController::class, 'updateCommentManager'])->name('orders.update-comment-manager');
 
 // Кастыль. Роут на каждый статус заказа, для разгроничения политики доступа
