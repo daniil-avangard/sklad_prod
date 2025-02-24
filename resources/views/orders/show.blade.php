@@ -69,7 +69,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table id="table-order" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Название</th>
@@ -170,8 +170,8 @@
                 <div class="row">
                     <div class="card-body col-sm-3">
                         <label class="form-label">Товары</label>
-                        <select name="products" class="form-select select2 product-select-option">
-                            <option value="">Выберите товар</option>
+                        <select id="product-name" name="products" class="form-select select2 product-select-option">
+                            <option value="Выберите товар">Выберите товар</option>
                             @foreach ($products as $product)
                                 <option value="{{ $product->id }}">{{ $product->name }}</option>
                             @endforeach
@@ -179,12 +179,12 @@
                     </div>
                     <div class="card-body col-sm-3">
                             <label class="form-label">Количество</label>
-                            <input type="text" name="products" value="0" class="form-control">
+                            <input id="product-quontity" type="text" name="products" value="0" class="form-control">
                     </div>
                     <div class="card-body col-sm-3">
                             <label class="form-label"></label>
                             <div class="col-sm-12">
-                                <span data-repeater-create="" class="btn btn-outline-secondary">
+                                <span id="add-item" data-repeater-create="" class="btn btn-outline-secondary">
                                     <span class="fas fa-plus"></span> Добавить
                                 </span>
                             </div>

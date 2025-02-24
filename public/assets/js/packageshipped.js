@@ -62,6 +62,8 @@ document.getElementById("big-comment").onclick = async () => {
     document.getElementById("myModal").getElementsByTagName("TEXTAREA")[0].value = "";
 }
 
+
+
 $(document).ready(function() {
     function updateSelectOptions() {
             var selectedValues = [];
@@ -89,5 +91,21 @@ $(document).ready(function() {
             });
         }
         updateSelectOptions();
+        
+        document.getElementById("add-item").onclick = () => {
+            let tbodyRef = document.getElementById("table-order").getElementsByTagName("tbody")[0];
+            let newRow = tbodyRef.insertRow(-1);
+            let select = document.getElementById("product-name");
+            let data = [select.options[select.selectedIndex].text, "", "", document.getElementById("product-quontity").value];
+            Array(4).fill().forEach((_, ind) => {
+                let newCell = newRow.insertCell(ind);
+                newCell.className = ind == 0 ? "product-select" : "";
+                let newText = document.createTextNode(data[ind]);
+                newCell.appendChild(newText);
+            });
+            select.value = "Выберите товар";
+            document.getElementById("product-quontity").value = "0";
+            updateSelectOptions();
+        }
 });
 
