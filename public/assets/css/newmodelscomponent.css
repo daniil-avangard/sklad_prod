@@ -368,6 +368,9 @@ tr p {
 .color-division-2 {
     background-color: #c0c0ff !important;
 }
+.color-division-3 {
+    background-color: #66ff66 !important;
+}
 .digits-row {
     display: flex;
     flex-direction: row;
