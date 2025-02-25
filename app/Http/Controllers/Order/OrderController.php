@@ -328,6 +328,16 @@ class OrderController extends Controller
         //        $item->save();
         return response()->json(['success' => true]);
     }
+    
+    public function updateFullOrder(Request $request)
+    {
+        $orderItem = new OrderItem();
+        $orderItem->order_id = $request->orderId;
+        $orderItem->product_id = $request->productId;
+        $orderItem->quantity = $request->quantity;
+        $orderItem->save();
+        return response()->json(['success' => true]);
+    }
 
     public function updateCommentManager(Request $request)
     {

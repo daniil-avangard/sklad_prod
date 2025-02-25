@@ -71,15 +71,14 @@ $(document).ready(function() {
                 selectedValues.push(selectedValue);
             }
         });
-        console.log(selectedValues);
+//        console.log(selectedValues);
         $('.product-select-option').each(function() {
-            console.log("1");
             var $select = $(this);
 //                console.log($select.find('option'));
             $select.find('option').each(function() {
 
                 var $option = $(this);
-                console.log($option.text());
+//                console.log($option.text());
                 if ($option.text() && selectedValues.includes($option.text()) && $option.text() !== $select.val()) {
                     $option.prop('disabled', true);
                 } else {
@@ -90,20 +89,48 @@ $(document).ready(function() {
     }
     updateSelectOptions();
         
-    document.getElementById("add-item").onclick = () => {
+    document.getElementById("add-item").onclick = async () => {
         let tbodyRef = document.getElementById("table-order").getElementsByTagName("tbody")[0];
         let newRow = tbodyRef.insertRow(-1);
         let select = document.getElementById("product-name");
         let data = [select.options[select.selectedIndex].text, "", "", document.getElementById("product-quontity").value];
-        Array(4).fill().forEach((_, ind) => {
-            let newCell = newRow.insertCell(ind);
-            newCell.className = ind == 0 ? "product-select" : "";
-            let newText = document.createTextNode(data[ind]);
-            newCell.appendChild(newText);
-        });
+        
+        let dataToSend = {orderId: document.getElementById("status-order").dataset.pk, productId: select.value, quantity: document.getElementById("product-quontity").value, _token: $('meta[name="csrf-token"]').attr('content')};
+        let url = '/orders/update-full-order';
+        const request = new Request(url, {
+                                method: "POST",
+                                headers: {
+                                            'Content-Type': 'application/json;charset=utf-8',
+                                        },
+                                body: JSON.stringify(dataToSend)
+                                });
+        try {
+            const response = await fetch(request);  
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+            res = await response.json();
+            if (res.success) {
+                Toast.fire({
+                            icon: 'success',
+                            title: 'Количество обновлено'
+                        });
+                Array(4).fill().forEach((_, ind) => {
+                    let newCell = newRow.insertCell(ind);
+                    newCell.className = ind == 0 ? "product-select" : "";
+                    let newText = document.createTextNode(data[ind]);
+                    newCell.appendChild(newText);
+                });
+            }
+        }
+        catch(error) {
+            console.log(error.message);
+        }
+        console.log('dataToSend = ', dataToSend);
         select.value = "Выберите товар";
         document.getElementById("product-quontity").value = "0";
         updateSelectOptions();
+        
     }
 });
 
