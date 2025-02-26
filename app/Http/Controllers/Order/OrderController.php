@@ -87,7 +87,7 @@ class OrderController extends Controller
         $this->authorize('viewAny', Order::class);
         $divisionGroups1 = Auth::user()->division_id;
         $role = Auth::user()->rolesId()->pluck('id')->toArray();
-        $currentStatus = (in_array(1004, $role)) ? StatusEnum::NEW->value : StatusEnum::PROCESSING->value;
+        $currentStatus = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
         $toProcessStatus = $currentStatus == StatusEnum::NEW->value ? StatusEnum::PROCESSING->value : StatusEnum::MANAGER_PROCESSING->value;
         
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
@@ -113,7 +113,7 @@ class OrderController extends Controller
     {
         $role = Auth::user()->rolesId()->pluck('id')->toArray();
 //        $currentRole = ($role[0] == 1004) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
-        $currentRole = (in_array(1004, $role)) ? StatusEnum::NEW->value : StatusEnum::PROCESSING->value;
+        $currentRole = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
         $allDivisionsNames = Division::all()->map(function ($division) {
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
