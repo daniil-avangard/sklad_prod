@@ -87,7 +87,7 @@ class OrderController extends Controller
         $this->authorize('viewAny', Order::class);
         $divisionGroups1 = Auth::user()->division_id;
         $role = Auth::user()->rolesId()->pluck('id')->toArray();
-        $currentStatus = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $currentStatus = (in_array(1004, $role)) ? StatusEnum::NEW->value : StatusEnum::PROCESSING->value;
         $toProcessStatus = $currentStatus == StatusEnum::NEW->value ? StatusEnum::PROCESSING->value : StatusEnum::MANAGER_PROCESSING->value;
         
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
