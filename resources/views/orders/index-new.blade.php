@@ -95,7 +95,7 @@
     <div class="row">
         <div class="col-12">
                 <div class="table-container">
-			<table class="long-table">
+			<table id="excel-table" class="long-table">
                             <tr>
                                 <th class="first-col head-bold">Товары</th>
                                 @foreach ($divisionNames as $divisionName)

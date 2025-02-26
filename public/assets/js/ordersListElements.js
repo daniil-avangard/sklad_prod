@@ -8,7 +8,7 @@ let editElementsOrders = document.querySelectorAll('.edit-button-excell');
 Array.from(popUps1).forEach((el, index) => {
     const listener = () => {
         let trParent = el.parentNode;
-        console.log("trParent = ", popUpsChilds[index]);
+//        console.log("trParent = ", popUpsChilds[index]);
         popUpsChilds[index].classList.toggle("show");
         trParent.classList.toggle("tr-height");
     }
@@ -19,9 +19,21 @@ Array.from(popUps1).forEach((el, index) => {
 });
 
 butonChangeOrderAllStatus.onclick = () => {
-    const url = new URL(window.location.origin);
-    url.pathname = '/ordersNewUpdate';
-    window.open(url, "_self");
+    let tableExcelTrArray = Array.from(document.getElementById('excel-table').getElementsByTagName("TR"));
+    console.log("Красного цвета = ", tableExcelTrArray.filter((elm) => elm.className == "row-color").length);
+//    if (tableExcelTrArray.filter((elm) => elm.className != "row-color").length == 350) {
+//        const url = new URL(window.location.origin);
+//        url.pathname = '/ordersNewUpdate';
+//        window.open(url, "_self");
+//    } else {
+//        Toast.fire({
+//                icon: 'error',
+//                title: 'Ошибка при обновлении статусов'
+//            });
+//    }
+//    const url = new URL(window.location.origin);
+//    url.pathname = '/ordersNewUpdate';
+//    window.open(url, "_self");
 }
 
 const excellCellClickFunction = (el) => {
