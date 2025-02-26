@@ -85,13 +85,17 @@ class OrderController extends Controller
     public function indexNewUpdate()
     {
         $this->authorize('viewAny', Order::class);
+        $role = Auth::user()->rolesId()->pluck('id')->toArray();
+        $currentStatus = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $toProcessStatus = $currentStatus == StatusEnum::NEW->value ? StatusEnum::PROCESSING->value : StatusEnum::MANAGER_PROCESSING->value;
+        
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get();
         foreach ($orders as $order) {
-            if ($order->status->value == StatusEnum::NEW->value) {
-                $order->status = StatusEnum::MANAGER_PROCESSING->value;
+            if ($order->status->value == $currentStatus) {
+                $order->status = $toProcessStatus;
                 $order->save();
             }
         }
@@ -102,7 +106,7 @@ class OrderController extends Controller
     {
         $role = Auth::user()->rolesId()->pluck('id')->toArray();
 //        $currentRole = ($role[0] == 1004) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
-        $currentRole = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $currentRole = (in_array(1004, $role)) ? StatusEnum::NEW->value : StatusEnum::PROCESSING->value;
         $allDivisionsNames = Division::all()->map(function ($division) {
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
