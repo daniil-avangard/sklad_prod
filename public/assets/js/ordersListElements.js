@@ -19,18 +19,25 @@ Array.from(popUps1).forEach((el, index) => {
 });
 
 butonChangeOrderAllStatus.onclick = () => {
+    let tableExcelDigits = document.querySelectorAll('.wrap-icon-digits-exell');
     let tableExcelTrArray = Array.from(document.getElementById('excel-table').getElementsByTagName("TR"));
     //console.log("Красного цвета = ", tableExcelTrArray.filter((elm) => elm.className == "row-color").length== 0);
-    if (tableExcelTrArray.filter((elm) => elm.className == "row-color").length == 0) {
+    if (tableExcelTrArray.filter((elm) => elm.className == "row-color").length == 0 && tableExcelDigits.length > 0) {
         butonChangeOrderAllStatus.disabled = true;
         const url = new URL(window.location.origin);
         url.pathname = '/ordersNewUpdate';
         window.open(url, "_self");
-    } else {
+    } else if (tableExcelTrArray.filter((elm) => elm.className == "row-color").length > 0) {
         Toast.fire({
                 icon: 'error',
                 title: 'Ошибка при обновлении статусов'
             });
+     
+    } else {
+        Toast.fire({
+                icon: 'success',
+                title: 'Обновления не требуется'
+            })
     }
 }
 
