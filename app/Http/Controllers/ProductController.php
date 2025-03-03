@@ -118,6 +118,7 @@ class ProductController extends Controller
                 })
             ];
         });
+//        dd($allDivisions);
 
         // Фильтруем все выбранные активные подразделения
         $selectedDivisions = $allDivisions->flatMap(function ($category) {

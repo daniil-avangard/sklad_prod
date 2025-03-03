@@ -36,11 +36,13 @@ Route::post('/basket/saveorder', [BasketController::class, 'saveOrder'])->name('
 
 Route::get('/orders', [OrderController::class, 'index'])->name('orders');
 Route::get('/ordersNew', [OrderController::class, 'indexNew'])->name('orders.new');
+Route::get('/ordersNewUpdate', [OrderController::class, 'indexNewUpdate'])->name('orders.newupdate');
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
 Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
 
 Route::post('/orders/update-quantity', [OrderController::class, 'updateQuantity'])->name('orders.update-quantity');
+Route::post('/orders/update-full-order', [OrderController::class, 'updateFullOrder'])->name('orders.update-full-order');
 Route::post('/orders/update-comment-manager', [OrderController::class, 'updateCommentManager'])->name('orders.update-comment-manager');
 
 // Кастыль. Роут на каждый статус заказа, для разгроничения политики доступа

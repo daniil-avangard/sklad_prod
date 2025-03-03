@@ -207,13 +207,17 @@ button.btn-settings:active {
     background-color: #0a567c !important;
 }
 tr p {
-    margin-bottom: 5px !important;
+    height: 100%;
+/*    margin-bottom: 5px !important;*/
 }
 .order-popup-parent {
     position: relative;
     display: block;
     cursor: pointer;
-    user-select: none;
+/*    user-select: none;*/
+    overflow: visible !important;
+    height: 100% !important;
+    z-index: 100 !important;
 }
 .order-popup-child {
     position: absolute;
@@ -223,14 +227,15 @@ tr p {
     color: #fff;
     text-align: center;
     border-radius: 6px;
-    z-index: 1;
-    bottom: 125%;
+    bottom: -125%;
     left: 50%;
     margin-left: -80px;
+    z-index: 100 !important;
 }
-.order-popup-parent .show {
+.show {
     visibility: visible;
     animation: fadeIn 0.1s;
+    z-index: 100 !important;
 }
 @keyframes fadeIn {
     from {opacity: 0;}
@@ -240,6 +245,237 @@ tr p {
     writing-mode: vertical-lr !important;
     text-orientation: upright !important;
 }
+.rotated-table-text {
+    writing-mode: vertical-lr !important;
+    transform: rotate(-180deg) !important;
+    letter-spacing: 2px !important;
+}
+.new-table {
+    width: 100% !important;
+}
 .new-table-row {
+    position: -webkit-sticky;
     width: 25% !important;
+    white-space: nowrap !important;
+}
+.overflowed-row {
+    width: 20% !important;
+    white-space: nowrap !important;
+}
+.new-table-wrapper {
+    width: 70% !important;
+    overflow-x: scroll !important;
+}
+.new-table-wrapper table {
+    border-collapse: separate !important;
+    width: 100% !important;
+}
+.clickForOrder {
+    cursor: pointer;
+}
+.digits-order {
+    display: flex;
+    flex-direction: column;
+}
+.digits-order p {
+    margin: 0 !important;
+}
+.view {
+  width: 1250px;
+  height: 500px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.wrapper table tr th:first-child {
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 2 !important;
+  left: 0;
+}
+.wrapper table th {
+  white-space: nowrap;
+}
+.view table td:first-child {
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 2 !important;
+  left: 0;
+}
+.wrapper {
+  position: relative;
+  width: 1250px;
+  height: 500px;
+  overflow: scroll;
+/*  white-space: nowrap;*/
+}
+.sticky-col {
+/*  position: -webkit-sticky;
+  position: sticky;*/
+/*  background-color: white !important;*/
+/*  z-index: 2 !important;*/
+}
+.sticky-head {
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 2 !important;
+}
+.first-col {
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  left: 0px;
+/*  overflow: hidden;*/
+  text-wrap: wrap;
+}
+.first-col-1 {
+  width: 300px;
+  min-width: 300px;
+  max-width: 300px;
+  left: 0px;
+/*  overflow: hidden;*/
+  text-wrap: wrap;
+}
+.second-col {
+  width: 250px;
+  min-width: 250px;
+  max-width: 350px;
+  left: 200px;
+}
+.another-col {
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px;
+  z-index: 1 !important;
+}
+.long-table table {
+    border: 1px solid #eaf0f9;
+}
+.long-table td {
+    border: 1px solid #eaf0f9;
+}
+.long-table th {
+    border: 1px solid #eaf0f9;
+}
+.head-bold {
+    font-weight: bold;
+}
+.color-for-approve {
+    color: red;
+}
+.color-division-1 {
+    background-color: #ffc5c5 !important;
+}
+.color-division-2 {
+    background-color: #c0c0ff !important;
+}
+.color-division-3 {
+    background-color: #66ff66 !important;
+}
+.digits-row {
+    display: flex;
+    flex-direction: row;
+}
+.svg-digits-excel {
+    margin-left: 10px;
+    cursor: pointer;
+}
+.wrap-icon-digits-exell {
+    display: block;
+    position: relative;
+}
+.wrap-icon-digits-exell .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #888;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 6px;
+  padding: 3px 0;
+  position: absolute;
+  z-index: 11 !important;
+  top: 150%;
+  left: 50%;
+  margin-left: -60px;
+}
+.wrap-icon-digits-exell .tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #888 transparent;
+}
+.wrap-icon-digits-exell:hover .tooltiptext {
+  visibility: visible;
+}
+.icon-digits-exell {
+    margin-left: 5px;
+    cursor: pointer;
+    transform: translateY(2px) !important;
+    color: #888;
+    font-size: 14px;
+}
+.btn-excel {
+    transform: scale(0.7) !important;
+}
+.order-visible {
+    display: none;
+}
+
+.table-container { 
+    width: 1250px; 
+    height: 500px; 
+    overflow: scroll;
+    margin-bottom: 20px;
+}
+.table-container table th {
+  white-space: nowrap;
+  padding: 10px 20px;
+  font-family: Arial;
+}
+.table-container table td {
+/*  white-space: nowrap;*/
+/*  padding: 10px 20px;
+  font-family: Arial;*/
+}
+.table-container table tr th:first-child {
+  position: sticky;
+  width: 100px;
+  left: 0;
+  z-index: 10;
+  background: #fff;
+}
+.table-container table tr {
+    transition: height 0.3s ease-in-out;
+}
+.table-container table td:first-child{
+  position: sticky;
+  width: 100px;
+  left: 0;
+  z-index: 10;
+  background: #fff;
+}
+.table-container table tr th:first-child{
+  z-index: 15;
+}
+.table-container table tr th{
+  position: sticky;
+  top: 0;
+  z-index: 9;
+  background: transparent;
+}
+.table-container td {
+    overflow: visible !important;
+}
+.table-container table tr th{
+    background: #fff;
+}
+.tr-height {
+    height: 100px !important;
+}
+.row-color {
+    background-color: #ffe6e6;
 }
