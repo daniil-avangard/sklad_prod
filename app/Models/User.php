@@ -43,6 +43,11 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(DivisionGroup::class, 'division_group_user');
     }
+    
+    public function rolesId(): BelongsToMany
+    {
+        return $this->belongsToMany(Role::class, 'role_user');
+    }
 
     public function getCreatedAtYearAttribute()
     {

@@ -69,7 +69,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                        <table id="table-order" class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>Название</th>
@@ -82,7 +82,7 @@
 
                                 @foreach ($order->items as $item)
                                     <tr>
-                                        <td>{{ $item->product->name }}</td>
+                                        <td class="product-select">{{ $item->product->name }}</td>
                                         <td>
                                             @php
                                                 $dateOfActualities = $item->product->variants
@@ -157,6 +157,39 @@
 
                 </div>
 
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="card-title">Добавить товар</h4>
+                        </div><!--end col-->
+                    </div> <!--end row-->
+                </div>
+                <div class="row">
+                    <div class="card-body col-sm-3">
+                        <label class="form-label">Товары</label>
+                        <select id="product-name" name="products" class="form-select select2 product-select-option">
+                            <option value="Выберите товар">Выберите товар</option>
+                            @foreach ($products as $product)
+                                <option value="{{ $product->id }}">{{ $product->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="card-body col-sm-3">
+                            <label class="form-label">Количество</label>
+                            <input id="product-quontity" type="text" name="products" value="0" class="form-control">
+                    </div>
+                    <div class="card-body col-sm-3">
+                            <label class="form-label"></label>
+                            <div class="col-sm-12">
+                                <span id="add-item" data-repeater-create="" class="btn btn-outline-secondary">
+                                    <span class="fas fa-plus"></span> Добавить
+                                </span>
+                            </div>
+                    </div>
+                </div>
             </div>
 
         </div>
