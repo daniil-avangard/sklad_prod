@@ -479,3 +479,15 @@ tr p {
 .row-color {
     background-color: #ffe6e6;
 }
+@media screen and (max-width: 1920px) {
+  .table-container { 
+    width: 1650px; 
+    height: 600px;
+  }
+}
+@media screen and (max-width: 1540px) {
+  .table-container { 
+    width: 1250px; 
+    height: 500px;
+  }
+}

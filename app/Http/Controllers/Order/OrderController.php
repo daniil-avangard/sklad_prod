@@ -25,8 +25,8 @@ class OrderController extends Controller
     public function index()
     {
         //dd($_SERVER['HTTP_USER_AGENT']);
-        $user_agent = $_SERVER['HTTP_USER_AGENT'];
-        $browser = get_browser($user_agent, true);
+//        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+//        $browser = get_browser($user_agent, true);
         //dd($browser);
         $this->authorize('viewAny', Order::class);
 
@@ -62,6 +62,18 @@ class OrderController extends Controller
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get()->sortByDesc('created_at');
         
+        $absolutelyAllOrders = Order::whereIn('status',[StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get();
+        $uniqGoodsTotalOrdered = array();
+        foreach ($absolutelyAllOrders as $order) {
+            foreach ($order->items as $item) {
+                if (!isset($uniqGoodsTotalOrdered[$item->product->name])) {
+                    $uniqGoodsTotalOrdered[$item->product->name] = $item->quantity;
+                } else {
+                    $uniqGoodsTotalOrdered[$item->product->name] += $item->quantity;
+                }
+            }
+        }
+        
         $allItems = [];
         
         foreach ($orders as $order) {
@@ -79,7 +91,7 @@ class OrderController extends Controller
 //        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
 //        $test = $uniqGoods[1]['name'];
 //        dd($allDivisionsDataNew, $uniqGoods);
-        return view('orders.index-new', compact('orders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew'));
+        return view('orders.index-new', compact('orders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew', 'uniqGoodsTotalOrdered'));
     }
     
     public function indexNewUpdate()
