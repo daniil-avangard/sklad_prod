@@ -51,7 +51,7 @@
                                     <td class="another-col">{{ $good['min_stock'] }}</td>
                                     <td class="another-col"> - </td>
                                     <td class="another-col">{{ $good['warehouse'] }}</td>
-                                    <td class="another-col">{{ $good['warehouse']-$good['total'] }}</td>
+                                    <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] }}</td>
                                 </tr>
                             @endforeach
 			</table>
