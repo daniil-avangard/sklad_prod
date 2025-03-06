@@ -124,12 +124,22 @@ class OrderController extends Controller
     private function forNewTable($divisionGroups, $orders)
     {
         $role = Auth::user()->rolesId()->pluck('id')->toArray();
+        $divisionGroupsID = Auth::user()->divisionGroups()->pluck('id');
+        //dd($divisionGroupsID[0]);
 //        $currentRole = ($role[0] == 1004) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
         $currentRole = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
         $allDivisionsNames = Division::all()->map(function ($division) {
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
-//        $allDivisionsNames = Division::all();
+        //$groupDivisionsNames = Division::all()->get()->divisionGroups()->whereIn('division_group_id', $divisionGroupsID);
+        
+        $groupDivisionsNames = Division::all()->map(function ($division) use ($divisionGroupsID) {
+            if (in_array($divisionGroupsID[0], $division->divisionGroups()->pluck('id')->toArray())) {
+                return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
+            }
+        })->toArray();
+//        $groupDivisionsNames1 = Division::all()->toArray();
+//        dd(array_filter($groupDivisionsNames));
         
         $divisionStateOrders = array();
         $divisionStateOrdersNew = array();
