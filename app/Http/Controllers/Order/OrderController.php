@@ -147,7 +147,7 @@ class OrderController extends Controller
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
         
-        $allDivisionsNames =  (in_array(1001, $role)) ? $groupDivisionsNames1 : $allDivisionsNames;
+        $allDivisionsNames =  (in_array(1001, $role)) ? $allDivisionsNames : $groupDivisionsNames1;
         
         $divisionStateOrders = array();
         $divisionStateOrdersNew = array();
