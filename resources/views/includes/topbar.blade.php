@@ -122,10 +122,14 @@
                         <text x="16" y="19" font-size="10" fill="#7081b9">0</text>
                     </g>
                 </svg>
-                <div class="dropdown-menu dropdown-menu-end dropdown-lg pt-0">
+                <div id="block-cart" class="dropdown-menu dropdown-menu-end dropdown-lg pt-0">
                     <h6
                         class="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
                         Корзина <span class="badge bg-primary rounded-pill">0</span>
+                    </h6>
+                    <h6
+                        class="dropdown-item-text font-15 m-0 py-3 d-flex justify-content-between align-items-center">
+                        Итого <span class="badge bg-primary rounded-pill">0</span>
                     </h6>
                 </div>
             </li>
