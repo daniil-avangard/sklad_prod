@@ -131,6 +131,9 @@
                         class="dropdown-item-text font-15 m-0 py-3 d-flex justify-content-between align-items-center">
                         Итого <span class="badge bg-primary rounded-pill">0</span>
                     </h6>
+                    <a href="{{ route('basket') }}" class="dropdown-item text-center text-primary">
+                        Перейти в корзину</i>
+                    </a>
                 </div>
             </li>
         </ul><!--end topbar-nav-->
