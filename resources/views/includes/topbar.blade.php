@@ -113,6 +113,22 @@
                             class="align-self-center icon-xs icon-dual me-1"></i>Выйти</a>
                 </div>
             </li>
+            <li id ="shop-cart" class="dropdown" style="width: 57px; height: 57px; cursor: pointer;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" style="transform: scale(1.35) translateY(8px);">
+                    <g id="trolley">
+                        <path stroke="#7081b9" fill="#7081b9" d="M29.4,8.85A2.48,2.48,0,0,0,27.53,8H14a1,1,0,0,0,0,2H27.53a.47.47,0,0,1,.36.16.48.48,0,0,1,.11.36l-1.45,10A1.71,1.71,0,0,1,24.85,22H14.23a1.72,1.72,0,0,1-1.68-1.33L10,8.79v0h0L9.5,6.87A3.79,3.79,0,0,0,5.82,4H3A1,1,0,0,0,3,6H5.82A1.8,1.8,0,0,1,7.56,7.36L8,9.21H8L10.6,21.09A3.72,3.72,0,0,0,14.23,24H24.85a3.74,3.74,0,0,0,3.68-3.16l1.45-10A2.45,2.45,0,0,0,29.4,8.85Z" />
+                        <path stroke="#7081b9" fill="#7081b9" d="M16,25H14a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" />
+                        <path stroke="#7081b9" fill="#7081b9" d="M25,25H23a1,1,0,0,0,0,2h2a1,1,0,0,0,0-2Z" />
+                        <text x="16" y="19" font-size="10" fill="#7081b9">0</text>
+                    </g>
+                </svg>
+                <div class="dropdown-menu dropdown-menu-end dropdown-lg pt-0">
+                    <h6
+                        class="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
+                        Корзина <span class="badge bg-primary rounded-pill">0</span>
+                    </h6>
+                </div>
+            </li>
         </ul><!--end topbar-nav-->
 
         <ul class="list-unstyled topbar-nav mb-0">

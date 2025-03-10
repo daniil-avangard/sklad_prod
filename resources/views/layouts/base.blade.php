@@ -73,6 +73,7 @@
         <script src="/assets/js/feather.min.js"></script>
         <script src="/assets/js/simplebar.min.js"></script>
         <script src="/assets/js/moment.js"></script>
+        <script src="/assets/js/shopcart.js"></script>
         <script src="/plugins/daterangepicker/daterangepicker.js"></script>
 
         <link href="/plugins/sweet-alert2/sweetalert2.min.css" rel="stylesheet" type="text/css">

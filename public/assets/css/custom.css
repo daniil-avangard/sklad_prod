@@ -2,13 +2,14 @@
     width: 14px;
     height: 14px;
 }
-
 .button-icon--big {
     width: 20px;
     height: 20px;
 }
-
-
 .button-icon-wrapper {
     padding: 0.2rem 0.5rem;
+}
+.cart-display {
+    display: block;
+    transform: translate(-276px, 25px);
 }
