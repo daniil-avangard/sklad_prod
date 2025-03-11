@@ -7,7 +7,7 @@ addProductToBasketForms.forEach((basketForm, index) => {
         let newLoader = document.createElement('span');
         newLoader.setAttribute("class", "loader-assembled");
         newLoader.id = "loader-status";
-        buttonToBasketForms[index].appendChild(newLoader);
+        buttonToBasketForms[index].insertBefore(newLoader, buttonToBasketForms[index].firstChild);
         buttonToBasketForms[index].disabled = true;
         const data = new FormData(basketForm);
         const productId = basketForm.dataset.productId;
@@ -32,6 +32,8 @@ addProductToBasketForms.forEach((basketForm, index) => {
                 });
                 buttonToBasketForms[index].disabled = false;
                 buttonToBasketForms[index].removeChild(newLoader);
+                console.log("Название товара = ", data);
+//                buttonToBasketForms[index].innerHTML = "Добавить в корзину";
                 basketForm.reset();
             })
             .catch((error) => {

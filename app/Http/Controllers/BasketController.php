@@ -65,6 +65,9 @@ class BasketController extends Controller
 
         return response()->json([
             'success' => 'Добавлено',
+            'name' => $product->name,
+            'image' => $product->image,
+            'quontity' => $basketProduct->pivot->quantity
         ]);
     }
 
