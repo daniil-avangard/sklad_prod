@@ -19,6 +19,8 @@ Route::post('/basket/add/{product}', [BasketController::class, 'add'])
     ->missing(function () {
         throw new NotFoundHttpException();
     });
+    
+Route::get('/basket/givedata', [BasketController::class, 'giveBasketData'])->name('basket.givedata');
 
 Route::post('/basket/update/{product}', [BasketController::class, 'updateQuantity'])
     ->where('product', '[0-9]+')

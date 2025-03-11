@@ -71,7 +71,14 @@ class BasketController extends Controller
         ]);
     }
 
-
+    public function giveBasketData()
+    {
+        $data = $this->basket->products()->orderBy('name')->get();
+        return response()->json([
+            'success' => 'Добавлено',
+            'data' => $data
+        ]);
+    }
 
     public function updateQuantity(Request $request, Product $product)
     {
