@@ -26,7 +26,7 @@ butonChangeOrderAllStatus.onclick = () => {
         butonChangeOrderAllStatus.disabled = true;
         const url = new URL(window.location.origin);
         url.pathname = '/ordersNewUpdate';
-        window.open(url, "_self");
+        
     } else if (tableExcelTrArray.filter((elm) => elm.className == "row-color").length > 0) {
         Toast.fire({
                 icon: 'error',

@@ -109,3 +109,7 @@
     </div><!--end row-->
 
 @endsection
+
+@push('scripts-plugins')
+    <script src="/assets/js/check-window.js"></script>
+@endpush

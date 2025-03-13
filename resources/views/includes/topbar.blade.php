@@ -127,6 +127,21 @@
                         class="dropdown-item-text font-15 m-0 py-3 border-bottom d-flex justify-content-between align-items-center">
                         Корзина <span class="badge bg-primary rounded-pill">0</span>
                     </h6>
+                    <div class="cart-block-scroll">
+                        <!-- item-->
+                        <div id="item-for-clone" class="dropdown-item py-3 cart-block-for-clone">
+                            <small class="float-end text-muted ps-2">2 мин</small>
+                            <div class="media">
+                                <div class="avatar-md bg-soft-primary">
+                                    <i data-feather="shopping-cart" class="align-self-center icon-xs"></i>
+                                </div>
+                                <div class="media-body align-self-center ms-2 text-truncate">
+                                    <h6 class="my-0 fw-normal text-dark">Новое уведомление</h6>
+                                    <small class="text-muted mb-0">В разработке</small>
+                                </div><!--end media-body-->
+                            </div><!--end media-->
+                        </div><!--end-item-->
+                    </div>
                     <h6
                         class="dropdown-item-text font-15 m-0 py-3 d-flex justify-content-between align-items-center">
                         Итого <span class="badge bg-primary rounded-pill">0</span>

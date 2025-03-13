@@ -13,3 +13,13 @@
     display: block;
     transform: translate(-276px, 20px);
 }
+.cart-block-for-clone {
+    display: none;
+}
+.cart-block-visible {
+    display: block;
+}
+.cart-block-scroll {
+    height: 300px !important;
+    overflow-y: scroll !important;
+}

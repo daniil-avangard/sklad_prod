@@ -1,7 +1,9 @@
-document.addEventListener("DOMContentLoaded", function() {
-
+document.addEventListener("DOMContentLoaded", async function() {
     let cartIconButton = document.getElementById('shop-cart');
     let blockCartButton = document.getElementById('block-cart');
+    let blockCartClone = document.getElementById('item-for-clone');
+    let parentCartBlock = document.querySelectorAll('.cart-block-scroll')[0];
+    console.log(parentCartBlock);
 
     cartIconButton.onmouseover = (e) => {
         cartIconButton.children[1].classList.add("cart-display");
@@ -12,7 +14,9 @@ document.addEventListener("DOMContentLoaded", function() {
     cartIconButton.onclick = () => {
         const url = new URL(window.location.origin);
         url.pathname = '/basket/';
-        window.open(url, "_self");
+        let invoice = window.open(url, "_self");
+//        invoice.postMessage("app.yyy");
+        invoice.receiptdata = "Hello page";
     }
 
     blockCartButton.onmouseover = (e) => {
@@ -24,8 +28,27 @@ document.addEventListener("DOMContentLoaded", function() {
             cartIconButton.children[1].classList.remove("cart-display");
         }
     }
+    parentCartBlock.onscroll = (event) => {
+        console.log(event);
+        cartIconButton.onmouseout = (e) => {}
+        blockCartButton.onmouseout = (e) => {}
+        setTimeout(() => {
+            cartIconButton.onmouseout = (e) => {
+                cartIconButton.children[1].classList.remove("cart-display");
+            }
+            blockCartButton.onmouseout = (e) => {
+                cartIconButton.children[1].classList.remove("cart-display");
+                cartIconButton.onmouseout = (e) => {
+                    cartIconButton.children[1].classList.remove("cart-display");
+                }
+            }
+        }, 10);
+    }
     
-    makeRequestToBasketApi();
+    let dataForBasket = await makeRequestToBasketApi();
+    console.log(dataForBasket);
+    createCartItems(dataForBasket.data, blockCartClone);
+    
 });
 
 const makeRequestToBasketApi = async () => {
@@ -42,9 +65,24 @@ const makeRequestToBasketApi = async () => {
             throw new Error(`Response status: ${response.status}`);
         }
         const data = await response.json();
-        console.log(data);
+        return data;
     }
     catch(error) {
         console.log(error.message);
     }
+}
+
+const createCartItems = (dataForBasket, blockCartClone) => {
+    
+    
+    Array(dataForBasket.length).fill().forEach((_, index) => {
+        let cloneNode = blockCartClone.cloneNode(true);
+        cloneNode.id = "";
+        let parentNode = blockCartClone.parentNode;
+        cloneNode.classList.remove("cart-block-for-clone");
+        cloneNode.classList.add("cart-block-visible");
+//        console.log(cloneNode);
+        parentNode.appendChild(cloneNode);
+    });
+    
 }
