@@ -1,5 +1,8 @@
 let deleteFromBasket = document.querySelectorAll('.delete-from-basket');
 
+
+// функция по удалению товара из карзины и
+// соотвествующего ряда
 Array.from(deleteFromBasket).forEach((el, index) => {
     let parentTR = el.parentNode.parentNode;
     el.onclick = async () => {
