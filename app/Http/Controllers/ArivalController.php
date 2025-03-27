@@ -193,6 +193,11 @@ class ArivalController extends Controller
 
         return response()->json(['success' => true, 'data' => $korobka->id]);
     }
+    
+    public function createKorobkaNew(Request $request)
+    {
+        return response()->json(['success' => true]);
+    }
 
     public function updateKorobka(Request $request)
     {

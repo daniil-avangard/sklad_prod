@@ -1,3 +1,35 @@
+//let statusNew = document.getElementById("korobka-add-new");
+//
+//statusNew.onclick = async () => {
+//    let url = '/basket/createKorobkaNew';
+//    let dataToSend = {_token: $('meta[name="csrf-token"]').attr('content') };
+////    let dataToSend = {name: data.name, orderId: data.orderId, action:data.action };
+//    console.log(dataToSend);
+//    const request = new Request(url, {
+//                                method: "POST",
+//                                headers: {
+//                                            'Content-Type': 'application/json;charset=utf-8',
+//                                        },
+//                                body: JSON.stringify(dataToSend)
+//                                });
+//                                
+//    let res = {};
+//    try {
+//        const response = await fetch(request);  
+//        if (!response.ok) {
+//            throw new Error(`Response status: ${response.status}`);
+//        }
+//        res = await response.json();
+//        res.result = true;
+//        
+//        console.log(res);
+//    }
+//    catch(error) {
+//        console.log(error.message);
+//        res.result = false;
+//    }
+//}
+
 const checkStatusForButtons = () => {
     let status = document.getElementById("order-status").dataset.status;
     let buttonsArray = ["start-assembl", "package-assembled", "package-shipped"];

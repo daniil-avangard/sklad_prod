@@ -3,7 +3,7 @@
 
 @section('title_page', 'Заказы')
 
-@push('styles-plugins')
+@push('styles-plugins') 
     <link type="text/css" href="/plugins/x-editable/css/bootstrap-editable.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">

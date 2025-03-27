@@ -249,6 +249,8 @@ tr p {
     writing-mode: vertical-lr !important;
     transform: rotate(-180deg) !important;
     letter-spacing: 2px !important;
+    max-height: 170px !important;
+    text-wrap: wrap !important;
 }
 .new-table {
     width: 100% !important;
@@ -431,6 +433,12 @@ tr p {
     overflow: scroll;
     margin-bottom: 20px;
 }
+.table-container-goods { 
+    width: 1250px; 
+    height: 500px; 
+    overflow-y: scroll;
+    margin-bottom: 20px;
+}
 .table-container table th {
   white-space: nowrap;
   padding: 10px 20px;
@@ -444,6 +452,22 @@ tr p {
 .table-container table tr th:first-child {
   position: sticky;
   width: 100px;
+  left: 0;
+  z-index: 10;
+  background: #fff;
+}
+.table-container-goods table tr:first-child  {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background: #fff;
+}
+.table-container-goods table tr:nth-child(2)  {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 1.7525rem;
   left: 0;
   z-index: 10;
   background: #fff;
@@ -479,8 +503,15 @@ tr p {
 .row-color {
     background-color: #ffe6e6;
 }
+.basket-button-change {
+    background-color: #ffe680 !important;
+}
 @media screen and (max-width: 1920px) {
   .table-container { 
+    width: 1650px; 
+    height: 600px;
+  }
+  .table-container-goods {
     width: 1650px; 
     height: 600px;
   }
@@ -490,4 +521,9 @@ tr p {
     width: 1250px; 
     height: 500px;
   }
+  .table-container-goods { 
+    width: 1250px; 
+    height: 500px;
+  }
 }
+

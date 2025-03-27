@@ -46,6 +46,7 @@ Route::middleware([ValidateCsrfToken::class, 'auth', 'admin'])->group(function (
     Route::get('/assembly/{order}', [ArivalController::class, 'showAssembl'])->name('assembly.show');
 //    Route::post('/assembly/createKorobka', [ArivalController::class, 'createKorobka'])->name('assembly.createKorobka')->middleware(ValidateCsrfToken::class);
     Route::post('/assembly/createKorobka', [ArivalController::class, 'createKorobka'])->name('assembly.createKorobka');
+    Route::post('/basket/createKorobkaNew', [ArivalController::class, 'createKorobkaNew'])->name('assembly.createKorobkaNew');
     Route::post('/assembly/updateKorobka', [ArivalController::class, 'updateKorobka'])->name('assembly.updateKorobka');
     Route::post('/assembly/korobkaChangeStatus', [ArivalController::class, 'korobkaChangeStatus'])->name('assembly.korobkaChangeStatus');
 
