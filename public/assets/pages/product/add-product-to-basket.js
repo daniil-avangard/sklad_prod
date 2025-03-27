@@ -1,7 +1,16 @@
 const addProductToBasketForms = document.querySelectorAll('.add-product-to-basket-form');
+let butonRedirectToBasket = document.getElementById('redirect-to-basket');
+let buttonsForm = document.querySelectorAll('button[type=submit]');
 
-addProductToBasketForms.forEach(basketForm => {
+butonRedirectToBasket.onclick = () => {
+    const url = new URL(window.location.origin);
+    url.pathname = '/basket/';
+    window.open(url, "_self");
+}
+
+addProductToBasketForms.forEach((basketForm, ind) => {
     basketForm.addEventListener('submit', (evt) => {
+        buttonsForm[ind].disabled = true;
         evt.preventDefault();
 
         const data = new FormData(basketForm);
@@ -17,15 +26,19 @@ addProductToBasketForms.forEach(basketForm => {
                 if (!response.ok) {
                     throw new Error('Ошибка добавления товара в корзину');
                 }
-
                 return response.json();
             })
             .then((data) => {
+                console.log('data = ', data);
+                buttonsForm[ind].innerHTML = data.quontity + " добавлено в корзину";
+                buttonsForm[ind].classList.add("basket-button-change");
+//                let button = basketForm.getElementsByTagName("BUTTON")[0];
+//                console.log('button = ', buttonsForm[ind]);
                 Toast.fire({
                     icon: 'success',
                     title: data.success
                 });
-
+                buttonsForm[ind].disabled = false;
                 basketForm.reset();
             })
             .catch((error) => {

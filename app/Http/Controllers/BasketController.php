@@ -65,6 +65,7 @@ class BasketController extends Controller
 
         return response()->json([
             'success' => 'Добавлено',
+            'quontity' => $quantity
         ]);
     }
 

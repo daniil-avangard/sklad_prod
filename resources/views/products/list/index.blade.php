@@ -1,5 +1,9 @@
 @extends('layouts.base')
 
+@push('styles-plugins')
+    <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
+@endpush
+
 @section('content')
 @include('includes.breadcrumb', [
 'title' => 'Товары',
@@ -11,9 +15,11 @@
 <div class="row">
     <div class="col-12">
         <div class="table-responsive">
+            <div class="table-container-goods">
             <table id="datatable" class="table table-bordered">
-                <thead>
+                
                     <tr>
+                        <th class="text-center" rowspan="2">Изображение</th>
                         <th class="text-center" rowspan="2">Название</th>
                         <th class="text-center" rowspan="2">Категория</th>
                         <th class="text-center" colspan="4">KKO</th>
@@ -30,13 +36,15 @@
                         <th class="text-center" colspan="1">Количество</th>
                         <th class="text-center" colspan="1"></th>
                     </tr>
-                </thead>
-                <tbody>
+               
+                
 
                     @foreach ($products as $product)
                     <tr>
                         <td>
                             <img src="{{ asset('/storage/' . $product->image) }}" alt="" height="40">
+                        </td>
+                        <td>
                             <p class="d-inline-block align-middle mb-0">
                                 <a href="{{ route('products.info', $product) }}"
                                     class="d-inline-block align-middle mb-0 product-name">{{ $product->name }}</a>
@@ -75,9 +83,13 @@
                     </tr>
                     @endforeach
 
-                </tbody>
+               
             </table>
+            </div>
         </div>
+    @can('view', \App\Models\Order::class)
+        <button id="redirect-to-basket" class="btn btn-success mb-3">Перейти в корзину</button>
+    @endcan
     </div> <!-- end col -->
 </div> <!-- end row -->
 @endsection
