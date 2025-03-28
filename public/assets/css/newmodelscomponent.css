@@ -479,7 +479,7 @@ tr p {
   position: sticky;
   width: 100px;
   left: 0;
-  z-index: 10;
+  z-index: 9;
   background: #fff;
 }
 .table-container table tr th:first-child{
@@ -505,6 +505,13 @@ tr p {
 }
 .basket-button-change {
     background-color: #ffe680 !important;
+    color: #1761fd !important;
+}
+.toggle-goods-popup-for-head {
+    z-index: 10 !important;
+}
+.toggle-goods-popup-for-cell {
+    z-index: 12 !important;
 }
 @media screen and (max-width: 1920px) {
   .table-container { 

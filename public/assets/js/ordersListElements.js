@@ -4,12 +4,15 @@ let popUpsChilds = document.querySelectorAll('.order-popup-child-1');
 let butonChangeOrderAllStatus = document.getElementById('acept-all-orders');
 let pElementsOrders = document.querySelectorAll('.clickForOrder');
 let editElementsOrders = document.querySelectorAll('.edit-button-excell');
+let tableThMain = document.getElementById('excel-table').getElementsByTagName("TH")[0];
 
 Array.from(popUps1).forEach((el, index) => {
     const listener = () => {
         let trParent = el.parentNode;
 //        console.log("trParent = ", popUpsChilds[index]);
         popUpsChilds[index].classList.toggle("show");
+        tableThMain.classList.toggle("toggle-goods-popup-for-head");
+        el.classList.toggle("toggle-goods-popup-for-cell");
         trParent.classList.toggle("tr-height");
     }
 
