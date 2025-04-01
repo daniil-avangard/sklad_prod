@@ -533,4 +533,15 @@ tr p {
     height: 500px;
   }
 }
+.visual-events {
+    pointer-events: none;
+}
+.close_image {
+  color: #aaaaaa;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  font-size: 20px;
+  font-weight: bold;
+}
 

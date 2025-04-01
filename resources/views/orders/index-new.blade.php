@@ -42,7 +42,8 @@
                                         <div class="order-popup-parent">
                                             <p>{{ $good['name'] }}</p>
                                             <div class="order-popup-child order-popup-child-1">
-                                                <img src="{{ asset('storage/' . $good['image']) }}" alt="" class=" mx-auto  d-block" height="150">
+                                                <span class="close_image">&times;</span>
+                                                <img src="{{ asset('storage/' . $good['image']) }}" alt="" class="mx-auto d-block visual-events" height="150">
                                             </div>
                                         </div>
                                     </td>
