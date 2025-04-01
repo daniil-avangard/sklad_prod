@@ -100,7 +100,7 @@ class OrderController extends Controller
         $divisionGroups1 = Auth::user()->division_id;
         $role = Auth::user()->rolesId()->pluck('id')->toArray();
         $currentStatus = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
-        $toProcessStatus = $currentStatus == StatusEnum::NEW->value ? StatusEnum::PROCESSING->value : StatusEnum::MANAGER_PROCESSING->value;
+        $toProcessStatus = $currentStatus == StatusEnum::NEW->value ? StatusEnum::PROCESSING->value : StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
         
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
