@@ -42,7 +42,7 @@
                                         <div class="order-popup-parent">
                                             <p>{{ $good['name'] }}</p>
                                             <div class="order-popup-child order-popup-child-1">
-                                                <img src="{{ asset('storage/' . $good['image']) }}" alt="" class=" mx-auto  d-block" height="150">
+                                                <img src="{{ asset('storage/' . $good['image']) }}" alt="" class="mx-auto d-block visual-events" height="150">
                                             </div>
                                         </div>
                                     </td>
@@ -66,6 +66,6 @@
 @push('scripts-plugins')
 <!--    <script src="/plugins/x-editable/js/bootstrap-editable.min.js"></script>-->
 <!--    <script src="/assets/pages/orders/update_new.quantity.js"></script>-->
-    <script src="/assets/js/checkBoxesOrdersList.js"></script>
+<!--    <script src="/assets/js/checkBoxesOrdersList.js"></script>-->
     <script src="/assets/js/ordersListElements.js"></script>
 @endpush
