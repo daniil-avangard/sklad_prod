@@ -537,10 +537,10 @@ tr p {
     pointer-events: none;
 }
 .close_image {
-  color: #aaaaaa;
+  color: #000000;
   position: absolute;
   top: 5px;
-  right: 5px;
+  left: 5px;
   font-size: 20px;
   font-weight: bold;
 }

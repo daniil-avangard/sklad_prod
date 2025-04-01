@@ -1,3 +1,5 @@
+document.addEventListener("DOMContentLoaded", function() {
+
 let popUps = document.querySelectorAll('.order-popup-parent');
 let popUps1 = document.querySelectorAll('.first-col-1');
 let popUpsChilds = document.querySelectorAll('.order-popup-child-1');
@@ -6,14 +8,32 @@ let pElementsOrders = document.querySelectorAll('.clickForOrder');
 let editElementsOrders = document.querySelectorAll('.edit-button-excell');
 let tableThMain = document.getElementById('excel-table').getElementsByTagName("TH")[0];
 
+window.addEventListener("error", (event) => {
+  log.textContent = `${log.textContent}${event.type}: ${event.message}\n`;
+  console.log(event);
+});
+
 Array.from(popUps1).forEach((el, index) => {
     const listener = () => {
+        console.log("Проверка Doma = ", document.readyState);
+        popUpsChilds.forEach((child, ind) => {
+            if (ind != index) {
+                if (child.classList.contains("show")) {
+                    console.log("Имеется такой блок");
+                    let trParent = child.parentNode.parentNode.parentNode;
+                    child.classList.toggle("show");
+                    //tableThMain.classList.toggle("toggle-goods-popup-for-head");
+                    popUps1[ind].classList.toggle("toggle-goods-popup-for-cell");
+                    trParent.classList.toggle("tr-height");
+                }
+            }
+        });
         let trParent = el.parentNode;
-//        console.log("trParent = ", popUpsChilds[index]);
         popUpsChilds[index].classList.toggle("show");
         tableThMain.classList.toggle("toggle-goods-popup-for-head");
         el.classList.toggle("toggle-goods-popup-for-cell");
         trParent.classList.toggle("tr-height");
+        
     }
 
     el.addEventListener("mouseover", listener, false);
@@ -164,4 +184,6 @@ Array.from(pElementsOrders).forEach((el, index) => {
 //        url.pathname = '/orders/' + id;
 //        window.open(url, "_self");
 //    }
+});
+
 });
