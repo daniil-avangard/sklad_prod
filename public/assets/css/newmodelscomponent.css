@@ -428,13 +428,13 @@ tr p {
 }
 
 .table-container { 
-    width: 1250px !important;
+/*    width: 1250px !important;*/
     height: 500px; 
     overflow: scroll;
     margin-bottom: 20px;
 }
 .table-container-goods { 
-    width: 1250px !important;
+/*    width: 1250px !important;*/
     height: 500px; 
     overflow-y: scroll;
     margin-bottom: 20px;
@@ -513,7 +513,7 @@ tr p {
 .toggle-goods-popup-for-cell {
     z-index: 12 !important;
 }
-@media screen and (min-width: 1920px) {
+@media screen and (max-width: 1920px) {
   .table-container { 
     width: 1730px;
     height: 600px;
@@ -523,7 +523,7 @@ tr p {
     height: 600px;
   }
 }
-@media screen and (min-width: 1740px) {
+@media screen and (max-width: 1740px) {
   .table-container { 
     width: 1450px;
     height: 500px;
@@ -533,7 +533,7 @@ tr p {
     height: 500px;
   }
 }
-@media screen and (min-width: 1540px) {
+@media screen and (max-width: 1540px) {
   .table-container { 
     width: 1250px;
     height: 500px;
@@ -543,7 +543,17 @@ tr p {
     height: 500px;
   }
 }
-@media screen and (min-width: 1290px) {
+@media screen and (max-width: 1290px) {
+  .table-container { 
+    width: 1200px;
+    height: 500px;
+  }
+  .table-container-goods { 
+    width: 1200px;
+    height: 500px;
+  }
+}
+@media screen and (max-width: 1090px) {
   .table-container { 
     width: 1000px;
     height: 500px;
@@ -553,7 +563,6 @@ tr p {
     height: 500px;
   }
 }
-
 .visual-events {
     pointer-events: none;
 }
