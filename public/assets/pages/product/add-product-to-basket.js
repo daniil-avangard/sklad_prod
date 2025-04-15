@@ -26,6 +26,8 @@ addProductToBasketForms.forEach((basketForm, ind) => {
                 if (!response.ok) {
                     throw new Error('Ошибка добавления товара в корзину');
                 }
+                console.log(response);
+
                 return response.json();
             })
             .then((data) => {
@@ -34,6 +36,7 @@ addProductToBasketForms.forEach((basketForm, ind) => {
                 buttonsForm[ind].classList.add("basket-button-change");
 //                let button = basketForm.getElementsByTagName("BUTTON")[0];
 //                console.log('button = ', buttonsForm[ind]);
+
                 Toast.fire({
                     icon: 'success',
                     title: data.success
