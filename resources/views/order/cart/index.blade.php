@@ -19,9 +19,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive shopping-cart">
-                        <x-form action="{{ route('basket.clear') }}" method="POST">
-                            <button class="btn btn-danger">Очистить корзину</button>
-                        </x-form>
+                        
                         <div class="table-container">
                         <table class="table table-bordered">
                             
@@ -101,7 +99,11 @@
                                     <textarea name="comment" class="form-control" placeholder="Комментарий к заказу"></textarea>
                                     <button class="btn btn-primary mt-2">Отправить заказ</button>
                                 </x-form>
-
+                            </div>
+                            <div class="mt-4">
+                                <x-form action="{{ route('basket.clear') }}" method="POST">
+                                    <button class="btn btn-danger">Очистить корзину</button>
+                                </x-form>
                             </div>
                         </div><!--end col-->
                         <div class="col-md-6">
