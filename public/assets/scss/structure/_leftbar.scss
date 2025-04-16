@@ -22,7 +22,7 @@ File: Leftbar
         .logo {
             line-height: $header-height;
             .logo-sm {
-                height: 22px;                
+                height: 22px;
             }
             .logo-lg {
                 height: 14px;
@@ -31,7 +31,7 @@ File: Leftbar
                 &.logo-light{
                   display: $logo-light;
               }
-            }  
+            }
         }
     }
     hr.hr-dashed.hr-menu{
@@ -39,8 +39,10 @@ File: Leftbar
     }
 
     .menu-content{
+        position: relative;
         height: 100%;
         padding-bottom: 70px;
+        z-index: 11;
     }
 }
 .page-wrapper {
@@ -135,20 +137,20 @@ File: Leftbar
                     &:hover {
                         color: $sidebar-sub-item-hover-color;
                         i{
-                            color: $primary; 
+                            color: $primary;
                         }
                     }
                 }
             }
         }
 
-        &.mm-active {            
+        &.mm-active {
             .menu-arrow{
                 i {
                     &:before {
                         content: "\F140";
                     }
-                } 
+                }
             }
             .mm-active a .menu-arrow.left-has-menu{
                 i {
@@ -162,7 +164,7 @@ File: Leftbar
                     &:before {
                         content: "\F142";
                     }
-                }  
+                }
             }
             li a{
                 menu-arrow.left-has-menu {
@@ -180,14 +182,14 @@ File: Leftbar
                     background: $sidebar-light-bg;
                     &.active{
                         color: $sidebar-item-active-color;
-                        background-color: transparent;                                                 
+                        background-color: transparent;
                     }
                     i{
                         color: $sidebar-item-active-color;
-                    }                               
+                    }
                 }
                 .menu-arrow.left-has-menu i:before{
-                    content: "\F140"; 
+                    content: "\F140";
                 }
                 .mm-show{
                     li{
@@ -201,7 +203,7 @@ File: Leftbar
 
             > a  {
                 color: $sidebar-item-active-color;
-                border-radius: 4px; 
+                border-radius: 4px;
                 i{
                     color: $sidebar-item-active-color;
                 }
@@ -211,14 +213,14 @@ File: Leftbar
                     background-color:transparent;
                     color: $primary;
                     i{
-                        color: $sidebar-item-hover-color; 
+                        color: $sidebar-item-hover-color;
                     }
                 }
             }
-            
-        }        
+
+        }
     }
-    
+
     .menu-arrow {
         margin-left: auto;
         i {
@@ -246,22 +248,22 @@ File: Leftbar
         overflow-y: auto;
         z-index: 10;
         bottom: 0;
-        top: $header-height;   
-        margin-top: 0; 
+        top: $header-height;
+        margin-top: 0;
         .brand {
             display: none;
-            width: $sidebar-width-collapsed;            
+            width: $sidebar-width-collapsed;
             .logo-lg {
-                display: none !important; 
+                display: none !important;
             }
-        }    
+        }
     }
     .page-wrapper{
         margin: 0;
     }
     .page-content {
         min-height: 100vh;
-        padding: 0 0 50px 0;        
+        padding: 0 0 50px 0;
     }
 }
 
@@ -272,7 +274,7 @@ File: Leftbar
         .brand {
             background-color: $sidebar-light-bg;
         }
-    } 
+    }
     .page-wrapper{
         margin: 0;
     }
