@@ -515,11 +515,11 @@ tr p {
 }
 @media screen and (max-width: 1920px) {
   .table-container { 
-    width: 1730px;
+    width: 1630px;
     height: 600px;
   }
   .table-container-goods {
-    width: 1730px;
+    width: 1610px;
     height: 600px;
   }
 }
