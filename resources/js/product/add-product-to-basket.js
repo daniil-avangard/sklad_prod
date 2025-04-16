@@ -18,7 +18,7 @@ addProductToBasketForms.forEach((basketForm, ind) => {
         evt.preventDefault();
 
         const data = new FormData(basketForm);
-        const productId = basketForm.dataset.productId;
+        // const productId = basketForm.dataset.productId;
 
         const url = basketForm.action;
 
