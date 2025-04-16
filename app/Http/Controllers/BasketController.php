@@ -67,6 +67,8 @@ class BasketController extends Controller
             'success' => 'Добавлено',
             'quontity' => $quantity
         ]);
+
+        // return redirect()->back()->with('success', 'Товар добавлен.');
     }
 
 
@@ -114,19 +116,19 @@ class BasketController extends Controller
         $order->user_id = Auth::user()->id;
         $order->division_id = Auth::user()->division_id; // Получение ID подразделения из данных юзера
         $order->save(); // Сохранение заказа
-           
+
         foreach ($basket->products as $product) { // Цикл по продуктам в корзине
             $order->items()->create([ // Создание нового элемента заказа
                 'product_id' => $product->id, // Установка ID продукта
                 'quantity' => $product->pivot->quantity, // Установка количества продукта
             ]);
         }
-        
+
         // начинаем схлопывать заказы в статусе 'в ожидании'
-        
+
         $newComposerOrder = $this->createOneNewOrder($divisionGroups, $order);
 //        dd($lengthNew['10004']['quantity']);
-        
+
 
         $basket->products()->detach(); // Удаляет записи из таблицы product_basket
 
@@ -136,16 +138,11 @@ class BasketController extends Controller
     
     // Создание одного нового единоно заказа 
     private function createOneNewOrder($divisionGroups, $createdOrder)
-    {
-//        $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
-//            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
-//            })->get()->sortByDesc('created_at');
-            
         $currentMonth = date('m');
         $orders = Order::where('division_id', $divisionGroups)->get()->sortByDesc('created_at');
-            
+
         $divisionNewOrders = array();
-        
+
         foreach ($orders as $order) {
             if ($order->status->value == StatusEnum::NEW->value) {
                 if ($order->created_at->format('m') == $currentMonth) {
@@ -153,15 +150,16 @@ class BasketController extends Controller
                 }   
             }
         }
-        
+
         $lengthNew = count($divisionNewOrders);
+
         if ($lengthNew > 1) {
             $orderCompose = new Order(); // Создание нового заказа
             $orderCompose->comment = ""; // Установка комментария к заказу из запроса
             $orderCompose->user_id = Auth::user()->id;
             $orderCompose->division_id = Auth::user()->division_id; // Получение ID подразделения из данных юзера
             $orderCompose->save(); // Сохранение заказа
-            
+
             $composerArray = array();
             foreach ($divisionNewOrders as $newOrder) {
                 foreach ($newOrder->items as $item) {
@@ -178,14 +176,14 @@ class BasketController extends Controller
                     }
                 }
             }
-            
+
             foreach ($composerArray as $k => $v) {
                 $orderCompose->items()->create([ // Создание нового элемента заказа
                     'product_id' => $k, // Установка ID продукта
                     'quantity' => $v['quantity'], // Установка количества продукта
                 ]);
             }
-            
+
             foreach ($divisionNewOrders as $order) {
                 $order->items()->delete();
                 $order->delete();
@@ -193,7 +191,7 @@ class BasketController extends Controller
         } else {
             $orderCompose = $createdOrder;
         }
-        
+
         return $orderCompose;
     }
 }

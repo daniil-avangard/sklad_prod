@@ -21,6 +21,9 @@
     <link href="/plugins/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css" />
     <link href="/assets/css/app.min.css" rel="stylesheet" type="text/css" />
 
+    <!-- Подключение стилей через Vite -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     {{-- Новые стили --}}
     <link href="/assets/css/custom.css" rel="stylesheet" type="text/css" />
 
