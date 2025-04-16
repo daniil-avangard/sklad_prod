@@ -408,11 +408,14 @@ class OrderController extends Controller
     
     private function createOneProcessOrder($divisionGroups, $createdOrder)
     {
+        $currentMonth = date('m');
         $orders = Order::where('division_id', $divisionGroups)->get()->sortByDesc('created_at');
         $divisionProcessOrders = array();
         foreach ($orders as $order) {
             if ($order->status->value == StatusEnum::PROCESSING->value) {
-                $divisionProcessOrders[] = $order;
+                if ($order->created_at->format('m') == $currentMonth) {
+                    $divisionProcessOrders[] = $order;
+                }  
             }
         }
         $lengthNew = count($divisionProcessOrders);
