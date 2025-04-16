@@ -9,11 +9,11 @@
                             <div class="page-title-box">
                                 <div class="row">
                                     <div class="col">
-                                        <h4 class="page-title">Starer</h4>
+                                        <h4 class="page-title">Начальная страница</h4>
                                         <ol class="breadcrumb">
-                                            <li class="breadcrumb-item"><a href="javascript:void(0);">Dastone</a></li>
-                                            <li class="breadcrumb-item"><a href="javascript:void(0);">Pages</a></li>
-                                            <li class="breadcrumb-item active">Starer</li>
+                                            <li class="breadcrumb-item"><a href="javascript:void(0);">Домашняя</a></li>
+                                            <li class="breadcrumb-item"><a href="javascript:void(0);">Страница</a></li>
+                                            <li class="breadcrumb-item active">Анализ</li>
                                         </ol>
                                     </div><!--end col-->
                                     <div class="col-auto align-self-center">
