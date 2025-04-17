@@ -14,7 +14,7 @@ use App\Http\Controllers\ProductGroupDivisionController;
 Route::middleware('auth', 'admin')->group(function () {
 
     Route::get('/', function () {
-        return view('home.index');
+        return redirect()->route('orders');
     })->name('home');
 
 
@@ -41,7 +41,7 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::post('/products/{product}/divisions-by-category', [ProductController::class, 'addDivisionsByCategory'])->name('products.divisions.addDivisionsByCategory');
     Route::delete('/products/{product}/divisions-by-category', [ProductController::class, 'deleteDivisionsByCategory'])->name('products.divisions.deleteDivisionsByCategory');
 
-    
+
     // Группы подразделений
     Route::get('/products/{product}/groups/divisions/create', [ProductGroupDivisionController::class, 'create'])->name('products.groups.divisions.create');
     Route::post('/products/{product}/groups/divisions', [ProductGroupDivisionController::class, 'attach'])->name('products.groups.divisions.attach');
