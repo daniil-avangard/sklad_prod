@@ -138,6 +138,7 @@ class BasketController extends Controller
     
     // Создание одного нового единоно заказа 
     private function createOneNewOrder($divisionGroups, $createdOrder)
+    {
         $currentMonth = date('m');
         $orders = Order::where('division_id', $divisionGroups)->get()->sortByDesc('created_at');
 
