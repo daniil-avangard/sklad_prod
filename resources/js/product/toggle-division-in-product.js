@@ -82,7 +82,7 @@ function toggleDivisionsInProduct() {
 
 
     // Функция для добавления или удаления всех подразделений
-    const toggleDivisionsByCategory = async (productId, divisionCategoryId, target) => {
+    const toggleDivisionsByCategory = async (productId, divisionCategoryId, target, buttonAddAllDivisions) => {
         const dataToSend = {
             product_id: productId,
             division_category_id: divisionCategoryId,
@@ -94,16 +94,15 @@ function toggleDivisionsInProduct() {
         const isAdding = Number(isSelected) === 0;
         const method = isAdding ? 'POST' : 'DELETE';
         const url = `./${productId}/divisions-by-category`;
-        console.log(dataToSend);
+        // console.log(dataToSend);
 
         const result = await sendRequest(url, method, dataToSend);
-        // console.log(result);
+        console.log(result);
 
         if (result && result.success) {
-            const divisionCategoryIds = result.body;
-
             // Обновляем стили для всех элементов списка
             const allDivisions = document.querySelectorAll('.division__item');
+            const divisionCategoryIds = result.body;
 
             allDivisions.forEach(element => {
                 if (divisionCategoryIds.includes(Number(element.dataset.divisionId))) {
@@ -122,7 +121,12 @@ function toggleDivisionsInProduct() {
             target.dataset.isCategorySelected = isAdding ? 1 : 0;
             target.classList.toggle('text-muted');
             target.classList.toggle('text-primary');
-            // buttonAddAllDivisions.textContent = isAdding ? 'Удалить все' : 'Добавить все';
+
+            // Обновляем кнопку Все
+            buttonAddAllDivisions.dataset.isAllSelected = !result.isAllSelected ? 1 : 0;
+            buttonAddAllDivisions.textContent = result.isAllSelected ? 'Удалить все' : 'Добавить все';
+            buttonAddAllDivisions.classList.add(result.isAllSelected ? 'btn-danger' : 'btn-primary');
+            buttonAddAllDivisions.classList.remove(result.isAllSelected ? 'btn-primary' : 'btn-danger');
         }
     };
 
@@ -131,14 +135,10 @@ function toggleDivisionsInProduct() {
     buttonAddDivisionsByCategory.forEach(element => {
         element.addEventListener('click', async (evt) => {
             evt.preventDefault();
-            // console.log(evt.target);
 
             const productId = divisionList.dataset.productId;
             const divisionCategoryId = element.dataset.divisionCategoryId;
-            // console.log(productId);
-            // console.log(divisionCategoryId);
-
-            toggleDivisionsByCategory(productId, divisionCategoryId, element);
+            toggleDivisionsByCategory(productId, divisionCategoryId, element, buttonAddAllDivisions);
         });
     });
 

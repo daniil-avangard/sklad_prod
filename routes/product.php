@@ -32,14 +32,12 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::get('/products/{product}/arivals', [ProductController::class, 'arival'])->name('products.arival');
     Route::get('/products/{product}/writeoffs', [ProductController::class, 'writeoff'])->name('products.writeoff');
 
-    // Подразделения
+    // Добавляет продукты Подразделениям
     Route::post('/products/{product}/divisions/', [ProductController::class, 'toggleDivision'])->name('products.divisions.toggleDivision');
     Route::post('/products/{product}/divisions-all', [ProductController::class, 'addAllDivisions'])->name('products.divisions.addAllDivisions');
     Route::delete('/products/{product}/divisions-all', [ProductController::class, 'deleteAllDivisions'])->name('products.divisions.deleteAllDivisions');
-
-
-    Route::post('/products/{product}/divisions-by-category', [ProductController::class, 'addDivisionsByCategory'])->name('products.divisions.addDivisionsByCategory');
-    Route::delete('/products/{product}/divisions-by-category', [ProductController::class, 'deleteDivisionsByCategory'])->name('products.divisions.deleteDivisionsByCategory');
+    Route::post('/products/{product}/divisions-by-category', [ProductController::class, 'addDivisionByCategory'])->name('products.divisions.addDivisionsByCategory');
+    Route::delete('/products/{product}/divisions-by-category', [ProductController::class, 'deleteDivisionByCategory'])->name('products.divisions.deleteDivisionsByCategory');
 
 
     // Группы подразделений
