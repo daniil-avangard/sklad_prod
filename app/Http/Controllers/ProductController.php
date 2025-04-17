@@ -399,11 +399,34 @@ class ProductController extends Controller
         $changes = $product->divisions()->toggle($division_id);
         $isAllDivisionSelected = $product->divisions()->count() === Division::all()->count();
 
+        $divisionCategories = DivisionCategory::with('divisions')->get()->map(function ($divisionCategory) use ($product) {
+            $divisions = $divisionCategory->divisions->map(function ($division) use ($product) {
+                return [
+                    'is_active' => $product->divisions->contains($division)
+                ];
+            });
+
+            $isAllDivisionByCategorySelected = $divisions->every(function ($division) {
+                return $division['is_active'];
+            });
+
+            return [
+                'division_id' => $divisionCategory->id,
+                'is_selected' => $isAllDivisionByCategorySelected
+            ];
+        });
+
+        // Формируем массив ID категорий, в которых все подразделения выбраны
+        $checkedCategoryIds = $divisionCategories->filter(function ($category) {
+            return $category['is_selected'];
+        })->pluck('division_id')->toArray();
+
         return response()->json([
             'success' => true,
             'added' => $changes['attached'],
             'removed' => $changes['detached'],
             'isAllSelected' => $isAllDivisionSelected,
+            'checkedСategoryIds' => $checkedCategoryIds,
         ]);
     }
 }
