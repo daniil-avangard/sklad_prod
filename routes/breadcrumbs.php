@@ -281,6 +281,11 @@ Breadcrumbs::for('orders', function ($trail) {
     $trail->push('Заказы', route('orders'));
 });
 
+Breadcrumbs::for('orders.new', function ($trail) {
+    $trail->parent('main');
+    $trail->push('Заказы', route('orders.new'));
+});
+
 // Просмотр нескольких заказов
 
 Breadcrumbs::for('orders.selected', function ($trail) {
@@ -289,7 +294,7 @@ Breadcrumbs::for('orders.selected', function ($trail) {
 });
 
 Breadcrumbs::for('orders.show', function ($trail, $order) {
-    $trail->parent('orders');
+    $trail->parent('orders.new');
     $trail->push('Просмотр заказа', route('orders.show', $order));
 });
 
