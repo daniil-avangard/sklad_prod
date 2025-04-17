@@ -49,6 +49,20 @@ function toggleDivisionsInProduct() {
                 }
             });
 
+            // Обработчик для кнопки добавления всех подразделений
+            const allDivisionsCategory = document.querySelectorAll('.division__item-category');
+            allDivisionsCategory.forEach(element => {
+                if (isAdding) {
+                    element.classList.remove('text-muted');
+                    element.classList.add('text-primary');
+                    element.dataset.isCategorySelected = 1;
+                } else {
+                    element.classList.remove('text-primary');
+                    element.classList.add('text-muted');
+                    element.dataset.isCategorySelected = 0;
+                }
+            });
+
             // Обновляем кнопку
             buttonAddAllDivisions.dataset.isAllSelected = isAdding ? 1 : 0;
             buttonAddAllDivisions.classList.toggle('btn-primary');
@@ -68,7 +82,7 @@ function toggleDivisionsInProduct() {
 
 
     // Функция для добавления или удаления всех подразделений
-    const toggleDivisionsByCategory = async (productId, divisionCategoryId, target) => {
+    const toggleDivisionsByCategory = async (productId, divisionCategoryId, target, buttonAddAllDivisions) => {
         const dataToSend = {
             product_id: productId,
             division_category_id: divisionCategoryId,
@@ -80,18 +94,18 @@ function toggleDivisionsInProduct() {
         const isAdding = Number(isSelected) === 0;
         const method = isAdding ? 'POST' : 'DELETE';
         const url = `./${productId}/divisions-by-category`;
-        console.log(dataToSend);
 
         const result = await sendRequest(url, method, dataToSend);
-        console.log(result);
+        // console.log(result);
 
         if (result && result.success) {
-            const divisionCategoryIds = result.body;
-
             // Обновляем стили для всех элементов списка
             const allDivisions = document.querySelectorAll('.division__item');
+            const divisionCategoryIds = result.body;
+
             allDivisions.forEach(element => {
-                if (divisionCategoryIds.includes(element.dataset.divisionId)) {
+                if (divisionCategoryIds.includes(Number(element.dataset.divisionId))) {
+
                     if (isAdding) {
                         element.classList.remove('border-dark-subtle');
                         element.classList.add('border-primary');
@@ -106,7 +120,12 @@ function toggleDivisionsInProduct() {
             target.dataset.isCategorySelected = isAdding ? 1 : 0;
             target.classList.toggle('text-muted');
             target.classList.toggle('text-primary');
-            // buttonAddAllDivisions.textContent = isAdding ? 'Удалить все' : 'Добавить все';
+
+            // Обновляем кнопку Все
+            buttonAddAllDivisions.dataset.isAllSelected = !result.isAllSelected ? 1 : 0;
+            buttonAddAllDivisions.textContent = result.isAllSelected ? 'Удалить все' : 'Добавить все';
+            buttonAddAllDivisions.classList.add(result.isAllSelected ? 'btn-danger' : 'btn-primary');
+            buttonAddAllDivisions.classList.remove(result.isAllSelected ? 'btn-primary' : 'btn-danger');
         }
     };
 
@@ -115,14 +134,10 @@ function toggleDivisionsInProduct() {
     buttonAddDivisionsByCategory.forEach(element => {
         element.addEventListener('click', async (evt) => {
             evt.preventDefault();
-            console.log(evt.target);
 
             const productId = divisionList.dataset.productId;
             const divisionCategoryId = element.dataset.divisionCategoryId;
-            console.log(productId);
-            console.log(divisionCategoryId);
-
-            toggleDivisionsByCategory(productId, divisionCategoryId, element);
+            toggleDivisionsByCategory(productId, divisionCategoryId, element, buttonAddAllDivisions);
         });
     });
 
@@ -136,6 +151,7 @@ function toggleDivisionsInProduct() {
         };
 
         const result = await sendRequest(`./${productId}/divisions`, 'POST', dataToSend);
+        console.log(result);
 
         if (result && result.success) {
             buttonAddAllDivisions.dataset.isAllSelected = result.isAllSelected ? 1 : 0;
@@ -151,6 +167,23 @@ function toggleDivisionsInProduct() {
                 target.classList.remove('border-primary'); // Удаляем синий
                 target.classList.add('border-dark-subtle'); // Добавляем серый
             }
+
+            // Обработчик для кнопки добавления всех подразделений
+            const allDivisionsCategory = document.querySelectorAll('.division__item-category');
+            const selectedDivisionsCategory = result.checkedСategoryIds;
+            allDivisionsCategory.forEach(element => {
+                const divisionCategoryId = element.dataset.divisionCategoryId;
+
+                if (selectedDivisionsCategory.includes(Number(divisionCategoryId))) {
+                    element.classList.remove('text-muted');
+                    element.classList.add('text-primary');
+                    element.dataset.isCategorySelected = 1;
+                } else {
+                    element.classList.remove('text-primary');
+                    element.classList.add('text-muted');
+                    element.dataset.isCategorySelected = 0;
+                }
+            });
         }
     };
 
@@ -158,8 +191,8 @@ function toggleDivisionsInProduct() {
     const divisionList = document.querySelector('#division-list');
     divisionList.addEventListener('click', (evt) => {
         evt.preventDefault();
-
         const target = evt.target;
+
         if (target.classList.contains('division__item')) {
             const divisionId = target.dataset.divisionId;
             const productId = divisionList.dataset.productId;

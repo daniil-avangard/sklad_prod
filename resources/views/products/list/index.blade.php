@@ -71,7 +71,7 @@
 
                                     <td>
                                         <input type="number" class="form-control form-control-sm" value="1"
-                                            name="quantity">
+                                            min="1" name="quantity">
                                     </td>
                                     <td>
                                         <button class="btn btn-primary" type="submit">
