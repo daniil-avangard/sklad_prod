@@ -22,7 +22,7 @@
                 @endcan
                 @can('create', \App\Models\Order::class)
                 <li class="nav-item"><a class="nav-link" href="{{ route('products.list') }}"><i
-                            class="ti-control-record"></i>Товары</a></li>
+                            class="ti-control-record"></i>Сделать заказ</a></li>
                 @endcan
             </ul>
         </li>
@@ -111,7 +111,7 @@
         {{-- @endcan --}}
 
 
-        <li class="menu-label my-2">Коммент внизу</li>
+        <li class="menu-label my-2">Комментарий</li>
     </ul>
 </div>
 </div>

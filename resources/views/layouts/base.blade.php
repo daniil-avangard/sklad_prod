@@ -36,7 +36,7 @@
     <div class="left-sidenav">
         <!-- LOGO -->
         <div class="brand">
-            <a href="index.html" class="logo">
+            <a href="/" class="logo">
                 <span>
                     <img src="/assets/images/logo-sm.png" alt="logo-small" class="logo-sm">
                 </span>

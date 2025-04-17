@@ -22,7 +22,7 @@ Array.from(popUps1).forEach((el, index) => {
                     console.log("Имеется такой блок");
                     let trParent = child.parentNode.parentNode.parentNode;
                     child.classList.toggle("show");
-                    //tableThMain.classList.toggle("toggle-goods-popup-for-head");
+                    tableThMain.classList.toggle("toggle-goods-popup-for-head");
                     popUps1[ind].classList.toggle("toggle-goods-popup-for-cell");
                     trParent.classList.toggle("tr-height");
                 }
