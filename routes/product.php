@@ -10,13 +10,20 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DivisionGroupController;
 use App\Http\Controllers\DivisionGroupDivisionController;
 use App\Http\Controllers\ProductGroupDivisionController;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 Route::middleware('auth', 'admin')->group(function () {
-
     Route::get('/', function () {
-        return redirect()->route('products.list');
-    })->name('home');
+        $user = Auth::user();
+        $roleName = $user->rolesId()->first()?->pluck('name'); // Коллекция названий ролей
 
+        if ($roleName == "Управляющий подразделения") {
+            return redirect()->route('products.list');
+        } else {
+            return redirect()->route('orders');
+        }
+    })->name('home');
 
 
     Route::get('/products', [ProductController::class, 'index'])->name('products');
