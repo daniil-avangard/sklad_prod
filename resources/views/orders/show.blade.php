@@ -11,7 +11,7 @@
         'route' => 'orders.show',
         'breadcrumbs' => 'Заказы',
         'param' => $order,
-        'back_route' => 'orders',
+        'back_route' => 'orders.new',
     ])
 
     @php
