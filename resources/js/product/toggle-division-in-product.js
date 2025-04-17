@@ -49,6 +49,20 @@ function toggleDivisionsInProduct() {
                 }
             });
 
+            // Обработчик для кнопки добавления всех подразделений
+            const allDivisionsCategory = document.querySelectorAll('.division__item-category');
+            allDivisionsCategory.forEach(element => {
+                if (isAdding) {
+                    element.classList.remove('text-muted');
+                    element.classList.add('text-primary');
+                    element.dataset.isCategorySelected = 1;
+                } else {
+                    element.classList.remove('text-primary');
+                    element.classList.add('text-muted');
+                    element.dataset.isCategorySelected = 0;
+                }
+            });
+
             // Обновляем кнопку
             buttonAddAllDivisions.dataset.isAllSelected = isAdding ? 1 : 0;
             buttonAddAllDivisions.classList.toggle('btn-primary');
@@ -83,15 +97,17 @@ function toggleDivisionsInProduct() {
         console.log(dataToSend);
 
         const result = await sendRequest(url, method, dataToSend);
-        console.log(result);
+        // console.log(result);
 
         if (result && result.success) {
             const divisionCategoryIds = result.body;
 
             // Обновляем стили для всех элементов списка
             const allDivisions = document.querySelectorAll('.division__item');
+
             allDivisions.forEach(element => {
-                if (divisionCategoryIds.includes(element.dataset.divisionId)) {
+                if (divisionCategoryIds.includes(Number(element.dataset.divisionId))) {
+
                     if (isAdding) {
                         element.classList.remove('border-dark-subtle');
                         element.classList.add('border-primary');
@@ -115,12 +131,12 @@ function toggleDivisionsInProduct() {
     buttonAddDivisionsByCategory.forEach(element => {
         element.addEventListener('click', async (evt) => {
             evt.preventDefault();
-            console.log(evt.target);
+            // console.log(evt.target);
 
             const productId = divisionList.dataset.productId;
             const divisionCategoryId = element.dataset.divisionCategoryId;
-            console.log(productId);
-            console.log(divisionCategoryId);
+            // console.log(productId);
+            // console.log(divisionCategoryId);
 
             toggleDivisionsByCategory(productId, divisionCategoryId, element);
         });
@@ -158,8 +174,8 @@ function toggleDivisionsInProduct() {
     const divisionList = document.querySelector('#division-list');
     divisionList.addEventListener('click', (evt) => {
         evt.preventDefault();
-
         const target = evt.target;
+
         if (target.classList.contains('division__item')) {
             const divisionId = target.dataset.divisionId;
             const productId = divisionList.dataset.productId;

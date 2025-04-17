@@ -60,9 +60,8 @@ class DivisionController extends Controller
         $division->city = $request->city;
         $division->name = $request->department;
         $division->user_id = auth()->user()->id;
-        $division->sort_for_excel = 3;
+        $division->sort_for_excel = $request->sort_for_excel;
         $division->save();
-
 
         // Добавляем запись в таблицу связи
         $division->divisionCategory()->attach($category_id);

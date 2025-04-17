@@ -14,7 +14,7 @@ use App\Http\Controllers\ProductGroupDivisionController;
 Route::middleware('auth', 'admin')->group(function () {
 
     Route::get('/', function () {
-        return redirect()->route('orders');
+        return redirect()->route('products.list');
     })->name('home');
 
 

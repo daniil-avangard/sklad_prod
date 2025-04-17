@@ -18,7 +18,6 @@
 
     <div class="" id="products-info">
         @include('products.info.nav')
-
         <div class="row">
             <div class="" id="products-info-variants">
                 @can('view', App\Models\ProductVariant::class)
@@ -27,7 +26,10 @@
             </div>
             <div class="" id="products-info-division">
                 @can('create', \App\Models\Product::class)
-                    @include('products.inc.list_division', ['allDivisions' => $allDivisions, 'isAllDivisionsSelected' => $isAllDivisionsSelected])
+                    @include('products.inc.list_division', [
+                        'allDivisions' => $allDivisions,
+                        'isAllDivisionsSelected' => $isAllDivisionsSelected,
+                    ])
                 @endcan
             </div>
         </div>
@@ -36,5 +38,4 @@
 
 @push('scripts-plugins')
     <script src="/assets/js/toggleProductInfo.js"></script>
-    <script src="/assets/js/toggleDivisionsInProduct.js"></script>
 @endpush

@@ -135,9 +135,9 @@ class BasketController extends Controller
 
         return redirect()->to(route('user.order', $newComposerOrder))->with('success', 'Заказ сохранен');
     }
-    
-    // Создание одного нового единоно заказа 
-    private function createOneNewOrder($divisionGroups, $createdOrder)
+
+    // Создание одного нового единоно заказа
+    private function createOneNewOrder($divisionGroups, $createdOrder) {
         $currentMonth = date('m');
         $orders = Order::where('division_id', $divisionGroups)->get()->sortByDesc('created_at');
 
@@ -147,7 +147,7 @@ class BasketController extends Controller
             if ($order->status->value == StatusEnum::NEW->value) {
                 if ($order->created_at->format('m') == $currentMonth) {
                     $divisionNewOrders[] = $order;
-                }   
+                }
             }
         }
 
