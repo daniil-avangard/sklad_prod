@@ -18,10 +18,12 @@ Route::middleware('auth', 'admin')->group(function () {
         $user = Auth::user();
         $roleId = $user->roles()->first()?->id;
 
-        if ($roleId == 1022) {
+        if (in_array($roleId, [1022])) {
             return redirect()->route('products.list');
+        } else if (in_array($roleId, [1023])) {
+            return redirect()->route('products');
         } else {
-            return redirect()->route('orders');
+            return redirect()->route('orders.new');
         }
     })->name('home');
 
