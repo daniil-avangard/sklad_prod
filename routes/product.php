@@ -16,12 +16,14 @@ use Illuminate\Support\Facades\Auth;
 Route::middleware('auth', 'admin')->group(function () {
     Route::get('/', function () {
         $user = Auth::user();
-        $roleName = $user->rolesId()->first()?->pluck('name'); // Коллекция названий ролей
+        $roleId = $user->roles()->first()?->id;
 
-        if ($roleName == "Управляющий подразделения") {
+        if (in_array($roleId, [1002])) {
             return redirect()->route('products.list');
+        } else if (in_array($roleId, [1003])) {
+            return redirect()->route('products');
         } else {
-            return redirect()->route('orders');
+            return redirect()->route('orders.new');
         }
     })->name('home');
 
