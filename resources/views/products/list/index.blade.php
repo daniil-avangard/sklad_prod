@@ -85,9 +85,7 @@
                     </table>
                 </div>
             </div>
-            @can('view', \App\Models\Order::class)
-                <button id="redirect-to-basket" class="btn btn-success mb-3">Перейти в корзину</button>
-            @endcan
+            <button id="redirect-to-basket" class="btn btn-success mb-3">Перейти в корзину</button>
         </div> <!-- end col -->
     </div> <!-- end row -->
 @endsection
