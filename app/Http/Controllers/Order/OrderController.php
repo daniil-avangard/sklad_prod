@@ -35,9 +35,9 @@ class OrderController extends Controller
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get()->sortByDesc('created_at');
-        
+
         $allItems = [];
-        
+
         foreach ($orders as $order) {
             $allItems[$order->id] = array();
             foreach ($order->items as $item) {
@@ -47,7 +47,7 @@ class OrderController extends Controller
 
         return view('orders.index', compact('orders', 'allItems'));
     }
-    
+
     public function indexNew()
     {
         $this->authorize('viewAny', Order::class);
@@ -55,13 +55,13 @@ class OrderController extends Controller
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
 //        auth()->user()->id;
 //        $role = Auth::user()->id;
-        $role = Auth::user()->rolesId()->pluck('id');
+        $role = Auth::user()->roles()->pluck('id');
 //        dd($role1[0]);
 
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get()->sortByDesc('created_at');
-        
+
         $absolutelyAllOrders = Order::whereIn('status',[StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get();
         $uniqGoodsTotalOrdered = array();
         foreach ($absolutelyAllOrders as $order) {
@@ -73,16 +73,16 @@ class OrderController extends Controller
                 }
             }
         }
-        
+
         $allItems = [];
-        
+
         foreach ($orders as $order) {
             $allItems[$order->id] = array();
             foreach ($order->items as $item) {
                 $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity, 'image' => $item->product->image);
             }
         }
-        
+
         $result = $this->forNewTable($divisionGroups, $orders);
         $uniqGoods = $result[0];
         $divisionNames = $result[1];
@@ -93,15 +93,15 @@ class OrderController extends Controller
 //        dd($allDivisionsDataNew, $uniqGoods);
         return view('orders.index-new', compact('orders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew', 'uniqGoodsTotalOrdered'));
     }
-    
+
     public function indexNewUpdate()
     {
         $this->authorize('viewAny', Order::class);
         $divisionGroups1 = Auth::user()->division_id;
-        $role = Auth::user()->rolesId()->pluck('id')->toArray();
+        $role = Auth::user()->roles()->pluck('id')->toArray();
         $currentStatus = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
         $toProcessStatus = $currentStatus == StatusEnum::NEW->value ? StatusEnum::PROCESSING->value : StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
-        
+
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
@@ -117,13 +117,13 @@ class OrderController extends Controller
         if ($toProcessStatus == StatusEnum::PROCESSING->value) {
             $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $order);
         }
-        
+
         return redirect()->to(route('orders.new'));
     }
-    
+
     private function forNewTable($divisionGroups, $orders)
     {
-        $role = Auth::user()->rolesId()->pluck('id')->toArray();
+        $role = Auth::user()->roles()->pluck('id')->toArray();
         $divisionGroupsID = Auth::user()->divisionGroups()->pluck('id');
         $divisionGroupsID1 = Auth::user()->divisionGroups()->pluck('id');
         //dd($divisionGroupsID[0]);
@@ -132,28 +132,28 @@ class OrderController extends Controller
         $allDivisionsNames = Division::all()->map(function ($division) {
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
-        
-        
+
+
 //        $groupDivisionsNames = Division::all()->map(function ($division) use ($divisionGroupsID) {
 //            if (in_array($divisionGroupsID[0], $division->divisionGroups()->pluck('id')->toArray())) {
 //                return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
 //            }
 //        })->toArray();
-        
+
         $groupDivisionsNames1 = Division::whereIn('id', function ($query) use ($divisionGroupsID1) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroupsID1);
         })->get();
         $groupDivisionsNames1 = $groupDivisionsNames1->map(function ($division) {
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
-        
+
         $allDivisionsNames =  (in_array(1001, $role)) ? $allDivisionsNames : $groupDivisionsNames1;
-        
+
         $divisionStateOrders = array();
         $divisionStateOrdersNew = array();
-        
+
         $arrayOfStatuses = array(StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value);
-        
+
         foreach ($orders as $order) {
             if (in_array($order->status->value, $arrayOfStatuses)) {
                 $divisionStateOrders[] = $order;
@@ -162,12 +162,12 @@ class OrderController extends Controller
                 }
             }
         }
-        
+
         $allGoodsInOrders = array();
         $allDivisions = array();
         $allDivisionsData = array();
         $allDivisionsDataNew = array();
-        
+
         foreach ($divisionStateOrders as $order) {
             foreach ($order->items as $item) {
                 if (!isset($allDivisionsData[$order->division->name])) {
@@ -186,9 +186,9 @@ class OrderController extends Controller
                 $allGoodsInOrders[] = array('name' => $item->product->name, 'image' => $item->product->image, 'warehouse' => $item->product->variants->sum('quantity'), 'min_stock' => $item->product->min_stock);
             }
         }
-        
+
         // Только новые для этой роли
-        
+
         foreach ($divisionStateOrdersNew as $order) {
             foreach ($order->items as $item) {
                 if (!isset($allDivisionsDataNew[$order->division->name])) {
@@ -204,14 +204,14 @@ class OrderController extends Controller
                         $allDivisionsDataNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
                     }
                 }
-                
+
             }
         }
-        
+
         foreach ($allDivisionsData as $k => $v) {
             $allDivisions[] = $k;
         }
-        
+
         foreach ($allDivisionsData as $k => $v) {
             foreach ($allGoodsInOrders as $x) {
                 if (!(array_key_exists($x['name'] ,$v))) {
@@ -219,7 +219,7 @@ class OrderController extends Controller
                 }
             }
         }
-        
+
         foreach ($allDivisionsDataNew as $k => $v) {
             foreach ($allGoodsInOrders as $x) {
                 if (!(array_key_exists($x['name'] ,$v))) {
@@ -227,9 +227,9 @@ class OrderController extends Controller
                 }
             }
         }
-        
+
         $allGoodsInOrders = array_unique($allGoodsInOrders, SORT_REGULAR);
-        
+
         foreach ($allGoodsInOrders as $index => $x) {
             $total = 0;
             foreach ($allDivisionsData as $k => $v) {
@@ -238,13 +238,13 @@ class OrderController extends Controller
             $x['total'] = $total;
             $allGoodsInOrders[$index] = $x;
         }
-        
+
         foreach ($allDivisionsNames as $division) {
             if (!(in_array($division['name'], $allDivisions))) {
                 $allDivisions[] = $division['name'];
             }
         }
-        
+
         foreach ($allDivisions as $name) {
             if (!isset($allDivisionsDataNew[$name])) {
                 foreach ($allGoodsInOrders as $item) {
@@ -256,20 +256,20 @@ class OrderController extends Controller
                     $allDivisionsData[$name][$item['name']] = array('quontity' => 0, 'id' => 0);
                 }
             }
-            
+
         }
         array_multisort(array_column($allDivisionsNames, 'sort'), SORT_ASC, $allDivisionsNames);
 //        dd($allDivisionsNames, $allDivisions);
         $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew);
-        
+
         return $result;
-        
+
     }
 
     public function show(Order $order)
     {
         $this->authorize('view', $order);
-        
+
         $products = Product::all();
 
         $currentStatus = $order->status->value;
@@ -369,7 +369,7 @@ class OrderController extends Controller
         //        $item->save();
         return response()->json(['success' => true]);
     }
-    
+
     public function updateFullOrder(Request $request)
     {
         $orderItem = new OrderItem();
@@ -401,11 +401,11 @@ class OrderController extends Controller
         $order->save();
         // здесь схлопываем заказы, только после order->save
         $newComposerOrder = $this->createOneProcessOrder($divisionGroups, $order);
-        
+
 //        return redirect()->back()->with('success', 'Заказ успешно проверен');
         return redirect()->to(route('orders.show', $newComposerOrder->id))->with('success', 'Заказ сохранен');
     }
-    
+
     private function createOneProcessOrder($divisionGroups, $createdOrder)
     {
         $currentMonth = date('m');
@@ -415,11 +415,11 @@ class OrderController extends Controller
             if ($order->status->value == StatusEnum::PROCESSING->value) {
                 if ($order->created_at->format('m') == $currentMonth) {
                     $divisionProcessOrders[] = $order;
-                }  
+                }
             }
         }
         $lengthNew = count($divisionProcessOrders);
-        
+
         if ($lengthNew > 1) {
             $orderCompose = new Order(); // Создание нового заказа
             $orderCompose->comment = ""; // Установка комментария к заказу из запроса
@@ -427,7 +427,7 @@ class OrderController extends Controller
             $orderCompose->division_id = Auth::user()->division_id; // Получение ID подразделения из данных юзера
             $orderCompose->status = StatusEnum::PROCESSING->value;
             $orderCompose->save(); // Сохранение заказа
-            
+
             $composerArray = array();
             foreach ($divisionProcessOrders as $newOrder) {
                 foreach ($newOrder->items as $item) {
@@ -444,14 +444,14 @@ class OrderController extends Controller
                     }
                 }
             }
-            
+
             foreach ($composerArray as $k => $v) {
                 $orderCompose->items()->create([ // Создание нового элемента заказа
                     'product_id' => $k, // Установка ID продукта
                     'quantity' => $v['quantity'], // Установка количества продукта
                 ]);
             }
-            
+
             foreach ($divisionProcessOrders as $order) {
                 $order->items()->delete();
                 $order->delete();
@@ -459,7 +459,7 @@ class OrderController extends Controller
         } else {
             $orderCompose = $createdOrder;
         }
-        
+
         return $orderCompose;
     }
 
@@ -515,7 +515,7 @@ class OrderController extends Controller
         $order->save();
         return redirect()->back()->with('success', 'Заказ успешно отменен');
     }
-    
+
     public function shipped(Request $request)
     {
         $order = Order::find($request->orderId);

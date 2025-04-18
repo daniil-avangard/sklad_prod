@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Auth;
 Route::middleware('auth', 'admin')->group(function () {
     Route::get('/', function () {
         $user = Auth::user();
-        $roleName = $user->rolesId()->first()?->pluck('name'); // Коллекция названий ролей
+        $roleId = $user->roles()->first()?->id;
 
-        if ($roleName == "Управляющий подразделения") {
+        if ($roleId == 1022) {
             return redirect()->route('products.list');
         } else {
             return redirect()->route('orders');
