@@ -21,7 +21,7 @@
                 </div>
             </li> --}}
 
-            <li class="dropdown notification-list">
+            {{-- <li class="dropdown notification-list">
                 <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-bs-toggle="dropdown"
                     href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <i data-feather="bell" class="align-self-center topbar-icon"></i>
@@ -94,7 +94,7 @@
                         Посмотреть все <i class="fi-arrow-right"></i>
                     </a>
                 </div>
-            </li>
+            </li> --}}
 
             <li class="dropdown">
                 <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-bs-toggle="dropdown"
