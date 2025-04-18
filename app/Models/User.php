@@ -9,11 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Traits\HasPermissions;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasPermissions;
-
 
     protected $fillable = [
         'surname',
@@ -24,7 +24,6 @@ class User extends Authenticatable
         'is_admin',
         'division_id',
     ];
-
 
     protected $hidden = [
         'password',
@@ -43,7 +42,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(DivisionGroup::class, 'division_group_user');
     }
-    
+
     public function rolesId(): BelongsToMany
     {
         return $this->belongsToMany(Role::class, 'role_user');

@@ -22,7 +22,8 @@ class ProductListController extends Controller
     {
         $this->authorize('create', \App\Models\Order::class);
 
-        // Продукт находится в группе division_group_product(product_id, division_group_id), division_group_id относится к division_groups(id), есть еще division_division_group(division_group_id, division_id), division_id относится к divisions(id)
+        // Продукт находится в группе division_group_product(product_id, division_group_id), division_group_id относится к division_groups(id),
+        // есть еще division_division_group(division_group_id, division_id), division_id относится к divisions(id)
         // У пользователя division_id = 7, нужно получить все product_id, которые находятся в division_group_product и в division_division_group(division_id = 7)
         // Пизда, не хотелось ебаться с этим с делать боллее элегантно
 

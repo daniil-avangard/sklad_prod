@@ -71,7 +71,7 @@
 
                                     <td>
                                         <input type="number" class="form-control form-control-sm" value="1"
-                                            name="quantity">
+                                            min="1" name="quantity">
                                     </td>
                                     <td>
                                         <button class="btn btn-primary" type="submit">
@@ -85,9 +85,7 @@
                     </table>
                 </div>
             </div>
-            @can('view', \App\Models\Order::class)
-                <button id="redirect-to-basket" class="btn btn-success mb-3">Перейти в корзину</button>
-            @endcan
+            <button id="redirect-to-basket" class="btn btn-success mb-3">Перейти в корзину</button>
         </div> <!-- end col -->
     </div> <!-- end row -->
 @endsection

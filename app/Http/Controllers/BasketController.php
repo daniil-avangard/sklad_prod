@@ -148,7 +148,7 @@ class BasketController extends Controller
             if ($order->status->value == StatusEnum::NEW->value) {
                 if ($order->created_at->format('m') == $currentMonth) {
                     $divisionNewOrders[] = $order;
-                }   
+                }
             }
         }
 

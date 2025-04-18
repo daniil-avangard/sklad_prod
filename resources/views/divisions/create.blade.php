@@ -42,6 +42,11 @@
                         <input type="text" name="department" id="department" class="form-control" required>
                     </div>
 
+                    <div class="form-group">
+                        <label for="name">Сортировка для Excel</label>
+                        <input type="number" name="sort_for_excel" id="sort_for_excel" class="form-control" min="1" max="4" placeholder="1" required>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Создать</button>
                 </x-form>
             </div>
