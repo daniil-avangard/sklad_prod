@@ -37,7 +37,7 @@ class OrderController extends Controller
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroupsID1);
         })->get();
         $groupDivisionsNames1 = $groupDivisionsNames1->map(function ($division) {
-            return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
+            return array('name'=>$division->name, 'id'=>$division->id);
         })->toArray();
 
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
