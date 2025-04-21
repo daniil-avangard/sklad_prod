@@ -4,6 +4,7 @@
 @section('title_page', 'Заказы')
 
 @push('styles-plugins')
+    <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <style>
         /* Custom Checkbox */
         .control {
@@ -133,10 +134,16 @@
         <div class="col-12">
 
             <div class="table-responsive">
-                @can('view', \App\Models\Order::class)
+<!--                @can('view', \App\Models\Order::class)
                     <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
-                @endcan
-                <table class="table table-bordered custom-table">
+                @endcan-->
+                <select name='divisions' id='divisiones-names'>
+                    <option value="0">Все</option>
+                    @foreach ($groupDivisionsNames1 as $divisionName)
+                        <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
+                    @endforeach
+                </select>
+                <table id="orders-table" class="table table-bordered custom-table">
                     <thead>
                         <tr>
                             <th scope="col">
@@ -155,7 +162,7 @@
                     </thead>
                     <tbody>
                         @foreach ($orders as $order)
-                            <tr>
+                            <tr class="order-rows">
                                 <th scope="row">
                                     <label class="control control--checkbox">
                                         <input type="checkbox" class="order-checkbox" value="{{ $order->id }}">

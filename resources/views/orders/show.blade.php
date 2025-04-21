@@ -32,6 +32,10 @@
                         </div><!--end col-->
                     </div> <!--end row-->
                 </div>
+                <div class="card-header">
+                    <h4 class="card-title">Дата заказа: <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d/m/Y') }}
+                                </span></h4>
+                </div>
                 <div class="card-body">
                     @can('processingStatus', $order)
                         @if ($currentStatus === 'new')
