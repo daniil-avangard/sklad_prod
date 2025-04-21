@@ -28,7 +28,7 @@ class OrderController extends Controller
 //        $user_agent = $_SERVER['HTTP_USER_AGENT'];
 //        $browser = get_browser($user_agent, true);
         //dd($browser);
-        $this->authorize('viewAny', Order::class);
+        $this->authorize('viewOrders', Order::class);
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
 
