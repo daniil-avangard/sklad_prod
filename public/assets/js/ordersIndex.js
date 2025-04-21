@@ -25,7 +25,13 @@ document.addEventListener("DOMContentLoaded", function() {
         tableTrArray.forEach((el, index) => {
             let cell = el.cells[1].getElementsByTagName("A")[0];
             if (cell) {
-                console.log(cell.innerHTML);
+                if (cell.innerHTML.trim() != selectDivision.value && selectDivision.value != "0") {
+                    el.classList.add('row-hidden');
+                    console.log(cell.innerHTML);
+                } else {
+                    el.classList.remove('row-hidden');
+                }
+                
             }
             
         });
