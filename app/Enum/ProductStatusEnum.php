@@ -2,7 +2,7 @@
 
 namespace App\Enum;
 
-enum ProductStatusEnum
+enum ProductStatusEnum: string
 {
     case AVAILABLE = 'available';
     case UNAVAILABLE = 'unavailable';
@@ -30,5 +30,5 @@ enum ProductStatusEnum
             self::NEEDS_REPAIR => 'yellow',
         };
     }
-    
+
 }
