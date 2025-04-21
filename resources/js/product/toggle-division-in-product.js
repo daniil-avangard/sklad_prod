@@ -73,12 +73,15 @@ function toggleDivisionsInProduct() {
 
     // Обработчик для кнопки добавления всех подразделений
     const buttonAddAllDivisions = document.querySelector('#add-all-divisions');
-    buttonAddAllDivisions.addEventListener('click', async (evt) => {
-        evt.preventDefault();
 
-        const productId = divisionList.dataset.productId;
-        toggleAllDivisions(productId, buttonAddAllDivisions);
-    });
+    if (buttonAddAllDivisions) {
+        buttonAddAllDivisions.addEventListener('click', async (evt) => {
+            evt.preventDefault();
+
+            const productId = divisionList.dataset.productId;
+            toggleAllDivisions(productId, buttonAddAllDivisions);
+        });
+    }
 
 
     // Функция для добавления или удаления всех подразделений
@@ -131,16 +134,17 @@ function toggleDivisionsInProduct() {
 
     // Обработчик для кнопки добавления всех подразделений
     const buttonAddDivisionsByCategory = document.querySelectorAll('.division__item-category');
-    buttonAddDivisionsByCategory.forEach(element => {
-        element.addEventListener('click', async (evt) => {
-            evt.preventDefault();
+    if (buttonAddDivisionsByCategory) {
+        buttonAddDivisionsByCategory.forEach(element => {
+            element.addEventListener('click', async (evt) => {
+                evt.preventDefault();
 
-            const productId = divisionList.dataset.productId;
-            const divisionCategoryId = element.dataset.divisionCategoryId;
-            toggleDivisionsByCategory(productId, divisionCategoryId, element, buttonAddAllDivisions);
+                const productId = divisionList.dataset.productId;
+                const divisionCategoryId = element.dataset.divisionCategoryId;
+                toggleDivisionsByCategory(productId, divisionCategoryId, element, buttonAddAllDivisions);
+            });
         });
-    });
-
+    }
 
     // Функция для добавления/удаления подразделения
     const toggleDivision = async (productId, divisionId, target, buttonAddAllDivisions) => {
@@ -189,17 +193,19 @@ function toggleDivisionsInProduct() {
 
     // Обработчик для клика по отдельному подразделению
     const divisionList = document.querySelector('#division-list');
-    divisionList.addEventListener('click', (evt) => {
-        evt.preventDefault();
-        const target = evt.target;
+    if (divisionList) {
+        divisionList.addEventListener('click', (evt) => {
+            evt.preventDefault();
+            const target = evt.target;
 
-        if (target.classList.contains('division__item')) {
-            const divisionId = target.dataset.divisionId;
-            const productId = divisionList.dataset.productId;
+            if (target.classList.contains('division__item')) {
+                const divisionId = target.dataset.divisionId;
+                const productId = divisionList.dataset.productId;
 
-            toggleDivision(productId, divisionId, target, buttonAddAllDivisions);
-        }
-    });
+                toggleDivision(productId, divisionId, target, buttonAddAllDivisions);
+            }
+        });
+    }
 }
 
 toggleDivisionsInProduct();

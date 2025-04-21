@@ -8,9 +8,12 @@
                     class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span>
             </a>
             <ul class="nav-second-level" aria-expanded="false">
-                @can('viewAny', \App\Models\Order::class)
-                <li class="nav-item"><a class="nav-link" href="{{ route('orders') }}"><i
-                            class="ti-control-record"></i>Заказы</a></li>
+                @can('viewOrders', \App\Models\Order::class)
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('orders') }}">
+                            <i class="ti-control-record"></i>Заказы
+                        </a>
+                    </li>
                 @endcan
                 @can('viewAny', \App\Models\Order::class)
                     <li class="nav-item"><a class="nav-link" href="{{ route('orders.new') }}"><i

@@ -26,6 +26,7 @@ use App\Policies\CompanyPolicy;
 use App\Policies\DivisionGroupPolicy;
 use App\Policies\DivisionPolicy;
 use App\Policies\KorobkaPolicy;
+use App\Policies\OldOrderPolicy;
 use App\Policies\OrderPolicy;
 use DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider;
 
