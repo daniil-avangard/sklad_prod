@@ -31,6 +31,14 @@ class OrderController extends Controller
         $this->authorize('viewOrders', Order::class);
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+        // Собираю названия дивизионов
+        $divisionGroupsID1 = Auth::user()->divisionGroups()->pluck('id');
+        $groupDivisionsNames1 = Division::whereIn('id', function ($query) use ($divisionGroupsID1) {
+            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroupsID1);
+        })->get();
+        $groupDivisionsNames1 = $groupDivisionsNames1->map(function ($division) {
+            return array('name'=>$division->name, 'id'=>$division->id);
+        })->toArray();
 
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
@@ -45,7 +53,7 @@ class OrderController extends Controller
             }
         }
 
-        return view('orders.index', compact('orders', 'allItems'));
+        return view('orders.index', compact('orders', 'allItems', 'groupDivisionsNames1'));
     }
 
     public function indexNew()
