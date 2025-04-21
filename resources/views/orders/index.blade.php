@@ -133,9 +133,9 @@
         <div class="col-12">
 
             <div class="table-responsive">
-                @can('view', \App\Models\Order::class)
+<!--                @can('view', \App\Models\Order::class)
                     <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
-                @endcan
+                @endcan-->
                 <table class="table table-bordered custom-table">
                     <thead>
                         <tr>
