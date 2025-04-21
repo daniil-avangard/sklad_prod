@@ -18,6 +18,7 @@
 
     <div class="" id="products-info">
         @include('products.info.nav')
+        
         <div class="row">
             <div class="" id="products-info-variants">
                 @can('view', App\Models\ProductVariant::class)
