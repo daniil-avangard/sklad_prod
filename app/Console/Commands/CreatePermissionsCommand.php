@@ -24,7 +24,7 @@ class CreatePermissionsCommand extends Command
         $this->createPolicyPermissions();
 
         // Создание ролей с правами
-        $this->createRoleWithPermissions(UserRoleEnum::SUPER_ADMIN->label, UserRoleEnum::SUPER_ADMIN->value, true, range(1001, 1061));
+        $this->createRoleWithPermissions(UserRoleEnum::SUPER_ADMIN->label(), UserRoleEnum::SUPER_ADMIN->value, true, range(1001, 1061));
         $this->createRoleWithPermissions(UserRoleEnum::MANAGER->label(), UserRoleEnum::MANAGER->value, false, [1016, 1024, 1027]);
         $this->createRoleWithPermissions(UserRoleEnum::DIVISION_MANAGER->label(), UserRoleEnum::DIVISION_MANAGER->value, false, [1016, 1025, 1026, 1028, 1030, 1031, 1042]);
         $this->createRoleWithPermissions(UserRoleEnum::TOP_MANAGER->label(), UserRoleEnum::TOP_MANAGER->value, false, [1003, 1006, 1010, 1011, 1015, 1016, 1020, 1024, 1025, 1026, 1028, 1029, 1030, 1031, 1032, 1033, 1035, 1036, 1042, 1047, 1052, 1057]);
@@ -69,6 +69,7 @@ class CreatePermissionsCommand extends Command
             if (class_exists($policy)) {
                 $methods = $this->getPolicyMethods($policy);
                 $policyNames = $this->getPolicyNames($policy);
+
                 foreach ($methods as $method) {
                     $permissionName = $policyNames[$method] ?? $method;
 

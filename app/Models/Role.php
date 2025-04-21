@@ -12,11 +12,11 @@ class Role extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'super'];
+    protected $fillable = ['name', 'super', 'value'];
 
     protected $casts = [
         'super' => 'boolean',
-    ];  
+    ];
 
     public function permissions(): BelongsToMany
     {

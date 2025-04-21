@@ -17,11 +17,12 @@ use Illuminate\Support\Facades\Auth;
 Route::middleware('auth', 'admin')->group(function () {
     Route::get('/', function () {
         $user = Auth::user();
-        $roleName = $user->roles()->first()?->name;
+        $role = $user->roles()->first()?->value;
+        // dd($role);
 
-        if ($roleName === UserRoleEnum::MANAGER->value) {
+        if ($role === UserRoleEnum::MANAGER->value) {
             return redirect()->route('products.list');
-        } else if ($roleName === UserRoleEnum::DIVISION_MANAGER->value) {
+        } else if ($role === UserRoleEnum::DIVISION_MANAGER->value) {
             return redirect()->route('products');
         } else {
             return redirect()->route('orders.new');
