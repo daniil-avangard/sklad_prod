@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\UserRoleEnum;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\DivisionController;
@@ -16,11 +17,12 @@ use Illuminate\Support\Facades\Auth;
 Route::middleware('auth', 'admin')->group(function () {
     Route::get('/', function () {
         $user = Auth::user();
-        $roleId = $user->roles()->first()?->id;
+        $role = $user->roles()->first()?->value;
+        // dd($role);
 
-        if (in_array($roleId, [1002])) {
+        if ($role === UserRoleEnum::MANAGER->value) {
             return redirect()->route('products.list');
-        } else if (in_array($roleId, [1003])) {
+        } else if ($role === UserRoleEnum::DIVISION_MANAGER->value) {
             return redirect()->route('products');
         } else {
             return redirect()->route('orders.new');

@@ -8,7 +8,6 @@
     <link href="/plugins/datatables/buttons.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     <!-- Responsive datatable examples -->
     <link href="/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
-
 @endpush
 
 @section('content')
@@ -16,7 +15,7 @@
         'title' => 'Продукты',
         'route' => 'products',
         'breadcrumbs' => 'Продукты',
-        'add_route' => $canCreateProduct ? 'products.create' : null
+        'add_route' => $canCreateProduct ? 'products.create' : null,
     ])
 
     <div class="row">
@@ -28,8 +27,12 @@
                         <thead>
                             <tr>
                                 <th>Название</th>
-                                <th>Количество</th>
-                                <th>В резерве</th>
+                                @can('update', App\Models\Product::class)
+                                    <th>Количество</th>
+                                @endcan
+                                @can('update', App\Models\Product::class)
+                                    <th>В резерве</th>
+                                @endcan
                                 <th>Действия</th>
                             </tr>
                         </thead>
@@ -37,8 +40,12 @@
                             @foreach ($products as $product)
                                 <tr>
                                     <td><a href="{{ route('products.show', $product) }}">{{ $product->name }}</a></td>
-                                    <td>{{ $product->total_quantity }}</td>
-                                    <td>{{ $product->total_reserved }}</td>
+                                    @can('update', $product)
+                                        <td>{{ $product->total_quantity }}</td>
+                                    @endcan
+                                    @can('update', $product)
+                                        <td>{{ $product->total_reserved }}</td>
+                                    @endcan
                                     <td>
                                         @can('view', $product)
                                             <a href="{{ route('products.show', $product) }}"
