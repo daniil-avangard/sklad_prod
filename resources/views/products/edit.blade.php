@@ -36,6 +36,7 @@
                                                     value="{{ $product->name }}" required>
                                             </div>
                                         </div>
+
                                         <div class="">
                                             <div class="form-group mb-3">
                                                 <label for="sku">Артикул</label>
@@ -43,6 +44,7 @@
                                                     value="{{ $product->sku }}">
                                             </div>
                                         </div>
+
                                         <div class="">
                                             <div class="form-group mb-3">
                                                 <label for="company_id">Компания</label>
@@ -58,14 +60,25 @@
                                         </div>
 
                                         <div class="">
-                                            <label for="category_id">Категория</label>
-                                            <select class="form-select" id="category_id" name="category_id">
-                                                <option value="">Выберите категорию</option>
-                                                @foreach ($categories as $category)
-                                                    <option {{ $category->id == $product->category_id ? 'selected' : '' }}
-                                                        value="{{ $category->id }}">{{ $category->name }}</option>
-                                                @endforeach
-                                            </select>
+                                            <div class="form-group">
+                                                <label for="category_id">Категория</label>
+                                                <select class="form-select" id="category_id" name="category_id">
+                                                    <option value="">Выберите категорию</option>
+                                                    @foreach ($categories as $category)
+                                                        <option
+                                                            {{ $category->id == $product->category_id ? 'selected' : '' }}
+                                                            value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="">
+                                            <div class="form-group mb-0">
+                                                <label for="min_stock">Минимальный остаток</label>
+                                                <input type="number" class="form-control" id="min_stock" name="min_stock"
+                                                    min="10" placeholder="10" value="{{ $product->min_stock }}">
+                                            </div>
                                         </div>
                                     </div>
 

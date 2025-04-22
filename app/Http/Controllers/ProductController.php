@@ -213,7 +213,8 @@ class ProductController extends Controller
             'sku',
             'kko_operator',
             'express_operator',
-            'category_id'
+            'category_id',
+            'min_stock'
         ]);
         $data['user_id'] = Auth::user()->id;
         // Обработка чекбоксов

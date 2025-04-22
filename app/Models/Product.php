@@ -30,6 +30,7 @@ class Product extends Model
         'sku',
         'company_id',
         'category_id',
+        'min_stock'
     ];
 
     protected $casts = [
