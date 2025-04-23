@@ -17,6 +17,10 @@
                                         <b>Артикул: </b>
                                         {{ $product->sku }}
                                     </div>
+                                    <div class="mb-3">
+                                        <b>Минимальный остаток: </b>
+                                        {{ $product->min_stock }}
+                                    </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="mb-3">

@@ -16,9 +16,9 @@
     <div class="ps-3 card-body list-group custom-list-group" id="division-list" data-product-id="{{ $product->id }}">
         @foreach ($allDivisions as $divisionCategory)
             <div class="list-group-item">
-                <h4 class="division__item-category card-title mb-2 pb-1 {{ $divisionCategory['all_divisions_selected'] ? 'text-primary' : 'text-muted' }}"
+                <h4 class="division__item-category card-title mb-2 pb-1 {{ $divisionCategory['category_division_selected'] ? 'text-primary' : 'text-muted' }}"
                     data-division-category-id="{{ $divisionCategory['category_id'] }}"
-                    data-is-category-selected="{{ $divisionCategory['all_divisions_selected'] ? 1 : 0 }}">
+                    data-is-category-selected="{{ $divisionCategory['category_division_selected'] ? 1 : 0 }}">
                     {{ $divisionCategory['category_name'] }}
                 </h4>
 

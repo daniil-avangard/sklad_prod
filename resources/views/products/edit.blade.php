@@ -31,18 +31,20 @@
                                     <div class="mb-3">
                                         <div class="">
                                             <div class="form-group mb-3">
+                                                <label for="sku">Артикул</label>
+                                                <input type="text" class="form-control" id="sku" name="sku"
+                                                    readonly value="{{ $product->sku }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="">
+                                            <div class="form-group mb-3">
                                                 <label for="name">Название</label>
                                                 <input type="text" class="form-control" id="name" name="name"
                                                     value="{{ $product->name }}" required>
                                             </div>
                                         </div>
-                                        <div class="">
-                                            <div class="form-group mb-3">
-                                                <label for="sku">Артикул</label>
-                                                <input type="text" class="form-control" id="sku" name="sku"
-                                                    value="{{ $product->sku }}">
-                                            </div>
-                                        </div>
+
                                         <div class="">
                                             <div class="form-group mb-3">
                                                 <label for="company_id">Компания</label>
@@ -58,14 +60,25 @@
                                         </div>
 
                                         <div class="">
-                                            <label for="category_id">Категория</label>
-                                            <select class="form-select" id="category_id" name="category_id">
-                                                <option value="">Выберите категорию</option>
-                                                @foreach ($categories as $category)
-                                                    <option {{ $category->id == $product->category_id ? 'selected' : '' }}
-                                                        value="{{ $category->id }}">{{ $category->name }}</option>
-                                                @endforeach
-                                            </select>
+                                            <div class="form-group">
+                                                <label for="category_id">Категория</label>
+                                                <select class="form-select" id="category_id" name="category_id">
+                                                    <option value="">Выберите категорию</option>
+                                                    @foreach ($categories as $category)
+                                                        <option
+                                                            {{ $category->id == $product->category_id ? 'selected' : '' }}
+                                                            value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="">
+                                            <div class="form-group mb-0">
+                                                <label for="min_stock">Минимальный остаток</label>
+                                                <input type="number" class="form-control" id="min_stock" name="min_stock"
+                                                    min="10" placeholder="10" value="{{ $product->min_stock }}">
+                                            </div>
                                         </div>
                                     </div>
 
@@ -167,7 +180,7 @@
 
                                 <div class="form-group mb-0">
                                     <label for="description">Описание</label>
-                                    <textarea class="form-control" id="description" name="description" rows="7">{{ $product->description }}</textarea>
+                                    <textarea class="form-control" id="description" name="description" rows="10">{{ $product->description }}</textarea>
                                 </div>
                             </div>
                         </div>

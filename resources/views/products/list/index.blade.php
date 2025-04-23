@@ -70,8 +70,8 @@
                                     @csrf
 
                                     <td>
-                                        <input type="number" class="form-control form-control-sm" value="1"
-                                            min="1" name="quantity">
+                                        <input type="number" class="form-control form-control-sm" value="0"
+                                            min="0" name="quantity">
                                     </td>
                                     <td>
                                         <button class="btn btn-primary" type="submit">

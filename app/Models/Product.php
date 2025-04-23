@@ -10,7 +10,7 @@ use App\Models\ProductVariant;
 use App\Models\Division;
 use App\Models\Basket;
 use App\Models\WriteoffProduct;
-
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -30,6 +30,7 @@ class Product extends Model
         'sku',
         'company_id',
         'category_id',
+        'min_stock'
     ];
 
     protected $casts = [
@@ -40,6 +41,14 @@ class Product extends Model
         'express_hall' => 'boolean',
         'express_operator' => Operator::class,
     ];
+
+    protected static function boot() {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->sku = Str::random(10);
+        });
+    }
 
     public function getStatusName(): string
     {
