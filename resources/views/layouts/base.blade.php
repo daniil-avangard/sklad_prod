@@ -37,9 +37,9 @@
         <!-- LOGO -->
         <div class="brand">
             <a href="/" class="logo">
-                <span>
+                {{-- <span>
                     <img src="/assets/images/logo-sm.png" alt="logo-small" class="logo-sm">
-                </span>
+                </span> --}}
                 <span>
                     <img src="/assets/images/logo_avangardrus.jpg" alt="logo-large" class="logo-lg logo-dark">
                     <img src="/assets/images/logo_avangardrus.jpg" alt="logo-large" class="logo-lg logo-light">

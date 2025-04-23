@@ -27,17 +27,11 @@
                                                         id="name" name="name" required>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-2">
-                                                <div class="form-group mb-3">
-                                                    <label for="sku">Артикул</label>
-                                                    <input type="text" class="form-control" value="{{ old('sku') }}"
-                                                        id="sku" name="sku">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-4">
+
+                                            <div class="col-lg-6">
                                                 <div class="form-group mb-3">
                                                     <label for="company_id">Компания</label>
-                                                    <select class="form-select" id="company_id" name="company_id">
+                                                    <select class="form-select" id="company_id" name="company_id" required>
                                                         <option value="">Выберите компанию</option>
                                                         @foreach ($companies as $company)
                                                             <option
@@ -45,18 +39,31 @@
                                                                 value="{{ $company->id }}">{{ $company->name }}</option>
                                                         @endforeach
                                                     </select>
-
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4">
-                                                <label for="category_id">Категория</label>
-                                                <select class="form-select" id="category_id" name="category_id">
-                                                    <option value="">Выберите категорию</option>
-                                                    @foreach ($categories as $category)
-                                                        <option {{ old('category_id') == $category->id ? 'selected' : '' }}
-                                                            value="{{ $category->id }}">{{ $category->name }}</option>
-                                                    @endforeach
-                                                </select>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="category_id">Категория</label>
+                                                    <select class="form-select" id="category_id" name="category_id" required>
+                                                        <option value="">Выберите категорию</option>
+                                                        @foreach ($categories as $category)
+                                                            <option
+                                                                {{ old('category_id') == $category->id ? 'selected' : '' }}
+                                                                value="{{ $category->id }}">{{ $category->name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group mb-3">
+                                                    <label for="min_stock">Минимальный остаток</label>
+                                                    <input type="number" class="form-control" id="min_stock"
+                                                        name="min_stock" min="10" placeholder="10"
+                                                        required
+                                                        value="{{ old('min_stock') }}">
+                                                </div>
                                             </div>
                                         </div>
 
@@ -77,10 +84,9 @@
                                     <div class="card-header">
                                         <h4 class="card-title">Необходимость размещения в точках продаж</h4>
                                     </div>
+
                                     <div class="card-body">
                                         <div class="row">
-
-
                                             <div class="col-md-6">
                                                 <div class="card">
                                                     <div class="card-header">
@@ -133,12 +139,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
                                             </div>
-
-
-
 
                                             <div class="col-md-6">
                                                 <div class="card">
@@ -149,8 +150,8 @@
                                                         <div class="row">
                                                             <div class="form-group mb-3 col-lg-6">
                                                                 <div class="checkbox-primary">
-                                                                    <input id="express_hall" type="checkbox" value="1"
-                                                                        name="express_hall"
+                                                                    <input id="express_hall" type="checkbox"
+                                                                        value="1" name="express_hall"
                                                                         {{ old('express_hall') ? 'checked' : '' }}>
                                                                     <label for="express_hall">
                                                                         Оперзал
@@ -177,26 +178,21 @@
 
 
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
 
-
-
                                 <div class="form-group mb-3 col-lg-12">
                                     <label for="description">Описание</label>
-                                    <textarea class="form-control" id="description" name="description" rows="3">{{ old('description') }}</textarea>
+                                    <textarea class="form-control" id="description" name="description" rows="3" required>{{ old('description') }}</textarea>
                                 </div>
 
                                 <div class="mt-3">
-                                    <button type="submit" class="btn btn-primary" name="action"
-                                        value="save">Добавить</button>
-
+                                    <button type="submit" class="btn btn-primary" name="action" value="save">
+                                        Добавить
+                                    </button>
                                 </div>
                             </div>
-
-
                     </x-form>
                 </div>
             </div>

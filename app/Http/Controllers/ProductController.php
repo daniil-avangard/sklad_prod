@@ -62,8 +62,8 @@ class ProductController extends Controller
             'company_id',
             'kko_operator',
             'express_operator',
-            'sku',
-            'category_id'
+            'category_id',
+            'min_stock'
         ]);
         $data['user_id'] = Auth::user()->id;
 
@@ -106,25 +106,29 @@ class ProductController extends Controller
             throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
         }
 
-        $allDivisions = DivisionCategory::with('divisions')->get()->map(function ($divisionCategory) use ($product) {
-            $divisions = $divisionCategory->divisions->map(function ($division) use ($product) {
+        $allDivisions = DivisionCategory::with('divisions')->get()
+            ->filter(function ($divisionCategory) {
+                return $divisionCategory->divisions->isNotEmpty();
+            })
+            ->map(function ($divisionCategory) use ($product) {
+                $divisions = $divisionCategory->divisions->map(function ($division) use ($product) {
+                    return [
+                        'division' => $division,
+                        'is_active' => $product->divisions->contains($division)
+                    ];
+                });
+
+                $isAllDivisionByCategorySelected =  $divisions->every(function ($division) {
+                    return $division['is_active'];
+                });
+
                 return [
-                    'division' => $division,
-                    'is_active' => $product->divisions->contains($division)
+                    'category_id' => $divisionCategory->id, // Id категории
+                    'category_name' => $divisionCategory->category_name, // Имя категории
+                    'divisions' => $divisions,
+                    'category_division_selected' => $isAllDivisionByCategorySelected,
                 ];
             });
-
-            $isAllDivisionByCategorySelected = $divisions->every(function ($division) {
-                return $division['is_active'];
-            });
-
-            return [
-                'category_id' => $divisionCategory->id, // Id категории
-                'category_name' => $divisionCategory->category_name, // Имя категории
-                'divisions' => $divisions,
-                'all_divisions_selected' => $isAllDivisionByCategorySelected,
-            ];
-        });
         // dd($allDivisions->toArray());
 
         // Фильтруем все выбранные активные подразделения
@@ -210,10 +214,10 @@ class ProductController extends Controller
             'name',
             'description',
             'company_id',
-            'sku',
             'kko_operator',
             'express_operator',
-            'category_id'
+            'category_id',
+            'min_stock'
         ]);
         $data['user_id'] = Auth::user()->id;
         // Обработка чекбоксов
