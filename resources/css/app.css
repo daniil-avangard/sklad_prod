@@ -11,5 +11,6 @@
 } */
 
 .left-sidenav .brand .logo .logo-lg {
-    height: 30px;
+    height: 40px;
+    margin: 0;
 }
