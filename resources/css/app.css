@@ -2,14 +2,6 @@
     z-index: 11;
 }
 
-/* @media screen and (max-width: 1540px) {
-    .table-container {
-        width: 100%;
-        height: 500px;
-        max-width: 1250px;
-    }
-} */
-
 .left-sidenav .brand .logo .logo-lg {
     height: 40px;
     margin: 0;
