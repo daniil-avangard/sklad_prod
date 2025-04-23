@@ -24,7 +24,7 @@ Array.from(popUps1).forEach((el, index) => {
                     child.classList.toggle("show");
                     tableThMain.classList.toggle("toggle-goods-popup-for-head");
                     popUps1[ind].classList.toggle("toggle-goods-popup-for-cell");
-                    trParent.classList.toggle("tr-height");
+//                    trParent.classList.toggle("tr-height");
                 }
             }
         });
@@ -32,7 +32,7 @@ Array.from(popUps1).forEach((el, index) => {
         popUpsChilds[index].classList.toggle("show");
         tableThMain.classList.toggle("toggle-goods-popup-for-head");
         el.classList.toggle("toggle-goods-popup-for-cell");
-        trParent.classList.toggle("tr-height");
+//        trParent.classList.toggle("tr-height");
         
     }
 

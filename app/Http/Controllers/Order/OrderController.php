@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Enum\Order\StatusEnum;
+use App\Enum\UserRoleEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DivisionGroup;
 use App\Models\Division;
@@ -31,6 +32,10 @@ class OrderController extends Controller
         $this->authorize('viewOrders', Order::class);
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+        $divisionID = Auth::user()->division_id;
+        $divisionAllOrders = Order::whereIn('division_id',[$divisionID])->get()->sortByDesc('created_at');
+        $role = Auth::user()->roles()->pluck('name')->toArray();
+        //dd($role);
         // Собираю названия дивизионов
         $divisionGroupsID1 = Auth::user()->divisionGroups()->pluck('id');
         $groupDivisionsNames1 = Division::whereIn('id', function ($query) use ($divisionGroupsID1) {
@@ -43,7 +48,7 @@ class OrderController extends Controller
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get()->sortByDesc('created_at');
-
+        $orders = (in_array(UserRoleEnum::MANAGER->label(), $role)) ? $divisionAllOrders : $orders;
         $allItems = [];
 
         foreach ($orders as $order) {
@@ -106,8 +111,8 @@ class OrderController extends Controller
     {
         $this->authorize('viewAny', Order::class);
         $divisionGroups1 = Auth::user()->division_id;
-        $role = Auth::user()->roles()->pluck('id')->toArray();
-        $currentStatus = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $role = Auth::user()->roles()->pluck('name')->toArray();
+        $currentStatus = (in_array(UserRoleEnum::TOP_MANAGER->label(), $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
         $toProcessStatus = $currentStatus == StatusEnum::NEW->value ? StatusEnum::PROCESSING->value : StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
@@ -132,11 +137,12 @@ class OrderController extends Controller
     private function forNewTable($divisionGroups, $orders)
     {
         $role = Auth::user()->roles()->pluck('id')->toArray();
+        $role1 = Auth::user()->roles()->pluck('name')->toArray();
         $divisionGroupsID = Auth::user()->divisionGroups()->pluck('id');
         $divisionGroupsID1 = Auth::user()->divisionGroups()->pluck('id');
         //dd($divisionGroupsID[0]);
 //        $currentRole = ($role[0] == 1004) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
-        $currentRole = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $currentRole = (in_array(UserRoleEnum::TOP_MANAGER->label(), $role1)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
         $allDivisionsNames = Division::all()->map(function ($division) {
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
@@ -155,7 +161,7 @@ class OrderController extends Controller
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
 
-        $allDivisionsNames =  (in_array(1001, $role)) ? $allDivisionsNames : $groupDivisionsNames1;
+        $allDivisionsNames =  (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role1)) ? $allDivisionsNames : $groupDivisionsNames1;
 
         $divisionStateOrders = array();
         $divisionStateOrdersNew = array();
