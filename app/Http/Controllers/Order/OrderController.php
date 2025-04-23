@@ -111,8 +111,8 @@ class OrderController extends Controller
     {
         $this->authorize('viewAny', Order::class);
         $divisionGroups1 = Auth::user()->division_id;
-        $role = Auth::user()->roles()->pluck('id')->toArray();
-        $currentStatus = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $role = Auth::user()->roles()->pluck('name')->toArray();
+        $currentStatus = (in_array(UserRoleEnum::TOP_MANAGER->label(), $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
         $toProcessStatus = $currentStatus == StatusEnum::NEW->value ? StatusEnum::PROCESSING->value : StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
@@ -137,11 +137,12 @@ class OrderController extends Controller
     private function forNewTable($divisionGroups, $orders)
     {
         $role = Auth::user()->roles()->pluck('id')->toArray();
+        $role1 = Auth::user()->roles()->pluck('name')->toArray();
         $divisionGroupsID = Auth::user()->divisionGroups()->pluck('id');
         $divisionGroupsID1 = Auth::user()->divisionGroups()->pluck('id');
         //dd($divisionGroupsID[0]);
 //        $currentRole = ($role[0] == 1004) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
-        $currentRole = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $currentRole = (in_array(UserRoleEnum::TOP_MANAGER->label(), $role1)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
         $allDivisionsNames = Division::all()->map(function ($division) {
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
@@ -160,7 +161,7 @@ class OrderController extends Controller
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
 
-        $allDivisionsNames =  (in_array(1001, $role)) ? $allDivisionsNames : $groupDivisionsNames1;
+        $allDivisionsNames =  (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role1)) ? $allDivisionsNames : $groupDivisionsNames1;
 
         $divisionStateOrders = array();
         $divisionStateOrdersNew = array();
