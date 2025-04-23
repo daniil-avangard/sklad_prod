@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Enum\Order\StatusEnum;
+use App\Enum\UserRoleEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DivisionGroup;
 use App\Models\Division;
@@ -31,6 +32,10 @@ class OrderController extends Controller
         $this->authorize('viewOrders', Order::class);
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+        $divisionID = Auth::user()->division_id;
+        $divisionAllOrders = Order::whereIn('division_id',[$divisionID])->get()->sortByDesc('created_at');
+        $role = Auth::user()->roles()->pluck('name')->toArray();
+        //dd($role);
         // Собираю названия дивизионов
         $divisionGroupsID1 = Auth::user()->divisionGroups()->pluck('id');
         $groupDivisionsNames1 = Division::whereIn('id', function ($query) use ($divisionGroupsID1) {
@@ -43,7 +48,7 @@ class OrderController extends Controller
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get()->sortByDesc('created_at');
-
+        $orders = (in_array(UserRoleEnum::MANAGER->label(), $role)) ? $divisionAllOrders : $orders;
         $allItems = [];
 
         foreach ($orders as $order) {
