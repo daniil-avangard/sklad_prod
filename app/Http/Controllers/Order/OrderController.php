@@ -408,6 +408,42 @@ class OrderController extends Controller
     // Статуты бля заказаков
     public function statusProcessing(Order $order)
     {
+//        $this->authorize('viewAny', Order::class);
+
+//        $divisionGroupsNew = Auth::user()->divisionGroups()->pluck('id');
+//        $roleNew = Auth::user()->roles()->pluck('id');
+//        $ordersNew = Order::whereIn('division_id', function ($query) use ($divisionGroupsNew) {
+//            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroupsNew);
+//        })->get()->sortByDesc('created_at');
+//        
+//        $result = $this->forNewTable($divisionGroupsNew, $ordersNew);
+        
+        //
+        
+        foreach ($order->items as $item) {
+            $products = Product::with('variants')->whereIn('id',[$item->product_id])->get()->map(function ($product) {
+                $product->total_quantity = $product->variants->sum('quantity');
+                $product->total_reserved = $product->variants->sum('reserved');
+                return $product;
+            });
+            $orderedTotal = OrderItem::whereIn('product_id',[$item->product_id])->get()->map(function ($productItem) {
+                $productItem->total_ordered = $productItem->sum('quantity');
+                return $productItem;
+            });
+            $checkFlag = true;
+            if ($products[0]->total_quantity < $products[0]->total_reserved + $orderedTotal[0]->total_ordered) {
+                $checkFlag = false;
+            }
+            dd($checkFlag);
+//            dd($orderedTotal);
+//            dd($products[0]->total_reserved);
+        }
+        dd($order->items[0]->quantity);
+        
+        //  Старый
+        
+        
+        
         $divisionGroups = Auth::user()->division_id;
         $this->authorize('processingStatus', $order);
 

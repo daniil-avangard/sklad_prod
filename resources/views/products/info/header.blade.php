@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-lg-6 align-self-center">
+                    <div class="col-lg-6 align-self-center" style="overflow: hidden;">
                         <img src="{{ asset('storage/' . $product->image) }}" alt="" class=" mx-auto  d-block"
                             height="300">
                     </div><!--end col-->
