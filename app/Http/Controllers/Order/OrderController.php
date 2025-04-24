@@ -408,20 +408,36 @@ class OrderController extends Controller
     // Статуты бля заказаков
     public function statusProcessing(Order $order)
     {
+        $AllOrders = Order::whereIn('status',[StatusEnum::CANCELED->value])->get()->map(function ($order) {
+                return $order->id;
+            })->toArray();
+
         $checkFlag = true;
         foreach ($order->items as $item) {
             $products = Product::with('variants')->whereIn('id',[$item->product_id])->get()->map(function ($product) {
                 $product->total_quantity = $product->variants->sum('quantity');
-                $product->total_reserved = $product->variants->sum('reserved');
+                $product->total_reserved = $product->variants->sum('reserved_order');
                 return $product;
             });
-            $orderedTotal = OrderItem::whereIn('product_id',[$item->product_id])->get()->map(function ($productItem) {
-                $productItem->total_ordered = $productItem->sum('quantity');
-                return $productItem;
-            });
+            $orderedTotalNew = OrderItem::whereIn('product_id',[$item->product_id])->get()->toArray();
+            $orderedTotalNew1 = array();
+            $sum = 0;
+            foreach ($orderedTotalNew as $item1) {
+                if (!(in_array($item1["order_id"], $AllOrders))) {
+                    $orderedTotalNew1[] = $item1;
+                    $sum += $item1["quantity"];
+                }
+            }
+            
+//            $orderedTotal = OrderItem::whereIn('product_id',[$item->product_id])->get()->map(function ($productItem) use ($sum) {
+//                $sum += $productItem->quantity;
+//                return $sum;
+//            });
+//            dd($sum);
 //            $checkFlag = true;
-            if ($products[0]->total_quantity < $products[0]->total_reserved + $orderedTotal[0]->total_ordered) {
+            if ($products[0]->total_quantity < $products[0]->total_reserved + $sum) {
                 $checkFlag = false;
+//                dd($item->product_id, $products[0]->total_quantity , $products[0]->total_reserved , $sum);
             }
 //            if (!($checkFlag)) {
 //                $products = Product::all();
