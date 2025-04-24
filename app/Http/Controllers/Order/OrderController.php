@@ -295,8 +295,9 @@ class OrderController extends Controller
         $order->items = $order->items->sortBy(function ($item) {
             return $item->product->name;
         });
+        $warning = "";
 
-        return view('orders.show', compact('order', 'currentStatus', 'products'));
+        return view('orders.show', compact('order', 'currentStatus', 'products', 'warning'));
     }
 
     public function create()
@@ -408,18 +409,7 @@ class OrderController extends Controller
     // Статуты бля заказаков
     public function statusProcessing(Order $order)
     {
-//        $this->authorize('viewAny', Order::class);
-
-//        $divisionGroupsNew = Auth::user()->divisionGroups()->pluck('id');
-//        $roleNew = Auth::user()->roles()->pluck('id');
-//        $ordersNew = Order::whereIn('division_id', function ($query) use ($divisionGroupsNew) {
-//            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroupsNew);
-//        })->get()->sortByDesc('created_at');
-//        
-//        $result = $this->forNewTable($divisionGroupsNew, $ordersNew);
-        
-        //
-        
+        $checkFlag = true;
         foreach ($order->items as $item) {
             $products = Product::with('variants')->whereIn('id',[$item->product_id])->get()->map(function ($product) {
                 $product->total_quantity = $product->variants->sum('quantity');
@@ -430,15 +420,29 @@ class OrderController extends Controller
                 $productItem->total_ordered = $productItem->sum('quantity');
                 return $productItem;
             });
-            $checkFlag = true;
+//            $checkFlag = true;
             if ($products[0]->total_quantity < $products[0]->total_reserved + $orderedTotal[0]->total_ordered) {
                 $checkFlag = false;
             }
-            dd($checkFlag);
+            if (!($checkFlag)) {
+                $products = Product::all();
+                $currentStatus = $order->status->value;
+                $warning = "Ошибка";
+                return view('orders.show', compact('order', 'currentStatus', 'products', 'warning'));
+//                return redirect()->back()->withErrors('error', 'Ошибка сохранения');
+            }
+//            dd($checkFlag);
 //            dd($orderedTotal);
 //            dd($products[0]->total_reserved);
         }
-        dd($order->items[0]->quantity);
+        if (!($checkFlag)) {
+                $products = Product::all();
+                $currentStatus = $order->status->value;
+                $warning = "Ошибка";
+                return view('orders.show', compact('order', 'currentStatus', 'products', 'warning'));
+//                return redirect()->back()->withErrors('error', 'Ошибка сохранения');
+        }
+//        dd($order->items[0]->quantity);
         
         //  Старый
         

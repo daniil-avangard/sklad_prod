@@ -25,7 +25,11 @@
                     Toast.fire({
                         icon: 'success',
                         title: '{{ $title }}'
-                    })
+                    });
+//                    Toast.fire({
+//                        icon: 'error',
+//                        title: '{{ $title }}'
+//                    });
                 });
             });
         </script>
