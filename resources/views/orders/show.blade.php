@@ -29,7 +29,6 @@
                                     class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}
                                 </span>
                             </h4>
-                            <p>{{ $warning }}</p>
                         </div><!--end col-->
                     </div> <!--end row-->
                 </div>

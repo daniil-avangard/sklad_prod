@@ -295,9 +295,8 @@ class OrderController extends Controller
         $order->items = $order->items->sortBy(function ($item) {
             return $item->product->name;
         });
-        $warning = "";
 
-        return view('orders.show', compact('order', 'currentStatus', 'products', 'warning'));
+        return view('orders.show', compact('order', 'currentStatus', 'products'));
     }
 
     public function create()
@@ -424,13 +423,13 @@ class OrderController extends Controller
             if ($products[0]->total_quantity < $products[0]->total_reserved + $orderedTotal[0]->total_ordered) {
                 $checkFlag = false;
             }
-            if (!($checkFlag)) {
-                $products = Product::all();
-                $currentStatus = $order->status->value;
-                $warning = "Ошибка";
-                return view('orders.show', compact('order', 'currentStatus', 'products', 'warning'));
+//            if (!($checkFlag)) {
+//                $products = Product::all();
+//                $currentStatus = $order->status->value;
+//                $warning = "Ошибка";
+//                return view('orders.show', compact('order', 'currentStatus', 'products', 'warning'));
 //                return redirect()->back()->withErrors('error', 'Ошибка сохранения');
-            }
+//            }
 //            dd($checkFlag);
 //            dd($orderedTotal);
 //            dd($products[0]->total_reserved);
@@ -439,8 +438,8 @@ class OrderController extends Controller
                 $products = Product::all();
                 $currentStatus = $order->status->value;
                 $warning = "Ошибка";
-                return view('orders.show', compact('order', 'currentStatus', 'products', 'warning'));
-//                return redirect()->back()->withErrors('error', 'Ошибка сохранения');
+//                return view('orders.show', compact('order', 'currentStatus', 'products', 'warning'));
+                return redirect()->back()->withErrors('Недостаточное количество товара на складе или товар уже был зарезервирован для заказа');
         }
 //        dd($order->items[0]->quantity);
         
