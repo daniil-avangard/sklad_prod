@@ -128,8 +128,10 @@ class OrderController extends Controller
                 $createOrder = $order;
             }
         }
+//        dd($createOrder);
         if ($toProcessStatus == StatusEnum::PROCESSING->value) {
-            $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $order);
+//            $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $order);
+            $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $createOrder);
         }
 
         return redirect()->to(route('orders.new'));
@@ -502,10 +504,16 @@ class OrderController extends Controller
         return redirect()->to(route('orders.show', $newComposerOrder->id))->with('success', 'Заказ сохранен');
     }
 
-    private function createOneProcessOrder($divisionGroups, $createdOrder)
+    private function createOneProcessOrder($divisionGroups1, $createdOrder)
     {
         $currentMonth = date('m');
-        $orders = Order::where('division_id', $divisionGroups)->get()->sortByDesc('created_at');
+//        $orders = Order::where('division_id', $divisionGroups)->get()->sortByDesc('created_at');
+        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+        $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
+            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
+        })->get();
+        
+//        dd($orders);
         $divisionProcessOrders = array();
         foreach ($orders as $order) {
             if ($order->status->value == StatusEnum::PROCESSING->value) {
