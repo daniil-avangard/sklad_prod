@@ -12,13 +12,14 @@ const sendRequest = async (url, method, data) => {
         });
 
         if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
+            const errorData = await response.json();
+            throw new Error(errorData.message);
         }
 
         return await response.json(); // Возвращаем ответ в случае успеха
     } catch (error) {
-        console.log(error.message);
-        return null; // Возвращаем null в случае ошибки
+        console.error('Ошибка:', error.message);
+        return { success: false, message: error.message };
     }
 };
 
@@ -55,37 +56,40 @@ const updateOptionsInSelect = async (categories) => {
     });
 }
 
+
 const addDivisionForm = document.querySelector('#add-division-form');
-addDivisionForm.addEventListener('submit', function (evt) {
-    evt.preventDefault();
+if (addDivisionForm) {
+    addDivisionForm.addEventListener('submit', function (evt) {
+        evt.preventDefault();
 
-    const formData = new FormData(addDivisionForm);
+        const formData = new FormData(addDivisionForm);
 
-    // Преобразуем FormData в объект для удобства работы
-    const dataObject = {};
-    formData.forEach((value, key) => {
-        dataObject[key] = value;
-    });
+        // Преобразуем FormData в объект для удобства работы
+        const dataObject = {};
+        formData.forEach((value, key) => {
+            dataObject[key] = value;
+        });
 
-    // Функция для добавления/удаления подразделения
-    const toggleDivision = async (data) => {
-        // console.log(data);
+        // Функция для добавления/удаления подразделения
+        const toggleDivision = async (data) => {
+            // console.log(data);
 
-        const result = await sendRequest(`/divisions`, 'POST', data);
-        // console.log(result);
+            const result = await sendRequest(`/divisions`, 'POST', data);
+            // console.log(result);
 
-        if (result.success) {
-            window.location.href = '/divisions';
-        } else {
-            Toast.fire({
-                icon: 'error',
-                title: result.message
-            })
+            if (result.success) {
+                window.location.href = '/divisions';
+            } else {
+                Toast.fire({
+                    icon: 'error',
+                    title: result.message
+                })
+            }
         }
-    }
 
-    toggleDivision(dataObject);
-});
+        toggleDivision(dataObject);
+    });
+}
 
 
 const addCategoryDivisionForm = document.querySelector('#add-category-division');
@@ -185,9 +189,10 @@ deleteCategoryButton.addEventListener('click', () => {
             division_ids: divisionIds,
             _token: $('meta[name="csrf-token"]').attr('content')
         };
+        // console.log(dataToSend);
 
         const result = await sendRequest(`/division-category`, 'DELETE', dataToSend);
-        // console.log(result);
+        console.log(result);
 
         if (result && result.success) {
             Toast.fire({
@@ -200,6 +205,11 @@ deleteCategoryButton.addEventListener('click', () => {
             // Обновляет список категорий
             updateCategoriesList(divisions);
             updateOptionsInSelect(divisions);
+        } else {
+            Toast.fire({
+                icon: 'error',
+                title: result.message
+            })
         }
     };
 

@@ -27,6 +27,8 @@
                         <thead>
                             <tr>
                                 <th>Название</th>
+                                <th>Компания</th>
+                                <th>Категория</th>
                                 @can('update', App\Models\Product::class)
                                     <th>Количество</th>
                                 @endcan
@@ -39,7 +41,11 @@
                         <tbody>
                             @foreach ($products as $product)
                                 <tr>
-                                    <td><a href="{{ route('products.show', $product) }}">{{ $product->name }}</a></td>
+                                    <td>
+                                        <a href="{{ route('products.show', $product) }}">{{ $product->name }}</a>
+                                    </td>
+                                    <td>{{ $product->companyName }}</td>
+                                    <td>{{ $product->categoryName }}</td>
                                     @can('update', $product)
                                         <td>{{ $product->total_quantity }}</td>
                                     @endcan
