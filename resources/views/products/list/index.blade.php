@@ -71,7 +71,7 @@
 
                                     <td>
                                         <input type="number" class="form-control form-control-sm" placeholder="0"
-                                            min="0" name="quantity" autocomplete="off">
+                                            min="0" name="quantity" autocomplete="off" required>
                                     </td>
                                     <td>
                                         <button class="btn btn-primary" type="submit">

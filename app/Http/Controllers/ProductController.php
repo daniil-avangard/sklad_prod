@@ -34,8 +34,14 @@ class ProductController extends Controller
         $products = Product::with('variants')->get()->map(function ($product) {
             $product->total_quantity = $product->variants->sum('quantity');
             $product->total_reserved = $product->variants->sum('reserved');
+            $product->companyName = $product->company()->first()->name;
+            $product->categoryName = $product->category()->first()->name;
             return $product;
         });
+
+        // $productList = $product->category();
+        // dd($products->toArray());
+
         return view('products.index', compact('products', 'canCreateProduct'));
     }
 
