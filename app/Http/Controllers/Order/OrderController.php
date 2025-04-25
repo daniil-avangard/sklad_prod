@@ -283,6 +283,30 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
+        $divisionGroupsIDNew = Auth::user()->divisionGroups()->pluck('id');
+        $ordersNew = Order::whereIn('division_id', function ($query) use ($divisionGroupsIDNew) {
+            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroupsIDNew);
+        })->get()->sortByDesc('created_at');
+        $divisionStateOrders = array();
+
+        $arrayOfStatuses = array(StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value);
+
+        foreach ($ordersNew as $order1) {
+            if (in_array($order1->status->value, $arrayOfStatuses)) {
+                $divisionStateOrders[] = $order1;
+            }
+        }
+
+        $allGoodsInOrders = array();
+        
+        foreach ($divisionStateOrders as $order1) {
+            foreach ($order1->items as $item1) {
+                $allGoodsInOrders[] = array('id' => $item1->product->id, 'name' => $item1->product->name, 'image' => $item1->product->image, 'warehouse' => $item1->product->variants->sum('quantity'), 'min_stock' => $item1->product->min_stock);
+            }
+        }
+        $allGoodsInOrders = array_unique($allGoodsInOrders, SORT_REGULAR);
+        
+        // старый код
         $this->authorize('view', $order);
         $this->divisionId = Auth::user()->division_id;
         
@@ -291,6 +315,7 @@ class OrderController extends Controller
             ->where('division_division_group.division_id', $this->divisionId)
             ->pluck('division_group_product.product_id');
 
+        
         $products = Product::whereIn('id', $divisionGroupProducts)
             ->orWhereHas('divisions', function ($query) {
                 $query->where('division_id', $this->divisionId);
@@ -306,7 +331,7 @@ class OrderController extends Controller
             return $item->product->name;
         });
 
-        return view('orders.show', compact('order', 'currentStatus', 'products'));
+        return view('orders.show', compact('order', 'currentStatus', 'allGoodsInOrders'));
     }
 
     public function create()
