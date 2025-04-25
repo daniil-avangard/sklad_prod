@@ -32,10 +32,24 @@ class ProductListController extends Controller
             ->where('division_division_group.division_id', $this->divisionId)
             ->pluck('division_group_product.product_id');
 
-        $products = Product::whereIn('id', $divisionGroupProducts)
+        $productsNew = Product::whereIn('id', $divisionGroupProducts)
             ->orWhereHas('divisions', function ($query) {
                 $query->where('division_id', $this->divisionId);
             })->orderBy('name')->get();
+            
+        $products = array();
+        foreach ($productsNew as $product) {
+            $variants = $product->variants()->where('is_active', true)->orderBy('date_of_actuality', 'desc')->get();
+            $sum = 0;
+            foreach ($variants as $vr) {
+                $sum += $vr->quantity;
+            }
+            if ($sum != 0) {
+                $products[] = $product;
+            }
+//            dd($product->id, $variants);
+        }
+        
 
         return view('products.list.index', compact('products'));
     }

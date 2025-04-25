@@ -9,10 +9,12 @@ use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
 use App\Enum\Order\StatusEnum;
+use App\Enum\UserRoleEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DivisionGroup;
 use App\Models\Division;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -31,6 +33,10 @@ class OrderController extends Controller
         $this->authorize('viewOrders', Order::class);
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+        $divisionID = Auth::user()->division_id;
+        $divisionAllOrders = Order::whereIn('division_id',[$divisionID])->get()->sortByDesc('created_at');
+        $role = Auth::user()->roles()->pluck('name')->toArray();
+        //dd($role);
         // Собираю названия дивизионов
         $divisionGroupsID1 = Auth::user()->divisionGroups()->pluck('id');
         $groupDivisionsNames1 = Division::whereIn('id', function ($query) use ($divisionGroupsID1) {
@@ -43,7 +49,7 @@ class OrderController extends Controller
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get()->sortByDesc('created_at');
-
+        $orders = (in_array(UserRoleEnum::MANAGER->label(), $role)) ? $divisionAllOrders : $orders;
         $allItems = [];
 
         foreach ($orders as $order) {
@@ -106,8 +112,8 @@ class OrderController extends Controller
     {
         $this->authorize('viewAny', Order::class);
         $divisionGroups1 = Auth::user()->division_id;
-        $role = Auth::user()->roles()->pluck('id')->toArray();
-        $currentStatus = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $role = Auth::user()->roles()->pluck('name')->toArray();
+        $currentStatus = (in_array(UserRoleEnum::TOP_MANAGER->label(), $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
         $toProcessStatus = $currentStatus == StatusEnum::NEW->value ? StatusEnum::PROCESSING->value : StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
@@ -132,11 +138,12 @@ class OrderController extends Controller
     private function forNewTable($divisionGroups, $orders)
     {
         $role = Auth::user()->roles()->pluck('id')->toArray();
+        $role1 = Auth::user()->roles()->pluck('name')->toArray();
         $divisionGroupsID = Auth::user()->divisionGroups()->pluck('id');
         $divisionGroupsID1 = Auth::user()->divisionGroups()->pluck('id');
         //dd($divisionGroupsID[0]);
 //        $currentRole = ($role[0] == 1004) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
-        $currentRole = (in_array(1004, $role)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $currentRole = (in_array(UserRoleEnum::TOP_MANAGER->label(), $role1)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
         $allDivisionsNames = Division::all()->map(function ($division) {
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
@@ -155,7 +162,7 @@ class OrderController extends Controller
             return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
         })->toArray();
 
-        $allDivisionsNames =  (in_array(1001, $role)) ? $allDivisionsNames : $groupDivisionsNames1;
+        $allDivisionsNames =  (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role1)) ? $allDivisionsNames : $groupDivisionsNames1;
 
         $divisionStateOrders = array();
         $divisionStateOrdersNew = array();
@@ -276,9 +283,43 @@ class OrderController extends Controller
 
     public function show(Order $order)
     {
-        $this->authorize('view', $order);
+        $divisionGroupsIDNew = Auth::user()->divisionGroups()->pluck('id');
+        $ordersNew = Order::whereIn('division_id', function ($query) use ($divisionGroupsIDNew) {
+            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroupsIDNew);
+        })->get()->sortByDesc('created_at');
+        $divisionStateOrders = array();
 
-        $products = Product::all();
+        $arrayOfStatuses = array(StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value);
+
+        foreach ($ordersNew as $order1) {
+            if (in_array($order1->status->value, $arrayOfStatuses)) {
+                $divisionStateOrders[] = $order1;
+            }
+        }
+
+        $allGoodsInOrders = array();
+        
+        foreach ($divisionStateOrders as $order1) {
+            foreach ($order1->items as $item1) {
+                $allGoodsInOrders[] = array('id' => $item1->product->id, 'name' => $item1->product->name, 'image' => $item1->product->image, 'warehouse' => $item1->product->variants->sum('quantity'), 'min_stock' => $item1->product->min_stock);
+            }
+        }
+        $allGoodsInOrders = array_unique($allGoodsInOrders, SORT_REGULAR);
+        
+        // старый код
+        $this->authorize('view', $order);
+        $this->divisionId = Auth::user()->division_id;
+        
+        $divisionGroupProducts = DB::table('division_group_product')
+            ->join('division_division_group', 'division_group_product.division_group_id', '=', 'division_division_group.division_group_id')
+            ->where('division_division_group.division_id', $this->divisionId)
+            ->pluck('division_group_product.product_id');
+
+        
+        $products = Product::whereIn('id', $divisionGroupProducts)
+            ->orWhereHas('divisions', function ($query) {
+                $query->where('division_id', $this->divisionId);
+            })->orderBy('name')->get();
 
         $currentStatus = $order->status->value;
 
@@ -290,7 +331,7 @@ class OrderController extends Controller
             return $item->product->name;
         });
 
-        return view('orders.show', compact('order', 'currentStatus', 'products'));
+        return view('orders.show', compact('order', 'currentStatus', 'allGoodsInOrders'));
     }
 
     public function create()
@@ -402,6 +443,53 @@ class OrderController extends Controller
     // Статуты бля заказаков
     public function statusProcessing(Order $order)
     {
+        $AllOrders = Order::whereIn('status',[StatusEnum::CANCELED->value, StatusEnum::DELIVERED->value, StatusEnum::SHIPPED->value, StatusEnum::ASSEMBLED->value, StatusEnum::WAREHOUSE_START->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get()->map(function ($order) {
+                return $order->id;
+            })->toArray();
+
+        $checkFlag = true;
+        foreach ($order->items as $item) {
+            $products = Product::with('variants')->whereIn('id',[$item->product_id])->get()->map(function ($product) {
+                $product->total_quantity = $product->variants->sum('quantity');
+                $product->total_reserved = $product->variants->sum('reserved_order');
+                return $product;
+            });
+            $orderedTotalNew = OrderItem::whereIn('product_id',[$item->product_id])->get()->toArray();
+            $orderedTotalNew1 = array();
+            
+            $sum = 0;
+            foreach ($orderedTotalNew as $item1) {
+                if (!(in_array($item1["order_id"], $AllOrders))) {
+                    $orderedTotalNew1[] = $item1;
+                    $sum += $item1["quantity"];
+                }
+            }
+            
+//            $orderedTotal = OrderItem::whereIn('product_id',[$item->product_id])->get()->map(function ($productItem) use ($sum) {
+//                $sum += $productItem->quantity;
+//                return $sum;
+//            });
+//            dd($sum);
+//            $checkFlag = true;
+            if ($products[0]->total_quantity < $sum) {
+                $checkFlag = false;
+//                dd($orderedTotalNew);
+//                dd($item->product_id, $products[0]->total_quantity , $products[0]->total_reserved , $sum);
+            }
+        }
+        if (!($checkFlag)) {
+                $products = Product::all();
+                $currentStatus = $order->status->value;
+                $warning = "Ошибка";
+//                return view('orders.show', compact('order', 'currentStatus', 'products', 'warning'));
+                return redirect()->back()->withErrors('Недостаточное количество товара на складе или товар уже был зарезервирован для заказа');
+        }
+//        dd($order->items[0]->quantity);
+        
+        //  Старый
+        
+        
+        
         $divisionGroups = Auth::user()->division_id;
         $this->authorize('processingStatus', $order);
 
@@ -474,8 +562,52 @@ class OrderController extends Controller
     public function statusManagerProcessing(Order $order)
     {
         $this->authorize('managerProcessingStatus', $order);
+        // добавленная проверка
+        $AllOrders = Order::whereIn('status',[StatusEnum::CANCELED->value, StatusEnum::DELIVERED->value, StatusEnum::SHIPPED->value, StatusEnum::ASSEMBLED->value, StatusEnum::WAREHOUSE_START->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get()->map(function ($order) {
+                return $order->id;
+            })->toArray();
 
-        $order->status = StatusEnum::MANAGER_PROCESSING->value;
+        $checkFlag = true;
+        foreach ($order->items as $item) {
+            $products = Product::with('variants')->whereIn('id',[$item->product_id])->get()->map(function ($product) {
+                $product->total_quantity = $product->variants->sum('quantity');
+                $product->total_reserved = $product->variants->sum('reserved_order');
+                return $product;
+            });
+            $orderedTotalNew = OrderItem::whereIn('product_id',[$item->product_id])->get()->toArray();
+            $orderedTotalNew1 = array();
+            
+            $sum = 0;
+            foreach ($orderedTotalNew as $item1) {
+                if (!(in_array($item1["order_id"], $AllOrders))) {
+                    $orderedTotalNew1[] = $item1;
+                    $sum += $item1["quantity"];
+                }
+            }
+            
+//            $orderedTotal = OrderItem::whereIn('product_id',[$item->product_id])->get()->map(function ($productItem) use ($sum) {
+//                $sum += $productItem->quantity;
+//                return $sum;
+//            });
+//            dd($sum);
+//            $checkFlag = true;
+            if ($products[0]->total_quantity < $sum) {
+                $checkFlag = false;
+//                dd($orderedTotalNew);
+//                dd($item->product_id, $products[0]->total_quantity , $products[0]->total_reserved , $sum);
+            }
+        }
+        if (!($checkFlag)) {
+                $products = Product::all();
+                $currentStatus = $order->status->value;
+                $warning = "Ошибка";
+//                return view('orders.show', compact('order', 'currentStatus', 'products', 'warning'));
+                return redirect()->back()->withErrors('Недостаточное количество товара на складе или товар уже был зарезервирован для заказа');
+        }
+        
+        // старый код
+
+        $order->status = StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
         $order->save();
         return redirect()->back()->with('success', 'Заказ успешно проверен');
     }

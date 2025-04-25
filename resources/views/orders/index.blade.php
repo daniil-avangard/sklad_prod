@@ -163,12 +163,14 @@
                 <table id="orders-table" class="table table-bordered custom-table">
                     <thead>
                         <tr>
-                            <th scope="col">
+<!--                            <th scope="col">
                                 <label class="control control--checkbox">
                                     <input type="checkbox" class="js-check-all" />
                                     <div class="control__indicator"></div>
                                 </label>
                             </th>
+                            </th>-->
+<!--                        <th scope="col">ID</th>-->
                             <th scope="col">Подразделение</th>
                             <th scope="col">Товары</th>
                             <th scope="col">Количество</th>
@@ -179,12 +181,12 @@
                     <tbody>
                         @foreach ($orders as $order)
                             <tr class="order-rows">
-                                <th scope="row">
+<!--                                <th scope="row">
                                     <label class="control control--checkbox">
                                         <input type="checkbox" class="order-checkbox" value="{{ $order->id }}">
                                         <div class="control__indicator"></div>
                                     </label>
-                                </th>
+                                </th>-->
                                 <td>
                                     <a
                                         @can('view', $order)
