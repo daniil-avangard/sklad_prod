@@ -66,12 +66,12 @@
                                 </td>
 
                                 <x-form class="add-product-to-basket-form" data-product-id="{{ $product->id }}"
-                                    action="{{ route('basket.add', $product) }}" method="POST">
+                                    action="{{ route('basket.add', $product) }}" method="POST" autocomplete="off">
                                     @csrf
 
                                     <td>
-                                        <input type="number" class="form-control form-control-sm" value="0"
-                                            min="0" name="quantity">
+                                        <input type="number" class="form-control form-control-sm" placeholder="0"
+                                            min="0" name="quantity" autocomplete="off" required>
                                     </td>
                                     <td>
                                         <button class="btn btn-primary" type="submit">
