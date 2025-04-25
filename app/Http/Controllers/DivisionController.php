@@ -72,6 +72,7 @@ class DivisionController extends Controller
         ]);
     }
 
+
     public function show(Division $division)
     {
         // Получает все категории подразделений
@@ -79,22 +80,74 @@ class DivisionController extends Controller
 
         $products = $division->products()->get();
         $currentCategory = $division->divisionCategory->first();
+        $divisionCategoryId = $currentCategory?->pivot?->division_category_id;
 
-        return view('divisions.show', compact('division', 'products', 'divisionCategory', 'currentCategory'));
+        return view('divisions.show', compact('division', 'products', 'divisionCategory', 'divisionCategoryId'));
     }
 
     public function edit(Division $division)
     {
+
         $this->authorize('update', Product::class);
 
-        return view('divisions.edit', compact('division'));
+        // Получает все категории подразделений
+        $divisionCategory = DivisionCategory::select('id', 'category_name')->get();
+
+        $products = $division->products()->get();
+        $currentCategory = $division->divisionCategory->first();
+        $divisionCategoryId = $currentCategory?->pivot?->division_category_id;
+
+        return view('divisions.edit', compact('division', 'products', 'divisionCategory', 'divisionCategoryId'));
     }
 
     public function update(Request $request, Division $division)
     {
-        $division->update($request->only(['name']));
+        $this->authorize('update', Division::class);
+
+        // dd($request->toArray());
+
+        // Получаем данные из запроса
+        $category_id = $request->input('category_id');
+        $city = $request->input('city');
+        $department = $request->input('department');
+        $sort_for_excel = $request->input('sort_for_excel');
+
+        // Проверка на допустимые категории
+        if ($category_id && !DivisionCategory::where('id', $category_id)->exists()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Выбрана несуществующая категория',
+            ], 400);
+        }
+
+        // Обновление данных подразделения
+        $division->update([
+            'city' => $city,
+            'name' => $department, // Предполагается, что поле "Отдел" хранится в поле `name`
+            'sort_for_excel' => $sort_for_excel ?? null,
+        ]);
+
+        // Обновление связи с категорией
+        if ($category_id) {
+            $division->divisionCategory()->sync($category_id); // Обновляем связь
+        } else {
+            $division->divisionCategory()->detach(); // Удаляем связь, если категория не выбрана
+        }
+
         return redirect()->route('divisions')->with('success', 'Подразделение успешно обновлено');
     }
+
+
+    // public function updateDivision(Request $request, Division $division)
+    // {
+    //     $division->update($request->only(['name']));
+
+    //     // return response()->json([
+    //     //     'success' => true,
+    //     //     'message' => 'Подразделение успешно обновлено',
+    //     // ]);
+    //     return redirect()->route('divisions')->with('success', 'Подразделение успешно обновлено');
+    // }
 
     public function delete(Division $division)
     {
@@ -104,6 +157,9 @@ class DivisionController extends Controller
         $division->delete();
         return redirect()->route('divisions')->with('success', 'Подразделение успешно удалено');
     }
+
+
+
 
     public function getProductsForModal(Division $division)
     {
