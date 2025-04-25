@@ -82,21 +82,26 @@
             opacity: .2;
             border: 2px solid #007bff;
         }
+
         .bg-started-war {
             background-color: #0e77ac !important;
         }
+
         .bg-assembled {
             background-color: #0a567c !important;
         }
+
         tr p {
             margin-bottom: 5px !important;
         }
+
         .order-popup-parent {
             position: relative;
             display: block;
             cursor: pointer;
             user-select: none;
         }
+
         .order-popup-child {
             position: absolute;
             visibility: hidden;
@@ -110,13 +115,20 @@
             left: 50%;
             margin-left: -80px;
         }
+
         .order-popup-parent .show {
             visibility: visible;
             animation: fadeIn 0.1s;
         }
+
         @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
     </style>
 @endpush
@@ -134,15 +146,20 @@
         <div class="col-12">
 
             <div class="table-responsive">
-<!--                @can('view', \App\Models\Order::class)
-                    <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
-                @endcan-->
-                <select name='divisions' id='divisiones-names'>
-                    <option value="0">Все</option>
-                    @foreach ($groupDivisionsNames1 as $divisionName)
-                        <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
-                    @endforeach
-                </select>
+                <!--                @can('view', \App\Models\Order::class)
+        <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
+    @endcan-->
+
+
+                @can('viewAny', \App\Models\Order::class)
+                    <select name='divisions' id='divisiones-names'>
+                        <option value="0">Все</option>
+                        @foreach ($groupDivisionsNames1 as $divisionName)
+                            <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
+                        @endforeach
+                    </select>
+                @endcan
+
                 <table id="orders-table" class="table table-bordered custom-table">
                     <thead>
                         <tr>
@@ -152,7 +169,6 @@
                                     <div class="control__indicator"></div>
                                 </label>
                             </th>
-<!--                            <th scope="col">ID</th>-->
                             <th scope="col">Подразделение</th>
                             <th scope="col">Товары</th>
                             <th scope="col">Количество</th>
@@ -179,15 +195,16 @@
                                         {{ $order->division->name }}
                                     </a>
                                 </td>
-<!--                                <td>  Было
-                                     $order->division->name 
-                                </td>-->
+                                <!--                                <td>  Было
+                                             $order->division->name
+                                        </td>-->
                                 <td>
                                     @foreach ($allItems[$order->id] as $item)
                                         <div class="order-popup-parent">
                                             <p>{{ $item['name'] }}</p>
                                             <div class="order-popup-child">
-                                                <img src="{{ asset('storage/' . $item['image']) }}" alt="" class=" mx-auto  d-block" height="150">
+                                                <img src="{{ asset('storage/' . $item['image']) }}" alt=""
+                                                    class=" mx-auto  d-block" height="150">
                                             </div>
                                         </div>
                                     @endforeach
