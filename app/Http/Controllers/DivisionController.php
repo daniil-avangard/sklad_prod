@@ -138,17 +138,6 @@ class DivisionController extends Controller
     }
 
 
-    // public function updateDivision(Request $request, Division $division)
-    // {
-    //     $division->update($request->only(['name']));
-
-    //     // return response()->json([
-    //     //     'success' => true,
-    //     //     'message' => 'Подразделение успешно обновлено',
-    //     // ]);
-    //     return redirect()->route('divisions')->with('success', 'Подразделение успешно обновлено');
-    // }
-
     public function delete(Division $division)
     {
         $this->authorize('delete', Product::class);
@@ -199,14 +188,56 @@ class DivisionController extends Controller
     {
         $divisionCategoryIds = $request->division_ids;
 
-        DivisionCategory::destroy($divisionCategoryIds);
-        $divisionCategory = DivisionCategory::select('id', 'category_name')->get();
+        // Проверяем, что переданы ID
+        if (empty($divisionCategoryIds)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Не указаны ID категорий для удаления.',
+            ], 400);
+        }
 
+        // Инициализируем переменные для отчета
+        $deletedCount = 0;
+        $errors = [];
+
+        // Проходим по каждой категории
+        foreach ($divisionCategoryIds as $categoryId) {
+            $category = DivisionCategory::find($categoryId);
+
+            if (!$category) {
+                $errors[] = "Категория с ID $categoryId не найдена.";
+                continue;
+            }
+
+            // Проверяем, используется ли категория
+            if ($category->divisions()->exists()) {
+                $errors[] = "Категория {$category->category_name} используется. Её нельзя удалить.";
+                continue;
+            }
+
+            // Удаляем категорию
+            $category->delete();
+            $deletedCount++;
+        }
+
+        // Формируем сообщение об успехе или ошибке
+        if ($deletedCount > 0 && empty($errors)) {
+            $divisionCategory = DivisionCategory::select('id', 'category_name')->get();
+
+            return response()->json([
+                'success' => true,
+                'body' => $divisionCategory,
+                'message' => count($divisionCategoryIds) > 1
+                    ? 'Категории успешно удалены.'
+                    : 'Категория успешно удалена.',
+            ]);
+        }
+
+        // Если были ошибки, возвращаем их
         return response()->json([
-            'success' => true,
-            'body' => $divisionCategory,
-            'message' => count($divisionCategoryIds) > 1 ? 'Категории успешно удалены' : 'Категория успешно удалена'
-        ]);
+            'success' => false,
+            'message' => 'Ошибка при удалении категорий.',
+        ], 400);
     }
 
     public function getDivisionList(Request $request)

@@ -20,10 +20,7 @@
                 </div>
 
                 <div class="card-body">
-                    {{-- divisions.update --}}
                     <x-form class="" action="{{ route('divisions.update', $division) }}" method="POST">
-                        {{-- <x-form class="" action="#" method="POST" id="update-division-form"> --}}
-                        {{-- <x-form class="" action="#" method="POST" id="update-division-form"> --}}
                         <div class="form-group">
                             <label for="category_id">Категория</label>
                             <select class="form-select" id="category_id" name="category_id">
@@ -74,8 +71,6 @@
                     </h5>
 
                     <x-form class="flex-grow-0 mb-4" action="#" method="POST" id="add-category-division">
-                        {{-- @csrf --}}
-                        {{-- <x-form class="flex-grow-0 mb-4" action="#" method="PUT" id="add-category-division"> --}}
                         <div class="d-flex">
                             <input type="text" class="form-control me-2" id="division_category" name="division_category"
                                 value="" placeholder="Название категории" required="">

@@ -12,13 +12,14 @@ const sendRequest = async (url, method, data) => {
         });
 
         if (!response.ok) {
-            throw new Error(`Response status: ${response.status}`);
+            const errorData = await response.json();
+            throw new Error(errorData.message);
         }
 
         return await response.json(); // Возвращаем ответ в случае успеха
     } catch (error) {
-        console.log(error.message);
-        return null; // Возвращаем null в случае ошибки
+        console.error('Ошибка:', error.message);
+        return { success: false, message: error.message };
     }
 };
 
@@ -191,7 +192,7 @@ deleteCategoryButton.addEventListener('click', () => {
         // console.log(dataToSend);
 
         const result = await sendRequest(`/division-category`, 'DELETE', dataToSend);
-        // console.log(result);
+        console.log(result);
 
         if (result && result.success) {
             Toast.fire({
@@ -204,6 +205,11 @@ deleteCategoryButton.addEventListener('click', () => {
             // Обновляет список категорий
             updateCategoriesList(divisions);
             updateOptionsInSelect(divisions);
+        } else {
+            Toast.fire({
+                icon: 'error',
+                title: result.message
+            })
         }
     };
 
