@@ -527,8 +527,12 @@ class OrderController extends Controller
         if ($lengthNew > 1) {
             $orderCompose = new Order(); // Создание нового заказа
             $orderCompose->comment = ""; // Установка комментария к заказу из запроса
-            $orderCompose->user_id = Auth::user()->id;
-            $orderCompose->division_id = Auth::user()->division_id; // Получение ID подразделения из данных юзера
+            
+            $orderCompose->user_id = $divisionProcessOrders[0]->user_id;
+            $orderCompose->division_id = $divisionProcessOrders[0]->division_id;
+            
+//            $orderCompose->user_id = Auth::user()->id;
+//            $orderCompose->division_id = Auth::user()->division_id; // Получение ID подразделения из данных юзера
             $orderCompose->status = StatusEnum::PROCESSING->value;
             $orderCompose->save(); // Сохранение заказа
 
