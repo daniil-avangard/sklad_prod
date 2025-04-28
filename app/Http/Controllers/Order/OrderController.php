@@ -506,6 +506,7 @@ class OrderController extends Controller
 
     private function createOneProcessOrder($divisionGroups1, $createdOrder)
     {
+//        $divisionCheck = $createdOrder->
         $currentMonth = date('m');
 //        $orders = Order::where('division_id', $divisionGroups)->get()->sortByDesc('created_at');
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
@@ -528,8 +529,8 @@ class OrderController extends Controller
             $orderCompose = new Order(); // Создание нового заказа
             $orderCompose->comment = ""; // Установка комментария к заказу из запроса
             
-            $orderCompose->user_id = $divisionProcessOrders[0]->user_id;
-            $orderCompose->division_id = $divisionProcessOrders[0]->division_id;
+            $orderCompose->user_id = $createdOrder->user_id;
+            $orderCompose->division_id = $createdOrder->division_id;
             
 //            $orderCompose->user_id = Auth::user()->id;
 //            $orderCompose->division_id = Auth::user()->division_id; // Получение ID подразделения из данных юзера
@@ -538,19 +539,22 @@ class OrderController extends Controller
 
             $composerArray = array();
             foreach ($divisionProcessOrders as $newOrder) {
-                foreach ($newOrder->items as $item) {
-                    if (!isset($composerArray[$item->product_id])) {
-                        $composerArray[$item->product_id] = [
-                            'product_id' => $item->product_id,
-                            'name' => $item->product->name,
-                            'quantity' => $item->quantity,
-                            //'total_variants' => $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved'),
-                            'item-id' => $item->id,
-                        ];
-                    } else {
-                        $composerArray[$item->product_id]['quantity'] += $item->quantity;
-                    }
+                if ($createdOrder->division_id == $newOrder->division_id) {
+                    foreach ($newOrder->items as $item) {
+                        if (!isset($composerArray[$item->product_id])) {
+                            $composerArray[$item->product_id] = [
+                                'product_id' => $item->product_id,
+                                'name' => $item->product->name,
+                                'quantity' => $item->quantity,
+                                //'total_variants' => $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved'),
+                                'item-id' => $item->id,
+                            ];
+                        } else {
+                            $composerArray[$item->product_id]['quantity'] += $item->quantity;
+                        }
                 }
+                }
+                
             }
 
             foreach ($composerArray as $k => $v) {
