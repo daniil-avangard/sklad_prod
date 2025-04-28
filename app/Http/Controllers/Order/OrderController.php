@@ -120,6 +120,7 @@ class OrderController extends Controller
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get();
+        $divisionsArr = [];
         $createOrder = new Order();
         foreach ($orders as $order) {
             if ($order->status->value == $currentStatus) {
@@ -127,8 +128,11 @@ class OrderController extends Controller
                 $order->save();
                 $createOrder = $order;
             }
-        }
-//        dd($createOrder);
+            if (!(in_array($order->division_id, $divisionsArr))) {
+                $divisionsArr[] = $order->division_id;
+            }
+        } 
+        dd($divisionsArr);
         if ($toProcessStatus == StatusEnum::PROCESSING->value) {
 //            $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $order);
             $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $createOrder);
