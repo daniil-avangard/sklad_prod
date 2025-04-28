@@ -531,7 +531,7 @@ class OrderController extends Controller
                 }
             }
         }
-        dd($divisionProcessOrders, $createdOrder);
+//        dd($divisionProcessOrders, $createdOrder);
         $lengthNew = count($divisionProcessOrders);
 
         if ($lengthNew > 1) {

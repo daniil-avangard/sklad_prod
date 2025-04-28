@@ -110,7 +110,21 @@
             left: 50%;
             margin-left: -80px;
         }
-        .order-popup-parent .show {
+        .order-popup-child-near-top {
+            position: absolute;
+            visibility: hidden;
+            width: 160px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            z-index: 1;
+            bottom: -575%;
+            left: 50%;
+            margin-left: -80px;
+            z-index: 100 !important;
+        }
+        .show {
             visibility: visible;
             animation: fadeIn 0.1s;
         }

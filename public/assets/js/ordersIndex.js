@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     Array.from(popUps).forEach((el, index) => {
         const listener = () => {
+            const rect = el.getBoundingClientRect();
             popUpsChilds.forEach((child, ind) => {
                 if (ind != index) {
                     if (child.classList.contains("show")) {
@@ -12,7 +13,15 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 }  
             });
-            
+            console.log(rect.top);
+            if (rect.top < 300) {
+                popUpsChilds[index].classList.remove("order-popup-child");
+                popUpsChilds[index].classList.add("order-popup-child-near-top");
+                console.log("hello rect");
+            } else {
+                popUpsChilds[index].classList.add("order-popup-child");
+                popUpsChilds[index].classList.remove("order-popup-child-near-top");
+            }
             popUpsChilds[index].classList.toggle("show");
         }
         
@@ -23,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
     selectDivision.onchange = () => {
         let tableTrArray = Array.from(document.getElementById('orders-table').rows);
         tableTrArray.forEach((el, index) => {
-            let cell = el.cells[1].getElementsByTagName("A")[0];
+            let cell = el.cells[0].getElementsByTagName("A")[0];
             if (cell) {
                 if (cell.innerHTML.trim() != selectDivision.value && selectDivision.value != "0") {
                     el.classList.add('row-hidden');
