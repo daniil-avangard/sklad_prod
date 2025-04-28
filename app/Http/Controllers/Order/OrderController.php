@@ -127,15 +127,19 @@ class OrderController extends Controller
                 $order->status = $toProcessStatus;
                 $order->save();
                 $createOrder = $order;
+                if (!(in_array($order->division_id, $divisionsArr))) {
+                    $divisionsArr[] = array('division_id' => $order->division_id, 'createOrder' => $order);
+                }
             }
-            if (!(in_array($order->division_id, $divisionsArr))) {
-                $divisionsArr[] = $order->division_id;
-            }
+            
         } 
-        dd($divisionsArr);
+//        dd($divisionsArr);
         if ($toProcessStatus == StatusEnum::PROCESSING->value) {
 //            $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $order);
-            $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $createOrder);
+            foreach ($divisionsArr as $createOrderNew) {
+                $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $createOrderNew['createOrder']);
+            }
+            
         }
 
         return redirect()->to(route('orders.new'));
