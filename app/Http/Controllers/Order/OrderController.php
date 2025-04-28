@@ -517,12 +517,13 @@ class OrderController extends Controller
 //        dd($orders);
         $divisionProcessOrders = array();
         foreach ($orders as $order) {
-            if ($order->status->value == StatusEnum::PROCESSING->value) {
+            if ($order->status->value == StatusEnum::PROCESSING->value && $createdOrder->division_id == $order->division_id) {
                 if ($order->created_at->format('m') == $currentMonth) {
                     $divisionProcessOrders[] = $order;
                 }
             }
         }
+        dd($divisionProcessOrders, $createdOrder);
         $lengthNew = count($divisionProcessOrders);
 
         if ($lengthNew > 1) {
@@ -539,7 +540,7 @@ class OrderController extends Controller
 
             $composerArray = array();
             foreach ($divisionProcessOrders as $newOrder) {
-                if ($createdOrder->division_id == $newOrder->division_id) {
+              
                     foreach ($newOrder->items as $item) {
                         if (!isset($composerArray[$item->product_id])) {
                             $composerArray[$item->product_id] = [
@@ -553,7 +554,7 @@ class OrderController extends Controller
                             $composerArray[$item->product_id]['quantity'] += $item->quantity;
                         }
                 }
-                }
+               
                 
             }
 
