@@ -132,6 +132,16 @@
             from {opacity: 0;}
             to {opacity: 1;}
         }
+        .order-filters {
+            display: flex;
+            flex-direction: column;
+            justify-content: left;
+            margin-right: 10px;
+        }
+        .block-filters-index {
+            display: flex;
+            flex-direction: row;
+        }
     </style>
 @endpush
 
@@ -151,14 +161,30 @@
 <!--                @can('view', \App\Models\Order::class)
                     <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
                 @endcan-->
-                @can('viewAny', \App\Models\Order::class)
-                <select name='divisions' id='divisiones-names'>
-                    <option value="0">Все</option>
-                    @foreach ($groupDivisionsNames1 as $divisionName)
-                        <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
-                    @endforeach
-                </select>
-                @endcan
+                <div class="block-filters-index">
+                    @can('viewAny', \App\Models\Order::class)
+                    <div class="order-filters">
+                        <label for="divisions">Город:</label>
+                        <select name='divisions' id='divisiones-names' class="index-top-filters">
+                            <option value="0">Все</option>
+                            @foreach ($groupDivisionsNames1 as $divisionName)
+                                <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endcan
+                    @can('viewAny', \App\Models\Order::class)
+                    <div class="order-filters">
+                        <label for="statusOfOrder">Статус:</label>
+                        <select name='statusOfOrder' id='status-of-orders' class="index-top-filters">
+                            <option value="0">Все</option>
+                            @foreach ($allOrdersStatus as $statusOrder)
+                                <option value="{{ $statusOrder['value'] }}">{{ $statusOrder['label'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endcan
+                </div>
                 <table id="orders-table" class="table table-bordered custom-table">
                     <thead>
                         <tr>

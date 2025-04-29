@@ -637,12 +637,18 @@ tr p {
   font-size: 20px;
   font-weight: bold;
 }
-#divisiones-names {
+.index-top-filters {
     margin-bottom: 15px;
     width: 200px;
     border: 2px solid #007bff; 
     color: #303e67;
 }
+/*#divisiones-names {
+    margin-bottom: 15px;
+    width: 200px;
+    border: 2px solid #007bff; 
+    color: #303e67;
+}*/
 .row-hidden {
     display: none !important;
 }
