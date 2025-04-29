@@ -116,7 +116,21 @@
             margin-left: -80px;
         }
 
-        .order-popup-parent .show {
+        .order-popup-child-near-top {
+            position: absolute;
+            visibility: hidden;
+            width: 160px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            z-index: 1;
+            bottom: -575%;
+            left: 50%;
+            margin-left: -80px;
+            z-index: 100 !important;
+        }
+        .show {
             visibility: visible;
             animation: fadeIn 0.1s;
         }
@@ -146,18 +160,17 @@
         <div class="col-12">
 
             <div class="table-responsive">
-                <!--                @can('view', \App\Models\Order::class)
-        <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
-    @endcan-->
 
-
+<!--                @can('view', \App\Models\Order::class)
+                    <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
+                @endcan-->
                 @can('viewAny', \App\Models\Order::class)
-                    <select name='divisions' id='divisiones-names'>
-                        <option value="0">Все</option>
-                        @foreach ($groupDivisionsNames1 as $divisionName)
-                            <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
-                        @endforeach
-                    </select>
+                <select name='divisions' id='divisiones-names'>
+                    <option value="0">Все</option>
+                    @foreach ($groupDivisionsNames1 as $divisionName)
+                        <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
+                    @endforeach
+                </select>
                 @endcan
 
                 <table id="orders-table" class="table table-bordered custom-table">
