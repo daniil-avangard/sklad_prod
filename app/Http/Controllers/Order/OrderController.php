@@ -120,18 +120,26 @@ class OrderController extends Controller
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get();
+        $divisionsArr = [];
         $createOrder = new Order();
         foreach ($orders as $order) {
             if ($order->status->value == $currentStatus) {
                 $order->status = $toProcessStatus;
                 $order->save();
                 $createOrder = $order;
+                if (!(in_array($order->division_id, $divisionsArr))) {
+                    $divisionsArr[] = array('division_id' => $order->division_id, 'createOrder' => $order);
+                }
             }
-        }
-//        dd($createOrder);
+            
+        } 
+//        dd($divisionsArr);
         if ($toProcessStatus == StatusEnum::PROCESSING->value) {
 //            $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $order);
-            $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $createOrder);
+            foreach ($divisionsArr as $createOrderNew) {
+                $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $createOrderNew['createOrder']);
+            }
+            
         }
 
         return redirect()->to(route('orders.new'));
@@ -506,6 +514,7 @@ class OrderController extends Controller
 
     private function createOneProcessOrder($divisionGroups1, $createdOrder)
     {
+//        $divisionCheck = $createdOrder->
         $currentMonth = date('m');
 //        $orders = Order::where('division_id', $divisionGroups)->get()->sortByDesc('created_at');
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
@@ -516,20 +525,21 @@ class OrderController extends Controller
 //        dd($orders);
         $divisionProcessOrders = array();
         foreach ($orders as $order) {
-            if ($order->status->value == StatusEnum::PROCESSING->value) {
+            if ($order->status->value == StatusEnum::PROCESSING->value && $createdOrder->division_id == $order->division_id) {
                 if ($order->created_at->format('m') == $currentMonth) {
                     $divisionProcessOrders[] = $order;
                 }
             }
         }
+//        dd($divisionProcessOrders, $createdOrder);
         $lengthNew = count($divisionProcessOrders);
 
         if ($lengthNew > 1) {
             $orderCompose = new Order(); // Создание нового заказа
             $orderCompose->comment = ""; // Установка комментария к заказу из запроса
             
-            $orderCompose->user_id = $divisionProcessOrders[0]->user_id;
-            $orderCompose->division_id = $divisionProcessOrders[0]->division_id;
+            $orderCompose->user_id = $createdOrder->user_id;
+            $orderCompose->division_id = $createdOrder->division_id;
             
 //            $orderCompose->user_id = Auth::user()->id;
 //            $orderCompose->division_id = Auth::user()->division_id; // Получение ID подразделения из данных юзера
@@ -538,19 +548,22 @@ class OrderController extends Controller
 
             $composerArray = array();
             foreach ($divisionProcessOrders as $newOrder) {
-                foreach ($newOrder->items as $item) {
-                    if (!isset($composerArray[$item->product_id])) {
-                        $composerArray[$item->product_id] = [
-                            'product_id' => $item->product_id,
-                            'name' => $item->product->name,
-                            'quantity' => $item->quantity,
-                            //'total_variants' => $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved'),
-                            'item-id' => $item->id,
-                        ];
-                    } else {
-                        $composerArray[$item->product_id]['quantity'] += $item->quantity;
-                    }
+              
+                    foreach ($newOrder->items as $item) {
+                        if (!isset($composerArray[$item->product_id])) {
+                            $composerArray[$item->product_id] = [
+                                'product_id' => $item->product_id,
+                                'name' => $item->product->name,
+                                'quantity' => $item->quantity,
+                                //'total_variants' => $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved'),
+                                'item-id' => $item->id,
+                            ];
+                        } else {
+                            $composerArray[$item->product_id]['quantity'] += $item->quantity;
+                        }
                 }
+               
+                
             }
 
             foreach ($composerArray as $k => $v) {
