@@ -211,8 +211,8 @@
                                     </a>
                                 </td>
                                 <!--                                <td>  Было
-                                             $order->division->name
-                                        </td>-->
+                                                 $order->division->name
+                                            </td>-->
                                 <td>
                                     @foreach ($allItems[$order->id] as $item)
                                         <div class="order-popup-parent">
