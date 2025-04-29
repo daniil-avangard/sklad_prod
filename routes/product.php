@@ -21,9 +21,9 @@ Route::middleware('auth', 'admin')->group(function () {
         // dd($role);
 
         if ($role === UserRoleEnum::MANAGER->value) {
-            return redirect()->route('products.list');
+            return redirect()->route('orders');
         } else if ($role === UserRoleEnum::DIVISION_MANAGER->value) {
-            return redirect()->route('products');
+            return redirect()->route('orders');
         } else {
             return redirect()->route('orders.new');
         }
