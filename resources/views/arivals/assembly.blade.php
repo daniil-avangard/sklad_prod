@@ -23,12 +23,12 @@
                 <table class="table table-bordered custom-table">
                     <thead>
                         <tr>
-                            <th scope="col">
+<!--                            <th scope="col">
                                 <label class="control control--checkbox">
                                     <input type="checkbox" class="js-check-all" />
                                     <div class="control__indicator"></div>
                                 </label>
-                            </th>
+                            </th>-->
                             <th scope="col">ID</th>
                             <th scope="col">Подразделение</th>
                             <th scope="col">Статус</th>
@@ -38,12 +38,12 @@
                     <tbody>
                         @foreach ($listForAssmbling as $order)
                             <tr>
-                                <th scope="row">
+<!--                                <th scope="row">
                                     <label class="control control--checkbox">
                                         <input type="checkbox" class="order-checkbox" value="{{ $order->id }}">
                                         <div class="control__indicator"></div>
                                     </label>
-                                </th>
+                                </th>-->
                                 <td>
                                     <a
                                     @can('view', App\Models\Korobka::class)
