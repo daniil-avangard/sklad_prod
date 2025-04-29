@@ -166,7 +166,7 @@
                     <div class="order-filters">
                         <label for="divisions">Город:</label>
                         <select name='divisions' id='divisiones-names' class="index-top-filters">
-                            <option value=""></option>
+                            <option value="">Все</option>
                             @foreach ($groupDivisionsNames1 as $divisionName)
                                 <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
                             @endforeach
@@ -177,7 +177,7 @@
                     <div class="order-filters">
                         <label for="statusOfOrder">Статус:</label>
                         <select name='statusOfOrder' id='status-of-orders' class="index-top-filters">
-                            <option value=""></option>
+                            <option value="">Все</option>
                             @foreach ($allOrdersStatus as $statusOrder)
                                 <option value="{{ $statusOrder['value'] }}">{{ $statusOrder['label'] }}</option>
                             @endforeach

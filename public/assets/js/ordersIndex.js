@@ -55,54 +55,26 @@ document.addEventListener("DOMContentLoaded", function() {
         el.addEventListener("mouseout", listener, false);
     });
     
-    selectDivision.onchange = () => {
-        display(selectDivision.value, selectOrderStatus.value);
-
-        // old code
-//        let showedRows = tableTrArray.filter(card => !card.classList.contains('row-hidden'));
-//        if (selectDivision.value == "0") {
-//            showedRows = tableTrArray;
-//            selectOrderStatus.value = "0";
-//        }
-//       
-//        showedRows.forEach((el, index) => {
-//            let cell = el.cells[0].getElementsByTagName("A")[0];
-//            if (cell) {
-//                if (cell.innerHTML.trim() != selectDivision.value && selectDivision.value != "0") {
-//                    el.classList.add('row-hidden');
-//                    console.log(cell.innerHTML);
-//                } else {
-//                    el.classList.remove('row-hidden');
-//                }
-//                
-//            }
-//            
-//        });
+    if (selectDivision) {
+        selectDivision.onchange = () => {
+            if (selectOrderStatus) {
+                display(selectDivision.value, selectOrderStatus.value);
+            } else {
+                display(selectDivision.value, false);
+            }
+            
+        }
     }
     
-    selectOrderStatus.onchange = () => {
-        display(selectDivision.value, selectOrderStatus.value);
-
-        // old code
-//        let showedRows = tableTrArray.filter(card => !card.classList.contains('row-hidden'));
-//        if (selectOrderStatus.value == "0") {
-//            showedRows = tableTrArray;
-//            selectDivision.value = "0";
-//        }
-//        showedRows.forEach((el, index) => {
-//            let cell = el.cells[3].getElementsByTagName("SPAN")[0];
-//            if (cell) {
-//                let text = selectOrderStatus.options[selectOrderStatus.selectedIndex].text;
-//                if (cell.innerHTML.trim() != text && selectOrderStatus.value != "0") {
-//                    el.classList.add('row-hidden');
-//                    console.log(cell.innerHTML);
-//                } else {
-//                    el.classList.remove('row-hidden');
-//                }
-//                
-//            }
-//            
-//        });
+    if (selectOrderStatus) {
+        selectOrderStatus.onchange = () => {
+            if (selectDivision) {
+                display(selectDivision.value, selectOrderStatus.value);
+            } else {
+                display(false, selectOrderStatus.value);
+            }
+        }
     }
+    
     
 });
