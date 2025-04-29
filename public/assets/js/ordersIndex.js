@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function() {
             tableTrArray
                     .filter(row => {
                         let cell = row.cells[0].getElementsByTagName("A")[0];
-                        console.log(cell.innerHTML.trim());
                         return (cell.innerHTML.trim() != division)
                     })
                     .forEach(row => row.classList.add('row-hidden'));
