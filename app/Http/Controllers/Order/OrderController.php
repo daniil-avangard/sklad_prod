@@ -51,15 +51,20 @@ class OrderController extends Controller
         })->get()->sortByDesc('created_at');
         $orders = (in_array(UserRoleEnum::MANAGER->label(), $role)) ? $divisionAllOrders : $orders;
         $allItems = [];
+        $allOrdersStatus = [];
 
         foreach ($orders as $order) {
             $allItems[$order->id] = array();
+            $valueForStatus = array('value' => $order->status->value, 'label' => StatusEnum::names()[$order->status->value]);
+            if (!(in_array($valueForStatus, $allOrdersStatus))) {
+                $allOrdersStatus[] = $valueForStatus;
+            }
             foreach ($order->items as $item) {
                 $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity, 'image' => $item->product->image);
             }
         }
 
-        return view('orders.index', compact('orders', 'allItems', 'groupDivisionsNames1'));
+        return view('orders.index', compact('orders', 'allItems', 'groupDivisionsNames1', 'allOrdersStatus'));
     }
 
     public function indexNew()
