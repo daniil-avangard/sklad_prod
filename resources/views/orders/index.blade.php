@@ -151,12 +151,14 @@
 <!--                @can('view', \App\Models\Order::class)
                     <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
                 @endcan-->
+                @can('viewAny', \App\Models\Order::class)
                 <select name='divisions' id='divisiones-names'>
                     <option value="0">Все</option>
                     @foreach ($groupDivisionsNames1 as $divisionName)
                         <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
                     @endforeach
                 </select>
+                @endcan
                 <table id="orders-table" class="table table-bordered custom-table">
                     <thead>
                         <tr>
