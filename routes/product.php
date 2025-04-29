@@ -21,9 +21,9 @@ Route::middleware('auth', 'admin')->group(function () {
         // dd($role);
 
         if ($role === UserRoleEnum::MANAGER->value) {
-            return redirect()->route('products.list');
+            return redirect()->route('orders');
         } else if ($role === UserRoleEnum::DIVISION_MANAGER->value) {
-            return redirect()->route('products');
+            return redirect()->route('orders');
         } else {
             return redirect()->route('orders.new');
         }
@@ -76,10 +76,23 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::delete('/categories/{category}', [CategoryController::class, 'delete'])->name('categories.delete');
 
 
+
+
     // Подразделения
     Route::get('/divisions', [DivisionController::class, 'index'])->name('divisions');
     Route::get('/divisions/create', [DivisionController::class, 'create'])->name('divisions.create');
     Route::post('/divisions', [DivisionController::class, 'store'])->name('divisions.store');
+
+
+    // Работаю c роутами
+    Route::get('/divisions/{division}', [DivisionController::class, 'show'])->name('divisions.show');
+    Route::delete('/divisions/{division}', [DivisionController::class, 'delete'])->name('divisions.delete');
+
+    Route::get('/divisions/{division}/edit', [DivisionController::class, 'edit'])->name('divisions.edit');
+    Route::post('/divisions/{division}/edit', [DivisionController::class, 'update'])->name('divisions.update');
+
+    // Route::put('/divisions/{division}/updateDivision', [DivisionController::class, 'updateDivision'])->name('divisions.updateDivision');
+
 
     // Новые
     Route::get('/division-category', [DivisionController::class, 'getDivisionList'])->name('division-category');
@@ -87,9 +100,7 @@ Route::middleware('auth', 'admin')->group(function () {
     Route::delete('/division-category', [DivisionController::class, 'deleteCategory'])->name('division-category.delete');
 
 
-    Route::get('/divisions/{division}', [DivisionController::class, 'show'])->name('divisions.show');
-    Route::put('/divisions/{division}', [DivisionController::class, 'update'])->name('divisions.update');
-    Route::delete('/divisions/{division}', [DivisionController::class, 'delete'])->name('divisions.delete');
+
 
     Route::get('/divisions/{division}/products/modal', [DivisionController::class, 'getProductsForModal'])->name('divisions.products.modal');
     Route::post('/divisions/{division}/products', [DivisionController::class, 'addProduct'])->name('divisions.addProduct');
