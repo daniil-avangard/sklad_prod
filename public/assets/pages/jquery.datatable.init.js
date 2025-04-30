@@ -4,68 +4,98 @@
  * Datatables Js
  */
 
+function setupProductTableFilters(table) {
+    // Фильтрация по выпадающим спискам
+    $('#companyFilter, #categoryFilter').on('change', function () {
+        const companyValue = $('#companyFilter').val();
+        const categoryValue = $('#categoryFilter').val();
 
-$(document).ready(function() {
-  $('#datatable').DataTable();
+        // Фильтруем по нужным столбцам
+        table.column(1).search(companyValue, false, false); // Столбец "Компания"
+        table.column(2).search(categoryValue, false, false); // Столбец "Категория"
 
-  $(document).ready(function() {
-      $('#datatable2').DataTable();
-  } );
+        table.draw();
+    });
+}
 
-  //Buttons examples
-  var table = $('#datatable-buttons').DataTable({
-      lengthChange: false,
-      responsive: true,
-    //   buttons: ['copy', 'excel', 'pdf', 'colvis'],
-      buttons: ['excel', 'pdf', 'colvis'],
-      language: {
-        url: '/assets/lang/datatables_ru.json',
-      },
-      dom: 'Bfrtip', // Добавляем эту строку для отображения кнопок
-  });
+$(document).ready(function () {
+    $('#datatable').DataTable();
 
-  table.buttons().container()
-      .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+    $(document).ready(function () {
+        $('#datatable2').DataTable();
+    });
 
-      $('#row_callback').DataTable( {
-        "createdRow": function ( row, data, index ) {
-            if ( data[5].replace(/[\$,]/g, '') * 1 > 150000 ) {
+    //Buttons examples
+    var table = $('#datatable-buttons').DataTable({
+        scrollX: true,
+        lengthChange: false,
+        // responsive: true,
+        language: {
+            url: '/assets/lang/datatables_ru.json',
+        },
+        dom: "<'row'<'col-sm-6'B><'col-sm-6'f>>" +
+            "<'row'<'col-sm-12'tr>>" +
+            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+        // dom: 'Bfrtip', // Добавляем эту строку для отображения кнопок
+        buttons: [
+            // 'copy'
+            // 'excel',
+            // 'pdf',
+            'colvis'
+        ]
+    });
+
+    table.buttons().container()
+        .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+
+    $('#row_callback').DataTable({
+        "createdRow": function (row, data, index) {
+            if (data[5].replace(/[\$,]/g, '') * 1 > 150000) {
                 $('td', row).eq(5).addClass('highlight');
             }
         }
-    } );
+    });
 
-} );
+    // Инициализируем основную таблицу
+    // const productTable = initializeDataTable('#datatable-buttons');
+
+
+    // Подключаем фильтры только если на странице есть нужные селекты
+    if ($('#companyFilter').length && $('#categoryFilter').length) {
+        setupProductTableFilters(table);
+    }
+
+});
 
 /* Formatting function for row details - modify as you need */
-function format ( d ) {
+function format(d) {
     // `d` is the original data object for the row
-    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-        '<tr>'+
-            '<td>Full name:</td>'+
-            '<td>'+d.name+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Extension number:</td>'+
-            '<td>'+d.extn+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Extra info:</td>'+
-            '<td>And any further details here (images etc)...</td>'+
-        '</tr>'+
-    '</table>';
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+        '<tr>' +
+        '<td>Full name:</td>' +
+        '<td>' + d.name + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>Extension number:</td>' +
+        '<td>' + d.extn + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>Extra info:</td>' +
+        '<td>And any further details here (images etc)...</td>' +
+        '</tr>' +
+        '</table>';
 }
 
-$(document).ready(function() {
-    var table = $('#child_rows').DataTable( {
+$(document).ready(function () {
+    var table = $('#child_rows').DataTable({
         // "ajax": "../../plugins/datatables/objects.txt",
         "data": testdata.data,
-        select:"single",
+        select: "single",
         "columns": [
             {
-                "className":      'details-control',
-                "orderable":      false,
-                "data":           null,
+                "className": 'details-control',
+                "orderable": false,
+                "data": null,
                 "defaultContent": ''
             },
             { "data": "name" },
@@ -74,53 +104,54 @@ $(document).ready(function() {
             { "data": "salary" }
         ],
         "order": [[1, 'asc']]
-    } );
+    });
 
     // Add event listener for opening and closing details
     $('#child_rows tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
-        var row = table.row( tr );
+        var row = table.row(tr);
 
-        if ( row.child.isShown() ) {
+        if (row.child.isShown()) {
             // This row is already open - close it
             row.child.hide();
             tr.removeClass('shown');
         }
         else {
             // Open this row
-            row.child( format(row.data()) ).show();
+            row.child(format(row.data())).show();
             tr.addClass('shown');
         }
-    } );
-} );
+    });
+});
 
 var testdata = {
     "data": [
-    {
-    "name": "Tiger Nixon",
-    "position": "System Architect",
-    "salary": "$320,800",
-    "start_date": "2011/04/25",
-    "office": "Edinburgh",
-    "extn": "5421"
-    },
-    {
-    "name": "Garrett Winters",
-    "position": "Accountant",
-    "salary": "$170,750",
-    "start_date": "2011/07/25",
-    "office": "Tokyo",
-    "extn": "8422"
-    },
-    {
-    "name": "Ashton Cox",
-    "position": "Junior Technical Author",
-    "salary": "$86,000",
-    "start_date": "2009/01/12",
-    "office": "San Francisco",
-    "extn": "1562"
-    },]}
+        {
+            "name": "Tiger Nixon",
+            "position": "System Architect",
+            "salary": "$320,800",
+            "start_date": "2011/04/25",
+            "office": "Edinburgh",
+            "extn": "5421"
+        },
+        {
+            "name": "Garrett Winters",
+            "position": "Accountant",
+            "salary": "$170,750",
+            "start_date": "2011/07/25",
+            "office": "Tokyo",
+            "extn": "8422"
+        },
+        {
+            "name": "Ashton Cox",
+            "position": "Junior Technical Author",
+            "salary": "$86,000",
+            "start_date": "2009/01/12",
+            "office": "San Francisco",
+            "extn": "1562"
+        },]
+}
 
 
-    // var x = document.getElementById("datatable_paginate");
-    // x.querySelector(".pagination").classList.add("pagination-sm");
+// var x = document.getElementById("datatable_paginate");
+// x.querySelector(".pagination").classList.add("pagination-sm");
