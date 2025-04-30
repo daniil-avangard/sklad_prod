@@ -3,11 +3,19 @@ document.addEventListener("DOMContentLoaded", function() {
     let popUpsChilds = document.querySelectorAll('.order-popup-child');
     let selectDivision = document.getElementById('divisiones-names');
     let selectOrderStatus = document.getElementById('status-of-orders');
+    let selectProductOrder = document.getElementById('products-of-orders');
 //    let tableTrArray = document.getElementById('orders-table').rows;
     let tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
     
-    function display(division, status) {
-        Array.from(tableTrArray).forEach(row => row.classList.remove('row-hidden'));
+    function display(division, status, product) {
+        tableTrArray.forEach(row => {
+            row.classList.remove('row-hidden');
+            let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
+            let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
+            Array.from(arrayProductsDivs).forEach((elm, ind) => elm.classList.remove('row-hidden'));
+            Array.from(arrayProductsQuantities).forEach((elm, ind) => elm.classList.remove('row-hidden'));
+        });
+        
         if (division) {
             tableTrArray
                     .filter(row => {
@@ -25,6 +33,34 @@ document.addEventListener("DOMContentLoaded", function() {
                     })
                     .forEach(row => row.classList.add('row-hidden'));
             
+        }
+        if (product) {
+            tableTrArray
+                    .filter(row => {
+                        let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
+                        let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
+                        let flag = true;
+                        let quontityIndex = 0;
+                        Array.from(arrayProductsDivs).forEach((elm, ind) => {
+                            let valueDiv = elm.getElementsByTagName("P")[0];
+                            console.log(valueDiv);
+                            if (valueDiv.innerHTML.trim() == product) {
+                                flag = false;
+                                quontityIndex = ind;
+                            }
+                        });
+                        if (!flag) {
+                            Array.from(arrayProductsDivs).forEach((elm, ind) => {
+                                let valueDiv = elm.getElementsByTagName("P")[0];
+                                if (valueDiv.innerHTML.trim() != product) elm.classList.add('row-hidden'); 
+                            });
+                            Array.from(arrayProductsQuantities).forEach((elm, ind) => {
+                                if (ind != quontityIndex) elm.classList.add('row-hidden');
+                            });
+                        }
+                        return flag;
+                    })
+                    .forEach(row => row.classList.add('row-hidden'));
         }
     }
 
@@ -57,9 +93,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (selectDivision) {
         selectDivision.onchange = () => {
             if (selectOrderStatus) {
-                display(selectDivision.value, selectOrderStatus.value);
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value);
             } else {
-                display(selectDivision.value, false);
+                display(selectDivision.value, false, selectProductOrder.value);
             }
             
         }
@@ -68,12 +104,17 @@ document.addEventListener("DOMContentLoaded", function() {
     if (selectOrderStatus) {
         selectOrderStatus.onchange = () => {
             if (selectDivision) {
-                display(selectDivision.value, selectOrderStatus.value);
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value);
             } else {
-                display(false, selectOrderStatus.value);
+                display(false, selectOrderStatus.value, selectProductOrder.value);
             }
         }
     }
     
+    if (selectProductOrder) {
+        selectProductOrder.onchange = () => {
+            display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value);
+        }
+    }
     
 });
