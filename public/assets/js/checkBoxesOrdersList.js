@@ -28,38 +28,39 @@ $(function() {
 
 });
 
+if (document.getElementById('view-selected')) {
+    document.getElementById('view-selected').addEventListener('click', function() {
+        const selectedOrders = Array.from(document.querySelectorAll('.order-checkbox:checked'))
+            .map(checkbox => checkbox.value);
+        console.log(selectedOrders);
+        if (selectedOrders.length > 0) {
+            // Создаем скрытую форму для отправки данных
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = "{{ route('orders.selected') }}";
 
-document.getElementById('view-selected').addEventListener('click', function() {
-    const selectedOrders = Array.from(document.querySelectorAll('.order-checkbox:checked'))
-        .map(checkbox => checkbox.value);
-    console.log(selectedOrders);
-    if (selectedOrders.length > 0) {
-        // Создаем скрытую форму для отправки данных
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = "{{ route('orders.selected') }}";
+            // Добавляем CSRF токен
+            const csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = '{{ csrf_token() }}';
+            form.appendChild(csrfToken);
 
-        // Добавляем CSRF токен
-        const csrfToken = document.createElement('input');
-        csrfToken.type = 'hidden';
-        csrfToken.name = '_token';
-        csrfToken.value = '{{ csrf_token() }}';
-        form.appendChild(csrfToken);
+            // Добавляем выбранные идентификаторы заказов
+            const orderIdsInput = document.createElement('input');
+            orderIdsInput.type = 'hidden';
+            orderIdsInput.name = 'ids';
+            orderIdsInput.value = selectedOrders.join(',');
+            form.appendChild(orderIdsInput);
 
-        // Добавляем выбранные идентификаторы заказов
-        const orderIdsInput = document.createElement('input');
-        orderIdsInput.type = 'hidden';
-        orderIdsInput.name = 'ids';
-        orderIdsInput.value = selectedOrders.join(',');
-        form.appendChild(orderIdsInput);
-
-        // Добавляем форму в документ и отправляем
-        document.body.appendChild(form);
-        form.submit();
-    } else {
-        Toast.fire({
-            icon: 'warning',
-            title: 'Пожалуйста, выберите хотя бы один заказ!'
-        })
-    }
-});
+            // Добавляем форму в документ и отправляем
+            document.body.appendChild(form);
+            form.submit();
+        } else {
+            Toast.fire({
+                icon: 'warning',
+                title: 'Пожалуйста, выберите хотя бы один заказ!'
+            })
+        }
+    });
+}

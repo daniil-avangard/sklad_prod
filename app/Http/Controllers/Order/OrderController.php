@@ -52,10 +52,18 @@ class OrderController extends Controller
         $orders = (in_array(UserRoleEnum::MANAGER->label(), $role)) ? $divisionAllOrders : $orders;
         $allItems = [];
         $allOrdersStatus = [];
+        $allOrdersProducts = [];
 
         foreach ($orders as $order) {
             $allItems[$order->id] = array();
             $valueForStatus = array('value' => $order->status->value, 'label' => StatusEnum::names()[$order->status->value]);
+            foreach ($order->items as $item) {
+                $valueForProducts = array('name' => $item->product->name, 'id' => $item->product->id);
+                if (!(in_array($valueForProducts, $allOrdersProducts))) {
+                    $allOrdersProducts[] = $valueForProducts;
+                }
+            }
+            
             if (!(in_array($valueForStatus, $allOrdersStatus))) {
                 $allOrdersStatus[] = $valueForStatus;
             }
@@ -64,7 +72,7 @@ class OrderController extends Controller
             }
         }
 
-        return view('orders.index', compact('orders', 'allItems', 'groupDivisionsNames1', 'allOrdersStatus'));
+        return view('orders.index', compact('orders', 'allItems', 'groupDivisionsNames1', 'allOrdersStatus', 'allOrdersProducts'));
     }
 
     public function indexNew()
