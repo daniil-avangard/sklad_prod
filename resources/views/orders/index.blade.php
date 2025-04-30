@@ -184,6 +184,17 @@
                         </select>
                     </div>
                     @endcan
+                    @can('viewAny', \App\Models\Order::class)
+                    <div class="order-filters">
+                        <label for="productsOfOrders">Продукты:</label>
+                        <select name='productsOfOrders' id='products-of-orders' class="index-top-filters">
+                            <option value="">Все</option>
+                            @foreach ($allOrdersProducts as $productOrder)
+                                <option value="{{ $productOrder['name'] }}">{{ $productOrder['name'] }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    @endcan
                 </div>
                 <table id="orders-table" class="table table-bordered custom-table">
                     <thead>
