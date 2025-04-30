@@ -3,6 +3,11 @@
 
 @section('title_page', 'Заказы')
 
+@push('scripts-plugins')
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/stock.js"></script>
+@endpush
+
 @push('styles-plugins')
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <style>
@@ -142,6 +147,11 @@
             display: flex;
             flex-direction: row;
         }
+        .highChart {
+            width: 100%;
+            height: 250px;
+            border: 1px solid black;
+        }
     </style>
 @endpush
 
@@ -259,7 +269,7 @@
                         @endforeach
                     </tbody>
                 </table>
-
+                <div id="chartContainer" class="highChart"></div>
             </div>
         </div>
     </div>

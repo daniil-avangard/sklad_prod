@@ -7,6 +7,55 @@ document.addEventListener("DOMContentLoaded", function() {
     let graphicProduct = document.getElementById('grafic-button');
     let tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
     
+    function draw(product, dataForGraphic) {
+//        let cities = [...dataForGraphic.keys()];
+        let cities = Array.from(dataForGraphic.keys(), (_, ind) => ind+1);
+//        let values = [...dataForGraphic.values()];
+        let values = Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm));
+        console.log(cities, values);
+        Highcharts.chart('chartContainer', {
+
+            title: {
+              text: product,
+              align: 'left'
+            },
+
+
+            xAxis: {
+              accessibility: {
+                data: cities
+              }
+            },
+
+            legend: {
+              layout: 'vertical',
+              align: 'right',
+              verticalAlign: 'middle'
+            },
+
+            series: [{
+              name: 'Количество',
+              data: values
+            }],
+
+            responsive: {
+              rules: [{
+                condition: {
+                  maxWidth: 500
+                },
+                chartOptions: {
+                  legend: {
+                    layout: 'horizontal',
+                    align: 'center',
+                    verticalAlign: 'bottom'
+                  }
+                }
+              }]
+            }
+
+          });
+    }
+    
     function display(division, status, product) {
         tableTrArray.forEach(row => {
             row.classList.remove('row-hidden');
@@ -135,12 +184,13 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
                     });
                     Array.from(arrayProductsQuantities).forEach((elm, ind) => {
-                        if (!(elm.classList.contains("row-hidden"))) quantity = elm.innerHTML.trim();
+                        if (!(elm.classList.contains("row-hidden"))) quantity = elm.firstElementChild.innerHTML.trim();
                     });
                     dataForGraphic.set(city, quantity);
                 }
             });
             console.log(product, dataForGraphic);
+            draw(product, dataForGraphic);
         }
     }
     
