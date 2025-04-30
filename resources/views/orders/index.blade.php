@@ -193,6 +193,7 @@
                                 <option value="{{ $productOrder['name'] }}">{{ $productOrder['name'] }}</option>
                             @endforeach
                         </select>
+                        <button id="grafic-button">График</button>
                     </div>
                     @endcan
                 </div>
