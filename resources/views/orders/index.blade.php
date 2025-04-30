@@ -5,7 +5,10 @@
 
 @push('scripts-plugins')
     <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/stock/modules/stock.js"></script>
+<!--    <script src="https://code.highcharts.com/stock/modules/stock.js"></script>-->
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 @endpush
 
 @push('styles-plugins')

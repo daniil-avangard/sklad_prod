@@ -8,52 +8,51 @@ document.addEventListener("DOMContentLoaded", function() {
     let tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
     
     function draw(product, dataForGraphic) {
-//        let cities = [...dataForGraphic.keys()];
-        let cities = Array.from(dataForGraphic.keys(), (_, ind) => ind+1);
+        let cities = [...dataForGraphic.keys()];
+//        let cities = Array.from(dataForGraphic.keys(), (_, ind) => ind+1);
 //        let values = [...dataForGraphic.values()];
         let values = Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm));
-        console.log(cities, values);
         Highcharts.chart('chartContainer', {
-
+            chart: {
+                type: 'column'
+            },
             title: {
-              text: product,
-              align: 'left'
+                text: product
             },
-
-
+//            subtitle: {
+//                text:
+//                    'Source: <a target="_blank" ' +
+//                    'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>'
+//            },
             xAxis: {
-              accessibility: {
-                data: cities
-              }
-            },
-
-            legend: {
-              layout: 'vertical',
-              align: 'right',
-              verticalAlign: 'middle'
-            },
-
-            series: [{
-              name: 'Количество',
-              data: values
-            }],
-
-            responsive: {
-              rules: [{
-                condition: {
-                  maxWidth: 500
-                },
-                chartOptions: {
-                  legend: {
-                    layout: 'horizontal',
-                    align: 'center',
-                    verticalAlign: 'bottom'
-                  }
+                categories: cities,
+                crosshair: true,
+                accessibility: {
+                    description: 'Дивизионы'
                 }
-              }]
-            }
-
-          });
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'штук'
+                }
+            },
+//            tooltip: {
+//                valueSuffix: ' (1000 MT)'
+//            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: product,
+                    data: values
+                }
+            ]
+        });
     }
     
     function display(division, status, product) {
