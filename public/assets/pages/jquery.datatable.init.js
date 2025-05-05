@@ -4,15 +4,35 @@
  * Datatables Js
  */
 
+function filterColumn(table, number, value) {
+    if (value === "all" || value === "") {
+        table.column(number).search("", true, false);
+    } else {
+        // table.column(number).search(value, false, false);
+        table.column(number)
+            .search(`^${value}$`, true, false)
+    }
+}
+
 function setupProductTableFilters(table) {
     // Фильтрация по выпадающим спискам
-    $('#companyFilter, #categoryFilter').on('change', function () {
+    $('#companyFilter, #categoryFilter, #kko_operator, #express_operator').on('change', function () {
         const companyValue = $('#companyFilter').val();
         const categoryValue = $('#categoryFilter').val();
+        const kkoOperator = $('#kko_operator').val();
+        // const expressOperator = $('#express_operator').val();
+
+        console.log("Фильтрация");
+        // console.log(companyValue);
+        // console.log(categoryValue);
+        console.log(kkoOperator);
+        // console.log(expressOperator);
 
         // Фильтруем по нужным столбцам
-        table.column(1).search(companyValue, false, false); // Столбец "Компания"
-        table.column(2).search(categoryValue, false, false); // Столбец "Категория"
+        filterColumn(table, 1, companyValue);
+        filterColumn(table, 2, categoryValue);
+        filterColumn(table, 9, kkoOperator);
+        // filterColumn(table, 11, expressOperator);
 
         table.draw();
     });
@@ -27,6 +47,36 @@ $(document).ready(function () {
 
     //Buttons examples
     var table = $('#datatable-buttons').DataTable({
+        columnDefs: [
+            {
+                targets: [9, 11], // номера твоих колонок
+                render: function (data, type, row) {
+                    // console.log('type:', type);
+
+                    if (type === 'filter') {
+                        // console.log('data:', data);
+
+                        // Создаем временный div, чтобы разобрать HTML
+                        const div = document.createElement('div');
+                        div.innerHTML = data;
+                        // console.log(div);
+
+                        console.log(data);
+
+
+                        // Пытаемся найти td и взять из него data-search
+                        const cell = div.querySelector('td');
+                        const searchData = cell ? cell.getAttribute('data-search') : '';
+                        // console.log(searchData);
+
+                        // Если есть data-search — используем его для фильтрации
+                        return searchData !== null ? searchData : data;
+                    }
+
+                    return data; // обычное отображение
+                }
+            }
+        ],
         scrollX: true,
         lengthChange: false,
         // responsive: true,
@@ -42,7 +92,7 @@ $(document).ready(function () {
             // 'excel',
             // 'pdf',
             'colvis'
-        ]
+        ],
     });
 
     table.buttons().container()
@@ -56,15 +106,15 @@ $(document).ready(function () {
         }
     });
 
-    // Инициализируем основную таблицу
-    // const productTable = initializeDataTable('#datatable-buttons');
+
+    // ==== Кастомная фильтрация по data-search ====
 
 
     // Подключаем фильтры только если на странице есть нужные селекты
-    if ($('#companyFilter').length && $('#categoryFilter').length) {
+    const filtersExists = $('product-table-filters') && $('#companyFilter').length && $('#categoryFilter').length;
+    if (filtersExists) {
         setupProductTableFilters(table);
     }
-
 });
 
 /* Formatting function for row details - modify as you need */

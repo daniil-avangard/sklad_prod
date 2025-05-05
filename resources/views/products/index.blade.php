@@ -22,25 +22,121 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body" style="overflow-x: auto;">
-                    <div class="filters mb-4">
-                        <select name="" id="companyFilter">
-                            <option value="1">Имя</option>
-                            <option value="1">Имя</option>
-                            <option value="1">Имя</option>
-                        </select>
+                    <div class="filters mb-4" id="product-table-filters">
+                        <div class="d-flex justify-content-between align-middle mb-3">
+                            <div class="">
+                                <!-- Фильтр по компании -->
+                                <label class="me-4" for="companyFilter">
+                                    Компания:
 
-                        <select name="" id="categoryFilter">
-                            <option value="1">Имя</option>
-                            <option value="1">Имя</option>
-                            <option value="1">Имя</option>
-                        </select>
+                                    <select name="companyFilter" id="companyFilter">
+                                        <option value="all" selected>Все</option>
+                                        @foreach ($productCompanies as $productCompany)
+                                            <option value="{{ $productCompany->name }}">{{ $productCompany->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </label>
 
-                        <div>
-                            <p>
-                                ККО
-                            </p>
+                                <!-- Фильтр по категории -->
+                                <label for="categoryFilter">
+                                    Категория:
 
-                            <input type="checkbox" name="" id="">
+                                    <select name="categoryFilter" id="categoryFilter">
+                                        <option value="all" selected>Все</option>
+                                        @foreach ($productCategories as $productCategory)
+                                            <option value="{{ $productCategory->name }}">{{ $productCategory->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </label>
+                            </div>
+
+                            <button>
+                                Сбросить
+                            </button>
+                        </div>
+
+                        <div class="d-flex columns-2 gap-2 mb-4 ms-0 me-0">
+                            <div class="card col-6 mb-0 p-0">
+                                <div class="card-header p-2">
+                                    <h4 class="card-title">ККО</h4>
+                                </div>
+
+                                <div class="card-body p-2 py-3">
+                                    <div class="row">
+                                        <div class="form-group col-6 mb-0">
+                                            <div class="checkbox-primary">
+                                                <input id="kko_hall" type="checkbox" value="1" name="kko_hall">
+                                                <label for="kko_hall">
+                                                    Оперзал
+                                                </label>
+                                            </div>
+
+                                            <div class="checkbox-primary">
+                                                <input id="kko_account_opening" type="checkbox" value="1"
+                                                    name="kko_account_opening">
+                                                <label for="kko_account_opening">
+                                                    Открытие счетов
+                                                </label>
+                                            </div>
+
+                                            <div class="checkbox-primary">
+                                                <input id="kko_manager" type="checkbox" value="1" name="kko_manager">
+                                                <label for="kko_manager">
+                                                    Менеджеру
+                                                </label>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="form-group col-6 mb-0">
+                                            <label for="kko_operator">Оперциансту</label>
+
+                                            <select id="kko_operator" name="kko_operator" class="form-select">
+                                                <option value="all" selected>Все</option>
+                                                @foreach (App\Enum\Products\PointsSale\Operator::cases() as $operator)
+                                                    <option {{ old('kko_operator') == $operator->value ? 'selected' : '' }}
+                                                        value="{{ $operator->value }}">
+                                                        {{ $operator->name() }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card col-6 mb-0 p-0">
+                                <div class="card-header p-2">
+                                    <h4 class="card-title">Экспресс</h4>
+                                </div>
+
+                                <div class="card-body p-2 py-3">
+                                    <div class="row">
+                                        <div class="form-group col-6 mb-0">
+                                            <div class="checkbox-primary">
+                                                <input id="express_hall" type="checkbox" value="1" name="express_hall">
+                                                <label for="express_hall">
+                                                    Оперзал
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group col-6 mb-0">
+                                            <label for="express_operator">Оперциансту</label>
+
+                                            <select id="express_operator" name="express_operator" class="form-select">
+                                                <option value="all" selected>Все</option>
+                                                @foreach (App\Enum\Products\PointsSale\Operator::cases() as $operator)
+                                                    <option
+                                                        {{ old('express_operator') == $operator->value ? 'selected' : '' }}
+                                                        value="{{ $operator->value }}">
+                                                        {{ $operator->name() }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -107,23 +203,23 @@
                                         <td>{{ $product->total_reserved }}</td>
                                     @endcan
                                     {{-- ККО --}}
-                                    <td>
+                                    <td data-search={{ $product->kko_hall }}>
                                         {!! kko_express_check($product->kko_hall) !!}
                                     </td>
-                                    <td>
+                                    <td data-search={{ $product->kko_account_opening }}>
                                         {!! kko_express_check($product->kko_account_opening) !!}
                                     </td>
-                                    <td>
+                                    <td data-search={{ $product->kko_manager }}>
                                         {!! kko_express_check($product->kko_manager) !!}
                                     </td>
-                                    <td>
+                                    <td data-search={{ $product->kko_operator }}>
                                         {!! kko_express_check($product->kko_operator) !!}
                                     </td>
                                     {{-- Экспресс --}}
-                                    <td>
+                                    <td data-search={{ $product->express_hall }}>
                                         {!! kko_express_check($product->express_hall) !!}
                                     </td>
-                                    <td>
+                                    <td data-searcg={{$product->express_operator}}>
                                         {!! kko_express_check($product->express_operator) !!}
                                     </td>
                                     <td>
@@ -179,5 +275,4 @@
     <script src="/plugins/datatables/dataTables.responsive.min.js"></script>
     <script src="/plugins/datatables/responsive.bootstrap4.min.js"></script>
     <script src="/assets/pages/jquery.datatable.init.js"></script>
-
 @endpush
