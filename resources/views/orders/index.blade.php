@@ -3,6 +3,14 @@
 
 @section('title_page', 'Заказы')
 
+@push('scripts-plugins')
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+<!--    <script src="https://code.highcharts.com/stock/modules/stock.js"></script>-->
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+@endpush
+
 @push('styles-plugins')
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <style>
@@ -149,10 +157,16 @@
             flex-direction: column;
             justify-content: left;
             margin-right: 10px;
+            margin-bottom: 5px;
         }
         .block-filters-index {
             display: flex;
             flex-direction: row;
+        }
+        .highChart {
+            width: 100%;
+            height: 250px;
+            border: 0.5px solid #eaf0f9;
         }
     </style>
 @endpush
@@ -206,6 +220,7 @@
                                 <option value="{{ $productOrder['name'] }}">{{ $productOrder['name'] }}</option>
                             @endforeach
                         </select>
+                        <button id="grafic-button">График</button>
                     </div>
                     @endcan
                 </div>
@@ -274,7 +289,7 @@
                         @endforeach
                     </tbody>
                 </table>
-
+                <div id="chartContainer" class="highChart"></div>
             </div>
         </div>
     </div>
