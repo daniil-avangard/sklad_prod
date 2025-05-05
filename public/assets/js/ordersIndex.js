@@ -171,26 +171,30 @@ document.addEventListener("DOMContentLoaded", function() {
     
     if (graphicProduct) {
         graphicProduct.onclick = () => {
-            let dataForGraphic = new Map();
-            let product, quantity;
-            tableTrArray.forEach(row => {
-                if (!(row.classList.contains("row-hidden"))) {
-                    let city = row.cells[0].getElementsByTagName("A")[0].innerHTML.trim();
-                    
-                    let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
-                    let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
-                    Array.from(arrayProductsDivs).forEach((elm, ind) => {
-                        if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
-                    });
-                    Array.from(arrayProductsQuantities).forEach((elm, ind) => {
-                        if (!(elm.classList.contains("row-hidden"))) quantity = elm.firstElementChild.innerHTML.trim();
-                    });
-                    dataForGraphic.set(city, quantity);
-                }
-            });
-            console.log(product, dataForGraphic);
-            draw(product, dataForGraphic);
-            document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
+            if (selectProductOrder.value != '') {
+                let dataForGraphic = new Map();
+                let product, quantity;
+                tableTrArray.forEach(row => {
+                    if (!(row.classList.contains("row-hidden"))) {
+                        let city = row.cells[0].getElementsByTagName("A")[0].innerHTML.trim();
+
+                        let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
+                        let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
+                        Array.from(arrayProductsDivs).forEach((elm, ind) => {
+                            if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
+                        });
+                        Array.from(arrayProductsQuantities).forEach((elm, ind) => {
+                            if (!(elm.classList.contains("row-hidden"))) quantity = elm.firstElementChild.innerHTML.trim();
+                        });
+                        dataForGraphic.set(city, quantity);
+                    }
+                });
+                console.log(product, dataForGraphic);
+                draw(product, dataForGraphic);
+                document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
+            } else {
+                alert('Выберите продукт');
+            }
         }
     }
     
