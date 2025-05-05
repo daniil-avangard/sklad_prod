@@ -51,7 +51,7 @@
                                 </label>
                             </div>
 
-                            <button>
+                            <button id="reset-product-table-button" class="button btn-danger btn-sm p-1 ps-2 pe-2 border-0">
                                 Сбросить
                             </button>
                         </div>
@@ -66,14 +66,14 @@
                                     <div class="row">
                                         <div class="form-group col-6 mb-0">
                                             <div class="checkbox-primary">
-                                                <input id="kko_hall" type="checkbox" value="1" name="kko_hall">
+                                                <input class="checkbox-filter" id="kko_hall" type="checkbox" value="1" name="kko_hall">
                                                 <label for="kko_hall">
                                                     Оперзал
                                                 </label>
                                             </div>
 
                                             <div class="checkbox-primary">
-                                                <input id="kko_account_opening" type="checkbox" value="1"
+                                                <input class="checkbox-filter" id="kko_account_opening" type="checkbox" value="1"
                                                     name="kko_account_opening">
                                                 <label for="kko_account_opening">
                                                     Открытие счетов
@@ -81,7 +81,7 @@
                                             </div>
 
                                             <div class="checkbox-primary">
-                                                <input id="kko_manager" type="checkbox" value="1" name="kko_manager">
+                                                <input class="checkbox-filter" id="kko_manager" type="checkbox" value="1" name="kko_manager">
                                                 <label for="kko_manager">
                                                     Менеджеру
                                                 </label>
@@ -114,7 +114,7 @@
                                     <div class="row">
                                         <div class="form-group col-6 mb-0">
                                             <div class="checkbox-primary">
-                                                <input id="express_hall" type="checkbox" value="1" name="express_hall">
+                                                <input class="checkbox-filter" id="express_hall" type="checkbox" value="1" name="express_hall">
                                                 <label for="express_hall">
                                                     Оперзал
                                                 </label>
@@ -220,6 +220,7 @@
                                         {!! kko_express_check($product->express_hall) !!}
                                     </td>
                                     <td data-search={{ $product->express_operator }}>
+                                        {{-- {{ $product->express_operator }} --}}
                                         {!! kko_express_check($product->express_operator) !!}
                                     </td>
                                     <td>

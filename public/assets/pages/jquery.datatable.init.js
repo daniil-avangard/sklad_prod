@@ -46,36 +46,6 @@ $(document).ready(function () {
 
     //Buttons examples
     var table = $('#datatable-buttons').DataTable({
-        // columnDefs: [
-        //     {
-        //         targets: [10],
-        //         render: function (data, type, row) {
-        //             // console.log('type:', type);
-
-        //             // if (type === 'filter') {
-        //             //     console.log('Тип:', type);
-        //             //     console.log('Данные:', data);
-        //             //     // console.log('Фильтруемое значение:', searchData);
-        //             //     return data;
-
-        //             //     // Создаем временный div, чтобы разобрать HTML
-        //             //     const div = document.createElement('div');
-        //             //     div.innerHTML = data;
-        //             //     console.log(div);
-
-        //             //     // Пытаемся найти td и взять из него data-search
-        //             //     const cell = div.querySelector('td');
-        //             //     console.log(cell);
-        //             //     const searchData = cell ? cell.getAttribute('data-search') : '';
-
-        //             //     // Если есть data-search — используем его для фильтрации
-        //             //     return searchData !== null ? searchData : data;
-        //             // }
-
-        //             return data; // обычное отображение
-        //         }
-        //     }
-        // ],
         scrollX: true,
         lengthChange: false,
         // responsive: true,
@@ -92,6 +62,23 @@ $(document).ready(function () {
             // 'pdf',
             'colvis'
         ],
+        columnDefs: [{
+            targets: [5, 6, 7, 8, 9, 10], // столбцы с data-search
+            render: function (data, type, row) {
+                // console.log("Строка:", row);
+
+                if (type === 'filter') {
+                    for (const column in row) {
+                        if (column['@data-search']) {
+                            return column?.['@data-search'] ?? '';
+                            // return column['@data-search'];
+                        }
+                    }
+                }
+
+                return data;
+            }
+        }],
     });
 
     table.buttons().container()
@@ -105,15 +92,32 @@ $(document).ready(function () {
         }
     });
 
-
-    // ==== Кастомная фильтрация по data-search ====
-
-
     // Подключаем фильтры только если на странице есть нужные селекты
     const filtersExists = $('product-table-filters') && $('#companyFilter').length && $('#categoryFilter').length;
     if (filtersExists) {
         setupProductTableFilters(table);
     }
+
+    function filterByCheckbox(table, checkboxId, columnIndex) {
+        const checkbox = $(`#${checkboxId}`);
+        checkbox.on('change', function () {
+            const isChecked = $(this).is(':checked');
+            console.log(isChecked);
+
+            if (isChecked) {
+                table.column(columnIndex).search('1', true, false);
+            } else {
+                table.column(columnIndex).search('', true, false);
+            }
+            table.draw();
+        });
+    }
+
+    // Привязываем чекбоксы к фильтрам
+    filterByCheckbox(table, 'kko_hall', 5);         // колонка 5 — kko_hall
+    filterByCheckbox(table, 'kko_account_opening', 6); // колонка 6 — kko_account_opening
+    filterByCheckbox(table, 'kko_manager', 7);
+    filterByCheckbox(table, 'express_hall', 9);
 });
 
 /* Formatting function for row details - modify as you need */
@@ -173,34 +177,5 @@ $(document).ready(function () {
     });
 });
 
-var testdata = {
-    "data": [
-        {
-            "name": "Tiger Nixon",
-            "position": "System Architect",
-            "salary": "$320,800",
-            "start_date": "2011/04/25",
-            "office": "Edinburgh",
-            "extn": "5421"
-        },
-        {
-            "name": "Garrett Winters",
-            "position": "Accountant",
-            "salary": "$170,750",
-            "start_date": "2011/07/25",
-            "office": "Tokyo",
-            "extn": "8422"
-        },
-        {
-            "name": "Ashton Cox",
-            "position": "Junior Technical Author",
-            "salary": "$86,000",
-            "start_date": "2009/01/12",
-            "office": "San Francisco",
-            "extn": "1562"
-        },]
-}
 
-
-// var x = document.getElementById("datatable_paginate");
-// x.querySelector(".pagination").classList.add("pagination-sm");
+module.export = { table }
