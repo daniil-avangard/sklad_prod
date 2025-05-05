@@ -219,7 +219,7 @@
                                     <td data-search={{ $product->express_hall }}>
                                         {!! kko_express_check($product->express_hall) !!}
                                     </td>
-                                    <td data-searcg={{$product->express_operator}}>
+                                    <td data-search={{ $product->express_operator }}>
                                         {!! kko_express_check($product->express_operator) !!}
                                     </td>
                                     <td>

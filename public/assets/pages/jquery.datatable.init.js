@@ -8,7 +8,6 @@ function filterColumn(table, number, value) {
     if (value === "all" || value === "") {
         table.column(number).search("", true, false);
     } else {
-        // table.column(number).search(value, false, false);
         table.column(number)
             .search(`^${value}$`, true, false)
     }
@@ -20,19 +19,19 @@ function setupProductTableFilters(table) {
         const companyValue = $('#companyFilter').val();
         const categoryValue = $('#categoryFilter').val();
         const kkoOperator = $('#kko_operator').val();
-        // const expressOperator = $('#express_operator').val();
+        const expressOperator = $('#express_operator').val();
 
-        console.log("Фильтрация");
+        // console.log("Фильтрация");
         // console.log(companyValue);
         // console.log(categoryValue);
-        console.log(kkoOperator);
+        // console.log(kkoOperator);
         // console.log(expressOperator);
 
         // Фильтруем по нужным столбцам
         filterColumn(table, 1, companyValue);
         filterColumn(table, 2, categoryValue);
-        filterColumn(table, 9, kkoOperator);
-        // filterColumn(table, 11, expressOperator);
+        filterColumn(table, 8, kkoOperator);
+        filterColumn(table, 10, expressOperator);
 
         table.draw();
     });
@@ -47,36 +46,36 @@ $(document).ready(function () {
 
     //Buttons examples
     var table = $('#datatable-buttons').DataTable({
-        columnDefs: [
-            {
-                targets: [9, 11], // номера твоих колонок
-                render: function (data, type, row) {
-                    // console.log('type:', type);
+        // columnDefs: [
+        //     {
+        //         targets: [10],
+        //         render: function (data, type, row) {
+        //             // console.log('type:', type);
 
-                    if (type === 'filter') {
-                        // console.log('data:', data);
+        //             // if (type === 'filter') {
+        //             //     console.log('Тип:', type);
+        //             //     console.log('Данные:', data);
+        //             //     // console.log('Фильтруемое значение:', searchData);
+        //             //     return data;
 
-                        // Создаем временный div, чтобы разобрать HTML
-                        const div = document.createElement('div');
-                        div.innerHTML = data;
-                        // console.log(div);
+        //             //     // Создаем временный div, чтобы разобрать HTML
+        //             //     const div = document.createElement('div');
+        //             //     div.innerHTML = data;
+        //             //     console.log(div);
 
-                        console.log(data);
+        //             //     // Пытаемся найти td и взять из него data-search
+        //             //     const cell = div.querySelector('td');
+        //             //     console.log(cell);
+        //             //     const searchData = cell ? cell.getAttribute('data-search') : '';
 
+        //             //     // Если есть data-search — используем его для фильтрации
+        //             //     return searchData !== null ? searchData : data;
+        //             // }
 
-                        // Пытаемся найти td и взять из него data-search
-                        const cell = div.querySelector('td');
-                        const searchData = cell ? cell.getAttribute('data-search') : '';
-                        // console.log(searchData);
-
-                        // Если есть data-search — используем его для фильтрации
-                        return searchData !== null ? searchData : data;
-                    }
-
-                    return data; // обычное отображение
-                }
-            }
-        ],
+        //             return data; // обычное отображение
+        //         }
+        //     }
+        // ],
         scrollX: true,
         lengthChange: false,
         // responsive: true,
