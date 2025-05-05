@@ -190,6 +190,7 @@ document.addEventListener("DOMContentLoaded", function() {
             });
             console.log(product, dataForGraphic);
             draw(product, dataForGraphic);
+            document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
         }
     }
     
