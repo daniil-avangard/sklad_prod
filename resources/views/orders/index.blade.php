@@ -200,7 +200,7 @@
                     @endcan
                     @can('viewAny', \App\Models\Order::class)
                     <div class="order-filters">
-                        <label for="productsOfOrders">Продукты:</label>
+                        <label for="productsOfOrders">Товары:</label>
                         <select name='productsOfOrders' id='products-of-orders' class="index-top-filters">
                             <option value="">Все</option>
                             @foreach ($allOrdersProducts as $productOrder)
