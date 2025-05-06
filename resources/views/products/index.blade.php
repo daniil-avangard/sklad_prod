@@ -22,6 +22,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body" style="overflow-x: auto;">
+                    {{-- Фильтра --}}
                     <div class="filters mb-4" id="product-table-filters">
                         <div class="d-flex justify-content-between align-middle mb-3">
                             <div class="d-flex">
@@ -148,7 +149,7 @@
                     </div>
 
                     {{-- Таблица --}}
-                    <table id="datatable-buttons" class="table table-striped table-bordered nowrap"
+                    <table id="product-table" class="table table-striped table-bordered nowrap"
                         style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
