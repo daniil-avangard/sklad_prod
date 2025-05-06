@@ -1,145 +1,118 @@
-//Buttons examples
-// var table = $('#product-table').DataTable({
-//     scrollX: true,
-//     lengthChange: true,
-//     // responsive: true,
-//     language: {
-//         url: '/assets/lang/datatables_ru.json',
-//     },
-//     lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Все"]],
-//     dom: "<'row'<'col-sm-6'B><'col-sm-6'f>>" +      // Верх: кнопки и поиск
-//         "<'row'<'col-sm-12'tr>>" +                // Средина: таблица
-//         "<'row pt-2'<'col-sm-6'i><'col-sm-3 d-flex align-items-center'l><'col-sm-3'p>>",     // Низ: информация слева, пагинация + "Show entries" справа
-//     buttons: [
-//         // 'copy'
-//         // 'excel',
-//         // 'pdf',
-//         'colvis'
-//     ],
-//     columnDefs: [{
-//         targets: [5, 6, 7, 8, 9, 10], // столбцы с data-search
-//         render: function (data, type, row) {
-//             // console.log("Строка:", row);
+class ProductTable {
+    constructor(tableSelectorId, tableConfig) {
+        this.tableSelectorId = tableSelectorId;
+        this.tableConfig = tableConfig;
 
-//             if (type === 'filter') {
-//                 for (const column in row) {
-//                     if (column['@data-search']) {
-//                         return column?.['@data-search'] ?? '';
-//                         // return column['@data-search'];
-//                     }
-//                 }
-//             }
+        // Node
+        this.resetProductTableButton = document.querySelector('#reset-product-table-button');
+        this.chanelFilterButton = document.querySelector('#chanel-filter-button');
+        this.chanelFilters = document.querySelector('#chanel-filters');
 
-//             return data;
-//         }
-//     }],
-// });
+        // Cелекты
+        this.companyFilter = document.querySelector('#companyFilter');
+        this.categoryFilter = document.querySelector('#categoryFilter');
+        this.kko_operator = document.querySelector('#kko_operator');
+        this.express_operator = document.querySelector('#express_operator');
+        this.checkboxFilters = document.querySelectorAll('.checkbox-filter');
 
-// table.buttons().container()
-//     .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+        // Чекбоксы
+        this.kko_hall = document.querySelector('#kko_hall');
+        this.kko_account_opening = document.querySelector('#kko_account_opening');
+        this.kko_manager = document.querySelector('#kko_manager');
+        this.express_hall = document.querySelector('#express_hall');
+    }
 
+    init() {
+        // Инициализация таблицы
+        this.table = $(this.tableSelectorId).DataTable(this.tableConfig);
+        this.table.buttons().container()
+            .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
 
+        // Слушатели на селекты
+        this.#filterBySelect(1, this.companyFilter);
+        this.#filterBySelect(2, this.categoryFilter);
+        this.#filterBySelect(8, this.kko_operator);
+        this.#filterBySelect(10, this.express_operator);
 
-// function initResetSettings(table) {
-//     const resetProductTableButton = document.querySelector('#reset-product-table-button');
-//     const companyFilter = document.querySelector('#companyFilter');
-//     const categoryFilter = document.querySelector('#categoryFilter');
-//     const kko_operator = document.querySelector('#kko_operator');
-//     const express_operator = document.querySelector('#express_operator');
-//     const checkboxFilters = document.querySelectorAll('.checkbox-filter');
+        // Фильтрация по чекбоксам
+        this.#filterByCheckbox(5, this.kko_hall);
+        this.#filterByCheckbox(6, this.kko_account_opening);
+        this.#filterByCheckbox(7, this.kko_manager);
+        this.#filterByCheckbox(9, this.express_hall);
 
-//     function resetProductFilters() {
-//         companyFilter.value = 'all';
-//         categoryFilter.value = 'all';
-//         kko_operator.value = 'all';
-//         express_operator.value = 'all';
-
-//         checkboxFilters.forEach((checkbox) => {
-//             checkbox.checked = false;
-//         });
-
-//         table.search('').columns().search('').draw();
-//         table.draw();
-//     }
-
-//     if (resetProductTableButton) {
-//         resetProductTableButton.addEventListener('click', resetProductFilters);
-//     }
-// }
+        // Очистка формы и значений
+        if (this.resetProductTableButton) {
+            this.resetProductTableButton.addEventListener('click', this.#resetProductFilters.bind(this));
+        }
+        this.#toggleVisibleChanelFilters();
+    }
 
 
-// function filterColumn(table, number, value) {
-//     if (value === "all" || value === "") {
-//         table.column(number).search("", true, false);
-//     } else {
-//         table.column(number)
-//             .search(`^${value}$`, true, false)
-//     }
-// }
+    #filterColumn(columnIndex, value) {
+        if (value === "all" || value === "") {
+            this.table.column(columnIndex).search("", true, false);
+        } else {
+            this.table.column(columnIndex)
+                .search(`^${value}$`, true, false)
+        }
+    }
 
-// function setupProductTableFilters(table) {
-//     // Фильтрация по выпадающим спискам
-//     $('#companyFilter, #categoryFilter, #kko_operator, #express_operator').on('change', function () {
-//         const companyValue = $('#companyFilter').val();
-//         const categoryValue = $('#categoryFilter').val();
-//         const kkoOperator = $('#kko_operator').val();
-//         const expressOperator = $('#express_operator').val();
+    #filterBySelect(columnIndex, select) {
+        if (!select) return;
 
-//         // console.log("Фильтрация");
-//         // console.log(companyValue);
-//         // console.log(categoryValue);
-//         // console.log(kkoOperator);
-//         // console.log(expressOperator);
+        select.addEventListener('change', () => {
+            const selectValue = select.value;
+            // console.log("Фильтрация");
+            // console.log("Значение:", selectValue);
 
-//         // Фильтруем по нужным столбцам
-//         filterColumn(table, 1, companyValue);
-//         filterColumn(table, 2, categoryValue);
-//         filterColumn(table, 8, kkoOperator);
-//         filterColumn(table, 10, expressOperator);
+            this.#filterColumn(columnIndex, selectValue);
+            this.table.draw();
+        });
+    }
 
-//         table.draw();
-//     });
-// }
+    #filterByCheckbox(columnIndex, checkbox) {
+        if (!checkbox) return;
 
-// function filterByCheckbox(table, checkboxId, columnIndex) {
-//     const checkbox = $(`#${checkboxId}`);
+        checkbox.addEventListener('change', () => {
+            const isChecked = checkbox.checked;
 
-//     checkbox.on('change', function () {
-//         const isChecked = $(this).is(':checked');
-//         // console.log(isChecked);
+            if (isChecked) {
+                this.table.column(columnIndex).search('1', true, false);
+            } else {
+                this.table.column(columnIndex).search('', true, false);
+            }
 
-//         if (isChecked) {
-//             table.column(columnIndex).search('1', true, false);
-//         } else {
-//             table.column(columnIndex).search('', true, false);
-//         }
-//         table.draw();
-//     });
-// }
+            this.table.draw();
+        });
+    }
 
-// Подключаем фильтры только если на странице есть нужные селекты
-// const filtersExists = $('product-table-filters') && $('#companyFilter').length && $('#categoryFilter').length;
-// if (filtersExists) {
-//     setupProductTableFilters(table);
-// }
+    #resetProductFilters() {
+        if (this.companyFilter) this.companyFilter.value = 'all';
+        if (this.categoryFilter) this.categoryFilter.value = 'all';
+        if (this.kko_operator) this.kko_operator.value = 'all';
+        if (this.express_operator) this.express_operator.value = 'all';
 
-// // Привязываем чекбоксы к фильтрам
-// filterByCheckbox(table, 'kko_hall', 5);         // колонка 5 — kko_hall
-// filterByCheckbox(table, 'kko_account_opening', 6); // колонка 6 — kko_account_opening
-// filterByCheckbox(table, 'kko_manager', 7);
-// filterByCheckbox(table, 'express_hall', 9);
+        if (this.checkboxFilters) {
+            this.checkboxFilters.forEach((checkbox) => {
+                if (checkbox) checkbox.checked = false;
+            });
+        }
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     initResetSettings(table);
-// });
+        // Сбрасываем значения формы
+        if (this.table) {
+            this.table.search('').columns().search('').draw();
+        }
+    }
 
+    #toggleVisibleChanelFilters() {
+        if (!this.chanelFilterButton || !this.chanelFilters) return;
 
-// const chanelFilterButton = document.querySelector('#chanel-filter-button');
-// const chanelFilters = document.querySelector('#chanel-filters');
+        this.chanelFilterButton.addEventListener('click', () => {
+            this.chanelFilters.classList.toggle('visually-hidden');
+        });
+    }
+}
 
-chanelFilterButton.addEventListener('click', () => {
-    chanelFilters.classList.toggle('visually-hidden');
-});
 
 // Конфиг таблицы
 const tableConfig = {
@@ -178,106 +151,9 @@ const tableConfig = {
     }]
 }
 
-class ProductTable {
-    constructor(tableSelectorId) {
-        this.tableSelectorId = tableSelectorId;
+const productTable = new ProductTable('#product-table', tableConfig);
+const productTableNode = document.querySelector('#product-table');
 
-        // Node
-        this.resetProductTableButton = document.querySelector('#reset-product-table-button');
-        this.chanelFilterButton = document.querySelector('#chanel-filter-button');
-        this.chanelFilters = document.querySelector('#chanel-filters');
-
-        // Cелекты
-        this.companyFilter = document.querySelector('#companyFilter');
-        this.categoryFilter = document.querySelector('#categoryFilter');
-        this.kko_operator = document.querySelector('#kko_operator');
-        this.express_operator = document.querySelector('#express_operator');
-        this.checkboxFilters = document.querySelectorAll('.checkbox-filter');
-    }
-
-    init() {
-        // Инициализация таблицы
-        this.table = document.querySelector(this.tableSelectorId).DataTable(tableConfig);
-        this.table.buttons().container()
-            .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
-
-        // Слушатели на селекты
-        this.#filterBySelect(this.companyFilter);
-        this.#filterBySelect(this.categoryFilter);
-        this.#filterBySelect(this.kko_operator);
-        this.#filterBySelect(this.express_operator);
-
-        // Фильтрация по чекбоксам
-        this.#filterByCheckbox(table, '#kko_hall', 5);
-        this.#filterByCheckbox(table, '#kko_account_opening', 6);
-        this.#filterByCheckbox(table, '#kko_manager', 7);
-        this.#filterByCheckbox(table, '#express_hall', 9);
-
-        // Очистка формы и значений
-        this.resetProductTableButton.addEventListener('click', this.#resetProductFilters);
-        this.#toggleVisibleChanelFilters();
-    }
-
-
-    #filterColumn(table, number, value) {
-        if (value === "all" || value === "") {
-            table.column(number).search("", true, false);
-        } else {
-            table.column(number)
-                .search(`^${value}$`, true, false)
-        }
-    }
-
-    #filterBySelect(selector) {
-        const select = document.querySelector(selector)
-
-        select.addEventListener('change', () => {
-            const selectValue = select.value();
-            console.log("Фильтрация");
-            console.log("Значение:", selectValue);
-
-            this.#filterColumn(selectValue);
-            this.table.draw();
-        });
-    }
-
-    #resetProductFilters() {
-        this.companyFilter.value = 'all';
-        this.categoryFilter.value = 'all';
-        this.kko_operator.value = 'all';
-        this.express_operator.value = 'all';
-
-        this.checkboxFilters.forEach((checkbox) => {
-            checkbox.checked = false;
-        });
-
-        // Сбрасываем значения формы
-        this.table.search('').columns().search('').draw();
-    }
-
-    #filterByCheckbox(table, selector, columnIndex) {
-        const checkbox = document.querySelector(selector);
-
-        checkbox.addEventListener('change', () => {
-            const isChecked = evt.target;
-            console.log(isChecked);
-
-            if (isChecked) {
-                table.column(columnIndex).search('1', true, false);
-            } else {
-                table.column(columnIndex).search('', true, false);
-            }
-
-            table.draw();
-        });
-    }
-
-    #toggleVisibleChanelFilters() {
-        this.chanelFilterButton.addEventListener('click', () => {
-            chanelFilters.classList.toggle('visually-hidden');
-        });
-    }
+if (productTableNode) {
+    productTable.init();
 }
-
-const productTable = new ProductTable('#product-table');
-productTable.init();
