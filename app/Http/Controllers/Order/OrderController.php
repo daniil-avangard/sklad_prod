@@ -82,7 +82,11 @@ class OrderController extends Controller
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
 //        auth()->user()->id;
 //        $role = Auth::user()->id;
-        $role = Auth::user()->roles()->pluck('id');
+//        $role = Auth::user()->roles()->pluck('id');
+        $role = Auth::user()->roles()->pluck('name')->toArray();
+//        dd($role, UserRoleEnum::DIVISION_MANAGER->label(), (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)));
+        $flagForExcell = (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)) ? "notShow" : "show";
+//        $flagForExcell = (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role)) ? "show" : "notShow";
 //        dd($role1[0]);
 
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
@@ -126,7 +130,7 @@ class OrderController extends Controller
 //        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
 //        $test = $uniqGoods[1]['name'];
 //        dd($allDivisionsDataNew, $uniqGoods);
-        return view('orders.index-new', compact('currentSessionOrders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew', 'uniqGoodsTotalOrdered'));
+        return view('orders.index-new', compact('currentSessionOrders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew', 'uniqGoodsTotalOrdered', 'flagForExcell'));
     }
 
     public function indexNewUpdate()
