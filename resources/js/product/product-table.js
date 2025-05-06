@@ -101,41 +101,41 @@
 //     });
 // }
 
-function filterByCheckbox(table, checkboxId, columnIndex) {
-    const checkbox = $(`#${checkboxId}`);
+// function filterByCheckbox(table, checkboxId, columnIndex) {
+//     const checkbox = $(`#${checkboxId}`);
 
-    checkbox.on('change', function () {
-        const isChecked = $(this).is(':checked');
-        // console.log(isChecked);
+//     checkbox.on('change', function () {
+//         const isChecked = $(this).is(':checked');
+//         // console.log(isChecked);
 
-        if (isChecked) {
-            table.column(columnIndex).search('1', true, false);
-        } else {
-            table.column(columnIndex).search('', true, false);
-        }
-        table.draw();
-    });
-}
+//         if (isChecked) {
+//             table.column(columnIndex).search('1', true, false);
+//         } else {
+//             table.column(columnIndex).search('', true, false);
+//         }
+//         table.draw();
+//     });
+// }
 
 // Подключаем фильтры только если на странице есть нужные селекты
-const filtersExists = $('product-table-filters') && $('#companyFilter').length && $('#categoryFilter').length;
-if (filtersExists) {
-    setupProductTableFilters(table);
-}
+// const filtersExists = $('product-table-filters') && $('#companyFilter').length && $('#categoryFilter').length;
+// if (filtersExists) {
+//     setupProductTableFilters(table);
+// }
 
-// Привязываем чекбоксы к фильтрам
-filterByCheckbox(table, 'kko_hall', 5);         // колонка 5 — kko_hall
-filterByCheckbox(table, 'kko_account_opening', 6); // колонка 6 — kko_account_opening
-filterByCheckbox(table, 'kko_manager', 7);
-filterByCheckbox(table, 'express_hall', 9);
+// // Привязываем чекбоксы к фильтрам
+// filterByCheckbox(table, 'kko_hall', 5);         // колонка 5 — kko_hall
+// filterByCheckbox(table, 'kko_account_opening', 6); // колонка 6 — kko_account_opening
+// filterByCheckbox(table, 'kko_manager', 7);
+// filterByCheckbox(table, 'express_hall', 9);
 
-document.addEventListener('DOMContentLoaded', () => {
-    initResetSettings(table);
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//     initResetSettings(table);
+// });
 
 
-const chanelFilterButton = document.querySelector('#chanel-filter-button');
-const chanelFilters = document.querySelector('#chanel-filters');
+// const chanelFilterButton = document.querySelector('#chanel-filter-button');
+// const chanelFilters = document.querySelector('#chanel-filters');
 
 chanelFilterButton.addEventListener('click', () => {
     chanelFilters.classList.toggle('visually-hidden');
@@ -182,14 +182,17 @@ class ProductTable {
     constructor(tableSelectorId) {
         this.tableSelectorId = tableSelectorId;
 
+        // Node
+        this.resetProductTableButton = document.querySelector('#reset-product-table-button');
+        this.chanelFilterButton = document.querySelector('#chanel-filter-button');
+        this.chanelFilters = document.querySelector('#chanel-filters');
+
         // Cелекты
         this.companyFilter = document.querySelector('#companyFilter');
         this.categoryFilter = document.querySelector('#categoryFilter');
         this.kko_operator = document.querySelector('#kko_operator');
         this.express_operator = document.querySelector('#express_operator');
         this.checkboxFilters = document.querySelectorAll('.checkbox-filter');
-
-        this.resetProductTableButton = document.querySelector('#reset-product-table-button');
     }
 
     init() {
@@ -212,6 +215,7 @@ class ProductTable {
 
         // Очистка формы и значений
         this.resetProductTableButton.addEventListener('click', this.#resetProductFilters);
+        this.#toggleVisibleChanelFilters();
     }
 
 
@@ -268,6 +272,11 @@ class ProductTable {
         });
     }
 
+    #toggleVisibleChanelFilters() {
+        this.chanelFilterButton.addEventListener('click', () => {
+            chanelFilters.classList.toggle('visually-hidden');
+        });
+    }
 }
 
 const productTable = new ProductTable('#product-table');
