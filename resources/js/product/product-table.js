@@ -55,13 +55,10 @@ function initResetSettings(table) {
         express_operator.value = 'all';
 
         checkboxFilters.forEach((checkbox) => {
-            checkbox.value = 1;
+            checkbox.checked = false;
         });
 
-        table.columns().every(function () {
-            this.search('');
-        })
-
+        table.search('').columns().search('').draw();
         table.draw();
     }
 
@@ -109,7 +106,7 @@ function filterByCheckbox(table, checkboxId, columnIndex) {
 
     checkbox.on('change', function () {
         const isChecked = $(this).is(':checked');
-        console.log(isChecked);
+        // console.log(isChecked);
 
         if (isChecked) {
             table.column(columnIndex).search('1', true, false);
@@ -132,4 +129,6 @@ filterByCheckbox(table, 'kko_account_opening', 6); // колонка 6 — kko_a
 filterByCheckbox(table, 'kko_manager', 7);
 filterByCheckbox(table, 'express_hall', 9);
 
-initResetSettings(table);
+document.addEventListener('DOMContentLoaded', () => {
+    initResetSettings(table);
+});
