@@ -3,10 +3,6 @@
  * Author: Mannatthemes
  * Datatables Js
  */
-
-
-
-
 $(document).ready(function () {
     $('#datatable').DataTable();
 
@@ -44,20 +40,6 @@ $(document).ready(function () {
             }
         }
     });
-
-    // Подключаем фильтры только если на странице есть нужные селекты
-    // const filtersExists = $('product-table-filters') && $('#companyFilter').length && $('#categoryFilter').length;
-    // if (filtersExists) {
-    //     setupProductTableFilters(table);
-    // }
-
-    // // Привязываем чекбоксы к фильтрам
-    // filterByCheckbox(table, 'kko_hall', 5);         // колонка 5 — kko_hall
-    // filterByCheckbox(table, 'kko_account_opening', 6); // колонка 6 — kko_account_opening
-    // filterByCheckbox(table, 'kko_manager', 7);
-    // filterByCheckbox(table, 'express_hall', 9);
-
-    // initResetSettings(table);
 });
 
 /* Formatting function for row details - modify as you need */

@@ -29,7 +29,7 @@ $(function() {
 });
 
 
-document.getElementById('view-selected').addEventListener('click', function() {
+document.getElementById('view-selected')?.addEventListener('click', function() {
     const selectedOrders = Array.from(document.querySelectorAll('.order-checkbox:checked'))
         .map(checkbox => checkbox.value);
     console.log(selectedOrders);
