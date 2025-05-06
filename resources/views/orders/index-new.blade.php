@@ -26,11 +26,13 @@
                                 @foreach ($divisionNames as $divisionName)
                                     <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }}">{{ $divisionName['name'] }}</th>
                                 @endforeach
+                                @if ( $flagForExcell == "show")
                                 <th class="head-bold">Заказано</th>
                                 <th class="head-bold">Минимально<br>допустимый<br>остаток</th>
                                 <th class="head-bold">Тираж<br>для<br>дозаказа</th>
                                 <th class="head-bold">На складе</th>
                                 <th class="head-bold">Остаток<br>после<br>заказов</th>
+                                @endif
                             </tr>
                             @foreach ($uniqGoods as $good)
                                 @if (($good['warehouse']-$good['total']) / $good['min_stock'] > 2)
@@ -47,11 +49,13 @@
                                         </div>
                                     </td>
                                     @include('orders.digits-cell')
-                                    <td class="another-col">{{ $good['total'] }}</td>
-                                    <td class="another-col">{{ $good['min_stock'] }}</td>
-                                    <td class="another-col"> - </td>
-                                    <td class="another-col">{{ $good['warehouse'] }}</td>
-                                    <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] }}</td>
+                                    @if ( $flagForExcell == "show")
+                                        <td class="another-col">{{ $good['total'] }}</td>
+                                        <td class="another-col">{{ $good['min_stock'] }}</td>
+                                        <td class="another-col"> - </td>
+                                        <td class="another-col">{{ $good['warehouse'] }}</td>
+                                        <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] }}</td>
+                                    @endif
                                 </tr>
                             @endforeach
 			</table>

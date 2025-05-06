@@ -78,16 +78,28 @@ class OrderController extends Controller
     public function indexNew()
     {
         $this->authorize('viewAny', Order::class);
-
+        $currentMonth = date('m');
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
 //        auth()->user()->id;
 //        $role = Auth::user()->id;
-        $role = Auth::user()->roles()->pluck('id');
+//        $role = Auth::user()->roles()->pluck('id');
+        $role = Auth::user()->roles()->pluck('name')->toArray();
+//        dd($role, UserRoleEnum::DIVISION_MANAGER->label(), (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)));
+        $flagForExcell = (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)) ? "notShow" : "show";
+//        $flagForExcell = (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role)) ? "show" : "notShow";
 //        dd($role1[0]);
 
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
         })->get()->sortByDesc('created_at');
+        
+        $currentSessionOrders = [];
+        
+        foreach ($orders as $order) {
+            if ($order->created_at->format('m') == $currentMonth) {
+                    $currentSessionOrders[] = $order;
+            }
+        }
 
         $absolutelyAllOrders = Order::whereIn('status',[StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get();
         $uniqGoodsTotalOrdered = array();
@@ -103,14 +115,14 @@ class OrderController extends Controller
 
         $allItems = [];
 
-        foreach ($orders as $order) {
+        foreach ($currentSessionOrders as $order) {
             $allItems[$order->id] = array();
             foreach ($order->items as $item) {
                 $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity, 'image' => $item->product->image);
             }
         }
 
-        $result = $this->forNewTable($divisionGroups, $orders);
+        $result = $this->forNewTable($divisionGroups, $currentSessionOrders);
         $uniqGoods = $result[0];
         $divisionNames = $result[1];
         $allDivisionsData = $result[2];
@@ -118,7 +130,7 @@ class OrderController extends Controller
 //        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
 //        $test = $uniqGoods[1]['name'];
 //        dd($allDivisionsDataNew, $uniqGoods);
-        return view('orders.index-new', compact('orders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew', 'uniqGoodsTotalOrdered'));
+        return view('orders.index-new', compact('currentSessionOrders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew', 'uniqGoodsTotalOrdered', 'flagForExcell'));
     }
 
     public function indexNewUpdate()
@@ -462,6 +474,10 @@ class OrderController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function excellData() 
+    {
+        return response()->json(['success' => true]);
+    }
 
     // Статуты бля заказаков
     public function statusProcessing(Order $order)

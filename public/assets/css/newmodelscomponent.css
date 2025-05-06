@@ -259,7 +259,7 @@ tr p {
     text-orientation: upright !important;
 }
 .rotated-table-text {
-    writing-mode: vertical-lr !important;
+    writing-mode: vertical-rl !important;
     transform: rotate(-180deg) !important;
     letter-spacing: 2px !important;
     max-height: 170px !important;
