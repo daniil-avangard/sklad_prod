@@ -13,12 +13,14 @@ class ExcellTable {
   }
   
   async dataFromApi() {
-    let url = '/orders/excelldata';
+    let url = '/excell';
+    let dataToSend = { id: 0, quantity: 0, _token: $('meta[name="csrf-token"]').attr('content')};
     const request = new Request(url, {
-                            method: "GET",
+                            method: "POST",
                             headers: {
                                         'Content-Type': 'application/json;charset=utf-8',
-                                    }
+                                    },
+                            body: JSON.stringify(dataToSend)
                             });
     try {
         const response = await fetch(request);  

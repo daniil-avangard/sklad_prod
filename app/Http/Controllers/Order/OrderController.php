@@ -476,6 +476,7 @@ class OrderController extends Controller
 
     public function excellData() 
     {
+        $this->authorize('update', Order::class);
         return response()->json(['success' => true]);
     }
 
