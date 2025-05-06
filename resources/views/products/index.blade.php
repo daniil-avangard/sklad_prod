@@ -56,12 +56,24 @@
                                 </label>
                             </div>
 
-                            <button id="reset-product-table-button" class="button btn-danger btn-sm p-1 ps-2 pe-2 border-0">
-                                Сбросить
-                            </button>
+                            <div>
+                                <button id="chanel-filter-button"
+                                    class="button btn-primary btn-sm p-1 ps-2 pe-2 border-0">
+                                    Фильтр по каналам распространения
+
+                                    <span class="ms-1">
+                                        <i data-feather='plus-circle' style='color: #fff; width: 14px; height: 14px'></i>
+                                    </span>
+                                </button>
+
+                                <button id="reset-product-table-button"
+                                    class="button btn-danger btn-sm p-1 ps-2 pe-2 border-0">
+                                    Сбросить
+                                </button>
+                            </div>
                         </div>
 
-                        <div class="d-flex columns-2 gap-2 mb-4 ms-0 me-0">
+                        <div id="chanel-filters" class="visually-hidden d-flex columns-2 gap-2 mb-4 ms-0 me-0">
                             <div class="card col-6 mb-0 p-0">
                                 <div class="card-header p-2">
                                     <h4 class="card-title">ККО</h4>

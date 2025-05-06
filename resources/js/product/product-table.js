@@ -132,3 +132,11 @@ filterByCheckbox(table, 'express_hall', 9);
 document.addEventListener('DOMContentLoaded', () => {
     initResetSettings(table);
 });
+
+
+const chanelFilterButton = document.querySelector('#chanel-filter-button');
+const chanelFilters = document.querySelector('#chanel-filters');
+
+chanelFilterButton.addEventListener('click', () => {
+    chanelFilters.classList.toggle('visually-hidden');
+});
