@@ -474,6 +474,10 @@ class OrderController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function excellData() 
+    {
+        return response()->json(['success' => true]);
+    }
 
     // Статуты бля заказаков
     public function statusProcessing(Order $order)

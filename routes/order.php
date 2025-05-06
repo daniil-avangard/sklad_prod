@@ -34,6 +34,11 @@ Route::post('basket/clear', [BasketController::class, 'clear'])->name('basket.cl
 
 Route::post('/basket/saveorder', [BasketController::class, 'saveOrder'])->name('basket.saveorder');
 
+Route::post('/orders/update-quantity', [OrderController::class, 'updateQuantity'])->name('orders.update-quantity');
+Route::post('/orders/excelldata', [OrderController::class, 'excellData'])->name('orders.excell-data');
+Route::post('/orders/update-full-order', [OrderController::class, 'updateFullOrder'])->name('orders.update-full-order');
+Route::post('/orders/update-comment-manager', [OrderController::class, 'updateCommentManager'])->name('orders.update-comment-manager');
+
 Route::get('/orders', [OrderController::class, 'index'])->name('orders');
 Route::get('/ordersNew', [OrderController::class, 'indexNew'])->name('orders.new');
 Route::get('/ordersNewUpdate', [OrderController::class, 'indexNewUpdate'])->name('orders.newupdate');
@@ -41,9 +46,7 @@ Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.sh
 Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
 Route::put('/orders/{order}', [OrderController::class, 'update'])->name('orders.update');
 
-Route::post('/orders/update-quantity', [OrderController::class, 'updateQuantity'])->name('orders.update-quantity');
-Route::post('/orders/update-full-order', [OrderController::class, 'updateFullOrder'])->name('orders.update-full-order');
-Route::post('/orders/update-comment-manager', [OrderController::class, 'updateCommentManager'])->name('orders.update-comment-manager');
+
 
 // Кастыль. Роут на каждый статус заказа, для разгроничения политики доступа
 Route::get('/orders/{order}/status/processing', [OrderController::class, 'statusProcessing'])->name('orders.status.processing');

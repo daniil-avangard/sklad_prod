@@ -8,7 +8,29 @@ class ExcellTable {
     this.editElementsOrders = document.querySelectorAll('.edit-button-excell');
     this.tableThMain = document.getElementById('excel-table').getElementsByTagName("TH")[0];
     
+    this.dataFromApi();
     this.initSettings();
+  }
+  
+  async dataFromApi() {
+    let url = '/orders/excelldata';
+    const request = new Request(url, {
+                            method: "GET",
+                            headers: {
+                                        'Content-Type': 'application/json;charset=utf-8',
+                                    }
+                            });
+    try {
+        const response = await fetch(request);  
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        let res = await response.json();
+        console.log("Проверяем api = ", res);
+    }
+    catch(error) {
+        console.log(error.message);
+    }
   }
   
   initSettings() {
