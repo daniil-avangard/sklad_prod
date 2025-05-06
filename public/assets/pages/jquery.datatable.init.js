@@ -4,6 +4,37 @@
  * Datatables Js
  */
 
+function initResetSettings(table) {
+    const resetProductTableButton = document.querySelector('#reset-product-table-button');
+    const companyFilter = document.querySelector('#companyFilter');
+    const categoryFilter = document.querySelector('#categoryFilter');
+    const kko_operator = document.querySelector('#kko_operator');
+    const express_operator = document.querySelector('#express_operator');
+    const checkboxFilters = document.querySelectorAll('.checkbox-filter');
+
+    function resetProductFilters() {
+        companyFilter.value = 'all';
+        categoryFilter.value = 'all';
+        kko_operator.value = 'all';
+        express_operator.value = 'all';
+
+        checkboxFilters.forEach((checkbox) => {
+            checkbox.value = 1;
+        });
+
+        table.columns().every(function () {
+            this.search('');
+        })
+
+        table.draw();
+    }
+
+    if (resetProductTableButton) {
+        resetProductTableButton.addEventListener('click', resetProductFilters);
+    }
+}
+
+
 function filterColumn(table, number, value) {
     if (value === "all" || value === "") {
         table.column(number).search("", true, false);
@@ -37,6 +68,23 @@ function setupProductTableFilters(table) {
     });
 }
 
+function filterByCheckbox(table, checkboxId, columnIndex) {
+    const checkbox = $(`#${checkboxId}`);
+
+    checkbox.on('change', function () {
+        const isChecked = $(this).is(':checked');
+        console.log(isChecked);
+
+        if (isChecked) {
+            table.column(columnIndex).search('1', true, false);
+        } else {
+            table.column(columnIndex).search('', true, false);
+        }
+        table.draw();
+    });
+}
+
+
 $(document).ready(function () {
     $('#datatable').DataTable();
 
@@ -47,15 +95,15 @@ $(document).ready(function () {
     //Buttons examples
     var table = $('#datatable-buttons').DataTable({
         scrollX: true,
-        lengthChange: false,
+        lengthChange: true,
         // responsive: true,
         language: {
             url: '/assets/lang/datatables_ru.json',
         },
-        dom: "<'row'<'col-sm-6'B><'col-sm-6'f>>" +
-            "<'row'<'col-sm-12'tr>>" +
-            "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-        // dom: 'Bfrtip', // Добавляем эту строку для отображения кнопок
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Все"]],
+        dom: "<'row'<'col-sm-6'B><'col-sm-6'f>>" +      // Верх: кнопки и поиск
+            "<'row'<'col-sm-12'tr>>" +                // Средина: таблица
+            "<'row pt-2'<'col-sm-6'i><'col-sm-3 d-flex align-items-center'l><'col-sm-3'p>>",     // Низ: информация слева, пагинация + "Show entries" справа
         buttons: [
             // 'copy'
             // 'excel',
@@ -81,6 +129,9 @@ $(document).ready(function () {
         }],
     });
 
+
+    
+
     table.buttons().container()
         .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
 
@@ -98,26 +149,13 @@ $(document).ready(function () {
         setupProductTableFilters(table);
     }
 
-    function filterByCheckbox(table, checkboxId, columnIndex) {
-        const checkbox = $(`#${checkboxId}`);
-        checkbox.on('change', function () {
-            const isChecked = $(this).is(':checked');
-            console.log(isChecked);
-
-            if (isChecked) {
-                table.column(columnIndex).search('1', true, false);
-            } else {
-                table.column(columnIndex).search('', true, false);
-            }
-            table.draw();
-        });
-    }
-
     // Привязываем чекбоксы к фильтрам
     filterByCheckbox(table, 'kko_hall', 5);         // колонка 5 — kko_hall
     filterByCheckbox(table, 'kko_account_opening', 6); // колонка 6 — kko_account_opening
     filterByCheckbox(table, 'kko_manager', 7);
     filterByCheckbox(table, 'express_hall', 9);
+
+    initResetSettings(table);
 });
 
 /* Formatting function for row details - modify as you need */
@@ -139,43 +177,3 @@ function format(d) {
         '</table>';
 }
 
-$(document).ready(function () {
-    var table = $('#child_rows').DataTable({
-        // "ajax": "../../plugins/datatables/objects.txt",
-        "data": testdata.data,
-        select: "single",
-        "columns": [
-            {
-                "className": 'details-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
-            },
-            { "data": "name" },
-            { "data": "position" },
-            { "data": "office" },
-            { "data": "salary" }
-        ],
-        "order": [[1, 'asc']]
-    });
-
-    // Add event listener for opening and closing details
-    $('#child_rows tbody').on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = table.row(tr);
-
-        if (row.child.isShown()) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-            // Open this row
-            row.child(format(row.data())).show();
-            tr.addClass('shown');
-        }
-    });
-});
-
-
-module.export = { table }

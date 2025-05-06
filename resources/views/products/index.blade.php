@@ -24,12 +24,14 @@
                 <div class="card-body" style="overflow-x: auto;">
                     <div class="filters mb-4" id="product-table-filters">
                         <div class="d-flex justify-content-between align-middle mb-3">
-                            <div class="">
+                            <div class="d-flex">
                                 <!-- Фильтр по компании -->
-                                <label class="me-4" for="companyFilter">
-                                    Компания:
+                                <label class="d-flex align-items-center me-4" for="companyFilter">
+                                    <span class="me-2">
+                                        Компания:
+                                    </span>
 
-                                    <select name="companyFilter" id="companyFilter">
+                                    <select class="form-select" name="companyFilter" id="companyFilter">
                                         <option value="all" selected>Все</option>
                                         @foreach ($productCompanies as $productCompany)
                                             <option value="{{ $productCompany->name }}">{{ $productCompany->name }}</option>
@@ -38,10 +40,12 @@
                                 </label>
 
                                 <!-- Фильтр по категории -->
-                                <label for="categoryFilter">
-                                    Категория:
+                                <label class="d-flex align-items-center" for="categoryFilter">
+                                    <span class="me-2">
+                                        Категория:
+                                    </span>
 
-                                    <select name="categoryFilter" id="categoryFilter">
+                                    <select class="form-select" name="categoryFilter" id="categoryFilter">
                                         <option value="all" selected>Все</option>
                                         @foreach ($productCategories as $productCategory)
                                             <option value="{{ $productCategory->name }}">{{ $productCategory->name }}
@@ -66,22 +70,24 @@
                                     <div class="row">
                                         <div class="form-group col-6 mb-0">
                                             <div class="checkbox-primary">
-                                                <input class="checkbox-filter" id="kko_hall" type="checkbox" value="1" name="kko_hall">
+                                                <input class="checkbox-filter" id="kko_hall" type="checkbox" value="1"
+                                                    name="kko_hall">
                                                 <label for="kko_hall">
                                                     Оперзал
                                                 </label>
                                             </div>
 
                                             <div class="checkbox-primary">
-                                                <input class="checkbox-filter" id="kko_account_opening" type="checkbox" value="1"
-                                                    name="kko_account_opening">
+                                                <input class="checkbox-filter" id="kko_account_opening" type="checkbox"
+                                                    value="1" name="kko_account_opening">
                                                 <label for="kko_account_opening">
                                                     Открытие счетов
                                                 </label>
                                             </div>
 
                                             <div class="checkbox-primary">
-                                                <input class="checkbox-filter" id="kko_manager" type="checkbox" value="1" name="kko_manager">
+                                                <input class="checkbox-filter" id="kko_manager" type="checkbox"
+                                                    value="1" name="kko_manager">
                                                 <label for="kko_manager">
                                                     Менеджеру
                                                 </label>
@@ -114,7 +120,8 @@
                                     <div class="row">
                                         <div class="form-group col-6 mb-0">
                                             <div class="checkbox-primary">
-                                                <input class="checkbox-filter" id="express_hall" type="checkbox" value="1" name="express_hall">
+                                                <input class="checkbox-filter" id="express_hall" type="checkbox"
+                                                    value="1" name="express_hall">
                                                 <label for="express_hall">
                                                     Оперзал
                                                 </label>
@@ -140,8 +147,9 @@
                         </div>
                     </div>
 
+                    {{-- Таблица --}}
                     <table id="datatable-buttons" class="table table-striped table-bordered nowrap"
-                        style="border-collapse: collapse; border-spacing: 0; width: 100%; padding-bottom: 12px">
+                        style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
                                 <th rowspan="2">Название</th>
