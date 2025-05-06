@@ -25,8 +25,8 @@ class ProductTable {
     init() {
         // Инициализация таблицы
         this.table = $(this.tableSelectorId).DataTable(this.tableConfig);
-        this.table.buttons().container()
-            .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+        // this.table.buttons().container()
+        //     .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
 
         // Слушатели на селекты
         this.#filterBySelect(1, this.companyFilter);

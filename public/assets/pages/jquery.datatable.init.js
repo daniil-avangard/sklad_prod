@@ -32,25 +32,7 @@ $(document).ready(function () {
             // 'pdf',
             'colvis'
         ],
-        columnDefs: [{
-            targets: [5, 6, 7, 8, 9, 10], // столбцы с data-search
-            render: function (data, type, row) {
-                // console.log("Строка:", row);
-
-                if (type === 'filter') {
-                    for (const column in row) {
-                        if (column['@data-search']) {
-                            return column?.['@data-search'] ?? '';
-                            // return column['@data-search'];
-                        }
-                    }
-                }
-
-                return data;
-            }
-        }],
     });
-
 
     table.buttons().container()
         .appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
