@@ -57,8 +57,7 @@
                             </div>
 
                             <div>
-                                <button id="chanel-filter-button"
-                                    class="button btn-primary btn-sm p-1 ps-2 pe-2 border-0">
+                                <button id="chanel-filter-button" class="button btn-primary btn-sm p-1 ps-2 pe-2 border-0">
                                     Фильтр по каналам распространения
 
                                     <span class="ms-1">
@@ -168,12 +167,12 @@
                                 <th rowspan="2">Название</th>
                                 <th rowspan="2">Компания</th>
                                 <th rowspan="2">Категория</th>
-                                @can('update', App\Models\Product::class)
+                                @can('view', \App\Model\Arival::class)
                                     <th rowspan="2">
                                         Количество
                                     </th>
                                 @endcan
-                                @can('update', App\Models\Product::class)
+                                @can('view', \App\Model\Arival::class)
                                     <th rowspan="2">
                                         В резерве
                                     </th>
@@ -217,10 +216,10 @@
                                     </td>
                                     <td>{{ $product->companyName }}</td>
                                     <td>{{ $product->categoryName }}</td>
-                                    @can('update', $product)
+                                    @can('view', \App\Model\Arival::class)
                                         <td>{{ $product->total_quantity }}</td>
                                     @endcan
-                                    @can('update', $product)
+                                    @can('view', \App\Model\Arival::class)
                                         <td>{{ $product->total_reserved }}</td>
                                     @endcan
                                     {{-- ККО --}}
