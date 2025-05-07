@@ -9,12 +9,12 @@ class ExcellTable {
     this.tableThMain = document.getElementById('excel-table').getElementsByTagName("TH")[0];
     
     this.dataFromApi();
-    this.initSettings();
+//    this.initSettings();
   }
   
   async dataFromApi() {
     let url = '/excell';
-    let dataToSend = { id: 0, quantity: 0, _token: $('meta[name="csrf-token"]').attr('content')};
+    let dataToSend = {_token: $('meta[name="csrf-token"]').attr('content')};
     const request = new Request(url, {
                             method: "POST",
                             headers: {
@@ -29,6 +29,10 @@ class ExcellTable {
         }
         let res = await response.json();
         console.log("Проверяем api = ", res);
+        console.log("парсим объект = ", res.uniqGoods[0]);
+        console.log(" еще парсим объект = ", res.uniqGoodsTotalOrdered[res.uniqGoods[0].name]);
+        console.log(" flafForExcell = ", res.flagForExcell);
+        this.initSettings();
     }
     catch(error) {
         console.log(error.message);
