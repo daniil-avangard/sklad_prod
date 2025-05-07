@@ -34,6 +34,7 @@ class ExcellTable {
         console.log(" flafForExcell = ", res.flagForExcell);
         this.flagRoleForExcell = res.flagForExcell == 'show';
         this.allDataForExcell = res.uniqGoods;
+        this.uniqGoodsTotalOrdered = res.uniqGoodsTotalOrdered;
         this.initSettings();
     }
     catch(error) {
@@ -135,7 +136,7 @@ class ExcellTable {
             let deltaItemQuontity = updateItemQuontity - initialItemQuontity;
             let url = '/orders/update-quantity';
             let dataToSend = {id: dataOrigin.dataset.pk, quantity: updateItemQuontity, _token: $('meta[name="csrf-token"]').attr('content')};
-            console.log('dataToSend = ', dataToSend);
+            console.log('dataToSend = ', self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name]);
             const request = new Request(url, {
                                     method: "POST",
                                     headers: {
@@ -144,11 +145,11 @@ class ExcellTable {
                                     body: JSON.stringify(dataToSend)
                                     });
             
-            let compareMinumum1 = this.allDataForExcell[indexCurrentRow].warehouse;
-            let compareMinumum2 = this.allDataForExcell[indexCurrentRow].min_stock;
+            let compareMinumum1 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) : self.allDataForExcell[indexCurrentRow].warehouse - self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name];
+            let compareMinumum2 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 4].innerHTML) : self.allDataForExcell[indexCurrentRow].min_stock;
             console.log('compareMinumum = ', compareMinumum1, compareMinumum2, deltaItemQuontity);
             
-            let compareMinumum = (parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity) >= (parseInt(arrayCurrentTD[arrayCurrentTD.length - 4].innerHTML));
+            let compareMinumum = (compareMinumum1 - deltaItemQuontity) >= (compareMinumum2);
             if (compareMinumum) {
                 try {
                     const response = await fetch(request);  
@@ -163,10 +164,16 @@ class ExcellTable {
                                     title: 'Количество обновлено'
                                 });
                         dataOrigin.innerHTML = updateItemQuontity;
-                        console.log("Проверка кол-ва заказанного = ", arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML, deltaItemQuontity);
-                        arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity;
-                        arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
-                        let compareToMinimumRatio = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) / parseInt(arrayCurrentTD[arrayCurrentTD.length - 4].innerHTML);
+//                        console.log("Проверка кол-ва заказанного = ", arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML, deltaItemQuontity);
+                        if (this.flagRoleForExcell) {
+                            arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity;
+                            arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
+                        } else {
+                            self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
+                            self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
+                        }
+                        
+                        let compareToMinimumRatio = compareMinumum1 / compareMinumum2;
                         if (compareToMinimumRatio > 2) {
                             parentTR.classList.remove("row-color");
                         } else {
