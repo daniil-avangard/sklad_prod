@@ -5,7 +5,7 @@ class ExcellTable {
     this.popUpsChilds = document.querySelectorAll('.order-popup-child-1');
     this.butonChangeOrderAllStatus = document.getElementById('acept-all-orders');
     this.pElementsOrders = document.querySelectorAll('.clickForOrder');
-    this.editElementsOrders = document.querySelectorAll('.edit-button-excell');
+//    this.editElementsOrders = document.querySelectorAll('.edit-button-excell');
     this.tableThMain = document.getElementById('excel-table').getElementsByTagName("TH")[0];
     
     this.dataFromApi();
@@ -32,6 +32,8 @@ class ExcellTable {
         console.log("парсим объект = ", res.uniqGoods[0]);
         console.log(" еще парсим объект = ", res.uniqGoodsTotalOrdered[res.uniqGoods[0].name]);
         console.log(" flafForExcell = ", res.flagForExcell);
+        this.flagRoleForExcell = res.flagForExcell == 'show';
+        this.allDataForExcell = res.uniqGoods;
         this.initSettings();
     }
     catch(error) {
@@ -46,6 +48,7 @@ class ExcellTable {
       console.log(event);
     });
     
+    // Всплывающие поп апы картинок
     Array.from(self.popUps1).forEach((el, index) => {
         const listener = () => {
             console.log("Проверка Doma = ", document.readyState);
@@ -122,6 +125,7 @@ class ExcellTable {
 
         newAccept.onclick = async () => {
             let arrayCurrentTD = parentTR.children;
+            let indexCurrentRow = parentTR.rowIndex - 1;
             newInput.disabled = true;
             newAccept.disabled = true;
             newDanger.disabled = true;
@@ -131,6 +135,7 @@ class ExcellTable {
             let deltaItemQuontity = updateItemQuontity - initialItemQuontity;
             let url = '/orders/update-quantity';
             let dataToSend = {id: dataOrigin.dataset.pk, quantity: updateItemQuontity, _token: $('meta[name="csrf-token"]').attr('content')};
+            console.log('dataToSend = ', dataToSend);
             const request = new Request(url, {
                                     method: "POST",
                                     headers: {
@@ -138,6 +143,11 @@ class ExcellTable {
                                             },
                                     body: JSON.stringify(dataToSend)
                                     });
+            
+            let compareMinumum1 = this.allDataForExcell[indexCurrentRow].warehouse;
+            let compareMinumum2 = this.allDataForExcell[indexCurrentRow].min_stock;
+            console.log('compareMinumum = ', compareMinumum1, compareMinumum2, deltaItemQuontity);
+            
             let compareMinumum = (parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity) >= (parseInt(arrayCurrentTD[arrayCurrentTD.length - 4].innerHTML));
             if (compareMinumum) {
                 try {
@@ -175,6 +185,7 @@ class ExcellTable {
                     console.log(error.message);
                 }
             } else {
+                console.log('dataToSend = ', dataToSend);
                 Toast.fire({
                                     icon: 'error',
                                     title: 'Ошибка при обновлении количества'
@@ -201,11 +212,11 @@ class ExcellTable {
         parentNode.insertBefore(newDanger, parentNode.children[3]);
     }
     
-    Array.from(self.editElementsOrders).forEach((el, index) => {
-        el.onclick = () => {
-            excellCellClickFunction(el.parentNode);
-        }
-    });
+//    Array.from(self.editElementsOrders).forEach((el, index) => {
+//        el.onclick = () => {
+//            excellCellClickFunction(el.parentNode);
+//        }
+//    });
 
     Array.from(self.pElementsOrders).forEach((el, index) => {
         el.onclick = () => {
