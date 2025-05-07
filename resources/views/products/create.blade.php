@@ -125,7 +125,7 @@
                                                             </div>
 
                                                             <div class="form-group mb-3 col-lg-6">
-                                                                <label for="kko_operator">Оперциансту</label>
+                                                                <label for="kko_operator">Операционист</label>
                                                                 <select id="kko_operator" name="kko_operator"
                                                                     class="form-select">
                                                                     @foreach (App\Enum\Products\PointsSale\Operator::cases() as $operator)
@@ -161,7 +161,7 @@
                                                             </div>
 
                                                             <div class="form-group mb-3 col-lg-6">
-                                                                <label for="kko_operator">Оперциансту</label>
+                                                                <label for="kko_operator">Операционист</label>
                                                                 <select id="express_operator" name="express_operator"
                                                                     class="form-select">
                                                                     @foreach (App\Enum\Products\PointsSale\Operator::cases() as $operator)

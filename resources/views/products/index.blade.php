@@ -108,7 +108,7 @@
                                         </div>
 
                                         <div class="form-group col-6 mb-0">
-                                            <label for="kko_operator">Оперциансту</label>
+                                            <label for="kko_operator">Операционист</label>
 
                                             <select id="kko_operator" name="kko_operator" class="form-select">
                                                 <option value="all" selected>Все</option>
@@ -141,7 +141,7 @@
                                         </div>
 
                                         <div class="form-group col-6 mb-0">
-                                            <label for="express_operator">Оперциансту</label>
+                                            <label for="express_operator">Операционист</label>
 
                                             <select id="express_operator" name="express_operator" class="form-select">
                                                 <option value="all" selected>Все</option>
