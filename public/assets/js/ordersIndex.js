@@ -3,11 +3,67 @@ document.addEventListener("DOMContentLoaded", function() {
     let popUpsChilds = document.querySelectorAll('.order-popup-child');
     let selectDivision = document.getElementById('divisiones-names');
     let selectOrderStatus = document.getElementById('status-of-orders');
-//    let tableTrArray = document.getElementById('orders-table').rows;
+    let selectProductOrder = document.getElementById('products-of-orders');
+    let graphicProduct = document.getElementById('grafic-button');
     let tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
     
-    function display(division, status) {
-        Array.from(tableTrArray).forEach(row => row.classList.remove('row-hidden'));
+    function draw(product, dataForGraphic) {
+        let cities = [...dataForGraphic.keys()];
+//        let cities = Array.from(dataForGraphic.keys(), (_, ind) => ind+1);
+//        let values = [...dataForGraphic.values()];
+        let values = Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm));
+        Highcharts.chart('chartContainer', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: product
+            },
+//            subtitle: {
+//                text:
+//                    'Source: <a target="_blank" ' +
+//                    'href="https://www.indexmundi.com/agriculture/?commodity=corn">indexmundi</a>'
+//            },
+            xAxis: {
+                categories: cities,
+                crosshair: true,
+                accessibility: {
+                    description: 'Дивизионы'
+                }
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'штук'
+                }
+            },
+//            tooltip: {
+//                valueSuffix: ' (1000 MT)'
+//            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [
+                {
+                    name: product,
+                    data: values
+                }
+            ]
+        });
+    }
+    
+    function display(division, status, product) {
+        tableTrArray.forEach(row => {
+            row.classList.remove('row-hidden');
+            let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
+            let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
+            Array.from(arrayProductsDivs).forEach((elm, ind) => elm.classList.remove('row-hidden'));
+            Array.from(arrayProductsQuantities).forEach((elm, ind) => elm.classList.remove('row-hidden'));
+        });
+        
         if (division) {
             tableTrArray
                     .filter(row => {
@@ -26,6 +82,34 @@ document.addEventListener("DOMContentLoaded", function() {
                     .forEach(row => row.classList.add('row-hidden'));
             
         }
+        if (product) {
+            tableTrArray
+                    .filter(row => {
+                        let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
+                        let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
+                        let flag = true;
+                        let quontityIndex = 0;
+                        Array.from(arrayProductsDivs).forEach((elm, ind) => {
+                            let valueDiv = elm.getElementsByTagName("P")[0];
+                            console.log(valueDiv);
+                            if (valueDiv.innerHTML.trim() == product) {
+                                flag = false;
+                                quontityIndex = ind;
+                            }
+                        });
+                        if (!flag) {
+                            Array.from(arrayProductsDivs).forEach((elm, ind) => {
+                                let valueDiv = elm.getElementsByTagName("P")[0];
+                                if (valueDiv.innerHTML.trim() != product) elm.classList.add('row-hidden'); 
+                            });
+                            Array.from(arrayProductsQuantities).forEach((elm, ind) => {
+                                if (ind != quontityIndex) elm.classList.add('row-hidden');
+                            });
+                        }
+                        return flag;
+                    })
+                    .forEach(row => row.classList.add('row-hidden'));
+        }
     }
 
     Array.from(popUps).forEach((el, index) => {
@@ -42,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (rect.top < 300) {
                 popUpsChilds[index].classList.remove("order-popup-child");
                 popUpsChilds[index].classList.add("order-popup-child-near-top");
-                console.log("hello rect");
+//                console.log("hello rect");
             } else {
                 popUpsChilds[index].classList.add("order-popup-child");
                 popUpsChilds[index].classList.remove("order-popup-child-near-top");
@@ -57,9 +141,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (selectDivision) {
         selectDivision.onchange = () => {
             if (selectOrderStatus) {
-                display(selectDivision.value, selectOrderStatus.value);
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value);
             } else {
-                display(selectDivision.value, false);
+                display(selectDivision.value, false, selectProductOrder.value);
             }
             
         }
@@ -68,12 +152,50 @@ document.addEventListener("DOMContentLoaded", function() {
     if (selectOrderStatus) {
         selectOrderStatus.onchange = () => {
             if (selectDivision) {
-                display(selectDivision.value, selectOrderStatus.value);
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value);
             } else {
-                display(false, selectOrderStatus.value);
+                display(false, selectOrderStatus.value, selectProductOrder.value);
             }
         }
     }
     
+    if (selectProductOrder) {
+        selectProductOrder.onchange = () => {
+            if (selectDivision) {
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value);
+            } else {
+                display(false, selectOrderStatus.value, selectProductOrder.value);
+            }
+        }
+    }
+    
+    if (graphicProduct) {
+        graphicProduct.onclick = () => {
+            if (selectProductOrder.value != '') {
+                let dataForGraphic = new Map();
+                let product, quantity;
+                tableTrArray.forEach(row => {
+                    if (!(row.classList.contains("row-hidden"))) {
+                        let city = row.cells[0].getElementsByTagName("A")[0].innerHTML.trim();
+
+                        let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
+                        let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
+                        Array.from(arrayProductsDivs).forEach((elm, ind) => {
+                            if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
+                        });
+                        Array.from(arrayProductsQuantities).forEach((elm, ind) => {
+                            if (!(elm.classList.contains("row-hidden"))) quantity = elm.firstElementChild.innerHTML.trim();
+                        });
+                        dataForGraphic.set(city, quantity);
+                    }
+                });
+                console.log(product, dataForGraphic);
+                draw(product, dataForGraphic);
+                document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
+            } else {
+                alert('Выберите продукт');
+            }
+        }
+    }
     
 });
