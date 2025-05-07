@@ -106,7 +106,18 @@ class ProductController extends Controller
                 });
         }
 
-        return view('products.index', compact('products', 'canCreateProduct'));
+        $productCategories = Category::all();
+        $productCompanies = Company::all();
+        
+    //     dd($products->toArray());
+    //     "kko_hall" => true
+    // "kko_account_opening" => false
+    // "kko_manager" => true
+    // "kko_operator" => "no"
+    // "express_hall" => false
+    // "express_operator" => "no"
+
+        return view('products.index', compact('products', 'canCreateProduct', 'productCategories', 'productCompanies'));
     }
 
     public function create()
