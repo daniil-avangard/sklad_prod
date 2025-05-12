@@ -37,7 +37,7 @@
                                 @endif
                             </tr>
                             @foreach ($uniqGoods as $good)
-                                @if (($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) / $good['min_stock'] > 2)
+                                @if (($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) / $good['min_stock'] >= 1)
                                 <tr>
                                 @else
                                 <tr class="row-color">

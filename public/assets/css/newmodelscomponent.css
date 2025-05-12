@@ -678,12 +678,13 @@ tr p {
     font-size: 8px !important;
     position: relative;
     overflow: visible !important;
+    font-size: 7px !important;
 }
 .month-field-legend {
     position: absolute;
     top: 0px !important;
     left: 10px !important;
-    font-size: 12px !important;
+    font-size: 7px !important;
 }
 .month-field input[type='checkbox'] {
     position: absolute;
@@ -708,10 +709,18 @@ tr p {
     cursor: pointer;
     display: block;
     float: left;
+    color: #000000;
     font-weight: normal;
     margin: 1px 0 0 1px;
-    padding: .5rem 0;
+    padding: .2rem 0;
     text-align: center;
     user-select: none;
     width: calc(25% - 1px);
+    font-size: 8px !important;
   }
+.month-field button {
+    height: calc(25% - 1px);
+    font-size: 8px !important;
+    width: 100% !important;
+    margin-top: 3px;
+}
