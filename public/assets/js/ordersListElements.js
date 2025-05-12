@@ -8,8 +8,16 @@ class ExcellTable {
 //    this.editElementsOrders = document.querySelectorAll('.edit-button-excell');
     this.tableThMain = document.getElementById('excel-table').getElementsByTagName("TH")[0];
     
+    this.start();
     this.dataFromApi();
 //    this.initSettings();
+  }
+  
+  start() {
+      this.butonChangeOrderAllStatus.disabled = true;
+      const month = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+      const d = new Date();
+      document.getElementById('month-orders').innerHTML = month[d.getMonth()];
   }
   
   async dataFromApi() {
@@ -35,6 +43,7 @@ class ExcellTable {
         this.flagRoleForExcell = res.flagForExcell == 'show';
         this.allDataForExcell = res.uniqGoods;
         this.uniqGoodsTotalOrdered = res.uniqGoodsTotalOrdered;
+        document.getElementById('date-orders').innerHTML = this.flagRoleForExcell ? "27" : "25";
         this.initSettings();
     }
     catch(error) {

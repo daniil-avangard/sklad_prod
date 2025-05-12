@@ -11,7 +11,7 @@
                 @can('viewOrders', \App\Models\Order::class)
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('orders') }}">
-                            <i class="ti-control-record"></i>Заказы
+                            <i class="ti-control-record"></i>История заказов
                         </a>
                     </li>
                 @endcan

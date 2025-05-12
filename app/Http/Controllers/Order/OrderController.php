@@ -85,8 +85,12 @@ class OrderController extends Controller
 //        $role = Auth::user()->roles()->pluck('id');
         $role = Auth::user()->roles()->pluck('name')->toArray();
 //        dd($role, UserRoleEnum::DIVISION_MANAGER->label(), (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)));
-        $flagForExcell = (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)) ? "notShow" : "show";
-        $flagForExcell = (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role)) ? "show" : "notShow";
+        $flagForExcell = "show";
+        if (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role)) {
+            $flagForExcell = "show";
+        } else {
+            $flagForExcell = (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)) ? "notShow" : "show";
+        }
 //        dd($role1[0]);
 
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
@@ -481,8 +485,12 @@ class OrderController extends Controller
         $currentMonth = date('m');
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
         $role = Auth::user()->roles()->pluck('name')->toArray();
-        $flagForExcell = (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)) ? "notShow" : "show";
-        $flagForExcell = (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role)) ? "show" : "notShow";
+        $flagForExcell = "show";
+        if (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role)) {
+            $flagForExcell = "show";
+        } else {
+            $flagForExcell = (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)) ? "notShow" : "show";
+        }
 
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
