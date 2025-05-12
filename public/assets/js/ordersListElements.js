@@ -57,7 +57,7 @@ class ExcellTable {
       if (this.flagRoleForExcell) {
           this.butonChangeOrderAllStatus.disabled = d.getDate() >=27 ? false : true;
       } else {
-          this.butonChangeOrderAllStatus.disabled = d.getDate() >=12 ? false : true;
+          this.butonChangeOrderAllStatus.disabled = d.getDate() >=25 ? false : true;
       }
   }
   
