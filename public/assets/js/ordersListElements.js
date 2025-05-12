@@ -39,16 +39,26 @@ class ExcellTable {
         console.log("Проверяем api = ", res);
         console.log("парсим объект = ", res.uniqGoods[0]);
         console.log(" еще парсим объект = ", res.uniqGoodsTotalOrdered[res.uniqGoods[0].name]);
-        console.log(" flafForExcell = ", res.flagForExcell);
+        console.log(" flagForExcell = ", res.flagForExcell);
         this.flagRoleForExcell = res.flagForExcell == 'show';
         this.allDataForExcell = res.uniqGoods;
         this.uniqGoodsTotalOrdered = res.uniqGoodsTotalOrdered;
         document.getElementById('date-orders').innerHTML = this.flagRoleForExcell ? "27" : "25";
         this.initSettings();
+        this.checkDateForButton();
     }
     catch(error) {
         console.log(error.message);
     }
+  }
+  
+  checkDateForButton() {
+      const d = new Date();
+      if (this.flagRoleForExcell) {
+          this.butonChangeOrderAllStatus.disabled = d.getDate() >=27 ? false : true;
+      } else {
+          this.butonChangeOrderAllStatus.disabled = d.getDate() >=12 ? false : true;
+      }
   }
   
   initSettings() {
