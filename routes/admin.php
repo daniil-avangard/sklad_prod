@@ -65,13 +65,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
     // Тест
-    Route::get('/test', function(Order $order) {
-        $oldOrders = Order::where('created_at', '<', Carbon::now())->get();
+    // Route::get('/test', function(Order $order) {
+    //     $oldOrders = Order::where('created_at', '<', Carbon::now())->get();
 
-        foreach ($oldOrders as $oldOrder) {
-            $oldOrder->created_at = Carbon::now();
-            $oldOrder->save();
-            echo "Обновил дату у заказа: " . $oldOrder->id . "\r\n";
-        }
-    });
+    //     foreach ($oldOrders as $oldOrder) {
+    //         $oldOrder->created_at = Carbon::now();
+    //         $oldOrder->save();
+    //         echo "Обновил дату у заказа: " . $oldOrder->id;
+    //     }
+    // });
 });

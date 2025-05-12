@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Order;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class MoveOrdersCommand extends Command
 {
@@ -32,9 +33,11 @@ class MoveOrdersCommand extends Command
         foreach ($oldOrders as $oldOrder) {
             $oldOrder->created_at = Carbon::now();
             $oldOrder->save();
-            echo "Обновил дату у заказа: " . $oldOrder->id . "\r\n";
+            // Log::info("Обновил дату у заказа: " . $oldOrder->id . "\r\n");
+            // echo "Обновил дату у заказа: " . $oldOrder->id . "\r\n";
         }
 
-        $this->info("Обновил дату у заказов.");
+        Log::info('Обновил дату у заказов.');
+        // $this->info("Обновил дату у заказов.");
     }
 }
