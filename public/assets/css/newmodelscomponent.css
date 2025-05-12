@@ -673,7 +673,7 @@ tr p {
 .month-field {
     width: 200px;
     height: 80px;
-    border: 0.5px solid #000000; 
+/*    border: 0.5px solid #000000; */
     color: #303e67;
     font-size: 8px !important;
     position: relative;
@@ -698,6 +698,10 @@ tr p {
 }
 .month-field input[type='checkbox']:checked + label{
     background: #337ab7;
+    color: #FFF;
+}
+.month-field input[type='checkbox']:checked:hover + label{
+    background: #87b4de;
     color: #FFF;
 }
 .month-field label {
