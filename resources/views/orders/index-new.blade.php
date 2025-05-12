@@ -19,6 +19,8 @@
     ])
     <div class="row">
         <div class="col-12">
+            <h4 class="page-title-svod-h4">Таблица для утверждения заказов на <span id="month-orders">май</span> месяц</h4>
+            <h6 class="page-title-svod-h6">Заказы необходимо проверить и утвердить в период с <span id="date-orders">25</span> числа и до окончания месяца</h6>
                 <div class="table-container">
 			<table id="excel-table" class="long-table">
                             <tr>
@@ -26,7 +28,7 @@
                                 @foreach ($divisionNames as $divisionName)
                                     <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }}">{{ $divisionName['name'] }}</th>
                                 @endforeach
-                                @if ( $flagForExcell == "show")
+                                @if ($flagForExcell == "show")
                                 <th class="head-bold">Заказано</th>
                                 <th class="head-bold">Минимально<br>допустимый<br>остаток</th>
                                 <th class="head-bold">Тираж<br>для<br>дозаказа</th>
@@ -49,7 +51,7 @@
                                         </div>
                                     </td>
                                     @include('orders.digits-cell')
-                                    @if ( $flagForExcell == "show")
+                                    @if ($flagForExcell == "show")
                                         <td class="another-col">{{ $good['total'] }}</td>
                                         <td class="another-col">{{ $good['min_stock'] }}</td>
                                         <td class="another-col"> - </td>

@@ -85,8 +85,12 @@ class OrderController extends Controller
 //        $role = Auth::user()->roles()->pluck('id');
         $role = Auth::user()->roles()->pluck('name')->toArray();
 //        dd($role, UserRoleEnum::DIVISION_MANAGER->label(), (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)));
-        $flagForExcell = (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)) ? "notShow" : "show";
-//        $flagForExcell = (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role)) ? "show" : "notShow";
+        $flagForExcell = "show";
+        if (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role)) {
+            $flagForExcell = "show";
+        } else {
+            $flagForExcell = (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)) ? "notShow" : "show";
+        }
 //        dd($role1[0]);
 
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
@@ -476,7 +480,58 @@ class OrderController extends Controller
 
     public function excellData() 
     {
-        return response()->json(['success' => true]);
+        $this->authorize('update', Order::class);
+        //
+        $currentMonth = date('m');
+        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+        $role = Auth::user()->roles()->pluck('name')->toArray();
+        $flagForExcell = "show";
+        if (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role)) {
+            $flagForExcell = "show";
+        } else {
+            $flagForExcell = (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)) ? "notShow" : "show";
+        }
+
+        $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
+            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
+        })->get()->sortByDesc('created_at');
+        
+        $currentSessionOrders = [];
+        
+        foreach ($orders as $order) {
+            if ($order->created_at->format('m') == $currentMonth) {
+                    $currentSessionOrders[] = $order;
+            }
+        }
+
+        $absolutelyAllOrders = Order::whereIn('status',[StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get();
+        $uniqGoodsTotalOrdered = array();
+        foreach ($absolutelyAllOrders as $order) {
+            foreach ($order->items as $item) {
+                if (!isset($uniqGoodsTotalOrdered[$item->product->name])) {
+                    $uniqGoodsTotalOrdered[$item->product->name] = $item->quantity;
+                } else {
+                    $uniqGoodsTotalOrdered[$item->product->name] += $item->quantity;
+                }
+            }
+        }
+
+        $allItems = [];
+
+        foreach ($currentSessionOrders as $order) {
+            $allItems[$order->id] = array();
+            foreach ($order->items as $item) {
+                $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity, 'image' => $item->product->image);
+            }
+        }
+
+        $result = $this->forNewTable($divisionGroups, $currentSessionOrders);
+        $uniqGoods = $result[0];
+        $divisionNames = $result[1];
+        $allDivisionsData = $result[2];
+        $allDivisionsDataNew = $result[3];
+        //
+        return response()->json(['success' => true, 'uniqGoods' => $uniqGoods, 'uniqGoodsTotalOrdered' => $uniqGoodsTotalOrdered, 'flagForExcell' => $flagForExcell]);
     }
 
     // Статуты бля заказаков
