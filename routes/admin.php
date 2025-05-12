@@ -7,9 +7,8 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Roles\RolePermissionController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\UserGroupDivisionController;
-
-
-
+use App\Models\Order;
+use Illuminate\Support\Carbon;
 
 Route::middleware(['auth', 'admin'])->group(function () {
 
@@ -63,4 +62,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::put('/permissions/{permission}', [PermissionController::class, 'update'])->name('permissions.update');
     Route::get('/permissions/{permission}', [PermissionController::class, 'show'])->name('permissions.show');
     Route::delete('/permissions/{permission}', [PermissionController::class, 'delete'])->name('permissions.delete');
+
+
+    // Тест
+    Route::get('/test', function(Order $order) {
+        $oldOrders = Order::where('created_at', '<', Carbon::now())->get();
+
+        foreach ($oldOrders as $oldOrder) {
+            $oldOrder->created_at = Carbon::now();
+            $oldOrder->save();
+            echo "Обновил дату у заказа: " . $oldOrder->id . "\r\n";
+        }
+    });
 });
