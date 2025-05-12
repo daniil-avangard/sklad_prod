@@ -5,20 +5,30 @@ class ExcellTable {
     this.popUpsChilds = document.querySelectorAll('.order-popup-child-1');
     this.butonChangeOrderAllStatus = document.getElementById('acept-all-orders');
     this.pElementsOrders = document.querySelectorAll('.clickForOrder');
-    this.editElementsOrders = document.querySelectorAll('.edit-button-excell');
+//    this.editElementsOrders = document.querySelectorAll('.edit-button-excell');
     this.tableThMain = document.getElementById('excel-table').getElementsByTagName("TH")[0];
     
+    this.start();
     this.dataFromApi();
-    this.initSettings();
+//    this.initSettings();
+  }
+  
+  start() {
+      this.butonChangeOrderAllStatus.disabled = true;
+      const month = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+      const d = new Date();
+      document.getElementById('month-orders').innerHTML = month[d.getMonth()];
   }
   
   async dataFromApi() {
-    let url = '/orders/excelldata';
+    let url = '/excell';
+    let dataToSend = {_token: $('meta[name="csrf-token"]').attr('content')};
     const request = new Request(url, {
-                            method: "GET",
+                            method: "POST",
                             headers: {
                                         'Content-Type': 'application/json;charset=utf-8',
-                                    }
+                                    },
+                            body: JSON.stringify(dataToSend)
                             });
     try {
         const response = await fetch(request);  
@@ -27,10 +37,28 @@ class ExcellTable {
         }
         let res = await response.json();
         console.log("Проверяем api = ", res);
+        console.log("парсим объект = ", res.uniqGoods[0]);
+        console.log(" еще парсим объект = ", res.uniqGoodsTotalOrdered[res.uniqGoods[0].name]);
+        console.log(" flagForExcell = ", res.flagForExcell);
+        this.flagRoleForExcell = res.flagForExcell == 'show';
+        this.allDataForExcell = res.uniqGoods;
+        this.uniqGoodsTotalOrdered = res.uniqGoodsTotalOrdered;
+        document.getElementById('date-orders').innerHTML = this.flagRoleForExcell ? "27" : "25";
+        this.initSettings();
+        this.checkDateForButton();
     }
     catch(error) {
         console.log(error.message);
     }
+  }
+  
+  checkDateForButton() {
+      const d = new Date();
+      if (this.flagRoleForExcell) {
+          this.butonChangeOrderAllStatus.disabled = d.getDate() >=27 ? false : true;
+      } else {
+          this.butonChangeOrderAllStatus.disabled = d.getDate() >=25 ? false : true;
+      }
   }
   
   initSettings() {
@@ -40,6 +68,7 @@ class ExcellTable {
       console.log(event);
     });
     
+    // Всплывающие поп апы картинок
     Array.from(self.popUps1).forEach((el, index) => {
         const listener = () => {
             console.log("Проверка Doma = ", document.readyState);
@@ -116,6 +145,7 @@ class ExcellTable {
 
         newAccept.onclick = async () => {
             let arrayCurrentTD = parentTR.children;
+            let indexCurrentRow = parentTR.rowIndex - 1;
             newInput.disabled = true;
             newAccept.disabled = true;
             newDanger.disabled = true;
@@ -125,6 +155,7 @@ class ExcellTable {
             let deltaItemQuontity = updateItemQuontity - initialItemQuontity;
             let url = '/orders/update-quantity';
             let dataToSend = {id: dataOrigin.dataset.pk, quantity: updateItemQuontity, _token: $('meta[name="csrf-token"]').attr('content')};
+            console.log('dataToSend = ', self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name]);
             const request = new Request(url, {
                                     method: "POST",
                                     headers: {
@@ -132,7 +163,12 @@ class ExcellTable {
                                             },
                                     body: JSON.stringify(dataToSend)
                                     });
-            let compareMinumum = (parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity) >= (parseInt(arrayCurrentTD[arrayCurrentTD.length - 4].innerHTML));
+            
+            let compareMinumum1 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) : self.allDataForExcell[indexCurrentRow].warehouse - self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name];
+            let compareMinumum2 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 4].innerHTML) : self.allDataForExcell[indexCurrentRow].min_stock;
+            console.log('compareMinumum = ', compareMinumum1, compareMinumum2, deltaItemQuontity);
+            
+            let compareMinumum = (compareMinumum1 - deltaItemQuontity) >= (compareMinumum2);
             if (compareMinumum) {
                 try {
                     const response = await fetch(request);  
@@ -147,10 +183,16 @@ class ExcellTable {
                                     title: 'Количество обновлено'
                                 });
                         dataOrigin.innerHTML = updateItemQuontity;
-                        console.log("Проверка кол-ва заказанного = ", arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML, deltaItemQuontity);
-                        arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity;
-                        arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
-                        let compareToMinimumRatio = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) / parseInt(arrayCurrentTD[arrayCurrentTD.length - 4].innerHTML);
+//                        console.log("Проверка кол-ва заказанного = ", arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML, deltaItemQuontity);
+                        if (this.flagRoleForExcell) {
+                            arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity;
+                            arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
+                        } else {
+                            self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
+                            self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
+                        }
+                        
+                        let compareToMinimumRatio = compareMinumum1 / compareMinumum2;
                         if (compareToMinimumRatio > 2) {
                             parentTR.classList.remove("row-color");
                         } else {
@@ -169,6 +211,7 @@ class ExcellTable {
                     console.log(error.message);
                 }
             } else {
+                console.log('dataToSend = ', dataToSend);
                 Toast.fire({
                                     icon: 'error',
                                     title: 'Ошибка при обновлении количества'
@@ -195,11 +238,11 @@ class ExcellTable {
         parentNode.insertBefore(newDanger, parentNode.children[3]);
     }
     
-    Array.from(self.editElementsOrders).forEach((el, index) => {
-        el.onclick = () => {
-            excellCellClickFunction(el.parentNode);
-        }
-    });
+//    Array.from(self.editElementsOrders).forEach((el, index) => {
+//        el.onclick = () => {
+//            excellCellClickFunction(el.parentNode);
+//        }
+//    });
 
     Array.from(self.pElementsOrders).forEach((el, index) => {
         el.onclick = () => {
