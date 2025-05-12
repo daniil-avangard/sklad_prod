@@ -670,3 +670,48 @@ tr p {
     margin-bottom: 20px !important;
     text-align: center !important;
 }
+.month-field {
+    width: 200px;
+    height: 80px;
+    border: 0.5px solid #000000; 
+    color: #303e67;
+    font-size: 8px !important;
+    position: relative;
+    overflow: visible !important;
+}
+.month-field-legend {
+    position: absolute;
+    top: 0px !important;
+    left: 10px !important;
+    font-size: 12px !important;
+}
+.month-field input[type='checkbox'] {
+    position: absolute;
+    visibility: hidden;
+}
+.month-field input[type='checkbox']:hover {
+    background: #f2f2f2;
+}
+.month-field label:hover {
+    background: #f2f2f2;
+}
+.month-field input[type='checkbox']:checked + label{
+    background: #337ab7;
+    color: #FFF;
+}
+.month-field label {
+    background: #337ab7;
+    color: #FFF;
+}
+.month-field label {
+    background: #DDD;
+    cursor: pointer;
+    display: block;
+    float: left;
+    font-weight: normal;
+    margin: 1px 0 0 1px;
+    padding: .5rem 0;
+    text-align: center;
+    user-select: none;
+    width: calc(25% - 1px);
+  }

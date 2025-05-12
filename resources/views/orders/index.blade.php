@@ -210,6 +210,19 @@
                         <button id="grafic-button">График</button>
                     </div>
                     @endcan
+                    @can('viewAny', \App\Models\Order::class)
+                    <div class="order-filters">
+                        <fieldset class="month-field">
+                            <legend class="month-field-legend">Месяц:</legend>
+                            <input id="apr2016" value="04" type="checkbox" name="month2016" />
+                            <label form="apr2016">Apr</label>
+                            <input id="may2016" value="05" type="checkbox" name="month2016" />
+                            <label for="may2016">May</label>
+                            <input id="jun2016" value="06" type="checkbox" name="month2016" />
+                            <label for="jun2016">Jun</label>
+                        </fieldset>
+                    </div>
+                    @endcan
                 </div>
                 <table id="orders-table" class="table table-bordered custom-table">
                     <thead>
