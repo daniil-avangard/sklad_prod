@@ -29,15 +29,15 @@ class MoveOrdersCommand extends Command
     public function handle()
     {
         $oldOrders = Order::where('created_at', '<', Carbon::now())->get();
+        $oldOrdersLength = count($oldOrders);
+        $date = Carbon::now();
 
         foreach ($oldOrders as $oldOrder) {
-            $oldOrder->created_at = Carbon::now();
+            $oldOrder->created_at = $date;
             $oldOrder->save();
-            // Log::info("Обновил дату у заказа: " . $oldOrder->id . "\r\n");
             // echo "Обновил дату у заказа: " . $oldOrder->id . "\r\n";
         }
 
-        Log::info('Обновил дату у заказов.');
-        // $this->info("Обновил дату у заказов.");
+        Log::info("Обновил дату для заказов. Месяц: {$date->month}. Кол-во обновленных заказов: {$oldOrdersLength}");
     }
 }
