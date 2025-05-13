@@ -32,18 +32,19 @@ class MoveOrdersCommand extends Command
         $allowedStatusToMove = [
             StatusEnum::NEW,
             StatusEnum::PROCESSING,
-            StatusEnum::MANAGER_PROCESSING
         ];
+
         $oldOrders = Order::where('created_at', '<', Carbon::now())
             ->whereIn('status', $allowedStatusToMove)
             ->get();
+
         $oldOrdersLength = count($oldOrders);
         $date = Carbon::now();
 
         foreach ($oldOrders as $oldOrder) {
             $oldOrder->created_at = $date;
             $oldOrder->save();
-            echo "Обновил дату у заказа: " . $oldOrder->id . "\r\n";
+            // echo "Обновил дату у заказа: " . $oldOrder->id . "\r\n";
         }
 
         Log::info("Обновил дату для заказов. Месяц: {$date->month}. Кол-во обновленных заказов: {$oldOrdersLength}");
