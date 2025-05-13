@@ -40,7 +40,11 @@
                                 @if (($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) / $good['min_stock'] >= 1)
                                 <tr>
                                 @else
-                                <tr class="row-color">
+                                    @if ($flagForExcell == "show")
+                                    <tr class="row-color">
+                                    @else
+                                    <tr>
+                                    @endif
                                 @endif
                                     <td class="first-col-1">
                                         <div class="order-popup-parent">
