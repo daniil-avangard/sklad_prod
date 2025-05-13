@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\Order\StatusEnum;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserPermissionController;
@@ -65,8 +66,16 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
     // Тест
-    // Route::get('/test', function(Order $order) {
-    //     $oldOrders = Order::where('created_at', '<', Carbon::now())->get();
+    // Route::get('/test', function (Order $order) {
+    //     $allowedStatusToMove = [
+    //         StatusEnum::NEW,
+    //         StatusEnum::PROCESSING,
+    //         StatusEnum::MANAGER_PROCESSING
+    //     ];
+    //     $oldOrders = Order::where('created_at', '<', Carbon::now())
+    //         ->whereIn('status', $allowedStatusToMove)
+    //         ->get();
+    //     var_dump(count($oldOrders->toArray()));
 
     //     foreach ($oldOrders as $oldOrder) {
     //         $oldOrder->created_at = Carbon::now();
