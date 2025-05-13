@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         let quontityIndex = 0;
                         Array.from(arrayProductsDivs).forEach((elm, ind) => {
                             let valueDiv = elm.getElementsByTagName("P")[0];
-                            console.log(valueDiv);
+//                            console.log(valueDiv);
                             if (valueDiv.innerHTML.trim() == product) {
                                 flag = false;
                                 quontityIndex = ind;
@@ -114,15 +114,25 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         
         if (checkBox) {
-            if (checkBox.checked) {
+            let arrCheck = Array.from(checkBoxArray).filter(elm => elm.checked).map(elm => elm.value);
+            console.log(arrCheck);
+            if (arrCheck.length > 0) {
                 tableTrArray
                     .filter(row => {
                         let cellValue = row.cells[4].innerHTML.substring(3, 5);
-                        return cellValue != checkBox.value;
+                        return !(arrCheck.includes(cellValue));
                     })
                     .forEach(row => row.classList.add('row-hidden'));
-            
             }
+//            if (checkBox.checked) {
+//                tableTrArray
+//                    .filter(row => {
+//                        let cellValue = row.cells[4].innerHTML.substring(3, 5);
+//                        return cellValue != checkBox.value;
+//                    })
+//                    .forEach(row => row.classList.add('row-hidden'));
+//            
+//            }
         }
     }
 
@@ -176,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (selectProductOrder) {
         selectProductOrder.onchange = () => {
             if (selectDivision) {
-                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value);
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value, true);
             } else {
                 display(false, selectOrderStatus.value, selectProductOrder.value);
             }
