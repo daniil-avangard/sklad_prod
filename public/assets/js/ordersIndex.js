@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", function() {
     let selectOrderStatus = document.getElementById('status-of-orders');
     let selectProductOrder = document.getElementById('products-of-orders');
     let graphicProduct = document.getElementById('grafic-button');
+    let checkBoxBlock = document.getElementById('month-field');
+    let checkBoxArray = checkBoxBlock.querySelectorAll("input[type='checkbox']");
     let tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
     
     function draw(product, dataForGraphic) {
@@ -55,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
     
-    function display(division, status, product) {
+    function display(division, status, product, checkBox) {
         tableTrArray.forEach(row => {
             row.classList.remove('row-hidden');
             let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
@@ -109,6 +111,18 @@ document.addEventListener("DOMContentLoaded", function() {
                         return flag;
                     })
                     .forEach(row => row.classList.add('row-hidden'));
+        }
+        
+        if (checkBox) {
+            if (checkBox.checked) {
+                tableTrArray
+                    .filter(row => {
+                        let cellValue = row.cells[4].innerHTML.substring(3, 5);
+                        return cellValue != checkBox.value;
+                    })
+                    .forEach(row => row.classList.add('row-hidden'));
+            
+            }
         }
     }
 
@@ -167,6 +181,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 display(false, selectOrderStatus.value, selectProductOrder.value);
             }
         }
+    }
+    
+    if (checkBoxBlock) {
+        Array.from(checkBoxArray).forEach((checkBox, ind) => {
+            checkBox.onchange = () => {
+                console.log(checkBox.value);
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value, checkBox);
+            }
+        });
     }
     
     if (graphicProduct) {

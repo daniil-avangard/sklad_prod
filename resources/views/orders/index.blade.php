@@ -212,7 +212,7 @@
                     @endcan
                     @can('viewAny', \App\Models\Order::class)
                     <div class="order-filters">
-                        <fieldset class="month-field">
+                        <fieldset id="month-field" class="month-field">
 <!--                            <legend class="month-field-legend">Месяц:</legend>-->
                             <input id="jan2016" value="01" type="checkbox" name="month2016" />
                             <label for="jan2016">Янв</label>
