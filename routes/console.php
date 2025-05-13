@@ -9,8 +9,5 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote')->hourly();
 
-
 // Переносит неутвержденные заказы в новый месяц
-Schedule::command(MoveOrdersCommand::class)->everyMinute();
-
-// monthly
+Schedule::command(MoveOrdersCommand::class)->monthly();
