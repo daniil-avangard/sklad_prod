@@ -32,7 +32,7 @@
                                 <th class="head-bold">Заказано</th>
                                 <th class="head-bold">Минимально<br>допустимый<br>остаток</th>
                                 <th class="head-bold">Тираж<br>для<br>дозаказа</th>
-                                <th class="head-bold">На складе</th>
+                                <th class="head-bold">Доступно<br>для<br>заказа</th>
                                 <th class="head-bold">Остаток<br>после<br>заказов</th>
                                 @endif
                             </tr>
@@ -55,7 +55,7 @@
                                         <td class="another-col">{{ $good['total'] }}</td>
                                         <td class="another-col">{{ $good['min_stock'] }}</td>
                                         <td class="another-col"> - </td>
-                                        <td class="another-col">{{ $good['warehouse'] }}</td>
+                                        <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] }}</td>
                                         <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] }}</td>
                                     @endif
                                 </tr>

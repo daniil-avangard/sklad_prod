@@ -155,7 +155,7 @@ class ExcellTable {
             let deltaItemQuontity = updateItemQuontity - initialItemQuontity;
             let url = '/orders/update-quantity';
             let dataToSend = {id: dataOrigin.dataset.pk, quantity: updateItemQuontity, _token: $('meta[name="csrf-token"]').attr('content')};
-            console.log('dataToSend = ', self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name]);
+//            console.log('dataToSend = ', self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name]);
             const request = new Request(url, {
                                     method: "POST",
                                     headers: {
