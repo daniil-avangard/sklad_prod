@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Запуск скрипта:
-# deploy_poly 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 true
+# deploy_poly token true
 
 # Параметры
 # $1 = PAT ключ пользователя от GIT
