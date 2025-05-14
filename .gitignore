@@ -19,3 +19,4 @@ yarn-error.log
 /.vscode
 /.osp
 /nbproject/private/
+deploy_poly.sh

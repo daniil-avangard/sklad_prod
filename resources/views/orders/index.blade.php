@@ -191,36 +191,114 @@
                 <div class="block-filters-index">
                     @can('viewAny', \App\Models\Order::class)
                     <div class="order-filters">
-                        <label for="divisions">Город:</label>
-                        <select name='divisions' id='divisiones-names' class="index-top-filters">
-                            <option value="">Все</option>
-                            @foreach ($groupDivisionsNames1 as $divisionName)
-                                <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
-                            @endforeach
-                        </select>
+                        <div class="filters-work-part">
+                            <label for="divisions">Город:</label>
+                            <select name='divisions' id='divisiones-names' class="index-top-filters">
+                                <option value="">Все</option>
+                                @foreach ($groupDivisionsNames1 as $divisionName)
+                                    <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="filters-button-part">
+                            <button class="select-work-buttons">Очистить фильтры</button>
+                        </div>
                     </div>
                     @endcan
                     @can('viewAny', \App\Models\Order::class)
                     <div class="order-filters">
-                        <label for="statusOfOrder">Статус:</label>
-                        <select name='statusOfOrder' id='status-of-orders' class="index-top-filters">
-                            <option value="">Все</option>
-                            @foreach ($allOrdersStatus as $statusOrder)
-                                <option value="{{ $statusOrder['value'] }}">{{ $statusOrder['label'] }}</option>
-                            @endforeach
-                        </select>
+                        <div class="filters-work-part">
+                            <label for="statusOfOrder">Статус:</label>
+                            <select name='statusOfOrder' id='status-of-orders' class="index-top-filters">
+                                <option value="">Все</option>
+                                @foreach ($allOrdersStatus as $statusOrder)
+                                    <option value="{{ $statusOrder['value'] }}">{{ $statusOrder['label'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="filters-button-part">
+                            <button class="select-work-buttons">Очистить фильтры</button>
+                        </div>
                     </div>
                     @endcan
                     @can('viewAny', \App\Models\Order::class)
                     <div class="order-filters">
-                        <label for="productsOfOrders">Товары:</label>
-                        <select name='productsOfOrders' id='products-of-orders' class="index-top-filters">
-                            <option value="">Все</option>
-                            @foreach ($allOrdersProducts as $productOrder)
-                                <option value="{{ $productOrder['name'] }}">{{ $productOrder['name'] }}</option>
-                            @endforeach
-                        </select>
-                        <button id="grafic-button">График</button>
+                        <div class="filters-work-part">
+                            <label for="productsOfOrders">Товары:</label>
+                            <select name='productsOfOrders' id='products-of-orders' class="index-top-filters">
+                                <option value="">Все</option>
+                                @foreach ($allOrdersProducts as $productOrder)
+                                    <option value="{{ $productOrder['name'] }}">{{ $productOrder['name'] }}</option>
+                                @endforeach
+                            </select>
+                            <button id="grafic-button">График</button>
+                        </div>
+                        <div class="filters-button-part">
+                            <button class="select-work-buttons">Очистить фильтры</button>
+                        </div>
+                    </div>
+                    @endcan
+                    @can('viewAny', \App\Models\Order::class)
+                    <div class="order-filters">
+                        <div class="filters-work-part filters-work-part-months">
+                            <fieldset id="month-field" class="month-field">
+                                <div class="month-field-legend">2025</div>
+                                <input id="jan2016" value="012025" type="checkbox" name="month2016" />
+                                <label for="jan2016">Янв</label>
+                                <input id="feb2016" value="022025" type="checkbox" name="month2016" />
+                                <label for="feb2016">Фев</label>
+                                <input id="mar2016" value="032025" type="checkbox" name="month2016" />
+                                <label for="mar2016">Мар</label>
+                                <input id="apr2016" value="042025" type="checkbox" name="month2016" />
+                                <label for="apr2016">Апр</label>
+                                <input id="may2016" value="052025" type="checkbox" name="month2016" />
+                                <label for="may2016">Май</label>
+                                <input id="jun2016" value="062025" type="checkbox" name="month2016" />
+                                <label for="jun2016">Июн</label>
+                                <input id="jul2016" value="072025" type="checkbox" name="month2016" />
+                                <label for="jul2016">Июл</label>
+                                <input id="aug2016" value="082025" type="checkbox" name="month2016" />
+                                <label for="aug2016">Авг</label>
+                                <input id="sep2016" value="092025" type="checkbox" name="month2016" />
+                                <label for="sep2016">Сен</label>
+                                <input id="oct2016" value="102025" type="checkbox" name="month2016" />
+                                <label for="oct2016">Окт</label>
+                                <input id="nov2016" value="112025" type="checkbox" name="month2016" />
+                                <label for="nov2016">Ноя</label>
+                                <input id="dec2016" value="122025" type="checkbox" name="month2016" />
+                                <label for="dec2016">Дек</label>         
+                            </fieldset>
+                            <fieldset class="month-field month-field-fielsets">
+                                <div class="month-field-legend">2024</div>
+                                <input id="jan2024" value="012024" type="checkbox" name="month2016" />
+                                <label for="jan2024">Янв</label>
+                                <input id="feb2024" value="022024" type="checkbox" name="month2016" />
+                                <label for="feb2024">Фев</label>
+                                <input id="mar2024" value="032024" type="checkbox" name="month2016" />
+                                <label for="mar2024">Мар</label>
+                                <input id="apr2024" value="042024" type="checkbox" name="month2016" />
+                                <label for="apr2024">Апр</label>
+                                <input id="may2024" value="052024" type="checkbox" name="month2016" />
+                                <label for="may2024">Май</label>
+                                <input id="jun2024" value="062024" type="checkbox" name="month2016" />
+                                <label for="jun2024">Июн</label>
+                                <input id="jul2024" value="072024" type="checkbox" name="month2016" />
+                                <label for="jul2024">Июл</label>
+                                <input id="aug2024" value="082024" type="checkbox" name="month2016" />
+                                <label for="aug2024">Авг</label>
+                                <input id="sep2024" value="092024" type="checkbox" name="month2016" />
+                                <label for="sep2024">Сен</label>
+                                <input id="oct2024" value="102024" type="checkbox" name="month2016" />
+                                <label for="oct2024">Окт</label>
+                                <input id="nov2024" value="112024" type="checkbox" name="month2016" />
+                                <label for="nov2024">Ноя</label>
+                                <input id="dec2024" value="122024" type="checkbox" name="month2016" />
+                                <label for="dec2024">Дек</label>         
+                            </fieldset>
+                        </div>
+                        <div class="filters-button-part">  
+                            <button id="grafic-months" class="select-work-buttons">График по месяцам</button>
+                        </div>
                     </div>
                     @endcan
                 </div>
