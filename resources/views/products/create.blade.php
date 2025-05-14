@@ -60,7 +60,7 @@
                                                 <div class="form-group mb-3">
                                                     <label for="min_stock">Минимальный остаток</label>
                                                     <input type="number" class="form-control" id="min_stock"
-                                                        name="min_stock" min="10" placeholder="10"
+                                                        name="min_stock" min="0" placeholder="0"
                                                         required
                                                         value="{{ old('min_stock') }}">
                                                 </div>
