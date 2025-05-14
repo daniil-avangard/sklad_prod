@@ -164,8 +164,8 @@ class ExcellTable {
                                     body: JSON.stringify(dataToSend)
                                     });
             
-            let compareMinumum1 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) : self.allDataForExcell[indexCurrentRow].warehouse - self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name];
-            let compareMinumum2 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 4].innerHTML) : self.allDataForExcell[indexCurrentRow].min_stock;
+            let compareMinumum1 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) : self.allDataForExcell[indexCurrentRow].warehouse - self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name];
+            let compareMinumum2 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 2].innerHTML) : self.allDataForExcell[indexCurrentRow].min_stock;
             console.log('compareMinumum = ', compareMinumum1, compareMinumum2, deltaItemQuontity);
             
 //            let compareMinumum = (compareMinumum1 - deltaItemQuontity) >= (compareMinumum2);
@@ -186,7 +186,7 @@ class ExcellTable {
                         dataOrigin.innerHTML = updateItemQuontity;
 //                        console.log("Проверка кол-ва заказанного = ", arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML, deltaItemQuontity);
                         if (this.flagRoleForExcell) {
-                            arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity;
+                            arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) - deltaItemQuontity;
                             arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
                         } else {
                             self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;

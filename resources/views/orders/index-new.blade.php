@@ -29,11 +29,11 @@
                                     <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }}">{{ $divisionName['name'] }}</th>
                                 @endforeach
                                 @if ($flagForExcell == "show")
-                                <th class="head-bold">Заказано</th>
-                                <th class="head-bold">Минимально<br>допустимый<br>остаток</th>
-                                <th class="head-bold">Тираж<br>для<br>дозаказа</th>
+                                <th class="head-bold">Заказано</th>  
                                 <th class="head-bold">Доступно<br>для<br>заказа</th>
                                 <th class="head-bold">Остаток<br>после<br>заказов</th>
+                                <th class="head-bold">Минимально<br>допустимый<br>остаток</th>
+                                <th class="head-bold">Тираж<br>для<br>дозаказа</th>                               
                                 @endif
                             </tr>
                             @foreach ($uniqGoods as $good)
@@ -57,10 +57,10 @@
                                     @include('orders.digits-cell')
                                     @if ($flagForExcell == "show")
                                         <td class="another-col">{{ $good['total'] }}</td>
-                                        <td class="another-col">{{ $good['min_stock'] }}</td>
-                                        <td class="another-col"> - </td>
                                         <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] }}</td>
                                         <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] }}</td>
+                                        <td class="another-col">{{ $good['min_stock'] }}</td>
+                                        <td class="another-col"> - </td>                                       
                                     @endif
                                 </tr>
                             @endforeach
