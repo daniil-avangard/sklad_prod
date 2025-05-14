@@ -670,3 +670,92 @@ tr p {
     margin-bottom: 20px !important;
     text-align: center !important;
 }
+.month-field {
+    width: 200px;
+    height: 100px;
+/*    border: 0.5px solid #000000; */
+    color: #303e67;
+    font-size: 8px !important;
+    position: relative;
+    overflow: visible !important;
+    font-size: 8px !important;
+}
+.month-field-legend {
+    position: relative;
+    top: 0px !important;
+    left: 0px !important;
+    font-size: 13px !important;
+}
+.month-field input[type='checkbox'] {
+    position: absolute;
+    visibility: hidden;
+}
+.month-field input[type='checkbox']:hover {
+    background: #f2f2f2;
+}
+.month-field label:hover {
+    background: #f2f2f2;
+}
+.month-field input[type='checkbox']:checked + label{
+    background: #337ab7;
+    color: #FFF;
+}
+.month-field input[type='checkbox']:checked:hover + label{
+    background: #87b4de;
+    color: #FFF;
+}
+.month-field label {
+    background: #337ab7;
+    color: #FFF;
+}
+.month-field label {
+    background: #DDD;
+    cursor: pointer;
+    display: block;
+    float: left;
+    color: #000000;
+    font-weight: normal;
+    margin: 1px 0 0 1px;
+    padding: .2rem 0;
+    text-align: center;
+    user-select: none;
+    width: calc(25% - 1px);
+    font-size: 8px !important;
+  }
+.month-field button {
+    height: calc(25% - 1px);
+    font-size: 8px !important;
+    width: 100% !important;
+    margin-top: 3px;
+}
+.filters-work-part {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 100px;
+    justify-content: left;
+    margin-bottom: 3px;
+}
+.filters-work-part-months {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.filters-work-part-months::-webkit-scrollbar {
+    background-color: transparent;
+    width: 0px;
+}
+.filters-work-part-months:hover::-webkit-scrollbar {
+    width: 8px;
+}
+.filters-work-part-months:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,.2);
+}
+.filters-button-part {
+    display: flex;
+    height: 15px;
+    width: 100%;
+}
+.select-work-buttons {
+    width: 100% !important;
+    font-size: 7px !important;
+}
