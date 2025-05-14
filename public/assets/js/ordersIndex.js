@@ -165,9 +165,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (selectDivision) {
         selectDivision.onchange = () => {
             if (selectOrderStatus) {
-                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value);
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value, true);
             } else {
-                display(selectDivision.value, false, selectProductOrder.value);
+                display(selectDivision.value, false, selectProductOrder.value, true);
             }
             
         }
@@ -176,9 +176,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (selectOrderStatus) {
         selectOrderStatus.onchange = () => {
             if (selectDivision) {
-                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value);
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value, true);
             } else {
-                display(false, selectOrderStatus.value, selectProductOrder.value);
+                display(false, selectOrderStatus.value, selectProductOrder.value, true);
             }
         }
     }
@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if (selectDivision) {
                 display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value, true);
             } else {
-                display(false, selectOrderStatus.value, selectProductOrder.value);
+                display(false, selectOrderStatus.value, selectProductOrder.value, true);
             }
         }
     }
@@ -196,7 +196,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (checkBoxBlock) {
         Array.from(checkBoxArray).forEach((checkBox, ind) => {
             checkBox.onchange = () => {
-                console.log(checkBox.value);
+//                console.log(checkBox.value);
                 display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value, checkBox);
             }
         });

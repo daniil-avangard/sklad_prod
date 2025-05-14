@@ -728,3 +728,19 @@ tr p {
     width: 100% !important;
     margin-top: 3px;
 }
+.filters-work-part {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 80px;
+    justify-content: left;
+}
+.filters-button-part {
+    display: flex;
+    height: 15px;
+    width: 100%;
+}
+.select-work-buttons {
+    width: 100% !important;
+    font-size: 7px !important;
+}

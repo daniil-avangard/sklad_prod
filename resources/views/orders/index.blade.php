@@ -178,40 +178,56 @@
                 <div class="block-filters-index">
                     @can('viewAny', \App\Models\Order::class)
                     <div class="order-filters">
-                        <label for="divisions">Город:</label>
-                        <select name='divisions' id='divisiones-names' class="index-top-filters">
-                            <option value="">Все</option>
-                            @foreach ($groupDivisionsNames1 as $divisionName)
-                                <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
-                            @endforeach
-                        </select>
+                        <div class="filters-work-part">
+                            <label for="divisions">Город:</label>
+                            <select name='divisions' id='divisiones-names' class="index-top-filters">
+                                <option value="">Все</option>
+                                @foreach ($groupDivisionsNames1 as $divisionName)
+                                    <option value="{{ $divisionName['name'] }}">{{ $divisionName['name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="filters-button-part">
+                            <button class="select-work-buttons">Очистить фильтры</button>
+                        </div>
                     </div>
                     @endcan
                     @can('viewAny', \App\Models\Order::class)
                     <div class="order-filters">
-                        <label for="statusOfOrder">Статус:</label>
-                        <select name='statusOfOrder' id='status-of-orders' class="index-top-filters">
-                            <option value="">Все</option>
-                            @foreach ($allOrdersStatus as $statusOrder)
-                                <option value="{{ $statusOrder['value'] }}">{{ $statusOrder['label'] }}</option>
-                            @endforeach
-                        </select>
+                        <div class="filters-work-part">
+                            <label for="statusOfOrder">Статус:</label>
+                            <select name='statusOfOrder' id='status-of-orders' class="index-top-filters">
+                                <option value="">Все</option>
+                                @foreach ($allOrdersStatus as $statusOrder)
+                                    <option value="{{ $statusOrder['value'] }}">{{ $statusOrder['label'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="filters-button-part">
+                            <button class="select-work-buttons">Очистить фильтры</button>
+                        </div>
                     </div>
                     @endcan
                     @can('viewAny', \App\Models\Order::class)
                     <div class="order-filters">
-                        <label for="productsOfOrders">Товары:</label>
-                        <select name='productsOfOrders' id='products-of-orders' class="index-top-filters">
-                            <option value="">Все</option>
-                            @foreach ($allOrdersProducts as $productOrder)
-                                <option value="{{ $productOrder['name'] }}">{{ $productOrder['name'] }}</option>
-                            @endforeach
-                        </select>
-                        <button id="grafic-button">График</button>
+                        <div class="filters-work-part">
+                            <label for="productsOfOrders">Товары:</label>
+                            <select name='productsOfOrders' id='products-of-orders' class="index-top-filters">
+                                <option value="">Все</option>
+                                @foreach ($allOrdersProducts as $productOrder)
+                                    <option value="{{ $productOrder['name'] }}">{{ $productOrder['name'] }}</option>
+                                @endforeach
+                            </select>
+                            <button id="grafic-button">График</button>
+                        </div>
+                        <div class="filters-button-part">
+                            <button class="select-work-buttons">Очистить фильтры</button>
+                        </div>
                     </div>
                     @endcan
                     @can('viewAny', \App\Models\Order::class)
                     <div class="order-filters">
+                        <div class="filters-work-part">
                         <fieldset id="month-field" class="month-field">
 <!--                            <legend class="month-field-legend">Месяц:</legend>-->
                             <input id="jan2016" value="01" type="checkbox" name="month2016" />
@@ -237,9 +253,12 @@
                             <input id="nov2016" value="11" type="checkbox" name="month2016" />
                             <label for="nov2016">Ноя</label>
                             <input id="dec2016" value="12" type="checkbox" name="month2016" />
-                            <label for="dec2016">Дек</label>
-                            <button id="grafic-months">График по месяцам</button>
+                            <label for="dec2016">Дек</label>         
                         </fieldset>
+                        </div>
+                        <div class="filters-button-part">  
+                            <button id="grafic-months" class="select-work-buttons">График по месяцам</button>
+                        </div>
                     </div>
                     @endcan
                 </div>
