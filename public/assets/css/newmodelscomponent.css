@@ -672,19 +672,19 @@ tr p {
 }
 .month-field {
     width: 200px;
-    height: 80px;
+    height: 100px;
 /*    border: 0.5px solid #000000; */
     color: #303e67;
     font-size: 8px !important;
     position: relative;
     overflow: visible !important;
-    font-size: 7px !important;
+    font-size: 8px !important;
 }
 .month-field-legend {
-    position: absolute;
+    position: relative;
     top: 0px !important;
-    left: 10px !important;
-    font-size: 7px !important;
+    left: 0px !important;
+    font-size: 13px !important;
 }
 .month-field input[type='checkbox'] {
     position: absolute;
@@ -732,8 +732,23 @@ tr p {
     display: flex;
     flex-direction: column;
     width: 200px;
-    height: 80px;
+    height: 100px;
     justify-content: left;
+    margin-bottom: 3px;
+}
+.filters-work-part-months {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.filters-work-part-months::-webkit-scrollbar {
+    background-color: transparent;
+    width: 0px;
+}
+.filters-work-part-months:hover::-webkit-scrollbar {
+    width: 8px;
+}
+.filters-work-part-months:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,.2);
 }
 .filters-button-part {
     display: flex;

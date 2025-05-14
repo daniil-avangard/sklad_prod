@@ -7,6 +7,8 @@ document.addEventListener("DOMContentLoaded", function() {
     let graphicProduct = document.getElementById('grafic-button');
     let checkBoxBlock = document.getElementById('month-field');
     let checkBoxArray = checkBoxBlock.querySelectorAll("input[type='checkbox']");
+    let checkBoxBlock1 = document.querySelectorAll('.month-field-fielsets');
+    let checkBoxArray1 = document.querySelectorAll("input[type='checkbox']");
     let tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
     
     function draw(product, dataForGraphic) {
@@ -114,25 +116,18 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         
         if (checkBox) {
-            let arrCheck = Array.from(checkBoxArray).filter(elm => elm.checked).map(elm => elm.value);
+            let arrCheck = Array.from(checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
             console.log(arrCheck);
             if (arrCheck.length > 0) {
                 tableTrArray
                     .filter(row => {
-                        let cellValue = row.cells[4].innerHTML.substring(3, 5);
-                        return !(arrCheck.includes(cellValue));
+//                        let cellMonth = row.cells[4].innerHTML.substring(3, 5);
+//                        let cellYear = row.cells[4].innerHTML.substring(3, 5);
+                        let valueMonthYear = row.cells[4].innerHTML.substring(3, 5) + row.cells[4].innerHTML.substring(6, 10);
+                        return !(arrCheck.includes(valueMonthYear));
                     })
                     .forEach(row => row.classList.add('row-hidden'));
             }
-//            if (checkBox.checked) {
-//                tableTrArray
-//                    .filter(row => {
-//                        let cellValue = row.cells[4].innerHTML.substring(3, 5);
-//                        return cellValue != checkBox.value;
-//                    })
-//                    .forEach(row => row.classList.add('row-hidden'));
-//            
-//            }
         }
     }
 
@@ -194,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     
     if (checkBoxBlock) {
-        Array.from(checkBoxArray).forEach((checkBox, ind) => {
+        Array.from(checkBoxArray1).forEach((checkBox, ind) => {
             checkBox.onchange = () => {
 //                console.log(checkBox.value);
                 display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value, checkBox);
