@@ -29,18 +29,22 @@
                                     <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }}">{{ $divisionName['name'] }}</th>
                                 @endforeach
                                 @if ($flagForExcell == "show")
-                                <th class="head-bold">Заказано</th>
-                                <th class="head-bold">Минимально<br>допустимый<br>остаток</th>
-                                <th class="head-bold">Тираж<br>для<br>дозаказа</th>
-                                <th class="head-bold">На складе</th>
+                                <th class="head-bold">Заказано</th>  
+                                <th class="head-bold">Доступно<br>для<br>заказа</th>
                                 <th class="head-bold">Остаток<br>после<br>заказов</th>
+                                <th class="head-bold">Минимально<br>допустимый<br>остаток</th>
+                                <th class="head-bold">Тираж<br>для<br>дозаказа</th>                               
                                 @endif
                             </tr>
                             @foreach ($uniqGoods as $good)
-                                @if (($good['warehouse']-$good['total']) / $good['min_stock'] > 2)
+                                @if (($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) / $good['min_stock'] >= 1)
                                 <tr>
                                 @else
-                                <tr class="row-color">
+                                    @if ($flagForExcell == "show")
+                                    <tr class="row-color">
+                                    @else
+                                    <tr>
+                                    @endif
                                 @endif
                                     <td class="first-col-1">
                                         <div class="order-popup-parent">
@@ -53,10 +57,10 @@
                                     @include('orders.digits-cell')
                                     @if ($flagForExcell == "show")
                                         <td class="another-col">{{ $good['total'] }}</td>
-                                        <td class="another-col">{{ $good['min_stock'] }}</td>
-                                        <td class="another-col"> - </td>
-                                        <td class="another-col">{{ $good['warehouse'] }}</td>
+                                        <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] }}</td>
                                         <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] }}</td>
+                                        <td class="another-col">{{ $good['min_stock'] }}</td>
+                                        <td class="another-col"> - </td>                                       
                                     @endif
                                 </tr>
                             @endforeach

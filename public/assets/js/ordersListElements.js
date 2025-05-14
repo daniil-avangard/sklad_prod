@@ -55,9 +55,9 @@ class ExcellTable {
   checkDateForButton() {
       const d = new Date();
       if (this.flagRoleForExcell) {
-          this.butonChangeOrderAllStatus.disabled = d.getDate() >=27 ? false : true;
+          this.butonChangeOrderAllStatus.disabled = d.getDate() >=12 ? false : true;
       } else {
-          this.butonChangeOrderAllStatus.disabled = d.getDate() >=25 ? false : true;
+          this.butonChangeOrderAllStatus.disabled = d.getDate() >=12 ? false : true;
       }
   }
   
@@ -155,7 +155,7 @@ class ExcellTable {
             let deltaItemQuontity = updateItemQuontity - initialItemQuontity;
             let url = '/orders/update-quantity';
             let dataToSend = {id: dataOrigin.dataset.pk, quantity: updateItemQuontity, _token: $('meta[name="csrf-token"]').attr('content')};
-            console.log('dataToSend = ', self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name]);
+//            console.log('dataToSend = ', self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name]);
             const request = new Request(url, {
                                     method: "POST",
                                     headers: {
@@ -164,11 +164,12 @@ class ExcellTable {
                                     body: JSON.stringify(dataToSend)
                                     });
             
-            let compareMinumum1 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) : self.allDataForExcell[indexCurrentRow].warehouse - self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name];
-            let compareMinumum2 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 4].innerHTML) : self.allDataForExcell[indexCurrentRow].min_stock;
+            let compareMinumum1 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) : self.allDataForExcell[indexCurrentRow].warehouse - self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name];
+            let compareMinumum2 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 2].innerHTML) : self.allDataForExcell[indexCurrentRow].min_stock;
             console.log('compareMinumum = ', compareMinumum1, compareMinumum2, deltaItemQuontity);
             
-            let compareMinumum = (compareMinumum1 - deltaItemQuontity) >= (compareMinumum2);
+//            let compareMinumum = (compareMinumum1 - deltaItemQuontity) >= (compareMinumum2);
+            let compareMinumum = self.flagRoleForExcell ? (compareMinumum1 - deltaItemQuontity) >= 0 : true;
             if (compareMinumum) {
                 try {
                     const response = await fetch(request);  
@@ -185,20 +186,25 @@ class ExcellTable {
                         dataOrigin.innerHTML = updateItemQuontity;
 //                        console.log("Проверка кол-ва заказанного = ", arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML, deltaItemQuontity);
                         if (this.flagRoleForExcell) {
-                            arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 1].innerHTML) - deltaItemQuontity;
+                            arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) - deltaItemQuontity;
                             arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
                         } else {
                             self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
                             self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
                         }
                         
-                        let compareToMinimumRatio = compareMinumum1 / compareMinumum2;
-                        if (compareToMinimumRatio > 2) {
-                            parentTR.classList.remove("row-color");
-                        } else {
-                            parentTR.classList.add("row-color");
+                        let compareToMinimumRatio = (compareMinumum1 - deltaItemQuontity) / compareMinumum2;
+//                        console.log("красный ряд = ", compareMinumum1, compareMinumum2, parentTR);
+                        if (self.flagRoleForExcell) {
+                            if (compareToMinimumRatio > 1) {
+                                parentTR.classList.remove("row-color");
+                            } else {
+                                parentTR.classList.add("row-color");
+                            }
                         }
+                        
                     } else {
+                        
                         Toast.fire({
                                     icon: 'error',
                                     title: 'Ошибка при обновлении количества'
@@ -211,10 +217,10 @@ class ExcellTable {
                     console.log(error.message);
                 }
             } else {
-                console.log('dataToSend = ', dataToSend);
+                console.log("проверка = ", compareMinumum1, initialItemQuontity, parentTR);
                 Toast.fire({
                                     icon: 'error',
-                                    title: 'Ошибка при обновлении количества'
+                                    title: `Максимальное количество ${compareMinumum1 + initialItemQuontity}`
                                 });
             }
 

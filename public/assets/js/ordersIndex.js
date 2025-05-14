@@ -5,6 +5,10 @@ document.addEventListener("DOMContentLoaded", function() {
     let selectOrderStatus = document.getElementById('status-of-orders');
     let selectProductOrder = document.getElementById('products-of-orders');
     let graphicProduct = document.getElementById('grafic-button');
+    let checkBoxBlock = document.getElementById('month-field');
+    let checkBoxArray = checkBoxBlock.querySelectorAll("input[type='checkbox']");
+    let checkBoxBlock1 = document.querySelectorAll('.month-field-fielsets');
+    let checkBoxArray1 = document.querySelectorAll("input[type='checkbox']");
     let tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
     
     function draw(product, dataForGraphic) {
@@ -55,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
     
-    function display(division, status, product) {
+    function display(division, status, product, checkBox) {
         tableTrArray.forEach(row => {
             row.classList.remove('row-hidden');
             let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
@@ -91,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         let quontityIndex = 0;
                         Array.from(arrayProductsDivs).forEach((elm, ind) => {
                             let valueDiv = elm.getElementsByTagName("P")[0];
-                            console.log(valueDiv);
+//                            console.log(valueDiv);
                             if (valueDiv.innerHTML.trim() == product) {
                                 flag = false;
                                 quontityIndex = ind;
@@ -109,6 +113,21 @@ document.addEventListener("DOMContentLoaded", function() {
                         return flag;
                     })
                     .forEach(row => row.classList.add('row-hidden'));
+        }
+        
+        if (checkBox) {
+            let arrCheck = Array.from(checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
+            console.log(arrCheck);
+            if (arrCheck.length > 0) {
+                tableTrArray
+                    .filter(row => {
+//                        let cellMonth = row.cells[4].innerHTML.substring(3, 5);
+//                        let cellYear = row.cells[4].innerHTML.substring(3, 5);
+                        let valueMonthYear = row.cells[4].innerHTML.substring(3, 5) + row.cells[4].innerHTML.substring(6, 10);
+                        return !(arrCheck.includes(valueMonthYear));
+                    })
+                    .forEach(row => row.classList.add('row-hidden'));
+            }
         }
     }
 
@@ -141,9 +160,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (selectDivision) {
         selectDivision.onchange = () => {
             if (selectOrderStatus) {
-                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value);
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value, true);
             } else {
-                display(selectDivision.value, false, selectProductOrder.value);
+                display(selectDivision.value, false, selectProductOrder.value, true);
             }
             
         }
@@ -152,9 +171,9 @@ document.addEventListener("DOMContentLoaded", function() {
     if (selectOrderStatus) {
         selectOrderStatus.onchange = () => {
             if (selectDivision) {
-                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value);
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value, true);
             } else {
-                display(false, selectOrderStatus.value, selectProductOrder.value);
+                display(false, selectOrderStatus.value, selectProductOrder.value, true);
             }
         }
     }
@@ -162,11 +181,20 @@ document.addEventListener("DOMContentLoaded", function() {
     if (selectProductOrder) {
         selectProductOrder.onchange = () => {
             if (selectDivision) {
-                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value);
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value, true);
             } else {
-                display(false, selectOrderStatus.value, selectProductOrder.value);
+                display(false, selectOrderStatus.value, selectProductOrder.value, true);
             }
         }
+    }
+    
+    if (checkBoxBlock) {
+        Array.from(checkBoxArray1).forEach((checkBox, ind) => {
+            checkBox.onchange = () => {
+//                console.log(checkBox.value);
+                display(selectDivision.value, selectOrderStatus.value, selectProductOrder.value, checkBox);
+            }
+        });
     }
     
     if (graphicProduct) {
