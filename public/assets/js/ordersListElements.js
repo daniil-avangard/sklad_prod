@@ -193,10 +193,10 @@ class ExcellTable {
                             self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
                         }
                         
-                        let compareToMinimumRatio = (compareMinumum1 - deltaItemQuontity) / compareMinumum2;
+                        let compareToMinimumRatio = (compareMinumum1 - deltaItemQuontity) - compareMinumum2;
 //                        console.log("красный ряд = ", compareMinumum1, compareMinumum2, parentTR);
                         if (self.flagRoleForExcell) {
-                            if (compareToMinimumRatio > 1) {
+                            if (compareToMinimumRatio > 0) {
                                 parentTR.classList.remove("row-color");
                             } else {
                                 parentTR.classList.add("row-color");
