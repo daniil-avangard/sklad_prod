@@ -37,7 +37,7 @@
                                 @endif
                             </tr>
                             @foreach ($uniqGoods as $good)
-                                @if (($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) / $good['min_stock'] >= 1)
+                                @if (($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) - $good['min_stock'] > 0)
                                 <tr>
                                 @else
                                     @if ($flagForExcell == "show")
