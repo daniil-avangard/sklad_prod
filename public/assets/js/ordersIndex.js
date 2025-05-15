@@ -33,6 +33,8 @@ class FilterPage {
         let divisionFilter = getCookie("selectSkladDivision");
         let orderStatusFilter = getCookie("selectSkladOrderStatus");
         let productOrderFilter = getCookie("selectSkladProductOrder");
+        let skladCheckBoxBlockFilter = getCookie("selectSkladCheckBoxBlock");
+        
         if (divisionFilter) {
             this.selectDivision.value = divisionFilter;
             if (this.selectOrderStatus) {
@@ -51,11 +53,21 @@ class FilterPage {
         }
         if (productOrderFilter) {
             this.selectProductOrder.value = productOrderFilter;
-            if (self.selectDivision) {
-                self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+            if (this.selectDivision) {
+                this.display(this.selectDivision.value, this.selectOrderStatus.value, this.selectProductOrder.value, true);
             } else {
-                self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+                this.display(false, this.selectOrderStatus.value, this.selectProductOrder.value, true);
             }
+        }
+        
+        if (skladCheckBoxBlockFilter) {
+            let chekedValueArray = skladCheckBoxBlockFilter.split(",");
+            this.checkBoxArray1.forEach((checkbox, ind) => {
+                if (chekedValueArray.includes(checkbox.value)) {
+                    checkbox.checked = true;
+                }
+            });
+            this.display(this.selectDivision.value, this.selectOrderStatus.value, this.selectProductOrder.value, true);
         }
     }
     
@@ -124,7 +136,8 @@ class FilterPage {
         if (self.checkBoxBlock) {
             Array.from(self.checkBoxArray1).forEach((checkBox, ind) => {
                 checkBox.onchange = () => {
-    //                console.log(checkBox.value);
+                    let arrCheck = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
+                    document.cookie = `selectSkladCheckBoxBlock=${arrCheck.join(",")}`;
                     self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox);
                 }
             });
