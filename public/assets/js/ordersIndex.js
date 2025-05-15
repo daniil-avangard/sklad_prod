@@ -32,6 +32,7 @@ class FilterPage {
         }
         let divisionFilter = getCookie("selectSkladDivision");
         let orderStatusFilter = getCookie("selectSkladOrderStatus");
+        let productOrderFilter = getCookie("selectSkladProductOrder");
         if (divisionFilter) {
             this.selectDivision.value = divisionFilter;
             if (this.selectOrderStatus) {
@@ -48,7 +49,14 @@ class FilterPage {
                     this.display(false, this.selectOrderStatus.value, this.selectProductOrder.value, true);
                 }
         }
-        console.log(divisionFilter);
+        if (productOrderFilter) {
+            this.selectProductOrder.value = productOrderFilter;
+            if (self.selectDivision) {
+                self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+            } else {
+                self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+            }
+        }
     }
     
     initsettings() {
@@ -104,6 +112,7 @@ class FilterPage {
 
         if (self.selectProductOrder) {
             self.selectProductOrder.onchange = () => {
+                document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
                 if (self.selectDivision) {
                     self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
                 } else {
