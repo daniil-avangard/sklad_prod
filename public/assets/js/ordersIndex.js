@@ -34,6 +34,8 @@ class FilterPage {
         let orderStatusFilter = getCookie("selectSkladOrderStatus");
         let productOrderFilter = getCookie("selectSkladProductOrder");
         let skladCheckBoxBlockFilter = getCookie("selectSkladCheckBoxBlock");
+        let userRoleCookie = getCookie("check");
+        console.log("userRoleCookie = ", userRoleCookie);
         
         if (divisionFilter) {
             this.selectDivision.value = divisionFilter;
@@ -69,6 +71,7 @@ class FilterPage {
             });
             this.display(this.selectDivision.value, this.selectOrderStatus.value, this.selectProductOrder.value, true);
         }
+        console.log(document.cookie);
     }
     
     initsettings() {
