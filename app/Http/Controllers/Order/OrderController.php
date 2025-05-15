@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Order;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\User;
@@ -24,12 +25,13 @@ class OrderController extends Controller
     //        $this->middleware('csrf')->only('updateCommentManager');
     //    }
 
-    public function index()
+    public function index(Request $request)
     {
         //dd($_SERVER['HTTP_USER_AGENT']);
-//        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+//        $user_agent = $_SERVER['HTTP_COOKIE'];
+//        $value = $request->cookie('selectSkladDivision');
 //        $browser = get_browser($user_agent, true);
-        //dd($browser);
+//        dd($request);
         $this->authorize('viewOrders', Order::class);
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
