@@ -19,8 +19,6 @@
     @endif
 
     <x-form method="POST" action="{{ route('login.store') }}">
-
-
         <div class="form-group mb-2">
             <label class="form-label" for="email">Почта</label>
             <div class="input-group">
@@ -28,10 +26,6 @@
                     placeholder="Введите ваш email">
             </div>
         </div><!--end form-group-->
-
-        <!-- <h1 class="" style="color: green">
-            ЧТо-то написал Я
-        </h1> -->
 
         <div class="form-group mb-2">
             <label class="form-label" for="userpassword">Пароль</label>
@@ -48,7 +42,7 @@
                     <label class="form-label text-muted" for="customSwitchSuccess">Запомнить меня</label>
                 </div>
             </div><!--end col-->
-            
+
             {{-- <div class="col-sm-6 text-end">
                 <a href="auth-recover-pw.html" class="text-muted font-13"><i class="dripicons-lock"></i> Забыли пароль?</a>
             </div><!--end col--> --}}

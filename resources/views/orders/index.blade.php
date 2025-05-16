@@ -90,21 +90,26 @@
             opacity: .2;
             border: 2px solid #007bff;
         }
+
         .bg-started-war {
             background-color: #0e77ac !important;
         }
+
         .bg-assembled {
             background-color: #0a567c !important;
         }
+
         tr p {
             margin-bottom: 5px !important;
         }
+
         .order-popup-parent {
             position: relative;
             display: block;
             cursor: pointer;
             user-select: none;
         }
+
         .order-popup-child {
             position: absolute;
             visibility: hidden;
@@ -118,6 +123,7 @@
             left: 50%;
             margin-left: -80px;
         }
+
         .order-popup-child-near-top {
             position: absolute;
             visibility: hidden;
@@ -136,9 +142,15 @@
             visibility: visible;
             animation: fadeIn 0.1s;
         }
+
         @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
         .order-filters {
             display: flex;
@@ -172,6 +184,7 @@
         <div class="col-12">
 
             <div class="table-responsive">
+
 <!--                @can('view', \App\Models\Order::class)
                     <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
                 @endcan-->
@@ -289,6 +302,7 @@
                     </div>
                     @endcan
                 </div>
+
                 <table id="orders-table" class="table table-bordered custom-table">
                     <thead>
                         <tr>
@@ -297,8 +311,9 @@
                                     <input type="checkbox" class="js-check-all" />
                                     <div class="control__indicator"></div>
                                 </label>
+                            </th>
                             </th>-->
-<!--                            <th scope="col">ID</th>-->
+<!--                        <th scope="col">ID</th>-->
                             <th scope="col">Подразделение</th>
                             <th scope="col">Товары</th>
                             <th scope="col">Количество</th>
@@ -325,15 +340,17 @@
                                         {{ $order->division->name }}
                                     </a>
                                 </td>
-<!--                                <td>  Было
-                                     $order->division->name 
-                                </td>-->
+                                <!--                                <td>  Было
+                                                 $order->division->name
+                                            </td>-->
                                 <td>
                                     @foreach ($allItems[$order->id] as $item)
                                         <div class="order-popup-parent">
                                             <p>{{ $item['name'] }}</p>
                                             <div class="order-popup-child">
+
                                                 <img src="{{ asset('storage/' . $item['image']) }}" alt="" class=" mx-auto  d-block popup-child-img" height="150">
+
                                             </div>
                                         </div>
                                     @endforeach
