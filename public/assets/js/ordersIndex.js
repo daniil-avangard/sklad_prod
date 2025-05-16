@@ -12,6 +12,8 @@ class FilterPage {
         this.tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
         
         this.initsettings();
+        this.initSettingsPopUpElements();
+        this.initSettingsGraphButton();
         this.initsettingsCleanFilters();
         this.checkFilterCookies();
     }
@@ -100,31 +102,6 @@ class FilterPage {
     initsettings() {
         const self = this;
         
-        Array.from(self.popUps).forEach((el, index) => {
-            const listener = () => {
-                const rect = el.getBoundingClientRect();
-                self.popUpsChilds.forEach((child, ind) => {
-                    if (ind != index) {
-                        if (child.classList.contains("show")) {
-                            child.classList.toggle("show");
-                        }
-                    }  
-                });
-//                console.log(rect.top);
-                if (rect.top < 300) {
-                    self.popUpsChilds[index].classList.remove("order-popup-child");
-                    self.popUpsChilds[index].classList.add("order-popup-child-near-top");
-                } else {
-                    self.popUpsChilds[index].classList.add("order-popup-child");
-                    self.popUpsChilds[index].classList.remove("order-popup-child-near-top");
-                }
-                self.popUpsChilds[index].classList.toggle("show");
-            }
-
-            el.addEventListener("mouseover", listener, false);
-            el.addEventListener("mouseout", listener, false);
-        });
-        
         if (self.selectDivision) {
             self.selectDivision.onchange = () => {
                 document.cookie = `selectSkladDivision=${self.selectDivision.value}`;
@@ -168,7 +145,41 @@ class FilterPage {
                 }
             });
         }
+ 
+    }
+    
+    initSettingsPopUpElements() {
+        const self = this;
+        
+        Array.from(self.popUps).forEach((el, index) => {
+            const listener = () => {
+                const rect = el.getBoundingClientRect();
+                self.popUpsChilds.forEach((child, ind) => {
+                    if (ind != index) {
+                        if (child.classList.contains("show")) {
+                            child.classList.toggle("show");
+                        }
+                    }  
+                });
+//                console.log(rect.top);
+                if (rect.top < 300) {
+                    self.popUpsChilds[index].classList.remove("order-popup-child");
+                    self.popUpsChilds[index].classList.add("order-popup-child-near-top");
+                } else {
+                    self.popUpsChilds[index].classList.add("order-popup-child");
+                    self.popUpsChilds[index].classList.remove("order-popup-child-near-top");
+                }
+                self.popUpsChilds[index].classList.toggle("show");
+            }
 
+            el.addEventListener("mouseover", listener, false);
+            el.addEventListener("mouseout", listener, false);
+        });
+    }
+    
+    initSettingsGraphButton() {
+        const self = this;
+        
         if (self.graphicProduct) {
             self.graphicProduct.onclick = () => {
                 if (self.selectProductOrder.value != '') {
@@ -197,6 +208,7 @@ class FilterPage {
                 }
             }
         }
+        
     }
     
     display(division, status, product, checkBox) {

@@ -762,4 +762,5 @@ tr p {
 .select-work-buttons {
     width: 100% !important;
     font-size: 10px !important;
+    padding: 0 !important;
 }
