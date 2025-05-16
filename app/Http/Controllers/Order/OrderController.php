@@ -39,7 +39,8 @@ class OrderController extends Controller
         $divisionID = Auth::user()->division_id;
         $divisionAllOrders = Order::whereIn('division_id',[$divisionID])->get()->sortByDesc('created_at');
         $role = Auth::user()->roles()->pluck('name')->toArray();
-        Cookie::queue('skladRoleUser', $role[0], 365);
+        $roleCockies = Auth::user()->roles()->pluck('value')->toArray();
+        Cookie::queue('skladRoleUser', $roleCockies[0], time()+3600, null, null, false, false);
 //        dd($role[0]);
         // Собираю названия дивизионов
         $divisionGroupsID1 = Auth::user()->divisionGroups()->pluck('id');
