@@ -232,6 +232,10 @@ tr p {
     margin-left: -80px;
     z-index: 100 !important;
 }
+.popup-child-img {
+    width: 100%;
+    object-fit: contain;
+}
 /*.order-popup-child-near-top {
     position: absolute;
     visibility: hidden;
