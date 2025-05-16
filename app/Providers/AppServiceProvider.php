@@ -29,6 +29,7 @@ use App\Policies\KorobkaPolicy;
 use App\Policies\OldOrderPolicy;
 use App\Policies\OrderPolicy;
 use DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider;
+use Illuminate\Cookie\Middleware\EncryptCookies;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -80,5 +81,6 @@ class AppServiceProvider extends ServiceProvider
                 }
             );
         }
+        EncryptCookies::except('check');
     }
 }

@@ -35,7 +35,7 @@ class FilterPage {
         let productOrderFilter = getCookie("selectSkladProductOrder");
         let skladCheckBoxBlockFilter = getCookie("selectSkladCheckBoxBlock");
         let userRoleCookie = getCookie("check");
-        console.log("userRoleCookie = ", userRoleCookie);
+//        console.log("userRoleCookie = ", userRoleCookie);
         
         if (divisionFilter) {
             this.selectDivision.value = divisionFilter;
