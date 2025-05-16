@@ -8,8 +8,11 @@ class FilterPage {
         this.graphicProduct = document.getElementById('grafic-button');
         this.checkBoxBlock = document.getElementById('month-field');
         this.checkBoxArray1 = document.querySelectorAll("input[type='checkbox']");
+        this.cleanFilters = document.querySelectorAll(".clean-filters");
         this.tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
+        
         this.initsettings();
+        this.initsettingsCleanFilters();
         this.checkFilterCookies();
     }
     
@@ -74,6 +77,22 @@ class FilterPage {
         console.log(document.cookie);
     }
     
+    initsettingsCleanFilters() {
+        const self = this;
+        
+        Array.from(self.cleanFilters).forEach((el, index) => {
+            el.onclick = () => {
+                self.selectDivision.value = "";
+                self.selectOrderStatus.value = "";
+                self.selectProductOrder.value = "";
+                Array.from(self.checkBoxArray1).forEach((elm, ind) => {
+                    elm.checked = false;
+                });
+                self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+            }
+        });
+    }
+    
     initsettings() {
         const self = this;
         
@@ -87,7 +106,7 @@ class FilterPage {
                         }
                     }  
                 });
-                console.log(rect.top);
+//                console.log(rect.top);
                 if (rect.top < 300) {
                     self.popUpsChilds[index].classList.remove("order-popup-child");
                     self.popUpsChilds[index].classList.add("order-popup-child-near-top");
