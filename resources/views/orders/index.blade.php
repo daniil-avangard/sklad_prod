@@ -348,8 +348,9 @@
                                         <div class="order-popup-parent">
                                             <p>{{ $item['name'] }}</p>
                                             <div class="order-popup-child">
-                                                <img src="{{ asset('storage/' . $item['image']) }}" alt=""
-                                                    class=" mx-auto  d-block" height="150">
+
+                                                <img src="{{ asset('storage/' . $item['image']) }}" alt="" class=" mx-auto  d-block popup-child-img" height="150">
+
                                             </div>
                                         </div>
                                     @endforeach

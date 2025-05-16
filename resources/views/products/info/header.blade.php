@@ -6,7 +6,10 @@
                 <div class="row">
                     <div class="col-lg-6 align-self-center" style="overflow: hidden;">
                         <img src="{{ asset('storage/' . $product->image) }}" alt="" class=" mx-auto  d-block"
-                            height="300">
+                            height="300" style="
+                                object-fit: contain;
+                                width: 100%;
+                            ">
                     </div><!--end col-->
                     <div class="col-lg-6 align-self-center">
                         <div class="single-pro-detail">
