@@ -83,11 +83,15 @@ class FilterPage {
         Array.from(self.cleanFilters).forEach((el, index) => {
             el.onclick = () => {
                 self.selectDivision.value = "";
+                document.cookie = `selectSkladDivision=${self.selectDivision.value}`;
                 self.selectOrderStatus.value = "";
+                document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
                 self.selectProductOrder.value = "";
+                document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
                 Array.from(self.checkBoxArray1).forEach((elm, ind) => {
                     elm.checked = false;
                 });
+                document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
                 self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
             }
         });
