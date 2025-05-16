@@ -16,6 +16,7 @@ use App\Models\DivisionGroup;
 use App\Models\Division;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cookie;
 
 class OrderController extends Controller
 {
@@ -25,7 +26,7 @@ class OrderController extends Controller
     //        $this->middleware('csrf')->only('updateCommentManager');
     //    }
 
-    public function index(Request $request)
+    public function index(Request $request, Response $response)
     {
         //dd($_SERVER['HTTP_USER_AGENT']);
 //        $user_agent = $_SERVER['HTTP_COOKIE'];
@@ -38,7 +39,8 @@ class OrderController extends Controller
         $divisionID = Auth::user()->division_id;
         $divisionAllOrders = Order::whereIn('division_id',[$divisionID])->get()->sortByDesc('created_at');
         $role = Auth::user()->roles()->pluck('name')->toArray();
-        //dd($role);
+        Cookie::queue('skladRoleUser', $role[0], 365);
+//        dd($role[0]);
         // Собираю названия дивизионов
         $divisionGroupsID1 = Auth::user()->divisionGroups()->pluck('id');
         $groupDivisionsNames1 = Division::whereIn('id', function ($query) use ($divisionGroupsID1) {
@@ -74,7 +76,7 @@ class OrderController extends Controller
             }
         }
 
-        return view('orders.index', compact('orders', 'allItems', 'groupDivisionsNames1', 'allOrdersStatus', 'allOrdersProducts'));
+        return response(view('orders.index', compact('orders', 'allItems', 'groupDivisionsNames1', 'allOrdersStatus', 'allOrdersProducts')))->cookie('check', 'new', time()+3600, null, null, false, false);
     }
 
     public function indexNew()
