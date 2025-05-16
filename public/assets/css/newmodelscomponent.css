@@ -752,10 +752,10 @@ tr p {
 }
 .filters-button-part {
     display: flex;
-    height: 15px;
+    height: 18px;
     width: 100%;
 }
 .select-work-buttons {
     width: 100% !important;
-    font-size: 7px !important;
+    font-size: 10px !important;
 }

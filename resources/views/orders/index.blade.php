@@ -201,7 +201,7 @@
                             </select>
                         </div>
                         <div class="filters-button-part">
-                            <button class="select-work-buttons">Очистить фильтры</button>
+                            <button class="select-work-buttons clean-filters">Очистить фильтры</button>
                         </div>
                     </div>
                     @endcan
@@ -217,7 +217,7 @@
                             </select>
                         </div>
                         <div class="filters-button-part">
-                            <button class="select-work-buttons">Очистить фильтры</button>
+                            <button class="select-work-buttons clean-filters">Очистить фильтры</button>
                         </div>
                     </div>
                     @endcan
@@ -234,7 +234,7 @@
                             <button id="grafic-button">График</button>
                         </div>
                         <div class="filters-button-part">
-                            <button class="select-work-buttons">Очистить фильтры</button>
+                            <button class="select-work-buttons clean-filters">Очистить фильтры</button>
                         </div>
                     </div>
                     @endcan

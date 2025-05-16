@@ -81,6 +81,7 @@ class AppServiceProvider extends ServiceProvider
                 }
             );
         }
-        EncryptCookies::except('check');
+        EncryptCookies::except(['check', 'skladRoleUser']);
+//        EncryptCookies::except('skladRoleUser');
     }
 }
