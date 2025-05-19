@@ -219,13 +219,14 @@ class FilterPage {
                             let check = val.filter(elm => elm[0] == month);
                             if (check.length == 0) {
                                 let newData = val;
-                                newData.push([month, 10]);
+                                newData.push([month, 0]);
                                 dataForGraphic.set(key, newData);
                             }
                         });
                     });
-                    
-                    console.log(dataForGraphic);
+                    self.draw(product, dataForGraphic, "notsimple");
+                    document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
+//                    console.log(dataForGraphic);
                 } else {
                     alert('Выберите продукт');
                 }
@@ -259,7 +260,7 @@ class FilterPage {
                         }
                     });
 //                    console.log(product, dataForGraphic);
-                    self.draw(product, dataForGraphic);
+                    self.draw(product, dataForGraphic, "simple");
                     document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
                 } else {
                     alert('Выберите продукт');
@@ -341,9 +342,22 @@ class FilterPage {
         
     }
     
-    draw(product, dataForGraphic) {
+    draw(product, dataForGraphic, flag) {
+        let self = this;
         let cities = [...dataForGraphic.keys()];
-        let values = Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm));
+        let values = flag == "simple" ? [{name: product, data: Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm))}] : [];
+        if (flag != "simple") {
+            let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+            arrayMonths.forEach((month, ind) => {
+                let data = [];
+                dataForGraphic.forEach(function(val, key) {
+//                    console.log(val.filter(elm => elm[0] == month)[0][1]);
+                    data.push(parseInt(val.filter(elm => elm[0] == month)[0][1]));
+                });
+                values.push({name: month, data: data});
+            }); 
+        }
+//        console.log(values);
         Highcharts.chart('chartContainer', {
             chart: {
                 type: 'column'
@@ -378,14 +392,10 @@ class FilterPage {
                     borderWidth: 0
                 }
             },
-            series: [
-                {
-                    name: product,
-                    data: values
-                }
-            ]
+            series: values
         });
     }
+    
     
 }
 
