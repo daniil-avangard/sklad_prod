@@ -6,6 +6,7 @@ class FilterPage {
         this.selectOrderStatus = document.getElementById('status-of-orders');
         this.selectProductOrder = document.getElementById('products-of-orders');
         this.graphicProduct = document.getElementById('grafic-button');
+        this.graphicDataProduct = document.getElementById('grafic-months');
         this.checkBoxBlock = document.getElementById('month-field');
         this.checkBoxArray1 = document.querySelectorAll("input[type='checkbox']");
         this.cleanFilters = document.querySelectorAll(".clean-filters");
@@ -14,6 +15,7 @@ class FilterPage {
         this.initsettings();
         this.initSettingsPopUpElements();
         this.initSettingsGraphButton();
+        this.initSettingsDataGraphButton();
         this.initsettingsCleanFilters();
         this.checkFilterCookies();
     }
@@ -175,6 +177,62 @@ class FilterPage {
             el.addEventListener("mouseover", listener, false);
             el.addEventListener("mouseout", listener, false);
         });
+    }
+    
+    initSettingsDataGraphButton() {
+        const self = this;
+        if (self.graphicDataProduct) {
+            self.graphicDataProduct.onclick = () => {
+                let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+                if (self.selectProductOrder.value != '') {
+                    let dataForGraphic = new Map();
+                    let product, quantity;
+                    self.tableTrArray.forEach(row => {
+                        if (!(row.classList.contains("row-hidden"))) {
+                            let city = row.cells[0].getElementsByTagName("A")[0].innerHTML.trim();
+                            
+                            let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
+                            let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
+                            Array.from(arrayProductsDivs).forEach((elm, ind) => {
+                                if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
+                            });
+                            Array.from(arrayProductsQuantities).forEach((elm, ind) => {
+                                if (!(elm.classList.contains("row-hidden"))) quantity = elm.firstElementChild.innerHTML.trim();
+                            });
+                            
+                            let dataMonth = row.cells[4].innerHTML.trim().substring(3, 5);
+                            if (!(dataForGraphic.has(city))) {
+                                dataForGraphic.set(city, [[dataMonth, quantity]]);
+                            } else {
+                                let data = dataForGraphic.get(city).filter(elm => elm[0] == dataMonth);
+                                if (data.length == 0) {
+                                    let newData = dataForGraphic.get(city);
+                                    newData.push([dataMonth, quantity]);
+                                    dataForGraphic.set(city, newData);
+                                }
+
+                            }
+                        }
+                    });
+                    arrayMonths.forEach((month, ind) => {
+                        dataForGraphic.forEach(function(val, key) {
+                            let check = val.filter(elm => elm[0] == month);
+                            if (check.length == 0) {
+                                let newData = val;
+                                newData.push([month, 10]);
+                                dataForGraphic.set(key, newData);
+                            }
+                        });
+                    });
+                    
+                    console.log(dataForGraphic);
+                } else {
+                    alert('Выберите продукт');
+                }
+                
+            }
+        }
+        
     }
     
     initSettingsGraphButton() {
