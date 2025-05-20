@@ -102,7 +102,7 @@
         .order-popup-parent {
             position: relative;
             display: block;
-            cursor: pointer;
+            cursor: default;
             user-select: none;
         }
         .order-popup-child {

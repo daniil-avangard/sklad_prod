@@ -184,7 +184,7 @@ class FilterPage {
         if (self.graphicDataProduct) {
             self.graphicDataProduct.onclick = () => {
                 let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
-                if (self.selectProductOrder.value != '') {
+                if (self.selectProductOrder.value != '' && arrayMonths.length > 0) {
                     let dataForGraphic = new Map();
                     let product, quantity;
                     self.tableTrArray.forEach(row => {
@@ -228,7 +228,12 @@ class FilterPage {
                     document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
 //                    console.log(dataForGraphic);
                 } else {
-                    alert('Выберите продукт');
+                    if (arrayMonths.length == 0) {
+                        alert('Выберите месяца');
+                    } else {
+                        alert('Выберите продукт');
+                    }
+                    
                 }
                 
             }
