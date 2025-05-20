@@ -358,6 +358,6 @@
 @endsection
 
 @push('scripts-plugins')
-    <script src="/assets/js/checkBoxesOrdersList.js"></script>
+<!--    <script src="/assets/js/checkBoxesOrdersList.js"></script>-->
     <script src="/assets/js/ordersIndex.js"></script>
 @endpush
