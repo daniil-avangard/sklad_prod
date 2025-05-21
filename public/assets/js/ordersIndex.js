@@ -452,9 +452,9 @@ class FilterPage {
             plotOptions: {
                 line: {
                     dataLabels: {
-                        enabled: true
+                        enabled: false
                     },
-                    enableMouseTracking: false
+                    enableMouseTracking: true
                 }
             },
             series: values1
