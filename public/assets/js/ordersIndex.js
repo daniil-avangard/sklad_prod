@@ -427,19 +427,28 @@ class FilterPage {
         });
         console.log(values1, monthsForXaxis);
         Highcharts.chart('chartContainer-1', {
+            chart: {
+                type: 'line'
+            },
             title: {
                 text: product
-            },
-            xAxis: {
-                categories: monthsForXaxis
-//                accessibility: {
-//                    rangeDescription: 'Range: 2010 to 2022'
-//                }
             },
             yAxis: {
                 title: {
                     text: 'штук'
+                },
+                labels: {
+                    format: '{value}'
                 }
+            },
+            xAxis: {
+                categories: monthsForXaxis
+//                labels: {
+//                    format: "{value}"
+//                 },
+//                accessibility: {
+//                    description: 'Months of the year'
+//                }
             },
             legend: {
                 layout: 'vertical',
@@ -447,14 +456,28 @@ class FilterPage {
                 verticalAlign: 'middle'
             },
             plotOptions: {
-                series: {
-                    label: {
-                        connectorAllowed: false
+                line: {
+                    dataLabels: {
+                        enabled: true
                     },
-                    pointStart: monthsForXaxis[0]
+                    enableMouseTracking: false
                 }
             },
             series: values1
+//            responsive: {
+//                rules: [{
+//                    condition: {
+//                        maxWidth: 500
+//                    },
+//                    chartOptions: {
+//                        legend: {
+//                            layout: 'horizontal',
+//                            align: 'center',
+//                            verticalAlign: 'bottom'
+//                        }
+//                    }
+//                }]
+//            }
         });
     }
     
