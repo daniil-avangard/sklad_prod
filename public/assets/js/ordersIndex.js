@@ -443,12 +443,6 @@ class FilterPage {
             },
             xAxis: {
                 categories: monthsForXaxis
-//                labels: {
-//                    format: "{value}"
-//                 },
-//                accessibility: {
-//                    description: 'Months of the year'
-//                }
             },
             legend: {
                 layout: 'vertical',
@@ -464,20 +458,6 @@ class FilterPage {
                 }
             },
             series: values1
-//            responsive: {
-//                rules: [{
-//                    condition: {
-//                        maxWidth: 500
-//                    },
-//                    chartOptions: {
-//                        legend: {
-//                            layout: 'horizontal',
-//                            align: 'center',
-//                            verticalAlign: 'bottom'
-//                        }
-//                    }
-//                }]
-//            }
         });
     }
     
