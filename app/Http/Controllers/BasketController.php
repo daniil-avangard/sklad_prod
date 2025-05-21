@@ -133,7 +133,8 @@ class BasketController extends Controller
         $basket->products()->detach(); // Удаляет записи из таблицы product_basket
 
 
-        return redirect()->to(route('user.order', $newComposerOrder))->with('success', 'Заказ сохранен');
+//        return redirect()->to(route('user.order', $newComposerOrder))->with('success', 'Заказ сохранен');
+        return redirect()->to(route('orders'))->with('success', 'Заказ сохранен');
     }
     
     // Создание одного нового единоно заказа 

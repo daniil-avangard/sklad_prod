@@ -7,6 +7,7 @@ use App\Http\Controllers\BasketController;
 use App\Http\Controllers\Order\OrderController;
 
 
+Route::middleware('auth', 'admin')->group(function () {
 
 Route::get('/product/list', [ProductListController::class, 'index'])->name('products.list');
 Route::get('/product/list/{product}', [ProductListController::class, 'show'])->name('products.info');
@@ -39,8 +40,10 @@ Route::post('/orders/excelldata', [OrderController::class, 'excellData'])->name(
 Route::post('/orders/update-full-order', [OrderController::class, 'updateFullOrder'])->name('orders.update-full-order');
 Route::post('/orders/update-comment-manager', [OrderController::class, 'updateCommentManager'])->name('orders.update-comment-manager');
 
-Route::get('/orders', [OrderController::class, 'index'])->name('orders');
-Route::get('/ordersNew', [OrderController::class, 'indexNew'])->name('orders.new');
+
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+    Route::get('/ordersNew', [OrderController::class, 'indexNew'])->name('orders.new');
+
 Route::get('/ordersNewUpdate', [OrderController::class, 'indexNewUpdate'])->name('orders.newupdate');
 Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
 Route::get('/orders/{order}/edit', [OrderController::class, 'edit'])->name('orders.edit');
@@ -62,3 +65,5 @@ Route::post('/orders/selected', [OrderController::class, 'selected'])->name('ord
 
 // Груз доставлен
 Route::post('/orders/shipped', [OrderController::class, 'shipped'])->name('orders.shipped');
+
+});

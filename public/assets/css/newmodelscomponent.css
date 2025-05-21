@@ -213,7 +213,7 @@ tr p {
 .order-popup-parent {
     position: relative;
     display: block;
-    cursor: pointer;
+    cursor: default;
 /*    user-select: none;*/
     overflow: visible !important;
     height: 100% !important;
@@ -762,4 +762,5 @@ tr p {
 .select-work-buttons {
     width: 100% !important;
     font-size: 10px !important;
+    padding: 0 !important;
 }
