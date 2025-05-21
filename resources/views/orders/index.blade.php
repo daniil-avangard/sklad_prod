@@ -352,6 +352,7 @@
                     </tbody>
                 </table>
                 <div id="chartContainer" class="highChart"></div>
+                <div id="chartContainer-1" class="highChart"></div>
             </div>
         </div>
     </div>

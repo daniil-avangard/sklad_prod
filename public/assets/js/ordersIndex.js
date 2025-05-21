@@ -225,6 +225,7 @@ class FilterPage {
                         });
                     });
                     self.draw(product, dataForGraphic, "notsimple");
+                    self.draw1(product, dataForGraphic, "notsimple");
                     document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
 //                    console.log(dataForGraphic);
                 } else {
@@ -362,7 +363,7 @@ class FilterPage {
                 values.push({name: month, data: data});
             }); 
         }
-//        console.log(values);
+        console.log(values);
         Highcharts.chart('chartContainer', {
             chart: {
                 type: 'column'
@@ -401,6 +402,61 @@ class FilterPage {
         });
     }
     
+    draw1(product, dataForGraphic, flag) {
+        let self = this;
+        let cities = [...dataForGraphic.keys()];
+        let monthsForXaxis;
+        let values = flag == "simple" ? [{name: product, data: Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm))}] : [];
+        if (flag != "simple") {
+            let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+            monthsForXaxis = arrayMonths;
+            arrayMonths.forEach((month, ind) => {
+                let data = [];
+                dataForGraphic.forEach(function(val, key) {
+//                    console.log(val.filter(elm => elm[0] == month)[0][1]);
+                    data.push(parseInt(val.filter(elm => elm[0] == month)[0][1]));
+                });
+                values.push({name: month, data: data});
+            }); 
+        }
+        let values1 = [];
+        dataForGraphic.forEach(function(val, key) {
+            val.sort(function(a, b){return a[0] - b[0]});
+            let data = val.map(x => parseInt(x[1]));
+            values1.push({name: key, data: data});
+        });
+        console.log(values1, monthsForXaxis);
+        Highcharts.chart('chartContainer-1', {
+            title: {
+                text: product
+            },
+            xAxis: {
+                categories: monthsForXaxis
+//                accessibility: {
+//                    rangeDescription: 'Range: 2010 to 2022'
+//                }
+            },
+            yAxis: {
+                title: {
+                    text: 'штук'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: monthsForXaxis[0]
+                }
+            },
+            series: values1
+        });
+    }
     
 }
 
