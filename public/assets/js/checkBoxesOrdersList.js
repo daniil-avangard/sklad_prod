@@ -15,7 +15,7 @@ $(function() {
         }
 
     });
-
+    // проверка чек-листов
     $('th[scope="row"] input[type="checkbox"]').on('click', function() {
         if ($(this).closest('tr').hasClass('active')) {
             $(this).closest('tr').removeClass('active');
