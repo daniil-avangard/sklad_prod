@@ -6,12 +6,16 @@ class FilterPage {
         this.selectOrderStatus = document.getElementById('status-of-orders');
         this.selectProductOrder = document.getElementById('products-of-orders');
         this.graphicProduct = document.getElementById('grafic-button');
+        this.graphicDataProduct = document.getElementById('grafic-months');
         this.checkBoxBlock = document.getElementById('month-field');
         this.checkBoxArray1 = document.querySelectorAll("input[type='checkbox']");
         this.cleanFilters = document.querySelectorAll(".clean-filters");
         this.tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
         
         this.initsettings();
+        this.initSettingsPopUpElements();
+        this.initSettingsGraphButton();
+        this.initSettingsDataGraphButton();
         this.initsettingsCleanFilters();
         this.checkFilterCookies();
     }
@@ -100,31 +104,6 @@ class FilterPage {
     initsettings() {
         const self = this;
         
-        Array.from(self.popUps).forEach((el, index) => {
-            const listener = () => {
-                const rect = el.getBoundingClientRect();
-                self.popUpsChilds.forEach((child, ind) => {
-                    if (ind != index) {
-                        if (child.classList.contains("show")) {
-                            child.classList.toggle("show");
-                        }
-                    }  
-                });
-//                console.log(rect.top);
-                if (rect.top < 300) {
-                    self.popUpsChilds[index].classList.remove("order-popup-child");
-                    self.popUpsChilds[index].classList.add("order-popup-child-near-top");
-                } else {
-                    self.popUpsChilds[index].classList.add("order-popup-child");
-                    self.popUpsChilds[index].classList.remove("order-popup-child-near-top");
-                }
-                self.popUpsChilds[index].classList.toggle("show");
-            }
-
-            el.addEventListener("mouseover", listener, false);
-            el.addEventListener("mouseout", listener, false);
-        });
-        
         if (self.selectDivision) {
             self.selectDivision.onchange = () => {
                 document.cookie = `selectSkladDivision=${self.selectDivision.value}`;
@@ -168,7 +147,104 @@ class FilterPage {
                 }
             });
         }
+ 
+    }
+    
+    initSettingsPopUpElements() {
+        const self = this;
+        
+        Array.from(self.popUps).forEach((el, index) => {
+            const listener = () => {
+                const rect = el.getBoundingClientRect();
+                self.popUpsChilds.forEach((child, ind) => {
+                    if (ind != index) {
+                        if (child.classList.contains("show")) {
+                            child.classList.toggle("show");
+                        }
+                    }  
+                });
+//                console.log(rect.top);
+                if (rect.top < 300) {
+                    self.popUpsChilds[index].classList.remove("order-popup-child");
+                    self.popUpsChilds[index].classList.add("order-popup-child-near-top");
+                } else {
+                    self.popUpsChilds[index].classList.add("order-popup-child");
+                    self.popUpsChilds[index].classList.remove("order-popup-child-near-top");
+                }
+                self.popUpsChilds[index].classList.toggle("show");
+            }
 
+            el.addEventListener("mouseover", listener, false);
+            el.addEventListener("mouseout", listener, false);
+        });
+    }
+    
+    initSettingsDataGraphButton() {
+        const self = this;
+        if (self.graphicDataProduct) {
+            self.graphicDataProduct.onclick = () => {
+                let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+                if (self.selectProductOrder.value != '' && arrayMonths.length > 0) {
+                    let dataForGraphic = new Map();
+                    let product, quantity;
+                    self.tableTrArray.forEach(row => {
+                        if (!(row.classList.contains("row-hidden"))) {
+                            let city = row.cells[0].getElementsByTagName("A")[0].innerHTML.trim();
+                            
+                            let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
+                            let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
+                            Array.from(arrayProductsDivs).forEach((elm, ind) => {
+                                if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
+                            });
+                            Array.from(arrayProductsQuantities).forEach((elm, ind) => {
+                                if (!(elm.classList.contains("row-hidden"))) quantity = elm.firstElementChild.innerHTML.trim();
+                            });
+                            
+                            let dataMonth = row.cells[4].innerHTML.trim().substring(3, 5);
+                            if (!(dataForGraphic.has(city))) {
+                                dataForGraphic.set(city, [[dataMonth, quantity]]);
+                            } else {
+                                let data = dataForGraphic.get(city).filter(elm => elm[0] == dataMonth);
+                                if (data.length == 0) {
+                                    let newData = dataForGraphic.get(city);
+                                    newData.push([dataMonth, quantity]);
+                                    dataForGraphic.set(city, newData);
+                                }
+
+                            }
+                        }
+                    });
+                    arrayMonths.forEach((month, ind) => {
+                        dataForGraphic.forEach(function(val, key) {
+                            let check = val.filter(elm => elm[0] == month);
+                            if (check.length == 0) {
+                                let newData = val;
+                                newData.push([month, 0]);
+                                dataForGraphic.set(key, newData);
+                            }
+                        });
+                    });
+                    self.draw(product, dataForGraphic, "notsimple");
+                    self.draw1(product, dataForGraphic, "notsimple");
+                    document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
+//                    console.log(dataForGraphic);
+                } else {
+                    if (arrayMonths.length == 0) {
+                        alert('Выберите месяца');
+                    } else {
+                        alert('Выберите продукт');
+                    }
+                    
+                }
+                
+            }
+        }
+        
+    }
+    
+    initSettingsGraphButton() {
+        const self = this;
+        
         if (self.graphicProduct) {
             self.graphicProduct.onclick = () => {
                 if (self.selectProductOrder.value != '') {
@@ -190,13 +266,14 @@ class FilterPage {
                         }
                     });
 //                    console.log(product, dataForGraphic);
-                    self.draw(product, dataForGraphic);
+                    self.draw(product, dataForGraphic, "simple");
                     document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
                 } else {
                     alert('Выберите продукт');
                 }
             }
         }
+        
     }
     
     display(division, status, product, checkBox) {
@@ -271,9 +348,22 @@ class FilterPage {
         
     }
     
-    draw(product, dataForGraphic) {
+    draw(product, dataForGraphic, flag) {
+        let self = this;
         let cities = [...dataForGraphic.keys()];
-        let values = Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm));
+        let values = flag == "simple" ? [{name: product, data: Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm))}] : [];
+        if (flag != "simple") {
+            let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+            arrayMonths.forEach((month, ind) => {
+                let data = [];
+                dataForGraphic.forEach(function(val, key) {
+//                    console.log(val.filter(elm => elm[0] == month)[0][1]);
+                    data.push(parseInt(val.filter(elm => elm[0] == month)[0][1]));
+                });
+                values.push({name: month, data: data});
+            }); 
+        }
+        console.log(values);
         Highcharts.chart('chartContainer', {
             chart: {
                 type: 'column'
@@ -308,12 +398,66 @@ class FilterPage {
                     borderWidth: 0
                 }
             },
-            series: [
-                {
-                    name: product,
-                    data: values
+            series: values
+        });
+    }
+    
+    draw1(product, dataForGraphic, flag) {
+        let self = this;
+        let cities = [...dataForGraphic.keys()];
+        let monthsForXaxis;
+        let values = flag == "simple" ? [{name: product, data: Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm))}] : [];
+        if (flag != "simple") {
+            let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+            monthsForXaxis = arrayMonths;
+            arrayMonths.forEach((month, ind) => {
+                let data = [];
+                dataForGraphic.forEach(function(val, key) {
+//                    console.log(val.filter(elm => elm[0] == month)[0][1]);
+                    data.push(parseInt(val.filter(elm => elm[0] == month)[0][1]));
+                });
+                values.push({name: month, data: data});
+            }); 
+        }
+        let values1 = [];
+        dataForGraphic.forEach(function(val, key) {
+            val.sort(function(a, b){return a[0] - b[0]});
+            let data = val.map(x => parseInt(x[1]));
+            values1.push({name: key, data: data});
+        });
+        console.log(values1, monthsForXaxis);
+        Highcharts.chart('chartContainer-1', {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: product
+            },
+            yAxis: {
+                title: {
+                    text: 'штук'
+                },
+                labels: {
+                    format: '{value}'
                 }
-            ]
+            },
+            xAxis: {
+                categories: monthsForXaxis
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: false
+                    },
+                    enableMouseTracking: true
+                }
+            },
+            series: values1
         });
     }
     

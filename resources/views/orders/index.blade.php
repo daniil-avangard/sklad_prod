@@ -5,7 +5,8 @@
 
 @push('scripts-plugins')
     <script src="https://code.highcharts.com/highcharts.js"></script>
-<!--    <script src="https://code.highcharts.com/stock/modules/stock.js"></script>-->
+    <script src="https://code.highcharts.com/stock/modules/stock.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
@@ -106,7 +107,7 @@
         .order-popup-parent {
             position: relative;
             display: block;
-            cursor: pointer;
+            cursor: default;
             user-select: none;
         }
 
@@ -369,12 +370,13 @@
                     </tbody>
                 </table>
                 <div id="chartContainer" class="highChart"></div>
+                <div id="chartContainer-1" class="highChart"></div>
             </div>
         </div>
     </div>
 @endsection
 
 @push('scripts-plugins')
-    <script src="/assets/js/checkBoxesOrdersList.js"></script>
+<!--    <script src="/assets/js/checkBoxesOrdersList.js"></script>-->
     <script src="/assets/js/ordersIndex.js"></script>
 @endpush
