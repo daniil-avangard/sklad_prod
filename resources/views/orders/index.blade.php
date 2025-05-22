@@ -222,7 +222,7 @@
                             <button id="grafic-button">График</button>
                         </div>
                         <div class="filters-button-part">
-                            <button class="select-work-buttons clean-filters">Очистить фильтры</button>
+                            <button id="clean-months" class="select-work-buttons">Очистить месяца</button>
                         </div>
                     </div>
                     @endcan

@@ -11,6 +11,7 @@ class FilterPage {
         this.checkBoxArray1 = document.querySelectorAll("input[type='checkbox']");
         this.cleanFilters = document.querySelectorAll(".clean-filters");
         this.tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
+        this.monthDetails = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
         
         this.initsettings();
         this.initSettingsPopUpElements();
@@ -183,7 +184,8 @@ class FilterPage {
         const self = this;
         if (self.graphicDataProduct) {
             self.graphicDataProduct.onclick = () => {
-                let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+//                let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+                let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
                 if (self.selectProductOrder.value != '' && arrayMonths.length > 0) {
                     let dataForGraphic = new Map();
                     let product, quantity;
@@ -200,7 +202,7 @@ class FilterPage {
                                 if (!(elm.classList.contains("row-hidden"))) quantity = elm.firstElementChild.innerHTML.trim();
                             });
                             
-                            let dataMonth = row.cells[4].innerHTML.trim().substring(3, 5);
+                            let dataMonth = row.cells[4].innerHTML.trim().substring(3, 5) + row.cells[4].innerHTML.trim().substring(6, 10);
                             if (!(dataForGraphic.has(city))) {
                                 dataForGraphic.set(city, [[dataMonth, quantity]]);
                             } else {
@@ -353,17 +355,27 @@ class FilterPage {
         let cities = [...dataForGraphic.keys()];
         let values = flag == "simple" ? [{name: product, data: Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm))}] : [];
         if (flag != "simple") {
-            let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+//            let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+            let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
+            arrayMonths.sort(function(a, b){
+                let aDate = new Date(a.substring(3, 7),parseInt(a.substring(0, 2))-1,1);
+                let bDate = new Date(b.substring(3, 7),parseInt(b.substring(0, 2))-1,1);
+                return aDate - bDate;
+            });
             arrayMonths.forEach((month, ind) => {
                 let data = [];
                 dataForGraphic.forEach(function(val, key) {
-//                    console.log(val.filter(elm => elm[0] == month)[0][1]);
+//                    val.sort(function(a, b){
+//                        let aDate = new Date(a[0].substring(3, 7),parseInt(a[0].substring(0, 2))-1,1);
+//                        let bDate = new Date(b[0].substring(3, 7),parseInt(b[0].substring(0, 2))-1,1);
+//                        return aDate - bDate;
+//                    });
                     data.push(parseInt(val.filter(elm => elm[0] == month)[0][1]));
                 });
-                values.push({name: month, data: data});
+                values.push({name: self.monthDetails[parseInt(month.substring(0, 2))-1], data: data});
             }); 
         }
-        console.log(values);
+//        console.log(values);
         Highcharts.chart('chartContainer', {
             chart: {
                 type: 'column'
@@ -403,25 +415,25 @@ class FilterPage {
     }
     
     draw1(product, dataForGraphic, flag) {
+        console.log(dataForGraphic);
         let self = this;
         let cities = [...dataForGraphic.keys()];
-        let monthsForXaxis;
-        let values = flag == "simple" ? [{name: product, data: Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm))}] : [];
-        if (flag != "simple") {
-            let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
-            monthsForXaxis = arrayMonths;
-            arrayMonths.forEach((month, ind) => {
-                let data = [];
-                dataForGraphic.forEach(function(val, key) {
-//                    console.log(val.filter(elm => elm[0] == month)[0][1]);
-                    data.push(parseInt(val.filter(elm => elm[0] == month)[0][1]));
-                });
-                values.push({name: month, data: data});
-            }); 
-        }
+        let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
+        arrayMonths.sort(function(a, b){
+                let aDate = new Date(a.substring(3, 7),parseInt(a.substring(0, 2))-1,1);
+                let bDate = new Date(b.substring(3, 7),parseInt(b.substring(0, 2))-1,1);
+                return aDate - bDate;
+            });
+        let monthsForXaxis = arrayMonths.map(month => this.monthDetails[parseInt(month.substring(0, 2))-1]);
+        console.log(arrayMonths);
         let values1 = [];
         dataForGraphic.forEach(function(val, key) {
-            val.sort(function(a, b){return a[0] - b[0]});
+            val.sort(function(a, b){
+                let aDate = new Date(a[0].substring(3, 7),parseInt(a[0].substring(0, 2))-1,1);
+                let bDate = new Date(b[0].substring(3, 7),parseInt(b[0].substring(0, 2))-1,1);
+                return aDate - bDate;
+            });
+//            console.log(val);
             let data = val.map(x => parseInt(x[1]));
             values1.push({name: key, data: data});
         });
