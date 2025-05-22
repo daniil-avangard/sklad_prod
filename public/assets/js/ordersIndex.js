@@ -78,7 +78,11 @@ class FilterPage {
                     checkbox.checked = true;
                 }
             });
-            this.display(this.selectDivision.value, this.selectOrderStatus.value, this.selectProductOrder.value, true);
+            if (this.selectDivision) {
+                this.display(this.selectDivision.value, this.selectOrderStatus.value, this.selectProductOrder.value, true);
+            } else {
+                this.display(false, this.selectOrderStatus.value, this.selectProductOrder.value, true);
+            }
         }
         console.log(document.cookie);
     }
@@ -88,8 +92,10 @@ class FilterPage {
         
         Array.from(self.cleanFilters).forEach((el, index) => {
             el.onclick = () => {
-                self.selectDivision.value = "";
-                document.cookie = `selectSkladDivision=${self.selectDivision.value}`;
+                if (self.selectDivision) {
+                    self.selectDivision.value = "";
+                    document.cookie = `selectSkladDivision=${self.selectDivision.value}`;
+                }
                 self.selectOrderStatus.value = "";
                 document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
                 self.selectProductOrder.value = "";
@@ -98,7 +104,11 @@ class FilterPage {
                     elm.checked = false;
                 });
                 document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
-                self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+                if (self.selectDivision) {
+                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+                } else {
+                    self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+                }
             }
         });
         
@@ -153,7 +163,11 @@ class FilterPage {
                 checkBox.onchange = () => {
                     let arrCheck = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
                     document.cookie = `selectSkladCheckBoxBlock=${arrCheck.join(",")}`;
-                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox);
+                    if (self.selectDivision) {
+                        self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox);
+                    } else {
+                        self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox);
+                    }
                 }
             });
         }
@@ -271,9 +285,15 @@ class FilterPage {
                                 if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
                             });
                             Array.from(arrayProductsQuantities).forEach((elm, ind) => {
-                                if (!(elm.classList.contains("row-hidden"))) quantity = elm.firstElementChild.innerHTML.trim();
+                                if (!(elm.classList.contains("row-hidden"))) quantity = parseInt(elm.firstElementChild.innerHTML.trim());
                             });
-                            dataForGraphic.set(city, quantity);
+                            if (!(dataForGraphic.has(city))) {
+                                dataForGraphic.set(city, quantity);
+                            } else {
+                                let quantitySum = parseInt(dataForGraphic.get(city)) + quantity;
+                                dataForGraphic.set(city, quantitySum);
+                            }
+                            
                         }
                     });
 //                    console.log(product, dataForGraphic);
