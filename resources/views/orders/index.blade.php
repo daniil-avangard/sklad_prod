@@ -231,7 +231,7 @@
                                     <option value="{{ $productOrder['name'] }}">{{ $productOrder['name'] }}</option>
                                 @endforeach
                             </select>
-                            <button id="grafic-button">График</button>
+                            <button id="grafic-button">График по городам</button>
                         </div>
                         <div class="filters-button-part">
                             <button id="clean-months" class="select-work-buttons">Очистить месяца</button>

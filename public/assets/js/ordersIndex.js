@@ -214,28 +214,36 @@ class FilterPage {
                     let product, quantity;
                     self.tableTrArray.forEach(row => {
                         if (!(row.classList.contains("row-hidden"))) {
-                            let city = row.cells[0].getElementsByTagName("A")[0].innerHTML.trim();
-                            
-                            let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
-                            let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
-                            Array.from(arrayProductsDivs).forEach((elm, ind) => {
-                                if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
-                            });
-                            Array.from(arrayProductsQuantities).forEach((elm, ind) => {
-                                if (!(elm.classList.contains("row-hidden"))) quantity = elm.firstElementChild.innerHTML.trim();
-                            });
-                            
-                            let dataMonth = row.cells[4].innerHTML.trim().substring(3, 5) + row.cells[4].innerHTML.trim().substring(6, 10);
-                            if (!(dataForGraphic.has(city))) {
-                                dataForGraphic.set(city, [[dataMonth, quantity]]);
-                            } else {
-                                let data = dataForGraphic.get(city).filter(elm => elm[0] == dataMonth);
-                                if (data.length == 0) {
-                                    let newData = dataForGraphic.get(city);
-                                    newData.push([dataMonth, quantity]);
-                                    dataForGraphic.set(city, newData);
-                                }
+                            if (row.cells[3].firstElementChild.innerHTML.trim() != "Отменен") {
+                                let city = row.cells[0].getElementsByTagName("A")[0].innerHTML.trim();
 
+                                let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
+                                let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
+                                Array.from(arrayProductsDivs).forEach((elm, ind) => {
+                                    if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
+                                });
+                                Array.from(arrayProductsQuantities).forEach((elm, ind) => {
+                                    if (!(elm.classList.contains("row-hidden"))) quantity = parseInt(elm.firstElementChild.innerHTML.trim());
+                                });
+
+                                let dataMonth = row.cells[4].innerHTML.trim().substring(3, 5) + row.cells[4].innerHTML.trim().substring(6, 10);
+                                if (!(dataForGraphic.has(city))) {
+                                    dataForGraphic.set(city, [[dataMonth, quantity]]);
+                                } else {
+                                    let data = dataForGraphic.get(city).filter(elm => elm[0] == dataMonth);
+                                    if (data.length == 0) {
+                                        let newData = dataForGraphic.get(city);
+                                        newData.push([dataMonth, quantity]);
+                                        dataForGraphic.set(city, newData);
+                                    } else {
+                                        let newData1 = dataForGraphic.get(city).map(elm => {
+                                                let nQuant = (elm[0] == dataMonth) ? elm[1] + quantity : elm[1];
+                                                return [elm[0], nQuant];
+                                            });
+                                        dataForGraphic.set(city, newData1);
+                                    }
+
+                                }
                             }
                         }
                     });
@@ -277,23 +285,24 @@ class FilterPage {
                     let product, quantity;
                     self.tableTrArray.forEach(row => {
                         if (!(row.classList.contains("row-hidden"))) {
-                            let city = row.cells[0].getElementsByTagName("A")[0].innerHTML.trim();
+                            if (row.cells[3].firstElementChild.innerHTML.trim() != "Отменен") {
+                                let city = row.cells[0].getElementsByTagName("A")[0].innerHTML.trim();
 
-                            let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
-                            let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
-                            Array.from(arrayProductsDivs).forEach((elm, ind) => {
-                                if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
-                            });
-                            Array.from(arrayProductsQuantities).forEach((elm, ind) => {
-                                if (!(elm.classList.contains("row-hidden"))) quantity = parseInt(elm.firstElementChild.innerHTML.trim());
-                            });
-                            if (!(dataForGraphic.has(city))) {
-                                dataForGraphic.set(city, quantity);
-                            } else {
-                                let quantitySum = parseInt(dataForGraphic.get(city)) + quantity;
-                                dataForGraphic.set(city, quantitySum);
+                                let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
+                                let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
+                                Array.from(arrayProductsDivs).forEach((elm, ind) => {
+                                    if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
+                                });
+                                Array.from(arrayProductsQuantities).forEach((elm, ind) => {
+                                    if (!(elm.classList.contains("row-hidden"))) quantity = parseInt(elm.firstElementChild.innerHTML.trim());
+                                });
+                                if (!(dataForGraphic.has(city))) {
+                                    dataForGraphic.set(city, quantity);
+                                } else {
+                                    let quantitySum = parseInt(dataForGraphic.get(city)) + quantity;
+                                    dataForGraphic.set(city, quantitySum);
+                                }
                             }
-                            
                         }
                     });
 //                    console.log(product, dataForGraphic);
