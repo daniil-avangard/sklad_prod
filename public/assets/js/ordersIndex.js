@@ -10,6 +10,7 @@ class FilterPage {
         this.checkBoxBlock = document.getElementById('month-field');
         this.checkBoxArray1 = document.querySelectorAll("input[type='checkbox']");
         this.cleanFilters = document.querySelectorAll(".clean-filters");
+        this.cleanMonthsFilter = document.getElementById('clean-months');
         this.tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
         this.monthDetails = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
         
@@ -100,6 +101,14 @@ class FilterPage {
                 self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
             }
         });
+        
+        this.cleanMonthsFilter.onclick = () => {
+            Array.from(self.checkBoxArray1).forEach((elm, ind) => {
+                    elm.checked = false;
+            });
+            document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
+            self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+        }
     }
     
     initsettings() {
@@ -372,7 +381,8 @@ class FilterPage {
 //                    });
                     data.push(parseInt(val.filter(elm => elm[0] == month)[0][1]));
                 });
-                values.push({name: self.monthDetails[parseInt(month.substring(0, 2))-1], data: data});
+                let monthYear = self.monthDetails[parseInt(month.substring(0, 2))-1] + "." + month.substring(2, 6);
+                values.push({name: monthYear, data: data});
             }); 
         }
 //        console.log(values);
@@ -424,7 +434,7 @@ class FilterPage {
                 let bDate = new Date(b.substring(3, 7),parseInt(b.substring(0, 2))-1,1);
                 return aDate - bDate;
             });
-        let monthsForXaxis = arrayMonths.map(month => this.monthDetails[parseInt(month.substring(0, 2))-1]);
+        let monthsForXaxis = arrayMonths.map(month => this.monthDetails[parseInt(month.substring(0, 2))-1] + "." + month.substring(2, 6));
         console.log(arrayMonths);
         let values1 = [];
         dataForGraphic.forEach(function(val, key) {
