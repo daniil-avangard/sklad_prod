@@ -206,7 +206,7 @@
                         </div>
                     </div>
                     @endcan
-                    @can('viewAny', \App\Models\Order::class)
+                    
                     <div class="order-filters">
                         <div class="filters-work-part">
                             <label for="statusOfOrder">Статус:</label>
@@ -221,8 +221,7 @@
                             <button class="select-work-buttons clean-filters">Очистить фильтры</button>
                         </div>
                     </div>
-                    @endcan
-                    @can('viewAny', \App\Models\Order::class)
+                    
                     <div class="order-filters">
                         <div class="filters-work-part">
                             <label for="productsOfOrders">Товары:</label>
@@ -235,11 +234,10 @@
                             <button id="grafic-button">График</button>
                         </div>
                         <div class="filters-button-part">
-                            <button class="select-work-buttons clean-filters">Очистить фильтры</button>
+                            <button id="clean-months" class="select-work-buttons">Очистить месяца</button>
                         </div>
                     </div>
-                    @endcan
-                    @can('viewAny', \App\Models\Order::class)
+                    
                     <div class="order-filters">
                         <div class="filters-work-part filters-work-part-months">
                             <fieldset id="month-field" class="month-field">
@@ -301,7 +299,7 @@
                             <button id="grafic-months" class="select-work-buttons">График по месяцам</button>
                         </div>
                     </div>
-                    @endcan
+                    
                 </div>
 
                 <table id="orders-table" class="table table-bordered custom-table">

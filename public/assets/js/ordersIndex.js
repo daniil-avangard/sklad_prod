@@ -10,7 +10,9 @@ class FilterPage {
         this.checkBoxBlock = document.getElementById('month-field');
         this.checkBoxArray1 = document.querySelectorAll("input[type='checkbox']");
         this.cleanFilters = document.querySelectorAll(".clean-filters");
+        this.cleanMonthsFilter = document.getElementById('clean-months');
         this.tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
+        this.monthDetails = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
         
         this.initsettings();
         this.initSettingsPopUpElements();
@@ -76,7 +78,11 @@ class FilterPage {
                     checkbox.checked = true;
                 }
             });
-            this.display(this.selectDivision.value, this.selectOrderStatus.value, this.selectProductOrder.value, true);
+            if (this.selectDivision) {
+                this.display(this.selectDivision.value, this.selectOrderStatus.value, this.selectProductOrder.value, true);
+            } else {
+                this.display(false, this.selectOrderStatus.value, this.selectProductOrder.value, true);
+            }
         }
         console.log(document.cookie);
     }
@@ -86,8 +92,10 @@ class FilterPage {
         
         Array.from(self.cleanFilters).forEach((el, index) => {
             el.onclick = () => {
-                self.selectDivision.value = "";
-                document.cookie = `selectSkladDivision=${self.selectDivision.value}`;
+                if (self.selectDivision) {
+                    self.selectDivision.value = "";
+                    document.cookie = `selectSkladDivision=${self.selectDivision.value}`;
+                }
                 self.selectOrderStatus.value = "";
                 document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
                 self.selectProductOrder.value = "";
@@ -96,9 +104,21 @@ class FilterPage {
                     elm.checked = false;
                 });
                 document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
-                self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+                if (self.selectDivision) {
+                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+                } else {
+                    self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+                }
             }
         });
+        
+        this.cleanMonthsFilter.onclick = () => {
+            Array.from(self.checkBoxArray1).forEach((elm, ind) => {
+                    elm.checked = false;
+            });
+            document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
+            self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+        }
     }
     
     initsettings() {
@@ -143,7 +163,11 @@ class FilterPage {
                 checkBox.onchange = () => {
                     let arrCheck = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
                     document.cookie = `selectSkladCheckBoxBlock=${arrCheck.join(",")}`;
-                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox);
+                    if (self.selectDivision) {
+                        self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox);
+                    } else {
+                        self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox);
+                    }
                 }
             });
         }
@@ -183,7 +207,8 @@ class FilterPage {
         const self = this;
         if (self.graphicDataProduct) {
             self.graphicDataProduct.onclick = () => {
-                let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+//                let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+                let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
                 if (self.selectProductOrder.value != '' && arrayMonths.length > 0) {
                     let dataForGraphic = new Map();
                     let product, quantity;
@@ -200,7 +225,7 @@ class FilterPage {
                                 if (!(elm.classList.contains("row-hidden"))) quantity = elm.firstElementChild.innerHTML.trim();
                             });
                             
-                            let dataMonth = row.cells[4].innerHTML.trim().substring(3, 5);
+                            let dataMonth = row.cells[4].innerHTML.trim().substring(3, 5) + row.cells[4].innerHTML.trim().substring(6, 10);
                             if (!(dataForGraphic.has(city))) {
                                 dataForGraphic.set(city, [[dataMonth, quantity]]);
                             } else {
@@ -260,9 +285,15 @@ class FilterPage {
                                 if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
                             });
                             Array.from(arrayProductsQuantities).forEach((elm, ind) => {
-                                if (!(elm.classList.contains("row-hidden"))) quantity = elm.firstElementChild.innerHTML.trim();
+                                if (!(elm.classList.contains("row-hidden"))) quantity = parseInt(elm.firstElementChild.innerHTML.trim());
                             });
-                            dataForGraphic.set(city, quantity);
+                            if (!(dataForGraphic.has(city))) {
+                                dataForGraphic.set(city, quantity);
+                            } else {
+                                let quantitySum = parseInt(dataForGraphic.get(city)) + quantity;
+                                dataForGraphic.set(city, quantitySum);
+                            }
+                            
                         }
                     });
 //                    console.log(product, dataForGraphic);
@@ -353,17 +384,28 @@ class FilterPage {
         let cities = [...dataForGraphic.keys()];
         let values = flag == "simple" ? [{name: product, data: Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm))}] : [];
         if (flag != "simple") {
-            let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+//            let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
+            let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
+            arrayMonths.sort(function(a, b){
+                let aDate = new Date(a.substring(3, 7),parseInt(a.substring(0, 2))-1,1);
+                let bDate = new Date(b.substring(3, 7),parseInt(b.substring(0, 2))-1,1);
+                return aDate - bDate;
+            });
             arrayMonths.forEach((month, ind) => {
                 let data = [];
                 dataForGraphic.forEach(function(val, key) {
-//                    console.log(val.filter(elm => elm[0] == month)[0][1]);
+//                    val.sort(function(a, b){
+//                        let aDate = new Date(a[0].substring(3, 7),parseInt(a[0].substring(0, 2))-1,1);
+//                        let bDate = new Date(b[0].substring(3, 7),parseInt(b[0].substring(0, 2))-1,1);
+//                        return aDate - bDate;
+//                    });
                     data.push(parseInt(val.filter(elm => elm[0] == month)[0][1]));
                 });
-                values.push({name: month, data: data});
+                let monthYear = self.monthDetails[parseInt(month.substring(0, 2))-1] + "." + month.substring(2, 6);
+                values.push({name: monthYear, data: data});
             }); 
         }
-        console.log(values);
+//        console.log(values);
         Highcharts.chart('chartContainer', {
             chart: {
                 type: 'column'
@@ -403,25 +445,25 @@ class FilterPage {
     }
     
     draw1(product, dataForGraphic, flag) {
+        console.log(dataForGraphic);
         let self = this;
         let cities = [...dataForGraphic.keys()];
-        let monthsForXaxis;
-        let values = flag == "simple" ? [{name: product, data: Array.from(dataForGraphic.values(), (elm, ind) => parseInt(elm))}] : [];
-        if (flag != "simple") {
-            let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value.substring(0, 2));
-            monthsForXaxis = arrayMonths;
-            arrayMonths.forEach((month, ind) => {
-                let data = [];
-                dataForGraphic.forEach(function(val, key) {
-//                    console.log(val.filter(elm => elm[0] == month)[0][1]);
-                    data.push(parseInt(val.filter(elm => elm[0] == month)[0][1]));
-                });
-                values.push({name: month, data: data});
-            }); 
-        }
+        let arrayMonths = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
+        arrayMonths.sort(function(a, b){
+                let aDate = new Date(a.substring(3, 7),parseInt(a.substring(0, 2))-1,1);
+                let bDate = new Date(b.substring(3, 7),parseInt(b.substring(0, 2))-1,1);
+                return aDate - bDate;
+            });
+        let monthsForXaxis = arrayMonths.map(month => this.monthDetails[parseInt(month.substring(0, 2))-1] + "." + month.substring(2, 6));
+        console.log(arrayMonths);
         let values1 = [];
         dataForGraphic.forEach(function(val, key) {
-            val.sort(function(a, b){return a[0] - b[0]});
+            val.sort(function(a, b){
+                let aDate = new Date(a[0].substring(3, 7),parseInt(a[0].substring(0, 2))-1,1);
+                let bDate = new Date(b[0].substring(3, 7),parseInt(b[0].substring(0, 2))-1,1);
+                return aDate - bDate;
+            });
+//            console.log(val);
             let data = val.map(x => parseInt(x[1]));
             values1.push({name: key, data: data});
         });
