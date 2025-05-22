@@ -222,7 +222,7 @@ class FilterPage {
                                 if (!(elm.classList.contains("row-hidden"))) product = elm.getElementsByTagName("P")[0].innerHTML.trim();
                             });
                             Array.from(arrayProductsQuantities).forEach((elm, ind) => {
-                                if (!(elm.classList.contains("row-hidden"))) quantity = elm.firstElementChild.innerHTML.trim();
+                                if (!(elm.classList.contains("row-hidden"))) quantity = parseInt(elm.firstElementChild.innerHTML.trim());
                             });
                             
                             let dataMonth = row.cells[4].innerHTML.trim().substring(3, 5) + row.cells[4].innerHTML.trim().substring(6, 10);
@@ -234,6 +234,12 @@ class FilterPage {
                                     let newData = dataForGraphic.get(city);
                                     newData.push([dataMonth, quantity]);
                                     dataForGraphic.set(city, newData);
+                                } else {
+                                    let newData1 = dataForGraphic.get(city).map(elm => {
+                                            let nQuant = (elm[0] == dataMonth) ? elm[1] + quantity : elm[1];
+                                            return [elm[0], nQuant];
+                                        });
+                                    dataForGraphic.set(city, newData1);
                                 }
 
                             }
