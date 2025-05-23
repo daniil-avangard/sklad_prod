@@ -66,6 +66,7 @@ addProductToBasketForms.forEach((basketForm, ind) => {
                         title: "Введите значение больше 0"
                     });
                     buttonsForm[ind].disabled = false;
+                    //test
             }
     });
 });
