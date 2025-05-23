@@ -332,7 +332,10 @@ class OrderController extends Controller
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroupsIDNew);
         })->get()->sortByDesc('created_at');
         $divisionStateOrders = array();
-
+       
+        $divisionIDCreatedOrder = $order->division->id;
+        
+            
         $arrayOfStatuses = array(StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value);
 
         foreach ($ordersNew as $order1) {
@@ -345,7 +348,14 @@ class OrderController extends Controller
         
         foreach ($divisionStateOrders as $order1) {
             foreach ($order1->items as $item1) {
-                $allGoodsInOrders[] = array('id' => $item1->product->id, 'name' => $item1->product->name, 'image' => $item1->product->image, 'warehouse' => $item1->product->variants->sum('quantity'), 'min_stock' => $item1->product->min_stock);
+                $flag = false;
+                $arrayProductDivisions = $item1->product->divisions()->get(['id'])->toArray();
+                foreach ($arrayProductDivisions as $division2) {
+                    if ($division2['id'] == $divisionIDCreatedOrder) {
+                        $flag = true;
+                    }
+                }
+                if ($flag) $allGoodsInOrders[] = array('id' => $item1->product->id, 'name' => $item1->product->name, 'image' => $item1->product->image, 'warehouse' => $item1->product->variants->sum('quantity'), 'min_stock' => $item1->product->min_stock);
             }
         }
         $allGoodsInOrders = array_unique($allGoodsInOrders, SORT_REGULAR);
