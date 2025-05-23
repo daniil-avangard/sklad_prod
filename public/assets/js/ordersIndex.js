@@ -11,6 +11,7 @@ class FilterPage {
         this.checkBoxArray1 = document.querySelectorAll("input[type='checkbox']");
         this.cleanFilters = document.querySelectorAll(".clean-filters");
         this.cleanMonthsFilter = document.getElementById('clean-months');
+        this.cleanStatusProdFilter = document.getElementById('clean-status-product');
         this.tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
         this.monthDetails = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
         
@@ -118,6 +119,18 @@ class FilterPage {
             });
             document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
             self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+        }
+        
+        this.cleanStatusProdFilter.onclick = () => {
+            self.selectOrderStatus.value = "";
+            document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
+            self.selectProductOrder.value = "";
+            document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
+            if (self.selectDivision) {
+                self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, false);
+            } else {
+                self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, false);
+            }
         }
     }
     
