@@ -19,7 +19,7 @@
     ])
     <div class="row">
         <div class="col-12">
-            <h4 class="page-title-svod-h4">Таблица для утверждения заказов на <span id="month-orders">май</span> месяц</h4>
+            <h4 class="page-title-svod-h4">Таблица для утверждения заказов на <span id="month-orders">май</span></h4>
             <h6 class="page-title-svod-h6">Заказы необходимо проверить и утвердить в период с <span id="date-orders">25</span> числа и до окончания месяца</h6>
                 <div class="table-container">
 			<table id="excel-table" class="long-table">

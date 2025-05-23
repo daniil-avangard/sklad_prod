@@ -118,7 +118,11 @@ class FilterPage {
                     elm.checked = false;
             });
             document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
-            self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+            if (self.selectDivision) {
+                self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+            } else {
+                self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+            }
         }
         
         this.cleanStatusProdFilter.onclick = () => {
