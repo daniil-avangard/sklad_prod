@@ -13,15 +13,20 @@ if (buttonRedirectToBasket) {
 
 if (butonAddAllToBasket) {
     butonAddAllToBasket.onclick = async () => {
-        let arrayValues = Array.from(addProductToBasketForms, (basketForm) => {
-            const data = new FormData(basketForm);
-            return [parseInt(basketForm.action.split("/").pop()), data.get("quantity")];
+        document.body.style.cursor = "wait";
+        buttonsForm.forEach( btn => {
+            btn.disabled = true;
         });
-        let dataToApi = arrayValues.filter(x => x[1] != "" && x[1] != "0");
+        let arrayValues = Array.from(addProductToBasketForms, (basketForm, ind) => {
+            const data = new FormData(basketForm);
+            return [parseInt(basketForm.action.split("/").pop()), data.get("quantity"), ind];
+        });
+        let dataForButtons = arrayValues.filter(x => x[1] != "" && x[1] != "0");
+        let dataToApi = Array.from(dataForButtons, x => [x[0], x[1]]);
         if (dataToApi.length > 0) {
             let url = '/addAllProducts';
             let dataToSend = {data: dataToApi, _token: $('meta[name="csrf-token"]').attr('content')};
-            console.log(dataToSend);
+//            console.log(dataToSend);
             const request = new Request(url, {
                                     method: "POST",
                                     headers: {
@@ -35,13 +40,25 @@ if (butonAddAllToBasket) {
                     throw new Error(`Response status: ${response.status}`);
                 }
                 let res = await response.json();
+                dataForButtons.forEach((elm, ind) => {
+                    buttonsForm[elm[2]].innerHTML = elm[1] + " добавлено в корзину";
+                    buttonsForm[elm[2]].classList.add("basket-button-change");
+                });
+                Toast.fire({
+                        icon: 'success',
+                        title: "В корзину все добавлено"
+                    });
                 console.log("Проверяем api = ", res);
             }
             catch(error) {
                 console.log(error.message);
             }
         }
-        console.log("Изменение всех значений = ", dataToApi);
+        document.body.style.cursor = "auto";
+        buttonsForm.forEach( btn => {
+            btn.disabled = false;
+        });
+//        console.log("Изменение всех значений = ", dataToApi);
     }
 }
 

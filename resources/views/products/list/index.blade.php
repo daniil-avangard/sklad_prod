@@ -87,7 +87,7 @@
                 </div>
             </div>
             <div>
-            <button id="all-items-to-basket" class="btn btn-primary">Добавить все товары корзину</button>
+            <button id="all-items-to-basket" class="btn btn-primary">Добавить все товары в корзину</button>
             </div>
             <button id="redirect-to-basket" class="btn btn-success mb-3">Перейти в корзину</button>
         </div> <!-- end col -->
