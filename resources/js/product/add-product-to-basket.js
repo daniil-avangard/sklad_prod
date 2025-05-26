@@ -2,6 +2,7 @@ const addProductToBasketForms = document.querySelectorAll('.add-product-to-baske
 let buttonRedirectToBasket = document.getElementById('redirect-to-basket');
 let butonAddAllToBasket = document.getElementById('all-items-to-basket');
 let buttonsForm = document.querySelectorAll('button[type=submit]');
+let inputFormElements = document.querySelectorAll('input[type=number]');
 
 if (buttonRedirectToBasket) {
     buttonRedirectToBasket.onclick = () => {
@@ -43,6 +44,7 @@ if (butonAddAllToBasket) {
                 dataForButtons.forEach((elm, ind) => {
                     buttonsForm[elm[2]].innerHTML = elm[1] + " добавлено в корзину";
                     buttonsForm[elm[2]].classList.add("basket-button-change");
+                    addProductToBasketForms[elm[2]].reset();
                 });
                 Toast.fire({
                         icon: 'success',
@@ -58,9 +60,16 @@ if (butonAddAllToBasket) {
         buttonsForm.forEach( btn => {
             btn.disabled = false;
         });
+        Array.from(inputFormElements).map(x => x.style.backgroundColor = "transparent");
 //        console.log("Изменение всех значений = ", dataToApi);
     }
 }
+
+inputFormElements.forEach((inputElm, ind) => {
+    inputElm.onchange = () => {
+        inputElm.style.backgroundColor = inputElm.value != 0 ? "#ffff33" : "transparent";
+    }
+});
 
 addProductToBasketForms.forEach((basketForm, ind) => {
     basketForm.addEventListener('submit', (evt) => {

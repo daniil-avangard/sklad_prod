@@ -47,7 +47,7 @@ class FilterPage {
         let userRoleCookie = getCookie("check");
 //        console.log("userRoleCookie = ", userRoleCookie);
         
-        if (divisionFilter) {
+        if (this.selectDivision) {
             this.selectDivision.value = divisionFilter;
             if (this.selectOrderStatus) {
                 this.display(this.selectDivision.value, this.selectOrderStatus.value, this.selectProductOrder.value, true);
