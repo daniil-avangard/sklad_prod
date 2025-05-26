@@ -1,14 +1,47 @@
- console.log("Hello world");
-
 const addProductToBasketForms = document.querySelectorAll('.add-product-to-basket-form');
-let butonRedirectToBasket = document.getElementById('redirect-to-basket');
+let buttonRedirectToBasket = document.getElementById('redirect-to-basket');
+let butonAddAllToBasket = document.getElementById('all-items-to-basket');
 let buttonsForm = document.querySelectorAll('button[type=submit]');
 
-if (butonRedirectToBasket) {
-    butonRedirectToBasket.onclick = () => {
+if (buttonRedirectToBasket) {
+    buttonRedirectToBasket.onclick = () => {
         const url = new URL(window.location.origin);
         url.pathname = '/basket/';
         window.open(url, "_self");
+    }
+}
+
+if (butonAddAllToBasket) {
+    butonAddAllToBasket.onclick = async () => {
+        let arrayValues = Array.from(addProductToBasketForms, (basketForm) => {
+            const data = new FormData(basketForm);
+            return [parseInt(basketForm.action.split("/").pop()), data.get("quantity")];
+        });
+        let dataToApi = arrayValues.filter(x => x[1] != "" && x[1] != "0");
+        if (dataToApi.length > 0) {
+            let url = '/addAllProducts';
+            let dataToSend = {data: dataToApi, _token: $('meta[name="csrf-token"]').attr('content')};
+            console.log(dataToSend);
+            const request = new Request(url, {
+                                    method: "POST",
+                                    headers: {
+                                                'Content-Type': 'application/json;charset=utf-8',
+                                            },
+                                    body: JSON.stringify(dataToSend)
+                                    });
+            try {
+                const response = await fetch(request);  
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+                let res = await response.json();
+                console.log("Проверяем api = ", res);
+            }
+            catch(error) {
+                console.log(error.message);
+            }
+        }
+        console.log("Изменение всех значений = ", dataToApi);
     }
 }
 

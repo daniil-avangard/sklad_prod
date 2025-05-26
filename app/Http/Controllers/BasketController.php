@@ -70,6 +70,15 @@ class BasketController extends Controller
 
         // return redirect()->back()->with('success', 'Товар добавлен.');
     }
+    
+    public function addAll(Request $request)
+    {
+        $this->authorize('update', Order::class);
+        return response()->json([
+            'success' => 'Добавлено',
+            'quontity' => $request['data']
+        ]);
+    }
 
 
 

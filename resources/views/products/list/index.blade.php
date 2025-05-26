@@ -2,6 +2,7 @@
 
 @push('styles-plugins')
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
 
 @section('content')
@@ -17,7 +18,7 @@
                 <div class="table-container-goods">
                     <table id="datatable" class="table table-bordered">
                         <tr>
-                            <th class="text-center" rowspan="2">Изображение</th>
+                            <th class="text-center orders_picture_row" rowspan="2">Изображение</th>
                             <th class="text-center" rowspan="2">Название</th>
                             <th class="text-center" rowspan="2">Категория</th>
                             <th class="text-center" colspan="4">KKO</th>
@@ -38,8 +39,8 @@
 
                         @foreach ($products as $product)
                             <tr>
-                                <td>
-                                    <img src="{{ asset('/storage/' . $product->image) }}" alt="" height="40">
+                                <td class="orders_picture_row">
+                                    <img src="{{ asset('/storage/' . $product->image) }}" alt="" height="40" class="popup-child-img">
                                 </td>
                                 <td>
                                     <p class="d-inline-block align-middle mb-0">
@@ -84,6 +85,9 @@
                         @endforeach
                     </table>
                 </div>
+            </div>
+            <div>
+            <button id="all-items-to-basket" class="btn btn-primary">Добавить все товары корзину</button>
             </div>
             <button id="redirect-to-basket" class="btn btn-success mb-3">Перейти в корзину</button>
         </div> <!-- end col -->
