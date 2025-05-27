@@ -47,7 +47,7 @@ mainFormSaveOrder.onsubmit = async (evt) => {
     
     let arrayValues = Array.from(addProductToBasketForms, (basketForm, ind) => {
         const data = new FormData(basketForm);
-        return [parseInt(basketForm.action.split("/").pop()), data.get("quantity"), ind];
+        return [parseInt(basketForm.action.split("/").pop()), parseInt(data.get("quantity")), ind];
     });
     console.log("Не работающая корзина = ", arrayValues);
     let dataToApi = Array.from(arrayValues, x => [x[0], x[1]]);
@@ -68,11 +68,19 @@ mainFormSaveOrder.onsubmit = async (evt) => {
                 }
                 let res = await response.json();
                 console.log("Не работающая корзина = ", res);
+                await toOrdersList(mainFormSaveOrder);
+                
             }
         catch(error) {
             console.log(error.message);
         }
     }
+}
+
+const toOrdersList = async (formHTML) => {
+    const data = new FormData(formHTML);
+    const url = formHTML.action;
+    console.log(data.get("comment"));
 }
 
 

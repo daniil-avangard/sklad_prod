@@ -87,8 +87,12 @@ class BasketController extends Controller
                     $basketProduct->pivot->quantity += $quantity;
                     $basketProduct->pivot->save(); // Сохраняем изменения в количестве
                 } else {
-                    $basketProduct->pivot->quantity = $quantity;
-                    $basketProduct->pivot->save(); // Сохраняем изменения в количестве
+                    if ($quantity == 0) {
+                        $this->basket->products()->detach($product);
+                    } else {
+                        $basketProduct->pivot->quantity = $quantity;
+                        $basketProduct->pivot->save(); // Сохраняем изменения в количестве
+                    }
                 }
             } else {
                 // Если продукт не существует в корзине, то добавляем его с указанным количеством

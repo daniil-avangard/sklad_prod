@@ -20,7 +20,7 @@ if (butonAddAllToBasket) {
         });
         let arrayValues = Array.from(addProductToBasketForms, (basketForm, ind) => {
             const data = new FormData(basketForm);
-            return [parseInt(basketForm.action.split("/").pop()), data.get("quantity"), ind];
+            return [parseInt(basketForm.action.split("/").pop()), parseInt(data.get("quantity")), ind];
         });
         let dataForButtons = arrayValues.filter(x => x[1] != "" && x[1] != "0");
         let dataToApi = Array.from(dataForButtons, x => [x[0], x[1]]);
