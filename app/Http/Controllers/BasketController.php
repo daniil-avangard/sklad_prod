@@ -87,7 +87,7 @@ class BasketController extends Controller
                     $basketProduct->pivot->quantity += $quantity;
                     $basketProduct->pivot->save(); // Сохраняем изменения в количестве
                 } else {
-                    if ($quantity == 0) {
+                    if ($quantity == 0 || $quantity == null) {
                         $this->basket->products()->detach($product);
                     } else {
                         $basketProduct->pivot->quantity = $quantity;
@@ -101,7 +101,7 @@ class BasketController extends Controller
         }
         return response()->json([
             'success' => 'Добавлено',
-            'quontity' => $request['type']
+            'quontity' => $request['data']
         ]);
     }
 

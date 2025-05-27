@@ -68,7 +68,8 @@ mainFormSaveOrder.onsubmit = async (evt) => {
                 }
                 let res = await response.json();
                 console.log("Не работающая корзина = ", res);
-                await toOrdersList(mainFormSaveOrder);
+                mainFormSaveOrder.submit();
+//                await toOrdersList(mainFormSaveOrder);
                 
             }
         catch(error) {
@@ -77,10 +78,28 @@ mainFormSaveOrder.onsubmit = async (evt) => {
     }
 }
 
-const toOrdersList = async (formHTML) => {
-    const data = new FormData(formHTML);
-    const url = formHTML.action;
-    console.log(data.get("comment"));
-}
+//const toOrdersList = async (formHTML) => {
+//    formHTML.submit();
+//    const data = new FormData(formHTML);
+//    const url = formHTML.action;
+//    console.log(data.get("comment"));
+//    const request = new Request(url, {
+//                                method: "POST",
+//                                headers: {
+//                                            'Content-Type': 'application/json;charset=utf-8',
+//                                        },
+//                                body: data
+//                                });
+//    try {
+//                const response = await fetch(request);  
+//                if (!response.ok) {
+//                    throw new Error(`Response status: ${response.status}`);
+//                }
+//                let res = await response.json();
+//        }
+//    catch(error) {
+//        console.log(error.message);
+//    }
+//}
 
 
