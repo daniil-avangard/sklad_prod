@@ -22,7 +22,8 @@ if (butonAddAllToBasket) {
             const data = new FormData(basketForm);
             return [parseInt(basketForm.action.split("/").pop()), parseInt(data.get("quantity")), ind];
         });
-        let dataForButtons = arrayValues.filter(x => x[1] != "" && x[1] != "0");
+        let dataForButtons = arrayValues.filter(x => x[1] != "" && x[1] != "0" && !(isNaN(x[1])));
+        console.log(dataForButtons);
         let dataToApi = Array.from(dataForButtons, x => [x[0], x[1]]);
         if (dataToApi.length > 0) {
             let url = '/addAllProducts';
