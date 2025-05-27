@@ -401,6 +401,8 @@ tr p {
 .wrap-icon-digits-exell {
     display: block;
     position: relative;
+    width: 100% !important;
+    height: 100% !important;
 }
 .wrap-icon-digits-exell .tooltiptext {
   visibility: hidden;
