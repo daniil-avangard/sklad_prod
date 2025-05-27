@@ -1,5 +1,11 @@
 let deleteFromBasket = document.querySelectorAll('.delete-from-basket');
+let inputFormElements = document.querySelectorAll('input[type=number]');
 
+inputFormElements.forEach((inputElm, ind) => {
+    inputElm.onchange = () => {
+        inputElm.style.backgroundColor = "#ffff33";
+    }
+});
 
 // функция по удалению товара из карзины и
 // соотвествующего ряда

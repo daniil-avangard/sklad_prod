@@ -24,7 +24,7 @@
                         <table class="table table-bordered">
                             
                                 <tr>
-                                    <th class="border-top-0">Изображение</th>
+                                    <th class="border-top-0 orders_picture_row">Изображение</th>
                                     <th class="border-top-0">Наименование</th>
                                     <th class="border-top-0">даты выпуска, разрешенные к рапространению</th>
                                     <th class="border-top-0">Категория</th>
@@ -37,7 +37,7 @@
                                     <tr>
                                         <td>
                                             <img src="{{ asset('/storage/' . $product->image) }}" alt=""
-                                                height="36">
+                                                height="36" class="popup-child-img">
                                         </td>
                                         <td>
                                             <p class="d-inline-block align-middle mb-0">

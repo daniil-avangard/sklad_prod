@@ -764,3 +764,9 @@ tr p {
     font-size: 10px !important;
     padding: 0 !important;
 }
+.orders_picture_row {
+    width: 150px !important;
+}
+#redirect-to-basket {
+    margin-top: 10px;
+}

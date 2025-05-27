@@ -70,8 +70,31 @@ class BasketController extends Controller
 
         // return redirect()->back()->with('success', 'Товар добавлен.');
     }
-
-
+    
+    public function addAll(Request $request)
+    {
+//        $this->authorize('update', Order::class);
+//        dd($request);
+        foreach ($request['data'] as $item) {
+//            dd($item);
+            $product = Product::where("id", $item[0])->first();
+            $basket = $this->basket;
+            $quantity = $item[1];
+            $basketProduct = $basket->products()->where('product_id', $product->id)->first();
+            if ($basketProduct) {
+                // Если продукт существует, увеличиваем количество
+                $basketProduct->pivot->quantity += $quantity;
+                $basketProduct->pivot->save(); // Сохраняем изменения в количестве
+            } else {
+                // Если продукт не существует в корзине, то добавляем его с указанным количеством
+                $basket->products()->attach($product, ['quantity' => $quantity]);
+            }
+        }
+        return response()->json([
+            'success' => 'Добавлено',
+            'quontity' => $request['data']
+        ]);
+    }
 
     public function updateQuantity(Request $request, Product $product)
     {
