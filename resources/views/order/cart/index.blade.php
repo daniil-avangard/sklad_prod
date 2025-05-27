@@ -4,6 +4,7 @@
 
 @push('styles-plugins')
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
 
 @section('content')
@@ -68,7 +69,7 @@
                                             {{ $product->category->name }}
                                         </td>
                                         <td>
-                                            <x-form action="{{ route('basket.update', $product) }}" method="POST">
+                                            <x-form class="add-product-to-basket-form" action="{{ route('basket.update', $product) }}" method="POST">
                                                 <input class="form-control form-control-sm w-50" type="number"
                                                     name="quantity" value="{{ $product->pivot->quantity }}" min="1"
                                                     id="quantity">
@@ -95,7 +96,7 @@
                         <div class="col-md-6 align-self-center">
 
                             <div class="mt-4">
-                                <x-form action="{{ route('basket.saveorder') }}" method="POST">
+                                <x-form id="save-order-form" action="{{ route('basket.saveorder') }}" method="POST">
                                     <textarea name="comment" class="form-control" placeholder="Комментарий к заказу"></textarea>
                                     <button class="btn btn-primary mt-2">Отправить заказ</button>
                                 </x-form>
