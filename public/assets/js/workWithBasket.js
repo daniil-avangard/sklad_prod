@@ -44,7 +44,8 @@ Array.from(deleteFromBasket).forEach((el, index) => {
 
 mainFormSaveOrder.onsubmit = async (evt) => {
     evt.preventDefault();
-    
+    document.body.style.cursor = "wait";
+    mainFormSaveOrder.getElementsByTagName("BUTTON")[0].style.cursor = "wait";
     let arrayValues = Array.from(addProductToBasketForms, (basketForm, ind) => {
         const data = new FormData(basketForm);
         return [parseInt(basketForm.action.split("/").pop()), parseInt(data.get("quantity")), ind];
@@ -82,20 +83,21 @@ mainFormSaveOrder.onsubmit = async (evt) => {
 //    formHTML.submit();
 //    const data = new FormData(formHTML);
 //    const url = formHTML.action;
-//    console.log(data.get("comment"));
+//    console.log(data.get("_token"), url);
 //    const request = new Request(url, {
 //                                method: "POST",
+//                                body: data,
 //                                headers: {
-//                                            'Content-Type': 'application/json;charset=utf-8',
-//                                        },
-//                                body: data
+//                                            'Accept': 'application/json',
+//                                        }
+//                                
 //                                });
 //    try {
 //                const response = await fetch(request);  
 //                if (!response.ok) {
 //                    throw new Error(`Response status: ${response.status}`);
 //                }
-//                let res = await response.json();
+////                let res = await response.json();
 //        }
 //    catch(error) {
 //        console.log(error.message);

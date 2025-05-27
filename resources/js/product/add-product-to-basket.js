@@ -109,7 +109,7 @@ addProductToBasketForms.forEach((basketForm, ind) => {
                         icon: 'success',
                         title: data.success
                     });
-
+                    Array.from(inputFormElements).map(x => x.style.backgroundColor = "transparent");
                     buttonsForm[ind].disabled = false;
                     basketForm.reset();
                 })
