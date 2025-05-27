@@ -73,7 +73,7 @@ class BasketController extends Controller
     
     public function addAll(Request $request)
     {
-        $this->authorize('update', Order::class);
+//        $this->authorize('update', Order::class);
 //        dd($request);
         foreach ($request['data'] as $item) {
 //            dd($item);
