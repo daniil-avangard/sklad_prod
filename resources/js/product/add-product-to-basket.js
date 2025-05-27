@@ -26,7 +26,7 @@ if (butonAddAllToBasket) {
         let dataToApi = Array.from(dataForButtons, x => [x[0], x[1]]);
         if (dataToApi.length > 0) {
             let url = '/addAllProducts';
-            let dataToSend = {data: dataToApi, _token: $('meta[name="csrf-token"]').attr('content')};
+            let dataToSend = {data: dataToApi, _token: $('meta[name="csrf-token"]').attr('content'), type: "add"};
 //            console.log(dataToSend);
             const request = new Request(url, {
                                     method: "POST",

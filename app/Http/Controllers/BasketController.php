@@ -83,8 +83,13 @@ class BasketController extends Controller
             $basketProduct = $basket->products()->where('product_id', $product->id)->first();
             if ($basketProduct) {
                 // Если продукт существует, увеличиваем количество
-                $basketProduct->pivot->quantity += $quantity;
-                $basketProduct->pivot->save(); // Сохраняем изменения в количестве
+                if ($request['type'] == 'add') {
+                    $basketProduct->pivot->quantity += $quantity;
+                    $basketProduct->pivot->save(); // Сохраняем изменения в количестве
+                } else {
+                    $basketProduct->pivot->quantity = $quantity;
+                    $basketProduct->pivot->save(); // Сохраняем изменения в количестве
+                }
             } else {
                 // Если продукт не существует в корзине, то добавляем его с указанным количеством
                 $basket->products()->attach($product, ['quantity' => $quantity]);
@@ -92,7 +97,7 @@ class BasketController extends Controller
         }
         return response()->json([
             'success' => 'Добавлено',
-            'quontity' => $request['data']
+            'quontity' => $request['type']
         ]);
     }
 
