@@ -6,6 +6,7 @@ use App\Http\Controllers\ArivalController;
 use App\Http\Controllers\WriteoffController;
 use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 use App\Http\Controllers\Order\OrderController;
+use App\Http\Controllers\BasketController;
 //use Illuminate\Foundation\Configuration\Middleware;
 
 Route::middleware([ValidateCsrfToken::class, 'auth', 'admin'])->group(function () {
@@ -51,4 +52,5 @@ Route::middleware([ValidateCsrfToken::class, 'auth', 'admin'])->group(function (
     Route::post('/assembly/updateKorobka', [ArivalController::class, 'updateKorobka'])->name('assembly.updateKorobka');
     Route::post('/assembly/korobkaChangeStatus', [ArivalController::class, 'korobkaChangeStatus'])->name('assembly.korobkaChangeStatus');
     Route::post('/excell', [OrderController::class, 'excellData']);
+    Route::post('/addAllProducts', [BasketController::class, 'addAll']);
 });

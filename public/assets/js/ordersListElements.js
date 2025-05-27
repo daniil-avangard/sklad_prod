@@ -181,6 +181,7 @@ class ExcellTable {
                     if (res.success) {
                         Toast.fire({
                                     icon: 'success',
+                                    timer: 300,
                                     title: 'Количество обновлено'
                                 });
                         dataOrigin.innerHTML = updateItemQuontity;
