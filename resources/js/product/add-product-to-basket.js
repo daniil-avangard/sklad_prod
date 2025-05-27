@@ -20,13 +20,14 @@ if (butonAddAllToBasket) {
         });
         let arrayValues = Array.from(addProductToBasketForms, (basketForm, ind) => {
             const data = new FormData(basketForm);
-            return [parseInt(basketForm.action.split("/").pop()), data.get("quantity"), ind];
+            return [parseInt(basketForm.action.split("/").pop()), parseInt(data.get("quantity")), ind];
         });
-        let dataForButtons = arrayValues.filter(x => x[1] != "" && x[1] != "0");
+        let dataForButtons = arrayValues.filter(x => x[1] != "" && x[1] != "0" && !(isNaN(x[1])));
+        console.log(dataForButtons);
         let dataToApi = Array.from(dataForButtons, x => [x[0], x[1]]);
         if (dataToApi.length > 0) {
             let url = '/addAllProducts';
-            let dataToSend = {data: dataToApi, _token: $('meta[name="csrf-token"]').attr('content')};
+            let dataToSend = {data: dataToApi, _token: $('meta[name="csrf-token"]').attr('content'), type: "add"};
 //            console.log(dataToSend);
             const request = new Request(url, {
                                     method: "POST",
@@ -109,7 +110,7 @@ addProductToBasketForms.forEach((basketForm, ind) => {
                         icon: 'success',
                         title: data.success
                     });
-
+                    Array.from(inputFormElements).map(x => x.style.backgroundColor = "transparent");
                     buttonsForm[ind].disabled = false;
                     basketForm.reset();
                 })
