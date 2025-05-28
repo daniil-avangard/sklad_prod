@@ -552,6 +552,12 @@ class OrderController extends Controller
     // Статуты бля заказаков
     public function statusProcessing(Order $order)
     {
+        foreach ($order->items as $item) {
+            dd($item->quantity);
+            if ($item->quantity == 0) {
+                dd($item->quantity);
+            }
+        }
         $AllOrders = Order::whereIn('status',[StatusEnum::CANCELED->value, StatusEnum::DELIVERED->value, StatusEnum::SHIPPED->value, StatusEnum::ASSEMBLED->value, StatusEnum::WAREHOUSE_START->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get()->map(function ($order) {
                 return $order->id;
             })->toArray();
@@ -601,8 +607,10 @@ class OrderController extends Controller
         
         $divisionGroups = Auth::user()->division_id;
         $this->authorize('processingStatus', $order);
+        
 
         $order->status = StatusEnum::PROCESSING->value;
+        
         $order->save();
         // здесь схлопываем заказы, только после order->save
         $newComposerOrder = $this->createOneProcessOrder($divisionGroups, $order);

@@ -39,7 +39,7 @@
                 <div class="card-body">
                     @can('processingStatus', $order)
                         @if ($currentStatus === 'new')
-                            <a class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
+                            <a id="process-to-another" class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
                                 куратором</a>
                         @endif
                     @endcan

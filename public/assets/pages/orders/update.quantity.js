@@ -1,5 +1,9 @@
 $(document).ready(function() {
-
+//    let aTest = document.getElementById("process-to-another");
+//    aTest.onclick = (evt) => {
+//        console.log("Hello world");
+//        evt.preventDefault();
+//    }
 
     $.fn.editableform.buttons =
         '<button type="submit" id="alerts_click" class="btn btn-success editable-submit btn-sm waves-effect waves-light"><i class="mdi mdi-check"></i></button>' +
@@ -20,8 +24,6 @@ $(document).ready(function() {
                         icon: 'error',
                         title: 'Количество не может быть пустым'
                     });
-                    this.innerText = "0";
-//                    console.log("Проверка this = ", this);
                     return; // Прерываем выполнение, если значение пустое
                 }
 
@@ -30,7 +32,6 @@ $(document).ready(function() {
                         icon: 'error',
                         title: 'Количество не может быть меньше 0'
                     });
-                    this.innerHTML = "0";
                     return; // Прерываем выполнение, если количество отрицательное
                 }
 
@@ -60,12 +61,11 @@ $(document).ready(function() {
                         Toast.fire({
                             icon: 'error',
                             title: 'Ошибка при обновлении количества'
-                        })
+                        });
                     }
                 });
             }
         });
-        console.log("Проверка this = ", this);
     });
 
     $('#comments-manager').editable({
