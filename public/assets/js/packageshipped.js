@@ -90,6 +90,7 @@ $(document).ready(function() {
     updateSelectOptions();
         
     document.getElementById("add-item").onclick = async () => {
+        document.getElementById("add-item").disabled = true;
         let tbodyRef = document.getElementById("table-order").getElementsByTagName("tbody")[0];
         let newRow = tbodyRef.insertRow(-1);
         let select = document.getElementById("product-name");
@@ -127,8 +128,10 @@ $(document).ready(function() {
             console.log(error.message);
         }
         console.log('dataToSend = ', dataToSend);
-        select.value = "Выберите товар";
+        select.value = "";
         document.getElementById("product-quontity").value = "0";
+        document.getElementById("product-quontity").style.backgroundColor = "transparent";
+        document.getElementById("add-item").disabled = false;
         updateSelectOptions();
         
     }
