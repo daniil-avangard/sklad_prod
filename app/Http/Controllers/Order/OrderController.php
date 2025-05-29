@@ -159,6 +159,11 @@ class OrderController extends Controller
         foreach ($orders as $order) {
             if ($order->status->value == $currentStatus) {
                 $order->status = $toProcessStatus;
+                foreach ($order->items as $item) {
+                    if ($item->quantity == 0) {
+                        $item->delete();
+                    }
+                }
                 $order->save();
                 $createOrder = $order;
                 if (!(in_array($order->division_id, $divisionsArr))) {
@@ -475,12 +480,26 @@ class OrderController extends Controller
 
     public function updateFullOrder(Request $request)
     {
-        $orderItem = new OrderItem();
-        $orderItem->order_id = $request->orderId;
-        $orderItem->product_id = $request->productId;
-        $orderItem->quantity = $request->quantity;
-        $orderItem->save();
-        return response()->json(['success' => true]);
+        $order = Order::find($request->orderId);
+        $role1 = Auth::user()->roles()->pluck('name')->toArray();
+        $currentStatusCheck = (in_array(UserRoleEnum::TOP_MANAGER->label(), $role1)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+//        $toProcessStatus = $currentStatusCheck == StatusEnum::NEW->value ? StatusEnum::PROCESSING->value : StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
+        $currentOrderStatus = $order->status->value;
+        $flagOrderStatus = $currentStatusCheck == $currentOrderStatus;
+        if ($currentStatusCheck == $currentOrderStatus) {
+            $flagOrderStatus = $currentOrderStatus != StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
+        }
+//        $flagOrderStatus = $currentOrderStatus != StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
+        if ($flagOrderStatus) {
+            $orderItem = new OrderItem();
+            $orderItem->order_id = $request->orderId;
+            $orderItem->product_id = $request->productId;
+            $orderItem->quantity = $request->quantity;
+            $orderItem->save();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
     }
 
     public function updateCommentManager(Request $request)
@@ -552,6 +571,7 @@ class OrderController extends Controller
     // Статуты бля заказаков
     public function statusProcessing(Order $order)
     {
+        
         $AllOrders = Order::whereIn('status',[StatusEnum::CANCELED->value, StatusEnum::DELIVERED->value, StatusEnum::SHIPPED->value, StatusEnum::ASSEMBLED->value, StatusEnum::WAREHOUSE_START->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get()->map(function ($order) {
                 return $order->id;
             })->toArray();
@@ -601,8 +621,14 @@ class OrderController extends Controller
         
         $divisionGroups = Auth::user()->division_id;
         $this->authorize('processingStatus', $order);
+        
 
         $order->status = StatusEnum::PROCESSING->value;
+        foreach ($order->items as $item) {
+            if ($item->quantity == 0) {
+                $item->delete();
+            }
+        }
         $order->save();
         // здесь схлопываем заказы, только после order->save
         $newComposerOrder = $this->createOneProcessOrder($divisionGroups, $order);

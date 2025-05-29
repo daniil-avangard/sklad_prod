@@ -17,7 +17,7 @@ class ExcellTable {
       this.butonChangeOrderAllStatus.disabled = true;
       const month = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
       const d = new Date();
-      document.getElementById('month-orders').innerHTML = month[d.getMonth()];
+      document.getElementById('month-orders').innerHTML = d.getMonth() == 11 ? month[0] : month[d.getMonth()+1];
   }
   
   async dataFromApi() {
@@ -130,6 +130,7 @@ class ExcellTable {
 
         let newInput = document.createElement('input');
         newInput.setAttribute("type", "number");
+        newInput.setAttribute("min", "0");
         newInput.setAttribute("class", "form-control form-control-sm");
         newInput.value = parseInt(dataOrigin.innerHTML);
         let newAccept = document.createElement('button');
