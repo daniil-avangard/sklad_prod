@@ -95,39 +95,49 @@ $(document).ready(function() {
         let newRow = tbodyRef.insertRow(-1);
         let select = document.getElementById("product-name");
         let data = [select.options[select.selectedIndex].text, "", "", document.getElementById("product-quontity").value];
-        
-        let dataToSend = {orderId: document.getElementById("status-order").dataset.pk, productId: select.value, quantity: document.getElementById("product-quontity").value, _token: $('meta[name="csrf-token"]').attr('content')};
-        let url = '/orders/update-full-order';
-        const request = new Request(url, {
-                                method: "POST",
-                                headers: {
-                                            'Content-Type': 'application/json;charset=utf-8',
-                                        },
-                                body: JSON.stringify(dataToSend)
-                                });
-        try {
-            const response = await fetch(request);  
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
+        let quantity = document.getElementById("product-quontity").value;
+        console.log(select.value, quantity, isNaN(quantity));
+        if (select.value != "" && quantity != 0 && !(isNaN(quantity))) {
+            let dataToSend = {orderId: document.getElementById("status-order").dataset.pk, productId: select.value, quantity: document.getElementById("product-quontity").value, _token: $('meta[name="csrf-token"]').attr('content')};
+            let url = '/orders/update-full-order';
+            const request = new Request(url, {
+                                    method: "POST",
+                                    headers: {
+                                                'Content-Type': 'application/json;charset=utf-8',
+                                            },
+                                    body: JSON.stringify(dataToSend)
+                                    });
+            try {
+                const response = await fetch(request);  
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+                res = await response.json();
+                if (res.success) {
+                    Toast.fire({
+                                icon: 'success',
+                                title: 'Количество обновлено'
+                            });
+                    Array(4).fill().forEach((_, ind) => {
+                        let newCell = newRow.insertCell(ind);
+                        newCell.className = ind == 0 ? "product-select" : "";
+                        let newText = document.createTextNode(data[ind]);
+                        newCell.appendChild(newText);
+                    });
+                } else {
+                    Toast.fire({
+                                icon: 'error',
+                                title: 'Заказ уже на другой стадии'
+                            });
+                }
             }
-            res = await response.json();
-            if (res.success) {
-                Toast.fire({
-                            icon: 'success',
-                            title: 'Количество обновлено'
-                        });
-                Array(4).fill().forEach((_, ind) => {
-                    let newCell = newRow.insertCell(ind);
-                    newCell.className = ind == 0 ? "product-select" : "";
-                    let newText = document.createTextNode(data[ind]);
-                    newCell.appendChild(newText);
-                });
+            catch(error) {
+                console.log(error.message);
             }
+            console.log('dataToSend = ', dataToSend);
+        } else {
+            alert("Выберите корректно название товара или его количество");
         }
-        catch(error) {
-            console.log(error.message);
-        }
-        console.log('dataToSend = ', dataToSend);
         select.value = "";
         document.getElementById("product-quontity").value = "0";
         document.getElementById("product-quontity").style.backgroundColor = "transparent";

@@ -159,6 +159,11 @@ class OrderController extends Controller
         foreach ($orders as $order) {
             if ($order->status->value == $currentStatus) {
                 $order->status = $toProcessStatus;
+                foreach ($order->items as $item) {
+                    if ($item->quantity == 0) {
+                        $item->delete();
+                    }
+                }
                 $order->save();
                 $createOrder = $order;
                 if (!(in_array($order->division_id, $divisionsArr))) {
@@ -475,12 +480,19 @@ class OrderController extends Controller
 
     public function updateFullOrder(Request $request)
     {
-        $orderItem = new OrderItem();
-        $orderItem->order_id = $request->orderId;
-        $orderItem->product_id = $request->productId;
-        $orderItem->quantity = $request->quantity;
-        $orderItem->save();
-        return response()->json(['success' => true]);
+        $order = Order::find($request->orderId);
+        $role1 = Auth::user()->roles()->pluck('name')->toArray();
+        $currentStatus = $order->status->value;
+        if ($currentStatus != StatusEnum::TRANSFERRED_TO_WAREHOUSE->value) {
+            $orderItem = new OrderItem();
+            $orderItem->order_id = $request->orderId;
+            $orderItem->product_id = $request->productId;
+            $orderItem->quantity = $request->quantity;
+            $orderItem->save();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
     }
 
     public function updateCommentManager(Request $request)
