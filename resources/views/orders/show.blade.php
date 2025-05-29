@@ -39,7 +39,7 @@
                 <div class="card-body">
                     @can('processingStatus', $order)
                         @if ($currentStatus === 'new')
-                            <a class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
+                            <a id="process-to-another" class="btn btn-primary" href="{{ route('orders.status.processing', $order) }}">Проверено
                                 куратором</a>
                         @endif
                     @endcan
@@ -175,7 +175,7 @@
                     <div class="card-body col-sm-3">
                         <label class="form-label">Товары</label>
                         <select id="product-name" name="products" class="form-select select2 product-select-option">
-                            <option value="Выберите товар">Выберите товар</option>
+                            <option value="">Выберите товар</option>
                             @foreach ($allGoodsInOrders as $product)
                                 <option value="{{ $product['id'] }}">{{ $product['name'] }}</option>
                             @endforeach
@@ -183,7 +183,7 @@
                     </div>
                     <div class="card-body col-sm-3">
                             <label class="form-label">Количество</label>
-                            <input id="product-quontity" type="text" name="products" value="0" class="form-control">
+                            <input id="product-quontity" type="number" name="products" value="0" min="0" class="form-control">
                     </div>
                     <div class="card-body col-sm-3">
                             <label class="form-label"></label>
