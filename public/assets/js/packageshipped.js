@@ -127,7 +127,7 @@ $(document).ready(function() {
                 } else {
                     Toast.fire({
                                 icon: 'error',
-                                title: 'Заказ уже на другой стадии'
+                                title: 'Заказ на другой стадии'
                             });
                 }
             }

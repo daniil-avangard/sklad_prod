@@ -482,8 +482,15 @@ class OrderController extends Controller
     {
         $order = Order::find($request->orderId);
         $role1 = Auth::user()->roles()->pluck('name')->toArray();
-        $currentStatus = $order->status->value;
-        if ($currentStatus != StatusEnum::TRANSFERRED_TO_WAREHOUSE->value) {
+        $currentStatusCheck = (in_array(UserRoleEnum::TOP_MANAGER->label(), $role1)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+//        $toProcessStatus = $currentStatusCheck == StatusEnum::NEW->value ? StatusEnum::PROCESSING->value : StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
+        $currentOrderStatus = $order->status->value;
+        $flagOrderStatus = $currentStatusCheck == $currentOrderStatus;
+        if ($currentStatusCheck == $currentOrderStatus) {
+            $flagOrderStatus = $currentOrderStatus != StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
+        }
+//        $flagOrderStatus = $currentOrderStatus != StatusEnum::TRANSFERRED_TO_WAREHOUSE->value;
+        if ($flagOrderStatus) {
             $orderItem = new OrderItem();
             $orderItem->order_id = $request->orderId;
             $orderItem->product_id = $request->productId;
