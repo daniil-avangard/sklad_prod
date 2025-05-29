@@ -678,12 +678,12 @@ tr p {
 }
 .month-field {
     width: 200px;
-    height: 100px;
+    height: 85px;
 /*    border: 0.5px solid #000000; */
     color: #303e67;
     font-size: 8px !important;
     position: relative;
-    overflow: visible !important;
+/*    overflow: visible !important;*/
     font-size: 8px !important;
 }
 .month-field-legend {
@@ -741,6 +741,9 @@ tr p {
     height: 100px;
     justify-content: left;
     margin-bottom: 3px;
+}
+.filters-graph-part {
+    height: 80.5px !important;
 }
 .filters-work-part-months {
     overflow-x: hidden;
