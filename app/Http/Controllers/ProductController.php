@@ -183,9 +183,9 @@ class ProductController extends Controller
     // Обновляю
     public function show(Request $request, Product $product)
     {
-        if (Gate::denies('view', $product)) {
-            throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
-        }
+//        if (Gate::denies('view', $product)) {
+//            throw new AuthorizationException('У вас нет разрешения на просмотр продуктов.');
+//        }
 
         $allDivisions = DivisionCategory::with('divisions')->get()
             ->filter(function ($divisionCategory) {

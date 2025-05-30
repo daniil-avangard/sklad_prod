@@ -107,7 +107,7 @@
         .order-popup-parent {
             position: relative;
             display: block;
-            cursor: default;
+            cursor: pointer;
             user-select: none;
         }
 
