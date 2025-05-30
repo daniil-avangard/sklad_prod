@@ -214,9 +214,17 @@ class FilterPage {
                 }
                 self.popUpsChilds[index].classList.toggle("show");
             }
+            
+            const clickEvent = () => {
+                const url = new URL(window.location.origin);
+                url.pathname = '/products/' + el.dataset.productid;
+                window.open(url, "_self");
+//                console.log("Проверка клика на открытие товара = ", url.toString());
+            }
 
             el.addEventListener("mouseover", listener, false);
             el.addEventListener("mouseout", listener, false);
+            el.addEventListener("click", clickEvent);
         });
     }
     

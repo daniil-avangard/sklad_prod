@@ -78,7 +78,7 @@
                                 <tr>
                                     <th>Название</th>
                                     <th>Даты актуализации</th>
-                                    <th>Количество доступное к заказу</th>
+<!--                                    <th>Количество доступное к заказу</th>-->
                                     <th>Количество</th>
                                 </tr>
                             </thead>
@@ -104,8 +104,8 @@
                                                     {{ \Carbon\Carbon::parse($dateOfActuality)->format('d.m.Y') }}</p>
                                             @endforeach
                                         </td>
-                                        <td>{{ $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved') }}
-                                        </td>
+<!--                                        <td>{{ $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved') }}
+                                        </td>-->
                                         <td>
                                             @if ($order->status->value === \App\Enum\Order\StatusEnum::NEW->value)
                                                 <a
