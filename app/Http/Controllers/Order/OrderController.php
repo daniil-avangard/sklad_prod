@@ -73,7 +73,7 @@ class OrderController extends Controller
                 $allOrdersStatus[] = $valueForStatus;
             }
             foreach ($order->items as $item) {
-                $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity, 'image' => $item->product->image);
+                $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity, 'image' => $item->product->image, 'productId' => $item->product->id);
             }
         }
 
