@@ -94,7 +94,7 @@ $(document).ready(function() {
         let tbodyRef = document.getElementById("table-order").getElementsByTagName("tbody")[0];
         let newRow = tbodyRef.insertRow(-1);
         let select = document.getElementById("product-name");
-        let data = [select.options[select.selectedIndex].text, "", "", document.getElementById("product-quontity").value];
+        let data = [select.options[select.selectedIndex].text, "", document.getElementById("product-quontity").value];
         let quantity = document.getElementById("product-quontity").value;
         console.log(select.value, quantity, isNaN(quantity));
         if (select.value != "" && quantity != 0 && !(isNaN(quantity))) {
@@ -118,7 +118,7 @@ $(document).ready(function() {
                                 icon: 'success',
                                 title: 'Количество обновлено'
                             });
-                    Array(4).fill().forEach((_, ind) => {
+                    Array(data.length).fill().forEach((_, ind) => {
                         let newCell = newRow.insertCell(ind);
                         newCell.className = ind == 0 ? "product-select" : "";
                         let newText = document.createTextNode(data[ind]);

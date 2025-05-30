@@ -226,9 +226,8 @@
                     </div>
                     
                     <div class="order-filters">
-                        <div>Период</div>
-                        <div class="filters-work-part filters-work-part-months filters-graph-part">
-                            
+                        <div>Период:</div>
+                        <div class="filters-work-part filters-work-part-months filters-graph-part">             
                             <fieldset id="month-field" class="month-field">
                                 <div class="month-field-legend">2025</div>
                                 <input id="jan2016" value="012025" type="checkbox" name="month2016" />

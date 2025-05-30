@@ -77,6 +77,9 @@ mainFormSaveOrder.onsubmit = async (evt) => {
             console.log(error.message);
         }
     }
+    alert("Корзина пустая. Создайте заказ.");
+    document.body.style.cursor = "auto";
+    mainFormSaveOrder.getElementsByTagName("BUTTON")[0].style.cursor = "pointer";
 }
 
 //const toOrdersList = async (formHTML) => {
