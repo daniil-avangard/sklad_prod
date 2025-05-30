@@ -330,7 +330,7 @@
                                 </td>-->
                                 <td>
                                     @foreach ($allItems[$order->id] as $item)
-                                        <div class="order-popup-parent">
+                                        <div class="order-popup-parent" data-productid="{{ $item['productId'] }}">
                                             <p>{{ $item['name'] }}</p>
                                             <div class="order-popup-child">
                                                 <img src="{{ asset('storage/' . $item['image']) }}" alt="" class=" mx-auto  d-block popup-child-img" height="150">
