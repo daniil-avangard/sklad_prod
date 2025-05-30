@@ -76,8 +76,9 @@ mainFormSaveOrder.onsubmit = async (evt) => {
         catch(error) {
             console.log(error.message);
         }
+    } else {
+        alert("Корзина пустая. Создайте заказ.");
     }
-    alert("Корзина пустая. Создайте заказ.");
     document.body.style.cursor = "auto";
     mainFormSaveOrder.getElementsByTagName("BUTTON")[0].style.cursor = "pointer";
 }
