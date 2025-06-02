@@ -20,7 +20,7 @@
                         <tr>
                             <th class="text-center orders_picture_row" rowspan="2">Изображение</th>
                             <th class="text-center" rowspan="2">Название</th>
-                            <th class="text-center" rowspan="2">Категория</th>
+                            <th class="text-center" rowspan="2">Даты актуализации</th>
                             <th class="text-center" colspan="4">KKO</th>
                             <th class="text-center" colspan="2">Экспресс</th>
                             <th class="text-center" colspan="2">Действия</th>
@@ -50,7 +50,24 @@
                                         <span class="text-muted font-13">{{ $product->sku }}</span>
                                     </p>
                                 </td>
-                                <td>{{ $product->category->name }}</td>
+<!--                                <td>{{ $product->category->name }}</td>-->
+                                <td>
+                                    @php
+                                        $dateOfActualities = $product->variants
+                                            ->where('is_active', true)
+                                            ->pluck('date_of_actuality')
+                                            ->unique()
+                                            ->values()
+                                            ->sortDesc();
+                                    @endphp
+                                    @foreach ($dateOfActualities as $dateOfActuality)
+                                        @if (is_null($dateOfActuality))
+                                            <p class="m-0">Без даты</p>
+                                        @endif
+                                        <p class="m-0">
+                                            {{ \Carbon\Carbon::parse($dateOfActuality)->format('d.m.Y') }}</p>
+                                    @endforeach
+                                </td>
                                 <td>{!! kko_express_check($product->kko_hall) !!}</td>
                                 <td>{!! kko_express_check($product->kko_account_opening) !!}</td>
                                 <td>
