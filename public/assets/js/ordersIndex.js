@@ -110,6 +110,8 @@ class FilterPage {
                 } else {
                     self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
                 }
+                document.getElementById('chartContainer').innerHTML = "";
+                document.getElementById('chartContainer-1').innerHTML = "";
             }
         });
         
