@@ -38,7 +38,7 @@ class ExcellTable {
         let res = await response.json();
         console.log("Проверяем api = ", res);
         console.log("парсим объект = ", res.uniqGoods[0]);
-        console.log(" еще парсим объект = ", res.uniqGoodsTotalOrdered[res.uniqGoods[0].name]);
+//        console.log(" еще парсим объект = ", res.uniqGoodsTotalOrdered[res.uniqGoods[0].name]);
         console.log(" flagForExcell = ", res.flagForExcell);
         this.flagRoleForExcell = res.flagForExcell == 'show';
         this.allDataForExcell = res.uniqGoods;
@@ -55,9 +55,9 @@ class ExcellTable {
   checkDateForButton() {
       const d = new Date();
       if (this.flagRoleForExcell) {
-          this.butonChangeOrderAllStatus.disabled = d.getDate() >=12 ? false : true;
+          this.butonChangeOrderAllStatus.disabled = d.getDate() >=1 ? false : true;
       } else {
-          this.butonChangeOrderAllStatus.disabled = d.getDate() >=12 ? false : true;
+          this.butonChangeOrderAllStatus.disabled = d.getDate() >=1 ? false : true;
       }
   }
   
