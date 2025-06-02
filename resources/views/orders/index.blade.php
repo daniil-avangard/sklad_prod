@@ -316,14 +316,15 @@
                                     </label>
                                 </th>-->
                                 <td>
-                                    <a
-                                        @can('view', $order)
-                                    href="{{ route('orders.show', $order) }}"
-                                    @else
-                                    href="#"
-                                    @endcan>
-                                        {{ $order->division->name }}
+                                    @can('view', $order)
+                                    <a     
+                                        href="{{ route('orders.show', $order) }}">
+                                    {{ $order->division->name }}
                                     </a>
+                                    @else
+                                    {{ $order->division->name }}
+                                    @endcan
+                                    
                                 </td>
 <!--                                <td>  Было
                                      $order->division->name 

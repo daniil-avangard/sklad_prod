@@ -290,7 +290,7 @@ class FilterPage {
 //                    console.log(dataForGraphic);
                 } else {
                     if (arrayMonths.length == 0) {
-                        alert('Выберите месяца');
+                        alert('Выберите товар и месяцы');
                     } else {
                         alert('Выберите продукт');
                     }
