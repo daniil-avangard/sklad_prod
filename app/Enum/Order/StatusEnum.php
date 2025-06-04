@@ -22,7 +22,7 @@ enum StatusEnum: string
     public static function names(): array
     {
         return [
-            self::NEW->value => 'В ожидании',
+            self::NEW->value => 'На проверке у куратора',
             self::PROCESSING->value => 'Проверено куратором',
             self::MANAGER_PROCESSING->value => 'Проверено начальником кураторов',
             self::TRANSFERRED_TO_WAREHOUSE->value => 'Передан на склад',

@@ -761,7 +761,7 @@ tr p {
 }
 .filters-button-part {
     display: flex;
-    height: 18px;
+    height: 28px;
     width: 100%;
 }
 .select-work-buttons {
@@ -783,4 +783,21 @@ tr p {
 }
 .tbl-borders-bottom {
     border-bottom: 2px solid black !important;
+}
+.buttons-orders-cotroller {
+    display: flex;
+    position: relative;
+    width: 98%;
+    justify-content: space-between;
+}
+.buttons-orders-elm {
+    display: flex;
+    position: relative;
+}
+#grafic-months {
+    height: 30px;
+    background-color: #ffb822;
+}
+.clean-filters {
+    height: 30px;
 }

@@ -188,9 +188,9 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="filters-button-part">
+<!--                        <div class="filters-button-part">
                             <button class="select-work-buttons clean-filters">Очистить фильтры</button>
-                        </div>
+                        </div>-->
                     </div>
                     @endcan
                     
@@ -204,9 +204,9 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="filters-button-part">
+<!--                        <div class="filters-button-part">
                             <button id="clean-status-product" class="select-work-buttons">Очистить Статусы и Товары</button>
-                        </div>
+                        </div>-->
                     </div>
                     
                     <div class="order-filters">
@@ -221,7 +221,8 @@
 <!--                            <button id="grafic-button">График по городам</button>-->
                         </div>
                         <div class="filters-button-part">
-                            <button id="clean-months" class="select-work-buttons">Очистить месяцы</button>
+<!--                            <button id="clean-months" class="select-work-buttons">Очистить месяцы</button>-->
+                            <button class="select-work-buttons clean-filters">Очистить фильтры</button>
                         </div>
                     </div>
                     

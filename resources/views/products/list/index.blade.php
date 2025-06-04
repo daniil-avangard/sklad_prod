@@ -103,10 +103,14 @@
                     </table>
                 </div>
             </div>
-            <div>
-            <button id="all-items-to-basket" class="btn btn-primary">Добавить все товары в корзину</button>
+            <div class="buttons-orders-cotroller">
+                <div class="buttons-orders-elm">
+                    <button id="redirect-to-basket" class="btn btn-success mb-3">Перейти в корзину</button>
+                </div>
+                <div class="buttons-orders-elm">
+                    <button id="all-items-to-basket" class="btn btn-primary mb-3">Добавить все товары в корзину</button>
+                </div>
             </div>
-            <button id="redirect-to-basket" class="btn btn-success mb-3">Перейти в корзину</button>
         </div> <!-- end col -->
     </div> <!-- end row -->
 @endsection
