@@ -20,9 +20,9 @@
                         <tr>
                             <th class="text-center orders_picture_row" rowspan="2">Изображение</th>
                             <th class="text-center" rowspan="2">Название</th>
-                            <th class="text-center" rowspan="2">Даты актуализации</th>
-                            <th class="text-center" colspan="4">KKO</th>
-                            <th class="text-center" colspan="2">Экспресс</th>
+                            <th class="text-center tbl-borders-right" rowspan="2">Даты актуализации</th>
+                            <th class="text-center tbl-borders-right tbl-borders-top" colspan="4">KKO</th>
+                            <th class="text-center tbl-borders-right tbl-borders-top" colspan="2">Экспресс</th>
                             <th class="text-center" colspan="2">Действия</th>
                         </tr>
 
@@ -30,9 +30,9 @@
                             <th class="text-center" colspan="1">Оперзал</th>
                             <th class="text-center" colspan="1">Открытие счетов</th>
                             <th class="text-center" colspan="1">Менеджерам</th>
-                            <th class="text-center" colspan="1">Операционистам</th>
+                            <th class="text-center tbl-borders-right" colspan="1">Операционистам</th>
                             <th class="text-center" colspan="1">Оперзал</th>
-                            <th class="text-center" colspan="1">Операционистам</th>
+                            <th class="text-center tbl-borders-right" colspan="1">Операционистам</th>
                             <th class="text-center" colspan="1">Количество</th>
                             <th class="text-center" colspan="1"></th>
                         </tr>
@@ -51,7 +51,7 @@
                                     </p>
                                 </td>
 <!--                                <td>{{ $product->category->name }}</td>-->
-                                <td>
+                                <td class="tbl-borders-right">
                                     @php
                                         $dateOfActualities = $product->variants
                                             ->where('is_active', true)
@@ -73,13 +73,13 @@
                                 <td>
                                     {!! kko_express_check($product->kko_manager) !!}
                                 </td>
-                                <td>
+                                <td class="tbl-borders-right">
                                     {!! kko_express_check($product->kko_operator) !!}
                                 </td>
                                 <td>
                                     {!! kko_express_check($product->express_hall) !!}
                                 </td>
-                                <td>
+                                <td class="tbl-borders-right">
                                     {!! kko_express_check($product->express_operator) !!}
                                 </td>
 

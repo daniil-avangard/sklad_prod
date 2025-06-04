@@ -775,3 +775,12 @@ tr p {
 #redirect-to-basket {
     margin-top: 10px;
 }
+.tbl-borders-right {
+    border-right: 2px solid black !important;
+}
+.tbl-borders-top {
+    border-top: 2px solid black !important;
+}
+.tbl-borders-bottom {
+    border-bottom: 2px solid black !important;
+}

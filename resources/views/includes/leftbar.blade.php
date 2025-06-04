@@ -4,7 +4,7 @@
 
         <li>
             <a href="javascript: void(0)">
-                <i data-feather="home" class="align-self-center menu-icon"></i><span>Заказ</span><span
+                <i data-feather="home" class="align-self-center menu-icon"></i><span>Заказы</span><span
                     class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span>
             </a>
             <ul class="nav-second-level" aria-expanded="false">
@@ -31,7 +31,7 @@
         </li>
         <li>
             <a href="javascript: void(0);"> <i data-feather="home"
-                    class="align-self-center menu-icon"></i><span>Продукты</span><span class="menu-arrow"><i
+                    class="align-self-center menu-icon"></i><span>Справочники</span><span class="menu-arrow"><i
                         class="mdi mdi-chevron-right"></i></span></a>
             <ul class="nav-second-level" aria-expanded="false">
                 @can('view', \App\Models\Product::class)
