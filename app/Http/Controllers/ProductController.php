@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\UserRoleEnum;
 use Illuminate\Http\Request;
 use App\Http\Requests\Product\ProductRequest;
 use App\Models\Product;
@@ -16,8 +17,10 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\Category;
 use App\Models\DivisionCategory;
+use App\Models\DivisionGroup;
 use App\Models\Writeoff;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -30,13 +33,91 @@ class ProductController extends Controller
         }
 
         $canCreateProduct = Gate::allows('create', Product::class);
+        $userRole = Auth::user()->roles()->first()?->value;
+        // dd($userRole);
 
-        $products = Product::with('variants')->get()->map(function ($product) {
-            $product->total_quantity = $product->variants->sum('quantity');
-            $product->total_reserved = $product->variants->sum('reserved');
-            return $product;
-        });
-        return view('products.index', compact('products', 'canCreateProduct'));
+        if ($userRole === UserRoleEnum::SUPER_ADMIN->value) {
+            $products = Product::with('variants')->orderBy('name')->get()
+                ->map(function ($product) {
+                    $product->total_quantity = $product->variants->sum('quantity');
+                    $product->total_reserved = $product->variants->sum('reserved');
+                    $product->companyName = $product->company()->first()->name;
+                    $product->categoryName = $product->category()->first()->name;
+                    return $product;
+                });
+
+            $products = Product::with('variants')->get()->map(function ($product) {
+                $product->total_quantity = $product->variants->sum('quantity');
+                $product->total_reserved = $product->variants->sum('reserved');
+                $product->companyName = $product->company()->first()->name;
+                $product->categoryName = $product->category()->first()->name;
+                return $product;
+            });
+        } else if ($userRole === UserRoleEnum::DIVISION_MANAGER->value || $userRole === UserRoleEnum::TOP_MANAGER->value) {
+            $divisionId = Auth::user()->division_id;
+            $divisionGroupIds = Auth::user()->divisionGroups?->pluck("pivot.division_group_id")->toArray();
+
+            // Шаг 2: Находим все подразделения, связанные с этими группами
+            $divisionIds = DB::table('division_division_group')
+                ->whereIn('division_group_id', $divisionGroupIds)
+                ->pluck('division_id')
+                ->unique() // Убираем дубликаты
+                ->toArray();
+
+            // Шаг 3: Находим продукты, прикрепленные к этим подразделениям
+            $productIds = DB::table('division_product')
+                ->whereIn('division_id', $divisionIds)
+                ->pluck('product_id')
+                ->unique() // Убираем дубликаты
+                ->toArray();
+
+            $products = Product::with('variants')
+                ->whereIn('id', $productIds)
+                ->orWhereHas('divisions', function ($query) use ($divisionId) {
+                    $query->where('division_id', $divisionId);
+                })
+                ->orderBy('name')
+                ->get()
+                ->map(function ($product) {
+                    $product->total_quantity = $product->variants->sum('quantity');
+                    $product->total_reserved = $product->variants->sum('reserved');
+                    $product->companyName = $product->company()->first()->name;
+                    $product->categoryName = $product->category()->first()->name;
+                    return $product;
+                });
+        } else {
+            $divisionId = Auth::user()->division_id;
+            $divisionGroupProducts = DB::table('division_group_product')
+                ->join('division_division_group', 'division_group_product.division_group_id', '=', 'division_division_group.division_group_id')
+                ->where('division_division_group.division_id', $divisionId)
+                ->pluck('division_group_product.product_id');
+
+            $products = Product::with('variants')
+                ->whereIn('id', $divisionGroupProducts)
+                ->orWhereHas('divisions', function ($query) use ($divisionId) {
+                    $query->where('division_id', $divisionId);
+                })
+                ->orderBy('name')->get()->map(function ($product) {
+                    $product->total_quantity = $product->variants->sum('quantity');
+                    $product->total_reserved = $product->variants->sum('reserved');
+                    $product->companyName = $product->company()->first()->name;
+                    $product->categoryName = $product->category()->first()->name;
+                    return $product;
+                });
+        }
+
+        $productCategories = Category::all();
+        $productCompanies = Company::all();
+        
+    //     dd($products->toArray());
+    //     "kko_hall" => true
+    // "kko_account_opening" => false
+    // "kko_manager" => true
+    // "kko_operator" => "no"
+    // "express_hall" => false
+    // "express_operator" => "no"
+
+        return view('products.index', compact('products', 'canCreateProduct', 'productCategories', 'productCompanies'));
     }
 
     public function create()

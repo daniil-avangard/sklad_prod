@@ -12,6 +12,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use App\Models\Division;
 use App\Models\DivisionGroup;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -110,5 +111,13 @@ class UserController extends Controller
 
         $user->delete();
         return redirect()->route('users.index')->with('success', 'Пользователь успешно удален');
+    }
+
+    public function role()
+    {
+        // $userRole = Auth::user()->roles;
+        $user = Auth::user();
+        $userRole = $user->roles()->first()?->value;
+        return response()->json(['role' => $userRole], 200);
     }
 }

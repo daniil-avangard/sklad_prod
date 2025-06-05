@@ -44,9 +44,17 @@
                                 </td>
                                 <td>
                                     <p class="d-inline-block align-middle mb-0">
-                                        <a href="{{ route('products.info', $product) }}"
-                                            class="d-inline-block align-middle mb-0 product-name">{{ $product->name }}</a>
-                                        <br>
+                                        @can('view', \App\Models\Product::class)
+                                            <a href="{{ route('products.info', $product) }}"
+                                                class="d-inline-block align-middle mb-0 product-name">{{ $product->name }}</a>
+                                            <br>
+                                            <span class="text-muted font-13">{{ $product->sku }}</span>
+                                        @else
+                                            <span
+                                                class="d-inline-block align-middle mb-0 product-name">{{ $product->name }}</span>
+                                            <br>
+                                        @endcan
+
                                         <span class="text-muted font-13">{{ $product->sku }}</span>
                                     </p>
                                 </td>
@@ -84,12 +92,12 @@
                                 </td>
 
                                 <x-form class="add-product-to-basket-form" data-product-id="{{ $product->id }}"
-                                    action="{{ route('basket.add', $product) }}" method="POST">
+                                    action="{{ route('basket.add', $product) }}" method="POST" autocomplete="off">
                                     @csrf
 
                                     <td>
-                                        <input type="number" class="form-control form-control-sm" value="0"
-                                            min="0" name="quantity">
+                                        <input type="number" class="form-control form-control-sm" placeholder="0"
+                                            min="0" name="quantity" autocomplete="off" required>
                                     </td>
                                     <td>
                                         @if ($arrayProductsInBasket[$product->id] == 0)
