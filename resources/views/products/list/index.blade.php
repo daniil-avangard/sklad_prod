@@ -98,7 +98,7 @@
                                             корзину
                                         </button>
                                         @else
-                                        <button class="btn btn-primary" type="submit">
+                                        <button class="btn btn-primary basket-button-change" type="submit">
                                             {{ $arrayProductsInBasket[$product->id] }} добавлено в
                                             корзину
                                         </button>
