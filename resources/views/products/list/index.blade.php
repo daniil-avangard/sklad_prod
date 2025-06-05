@@ -92,10 +92,17 @@
                                             min="0" name="quantity">
                                     </td>
                                     <td>
+                                        @if ($arrayProductsInBasket[$product->id] == 0)
                                         <button class="btn btn-primary" type="submit">
                                             Добавить в
                                             корзину
                                         </button>
+                                        @else
+                                        <button class="btn btn-primary" type="submit">
+                                            {{ $arrayProductsInBasket[$product->id] }} добавлено в
+                                            корзину
+                                        </button>
+                                        @endif
                                     </td>
                                 </x-form>
                             </tr>

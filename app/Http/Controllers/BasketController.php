@@ -76,7 +76,6 @@ class BasketController extends Controller
     {
 //        $this->authorize('update', Order::class);
 //        dd($request);
-        $index = 0;
         $quantArray = [];
         foreach ($request['data'] as $item) {
 //            dd($item);
@@ -104,7 +103,6 @@ class BasketController extends Controller
                 $basket->products()->attach($product, ['quantity' => $quantity]);
                 $quantArray[] = $quantity;
             }
-            $index++;
         }
         return response()->json([
             'success' => 'Добавлено',
