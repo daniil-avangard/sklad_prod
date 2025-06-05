@@ -18,6 +18,10 @@
 
                                 class="ti-control-record"></i>Сделать заказ</a></li>
                 @endcan
+                @can('viewAny', \App\Models\Order::class)
+                    <li class="nav-item"><a class="nav-link" href="{{ route('orders.new') }}"><i
+                                class="ti-control-record"></i>Тест</a></li>
+                @endcan
             </ul>
         </li>
         <li>
