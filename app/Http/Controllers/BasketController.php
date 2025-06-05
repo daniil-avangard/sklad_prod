@@ -58,6 +58,7 @@ class BasketController extends Controller
             // Если продукт существует, увеличиваем количество
             $basketProduct->pivot->quantity += $quantity;
             $basketProduct->pivot->save(); // Сохраняем изменения в количестве
+            $quantity = $basketProduct->pivot->quantity;
         } else {
             // Если продукт не существует в корзине, то добавляем его с указанным количеством
             $basket->products()->attach($product, ['quantity' => $quantity]);
@@ -75,6 +76,7 @@ class BasketController extends Controller
     {
 //        $this->authorize('update', Order::class);
 //        dd($request);
+        $quantArray = [];
         foreach ($request['data'] as $item) {
 //            dd($item);
             $product = Product::where("id", $item[0])->first();
@@ -86,22 +88,25 @@ class BasketController extends Controller
                 if ($request['type'] == 'add') {
                     $basketProduct->pivot->quantity += $quantity;
                     $basketProduct->pivot->save(); // Сохраняем изменения в количестве
+                    $quantArray[] = $basketProduct->pivot->quantity;
                 } else {
                     if ($quantity == 0 || $quantity == null) {
                         $this->basket->products()->detach($product);
                     } else {
                         $basketProduct->pivot->quantity = $quantity;
                         $basketProduct->pivot->save(); // Сохраняем изменения в количестве
+                        $quantArray[] = $quantity;
                     }
                 }
             } else {
                 // Если продукт не существует в корзине, то добавляем его с указанным количеством
                 $basket->products()->attach($product, ['quantity' => $quantity]);
+                $quantArray[] = $quantity;
             }
         }
         return response()->json([
             'success' => 'Добавлено',
-            'quontity' => $request['data']
+            'quontity' => $quantArray
         ]);
     }
 

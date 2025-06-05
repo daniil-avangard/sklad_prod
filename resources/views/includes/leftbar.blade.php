@@ -15,7 +15,20 @@
             <ul class="nav-second-level" aria-expanded="false">
                 @can('create', \App\Models\Order::class)
                     <li class="nav-item"><a class="nav-link" href="{{ route('products.list') }}"><i
-                                class="ti-control-record"></i>Создать заказ</a></li>
+
+                                class="ti-control-record"></i>Сделать заказ</a></li>
+                @endcan
+            </ul>
+        </li>
+        <li>
+            <a href="javascript: void(0);"> <i data-feather="home"
+                    class="align-self-center menu-icon"></i><span>Справочники</span><span class="menu-arrow"><i
+                        class="mdi mdi-chevron-right"></i></span></a>
+            <ul class="nav-second-level" aria-expanded="false">
+                @can('view', \App\Models\Product::class)
+                    <li class="nav-item"><a class="nav-link" href="{{ route('products') }}"><i
+                                class="ti-control-record"></i>Продукты</a></li>
+
                 @endcan
                 @can('create', \App\Models\Order::class)
                     <li class="nav-item">
