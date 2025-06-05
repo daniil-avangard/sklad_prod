@@ -115,29 +115,35 @@ class FilterPage {
             }
         });
         
-        this.cleanMonthsFilter.onclick = () => {
-            Array.from(self.checkBoxArray1).forEach((elm, ind) => {
-                    elm.checked = false;
-            });
-            document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
-            if (self.selectDivision) {
-                self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
-            } else {
-                self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+        if (this.cleanMonthsFilter) {
+            this.cleanMonthsFilter.onclick = () => {
+                Array.from(self.checkBoxArray1).forEach((elm, ind) => {
+                        elm.checked = false;
+                });
+                document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
+                if (self.selectDivision) {
+                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+                } else {
+                    self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+                }
             }
         }
         
-        this.cleanStatusProdFilter.onclick = () => {
-            self.selectOrderStatus.value = "";
-            document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
-            self.selectProductOrder.value = "";
-            document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
-            if (self.selectDivision) {
-                self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, false);
-            } else {
-                self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, false);
+        if (this.cleanStatusProdFilter) {
+            this.cleanStatusProdFilter.onclick = () => {
+                self.selectOrderStatus.value = "";
+                document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
+                self.selectProductOrder.value = "";
+                document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
+                if (self.selectDivision) {
+                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, false);
+                } else {
+                    self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, false);
+                }
             }
         }
+        
+        
     }
     
     initsettings() {
@@ -242,7 +248,8 @@ class FilterPage {
                     self.tableTrArray.forEach(row => {
                         if (!(row.classList.contains("row-hidden"))) {
                             if (row.cells[3].firstElementChild.innerHTML.trim() != "Отменен") {
-                                let city = row.cells[0].getElementsByTagName("A")[0].innerHTML.trim();
+                                let city = row.cells[0].getElementsByTagName("A").length > 0 ? row.cells[0].getElementsByTagName("A")[0].innerHTML.trim() : row.cells[0].innerHTML.trim();
+//                                let city = row.cells[0].getElementsByTagName("A")[0].innerHTML.trim();
 
                                 let arrayProductsDivs = row.cells[1].querySelectorAll('.order-popup-parent');
                                 let arrayProductsQuantities = row.cells[2].getElementsByTagName("P");
@@ -290,7 +297,7 @@ class FilterPage {
 //                    console.log(dataForGraphic);
                 } else {
                     if (arrayMonths.length == 0) {
-                        alert('Выберите месяца');
+                        alert('Выберите товар и месяцы');
                     } else {
                         alert('Выберите продукт');
                     }

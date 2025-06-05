@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Basket;
 
 class ProductListController extends Controller
 {
@@ -21,6 +22,7 @@ class ProductListController extends Controller
     public function index()
     {
         $this->authorize('create', \App\Models\Order::class);
+        $basket = Basket::firstOrCreate(['user_id' => Auth::user()->id]);
 
         // Продукт находится в группе division_group_product(product_id, division_group_id), division_group_id относится к division_groups(id),
         // есть еще division_division_group(division_group_id, division_id), division_id относится к divisions(id)
@@ -50,8 +52,18 @@ class ProductListController extends Controller
 //            dd($product->id, $variants);
         }
         
+        $arrayProductsInBasket = [];
+        foreach ($products as $product) {
+            $basketProduct = $basket->products()->where('product_id', $product->id)->first();
+            if ($basketProduct) {
+                $arrayProductsInBasket[$product->id] = $basketProduct->pivot->quantity;
+            } else {
+                $arrayProductsInBasket[$product->id] = 0;
+            }
+        }
+        
 
-        return view('products.list.index', compact('products'));
+        return view('products.list.index', compact('products', 'arrayProductsInBasket'));
     }
 
     public function show(Product $product)

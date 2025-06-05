@@ -20,9 +20,9 @@
                         <tr>
                             <th class="text-center orders_picture_row" rowspan="2">Изображение</th>
                             <th class="text-center" rowspan="2">Название</th>
-                            <th class="text-center" rowspan="2">Даты актуализации</th>
-                            <th class="text-center" colspan="4">KKO</th>
-                            <th class="text-center" colspan="2">Экспресс</th>
+                            <th class="text-center tbl-borders-right" rowspan="2">Даты актуализации</th>
+                            <th class="text-center tbl-borders-right tbl-borders-top" colspan="4">KKO</th>
+                            <th class="text-center tbl-borders-right tbl-borders-top" colspan="2">Экспресс</th>
                             <th class="text-center" colspan="2">Действия</th>
                         </tr>
 
@@ -30,9 +30,9 @@
                             <th class="text-center" colspan="1">Оперзал</th>
                             <th class="text-center" colspan="1">Открытие счетов</th>
                             <th class="text-center" colspan="1">Менеджерам</th>
-                            <th class="text-center" colspan="1">Операционистам</th>
+                            <th class="text-center tbl-borders-right" colspan="1">Операционистам</th>
                             <th class="text-center" colspan="1">Оперзал</th>
-                            <th class="text-center" colspan="1">Операционистам</th>
+                            <th class="text-center tbl-borders-right" colspan="1">Операционистам</th>
                             <th class="text-center" colspan="1">Количество</th>
                             <th class="text-center" colspan="1"></th>
                         </tr>
@@ -59,7 +59,7 @@
                                     </p>
                                 </td>
 <!--                                <td>{{ $product->category->name }}</td>-->
-                                <td>
+                                <td class="tbl-borders-right">
                                     @php
                                         $dateOfActualities = $product->variants
                                             ->where('is_active', true)
@@ -81,13 +81,13 @@
                                 <td>
                                     {!! kko_express_check($product->kko_manager) !!}
                                 </td>
-                                <td>
+                                <td class="tbl-borders-right">
                                     {!! kko_express_check($product->kko_operator) !!}
                                 </td>
                                 <td>
                                     {!! kko_express_check($product->express_hall) !!}
                                 </td>
-                                <td>
+                                <td class="tbl-borders-right">
                                     {!! kko_express_check($product->express_operator) !!}
                                 </td>
 
@@ -100,10 +100,17 @@
                                             min="0" name="quantity" autocomplete="off" required>
                                     </td>
                                     <td>
+                                        @if ($arrayProductsInBasket[$product->id] == 0)
                                         <button class="btn btn-primary" type="submit">
                                             Добавить в
                                             корзину
                                         </button>
+                                        @else
+                                        <button class="btn btn-primary basket-button-change" type="submit">
+                                            {{ $arrayProductsInBasket[$product->id] }} добавлено в
+                                            корзину
+                                        </button>
+                                        @endif
                                     </td>
                                 </x-form>
                             </tr>
@@ -111,10 +118,14 @@
                     </table>
                 </div>
             </div>
-            <div>
-            <button id="all-items-to-basket" class="btn btn-primary">Добавить все товары в корзину</button>
+            <div class="buttons-orders-cotroller">
+                <div class="buttons-orders-elm">
+                    <button id="redirect-to-basket" class="btn btn-success mb-3">Перейти в корзину</button>
+                </div>
+                <div class="buttons-orders-elm">
+                    <button id="all-items-to-basket" class="btn btn-primary mb-3">Добавить все товары в корзину</button>
+                </div>
             </div>
-            <button id="redirect-to-basket" class="btn btn-success mb-3">Перейти в корзину</button>
         </div> <!-- end col -->
     </div> <!-- end row -->
 @endsection
