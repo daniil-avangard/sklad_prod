@@ -18,22 +18,6 @@
 
                                 class="ti-control-record"></i>Сделать заказ</a></li>
                 @endcan
-                @can('viewAny', \App\Models\Order::class)
-                    <li class="nav-item"><a class="nav-link" href="{{ route('orders.new') }}"><i
-                                class="ti-control-record"></i>Тест</a></li>
-                @endcan
-            </ul>
-        </li>
-        <li>
-            <a href="javascript: void(0);"> <i data-feather="home"
-                    class="align-self-center menu-icon"></i><span>Справочники</span><span class="menu-arrow"><i
-                        class="mdi mdi-chevron-right"></i></span></a>
-            <ul class="nav-second-level" aria-expanded="false">
-                @can('view', \App\Models\Product::class)
-                    <li class="nav-item"><a class="nav-link" href="{{ route('products') }}"><i
-                                class="ti-control-record"></i>Продукты</a></li>
-
-                @endcan
                 @can('create', \App\Models\Order::class)
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('basket') }}"><i class="ti-control-record"></i>Корзина</a>
@@ -52,11 +36,26 @@
                 @endcan
             </ul>
         </li>
+<!--        <li>
+            <a href="javascript: void(0);"> <i data-feather="home"
+                    class="align-self-center menu-icon"></i><span>Справочники</span><span class="menu-arrow"><i
+                        class="mdi mdi-chevron-right"></i></span></a>
+            <ul class="nav-second-level" aria-expanded="false">
+                @can('view', \App\Models\Product::class)
+                    <li class="nav-item"><a class="nav-link" href="{{ route('products') }}"><i
+                                class="ti-control-record"></i>Продукты</a></li>
+
+                @endcan
+                
+                
+                
+            </ul>
+        </li>-->
         @can('view', \App\Models\Product::class)
             <li>
                 <a href="javascript: void(0);">
                     <i data-feather="home" class="align-self-center menu-icon"></i>
-                    <span>Продукты</span>
+                    <span>Справочники</span>
                     <span class="menu-arrow">
                         <i class="mdi mdi-chevron-right"></i>
                     </span>
