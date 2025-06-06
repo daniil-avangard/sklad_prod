@@ -37,7 +37,7 @@ class ExcellTable {
         }
         let res = await response.json();
         console.log("Проверяем api = ", res);
-        console.log("парсим объект = ", res.uniqGoods[0]);
+        console.log("парсим объект = ", res.uniqGoods);
 //        console.log(" еще парсим объект = ", res.uniqGoodsTotalOrdered[res.uniqGoods[0].name]);
         console.log(" flagForExcell = ", res.flagForExcell);
         this.flagRoleForExcell = res.flagForExcell == 'show';
@@ -164,7 +164,7 @@ class ExcellTable {
                                             },
                                     body: JSON.stringify(dataToSend)
                                     });
-            
+            console.log(indexCurrentRow, self.allDataForExcell[indexCurrentRow]);
             let compareMinumum1 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) : self.allDataForExcell[indexCurrentRow].warehouse - self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name];
             let compareMinumum2 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 2].innerHTML) : self.allDataForExcell[indexCurrentRow].min_stock;
             console.log('compareMinumum = ', compareMinumum1, compareMinumum2, deltaItemQuontity);
