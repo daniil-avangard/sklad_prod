@@ -322,8 +322,25 @@ class OrderController extends Controller
             }
 
         }
+        
+        $nullDivisionsGoods = [];
+        foreach ($allGoodsInOrders as $key => $item) {
+            $sumQuantItem = 0;  
+            foreach ($allDivisions as $name) { 
+                $sumQuantItem += $allDivisionsDataNew[$name][$item['name']]['quontity'];
+            }
+            if ($sumQuantItem == 0) {
+                $nullDivisionsGoods[] = $key;
+            }
+        }
+          
         array_multisort(array_column($allDivisionsNames, 'sort'), SORT_ASC, $allDivisionsNames);
-//        dd($allDivisionsNames, $allDivisions);
+//        dd($nullDivisionsGoods);
+        if (count($nullDivisionsGoods) != 0) {
+            foreach ($nullDivisionsGoods as $dellItem) {
+                unset($allGoodsInOrders[$dellItem]);
+            }
+        }
         $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew);
 
         return $result;
