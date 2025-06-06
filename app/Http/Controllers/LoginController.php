@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\Login\LoginRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 
 
 
@@ -30,7 +31,10 @@ class LoginController extends Controller
         }
 
         $loginRequest->session()->regenerate();
-
+        Cookie::queue('selectSkladDivision', '', time()+3600, null, null, false, false);
+        Cookie::queue('selectSkladOrderStatus', '', time()+3600, null, null, false, false);
+        Cookie::queue('selectSkladProductOrder', '', time()+3600, null, null, false, false);
+        Cookie::queue('selectSkladCheckBoxBlock', '', time()+3600, null, null, false, false);
         return redirect()->intended(route('home'));
     }
 
