@@ -335,13 +335,21 @@ class OrderController extends Controller
         }
           
         array_multisort(array_column($allDivisionsNames, 'sort'), SORT_ASC, $allDivisionsNames);
-//        dd($nullDivisionsGoods);
+        
+        $result = array();
+        $allGoodsInOrdersUpdated = [];
         if (count($nullDivisionsGoods) != 0) {
             foreach ($nullDivisionsGoods as $dellItem) {
                 unset($allGoodsInOrders[$dellItem]);
             }
+            foreach ($allGoodsInOrders as $item) {
+                $allGoodsInOrdersUpdated[] = $item;
+            }
+            $result = array($allGoodsInOrdersUpdated, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew);
+            
+        } else {
+            $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew);
         }
-        $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew);
 
         return $result;
 

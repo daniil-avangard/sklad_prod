@@ -39,7 +39,8 @@ if (document.getElementById('view-selected')) {
             form.method = 'POST';
             form.action = "{{ route('orders.selected') }}";
 
-
+        }
+    });
 document.getElementById('view-selected')?.addEventListener('click', function() {
     const selectedOrders = Array.from(document.querySelectorAll('.order-checkbox:checked'))
         .map(checkbox => checkbox.value);
@@ -75,4 +76,5 @@ document.getElementById('view-selected')?.addEventListener('click', function() {
             })
         }
     });
-
+    
+}
