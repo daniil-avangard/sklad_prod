@@ -642,8 +642,9 @@ class OrderController extends Controller
         $divisionNames = $result[1];
         $allDivisionsData = $result[2];
         $allDivisionsDataNew = $result[3];
+        $totalNewData = $result[4];
         //
-        return response()->json(['success' => true, 'uniqGoods' => $uniqGoods, 'uniqGoodsTotalOrdered' => $uniqGoodsTotalOrdered, 'flagForExcell' => $flagForExcell]);
+        return response()->json(['success' => true, 'uniqGoods' => $uniqGoods, 'uniqGoodsTotalOrdered' => $uniqGoodsTotalOrdered, 'flagForExcell' => $flagForExcell, 'totalNewData' => $totalNewData]);
     }
 
     // Статуты бля заказаков
