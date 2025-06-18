@@ -136,10 +136,11 @@ class OrderController extends Controller
         $divisionNames = $result[1];
         $allDivisionsData = $result[2];
         $allDivisionsDataNew = $result[3];
+        $totalNewData = $result[4];
 //        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
 //        $test = $uniqGoods[1]['name'];
 //        dd($allDivisionsDataNew, $uniqGoods);
-        return view('orders.index-new', compact('currentSessionOrders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew', 'uniqGoodsTotalOrdered', 'flagForExcell'));
+        return view('orders.index-new', compact('currentSessionOrders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew', 'uniqGoodsTotalOrdered', 'flagForExcell', 'totalNewData'));
     }
 
     public function indexNewUpdate()
@@ -215,6 +216,7 @@ class OrderController extends Controller
 
         $divisionStateOrders = array();
         $divisionStateOrdersNew = array();
+        $allDivisionsProcessingNew = array();
 
         $arrayOfStatuses = array(StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value);
 
@@ -224,6 +226,9 @@ class OrderController extends Controller
                 if ($order->status->value == $currentRole) {
                     $divisionStateOrdersNew[] = $order;
                 }
+                if ($order->status->value == StatusEnum::NEW->value) {
+                    $allDivisionsProcessingNew[] = $order;
+                }
             }
         }
 
@@ -231,7 +236,8 @@ class OrderController extends Controller
         $allDivisions = array();
         $allDivisionsData = array();
         $allDivisionsDataNew = array();
-
+        $allProcessingNew = array();
+        
         foreach ($divisionStateOrders as $order) {
             foreach ($order->items as $item) {
                 if (!isset($allDivisionsData[$order->division->name])) {
@@ -271,6 +277,26 @@ class OrderController extends Controller
 
             }
         }
+        
+        // Для только новых заказов
+        foreach ($allDivisionsProcessingNew as $order) {
+            foreach ($order->items as $item) {
+                if (!isset($allProcessingNew[$order->division->name])) {
+                    if (!isset($allProcessingNew[$order->division->name][$item->product->name])) {
+                        $allProcessingNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order);
+                    } else {
+                        $allProcessingNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
+                    }
+                } else {
+                    if (!isset($allProcessingNew[$order->division->name][$item->product->name])) {
+                        $allProcessingNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order);
+                    } else {
+                        $allProcessingNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
+                    }
+                }
+
+            }
+        }
 
         foreach ($allDivisionsData as $k => $v) {
             $allDivisions[] = $k;
@@ -288,6 +314,15 @@ class OrderController extends Controller
             foreach ($allGoodsInOrders as $x) {
                 if (!(array_key_exists($x['name'] ,$v))) {
                     $allDivisionsDataNew[$k][$x['name']] = array('quontity' => 0, 'id' => 0);
+                }
+            }
+        }
+        
+        // Для только новых заказов
+        foreach ($allProcessingNew as $k => $v) {
+            foreach ($allGoodsInOrders as $x) {
+                if (!(array_key_exists($x['name'] ,$v))) {
+                    $allProcessingNew[$k][$x['name']] = array('quontity' => 0, 'id' => 0);
                 }
             }
         }
@@ -315,6 +350,12 @@ class OrderController extends Controller
                     $allDivisionsDataNew[$name][$item['name']] = array('quontity' => 0, 'id' => 0);
                 }
             }
+            // Для только новых заказов
+            if (!isset($allProcessingNew[$name])) {
+                foreach ($allGoodsInOrders as $item) {
+                    $allProcessingNew[$name][$item['name']] = array('quontity' => 0, 'id' => 0);
+                }
+            }
             if (!isset($allDivisionsData[$name])) {
                 foreach ($allGoodsInOrders as $item) {
                     $allDivisionsData[$name][$item['name']] = array('quontity' => 0, 'id' => 0);
@@ -322,6 +363,18 @@ class OrderController extends Controller
             }
 
         }
+        
+        $totalNewArray = array();
+        
+        foreach ($allGoodsInOrders as $x) {
+            $totalNewQuontity = 0;
+            foreach ($allDivisions as $name) {
+                $totalNewQuontity += $allProcessingNew[$name][$x['name']]['quontity'];
+            }
+            $totalNewArray[$x['name']] = $totalNewQuontity;
+        }
+        
+//        dd($totalNewArray);
         
         $nullDivisionsGoods = [];
         foreach ($allGoodsInOrders as $key => $item) {
@@ -345,10 +398,10 @@ class OrderController extends Controller
             foreach ($allGoodsInOrders as $item) {
                 $allGoodsInOrdersUpdated[] = $item;
             }
-            $result = array($allGoodsInOrdersUpdated, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew);
+            $result = array($allGoodsInOrdersUpdated, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew, $totalNewArray);
             
         } else {
-            $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew);
+            $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew, $totalNewArray);
         }
 
         return $result;
@@ -589,8 +642,9 @@ class OrderController extends Controller
         $divisionNames = $result[1];
         $allDivisionsData = $result[2];
         $allDivisionsDataNew = $result[3];
+        $totalNewData = $result[4];
         //
-        return response()->json(['success' => true, 'uniqGoods' => $uniqGoods, 'uniqGoodsTotalOrdered' => $uniqGoodsTotalOrdered, 'flagForExcell' => $flagForExcell]);
+        return response()->json(['success' => true, 'uniqGoods' => $uniqGoods, 'uniqGoodsTotalOrdered' => $uniqGoodsTotalOrdered, 'flagForExcell' => $flagForExcell, 'totalNewData' => $totalNewData]);
     }
 
     // Статуты бля заказаков
