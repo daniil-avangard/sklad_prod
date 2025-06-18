@@ -56,9 +56,9 @@
                                     </td>
                                     @include('orders.digits-cell')
                                     @if ($flagForExcell == "show")
-                                        <td class="another-col">{{ $good['total'] }}</td>
-                                        <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] }}</td>
-                                        <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] }}</td>
+                                        <td class="another-col">{{ $good['total'] - $totalNewData[$good['name']] }}</td>
+                                        <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] + $totalNewData[$good['name']] }}</td>
+                                        <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] + $totalNewData[$good['name']] }}</td>
                                         <td class="another-col">{{ $good['min_stock'] }}</td>
                                         <td class="another-col"> - </td>                                       
                                     @endif
