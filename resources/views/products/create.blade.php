@@ -2,6 +2,7 @@
 @section('title_page', 'Добавление продукта')
 @push('styles-plugins')
     <link href="/plugins/dropify/css/dropify.min.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
 @endpush
 @section('content')
     @include('includes.breadcrumb', [
@@ -81,8 +82,9 @@
                         <div class=row>
                             <div class="col-md-12">
                                 <div class="card">
-                                    <div class="card-header">
+                                    <div class="card-header wrap-form-data">
                                         <h4 class="card-title">Необходимость размещения в точках продаж</h4>
+                                        <span class="tooltiptext">Заполните это поле</span>
                                     </div>
 
                                     <div class="card-body">

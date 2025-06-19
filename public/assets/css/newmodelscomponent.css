@@ -432,6 +432,34 @@ tr p {
 .wrap-icon-digits-exell:hover .tooltiptext {
   visibility: visible;
 }
+.wrap-form-data .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #888;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+  border-radius: 6px;
+  padding: 3px 0;
+  position: absolute;
+  z-index: 11 !important;
+  top: 20%;
+  left: 50%;
+  margin-left: -60px;
+}
+.wrap-form-data .tooltiptext::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent #888 transparent;
+}
+.tooltiptext-visible {
+  visibility: visible !important;
+}
 .icon-digits-exell {
     margin-left: 5px;
     cursor: pointer;
