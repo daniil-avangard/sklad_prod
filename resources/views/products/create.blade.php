@@ -14,7 +14,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <x-form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
+                    <x-form id="product-form" action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                         <div class="row">
                             <div class="card">
                                 <div class="card-body">
@@ -71,7 +71,7 @@
                                             <label for="image">Изображение</label>
                                             <input name="image" type="file" id="image" class="dropify-ru"
                                                 data-max-file-size="10M"
-                                                data-max-file-size-error="Извините, файл слишком большой" />
+                                                data-max-file-size-error="Извините, файл слишком большой" required />
                                         </div>
                                     </div>
                                 </div>
@@ -203,4 +203,5 @@
 @push('scripts-plugins')
     <script src="/plugins/dropify/js/dropify.min.js"></script>
     <script src="/assets/pages/jquery.form-upload.init.js"></script>
+    <script src="/assets/js/productForm.js"></script>
 @endpush
