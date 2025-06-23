@@ -443,7 +443,7 @@ tr p {
   padding: 3px 0;
   position: absolute;
   z-index: 11 !important;
-  top: 20%;
+  top: 80%;
   left: 50%;
   margin-left: -60px;
 }
