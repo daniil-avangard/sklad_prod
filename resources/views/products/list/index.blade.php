@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@vite(['resources/css/app.css', 'resources/js/app.js'])
+<!--@vite(['resources/css/app.css', 'resources/js/app.js'])-->
 @push('styles-plugins')
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
