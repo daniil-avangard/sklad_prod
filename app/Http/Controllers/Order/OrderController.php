@@ -681,7 +681,8 @@ class OrderController extends Controller
 //            dd($sum);
 //            $checkFlag = true;
             if ($products[0]->total_quantity < $sum) {
-                $checkFlag = false;
+//                $checkFlag = false;
+                $checkFlag = true;
 //                dd($orderedTotalNew);
 //                dd($item->product_id, $products[0]->total_quantity , $products[0]->total_reserved , $sum);
             }
