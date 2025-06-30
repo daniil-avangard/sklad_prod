@@ -6,6 +6,7 @@
     <!-- DataTables -->
     <link href="/plugins/datatables/dataTables.bootstrap5.min.css" rel="stylesheet" type="text/css" />
     <link href="/plugins/datatables/buttons.bootstrap5.min.css" rel="stylesheet" type="text/css" />
+    <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <!-- Responsive datatable examples -->
     <link href="/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
 @endpush
@@ -177,33 +178,33 @@
                                         В резерве
                                     </th>
                                 @endcan
-                                <th colspan="4" class="text-center">
+                                <th colspan="4" class="text-center bckgrnd-table-cell">
                                     ККО
                                 </th>
-                                <th colspan="2" class="text-center">
+                                <th colspan="2" class="text-center bckgrnd-table-cell">
                                     Экспресс
                                 </th>
                                 <th rowspan="2">Действия</th>
                             </tr>
                             <tr>
                                 {{-- ККО --}}
-                                <th>
+                                <th class="bckgrnd-table-cell">
                                     Оперзал
                                 </th>
-                                <th>
+                                <th class="bckgrnd-table-cell">
                                     Открытие счетов
                                 </th>
-                                <th>
+                                <th class="bckgrnd-table-cell">
                                     Менеджерам
                                 </th>
-                                <th>
+                                <th class="bckgrnd-table-cell">
                                     Операционистам
                                 </th>
                                 {{-- Экспресс --}}
-                                <th>
+                                <th class="bckgrnd-table-cell">
                                     Оперзал
                                 </th>
-                                <th>
+                                <th class="bckgrnd-table-cell">
                                     Операционистам
                                 </th>
                             </tr>
@@ -223,23 +224,23 @@
                                         <td>{{ $product->total_reserved }}</td>
                                     @endcan
                                     {{-- ККО --}}
-                                    <td data-search={{ $product->kko_hall }}>
+                                    <td class="bckgrnd-table-cell" data-search={{ $product->kko_hall }}>
                                         {!! kko_express_check($product->kko_hall) !!}
                                     </td>
-                                    <td data-search={{ $product->kko_account_opening }}>
+                                    <td class="bckgrnd-table-cell" data-search={{ $product->kko_account_opening }}>
                                         {!! kko_express_check($product->kko_account_opening) !!}
                                     </td>
-                                    <td data-search={{ $product->kko_manager }}>
+                                    <td class="bckgrnd-table-cell" data-search={{ $product->kko_manager }}>
                                         {!! kko_express_check($product->kko_manager) !!}
                                     </td>
-                                    <td data-search={{ $product->kko_operator }}>
+                                    <td class="bckgrnd-table-cell" data-search={{ $product->kko_operator }}>
                                         {!! kko_express_check($product->kko_operator) !!}
                                     </td>
                                     {{-- Экспресс --}}
-                                    <td data-search={{ $product->express_hall }}>
+                                    <td class="bckgrnd-table-cell" data-search={{ $product->express_hall }}>
                                         {!! kko_express_check($product->express_hall) !!}
                                     </td>
-                                    <td data-search={{ $product->express_operator }}>
+                                    <td class="bckgrnd-table-cell" data-search={{ $product->express_operator }}>
                                         {{-- {{ $product->express_operator }} --}}
                                         {!! kko_express_check($product->express_operator) !!}
                                     </td>

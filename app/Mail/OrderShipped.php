@@ -9,6 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Headers;
 
 class OrderShipped extends Mailable
 {
@@ -29,10 +30,10 @@ class OrderShipped extends Mailable
     {
         return new Envelope(
             from: new Address('abdyushevr@avangard.ru'),
-            replyTo: [
-                new Address('abdyushevr@avangard.ru'),
-            ],
-            subject: 'Order Shipped',
+//            replyTo: [
+//                new Address('abdyushevr@avangard.ru'),
+//            ],
+            subject: 'Test Email Notification',
         );
     }
 
@@ -54,5 +55,20 @@ class OrderShipped extends Mailable
     public function attachments(): array
     {
         return [];
+    }
+    
+    /**
+
+    * Get the message headers.
+
+    */
+
+    public function headers(): Headers
+    {
+        return new Headers(
+            text: [
+                'X-PM-Message-Stream' => 'outbound',
+            ],
+        );
     }
 }

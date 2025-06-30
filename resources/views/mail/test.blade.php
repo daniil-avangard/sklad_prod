@@ -1,3 +1,3 @@
 <div>
-    Hello world
+    Hello smtp From Sklad app!
 </div>
