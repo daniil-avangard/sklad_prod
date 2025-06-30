@@ -166,22 +166,11 @@
                         <thead>
                             <tr>
                                 <th rowspan="2">Название</th>
-                                <th rowspan="2">Компания</th>
-                                <th rowspan="2">Категория</th>
-                                @can('view', \App\Model\Arival::class)
-                                    <th rowspan="2">
-                                        Количество
-                                    </th>
-                                @endcan
-                                @can('view', \App\Model\Arival::class)
-                                    <th rowspan="2">
-                                        В резерве
-                                    </th>
-                                @endcan
-                                <th colspan="4" class="text-center bckgrnd-table-cell">
+                                <th rowspan="2" class="tbl-borders-right">Компания</th>
+                                <th colspan="4" class="text-center tbl-borders-right tbl-borders-top bckgrnd-table-cell">
                                     ККО
                                 </th>
-                                <th colspan="2" class="text-center bckgrnd-table-cell">
+                                <th colspan="2" class="text-center tbl-borders-right tbl-borders-top bckgrnd-table-cell">
                                     Экспресс
                                 </th>
                                 <th rowspan="2">Действия</th>
@@ -197,14 +186,14 @@
                                 <th class="bckgrnd-table-cell">
                                     Менеджерам
                                 </th>
-                                <th class="bckgrnd-table-cell">
+                                <th class="tbl-borders-right bckgrnd-table-cell">
                                     Операционистам
                                 </th>
                                 {{-- Экспресс --}}
                                 <th class="bckgrnd-table-cell">
                                     Оперзал
                                 </th>
-                                <th class="bckgrnd-table-cell">
+                                <th class="tbl-borders-right bckgrnd-table-cell">
                                     Операционистам
                                 </th>
                             </tr>
@@ -215,14 +204,7 @@
                                     <td>
                                         <a href="{{ route('products.show', $product) }}">{{ $product->name }}</a>
                                     </td>
-                                    <td>{{ $product->companyName }}</td>
-                                    <td>{{ $product->categoryName }}</td>
-                                    @can('view', \App\Model\Arival::class)
-                                        <td>{{ $product->total_quantity }}</td>
-                                    @endcan
-                                    @can('view', \App\Model\Arival::class)
-                                        <td>{{ $product->total_reserved }}</td>
-                                    @endcan
+                                    <td class="tbl-borders-right">{{ $product->companyName }}</td>
                                     {{-- ККО --}}
                                     <td class="bckgrnd-table-cell" data-search={{ $product->kko_hall }}>
                                         {!! kko_express_check($product->kko_hall) !!}
@@ -233,14 +215,14 @@
                                     <td class="bckgrnd-table-cell" data-search={{ $product->kko_manager }}>
                                         {!! kko_express_check($product->kko_manager) !!}
                                     </td>
-                                    <td class="bckgrnd-table-cell" data-search={{ $product->kko_operator }}>
+                                    <td class="tbl-borders-right bckgrnd-table-cell" data-search={{ $product->kko_operator }}>
                                         {!! kko_express_check($product->kko_operator) !!}
                                     </td>
                                     {{-- Экспресс --}}
                                     <td class="bckgrnd-table-cell" data-search={{ $product->express_hall }}>
                                         {!! kko_express_check($product->express_hall) !!}
                                     </td>
-                                    <td class="bckgrnd-table-cell" data-search={{ $product->express_operator }}>
+                                    <td class="tbl-borders-right bckgrnd-table-cell" data-search={{ $product->express_operator }}>
                                         {{-- {{ $product->express_operator }} --}}
                                         {!! kko_express_check($product->express_operator) !!}
                                     </td>
