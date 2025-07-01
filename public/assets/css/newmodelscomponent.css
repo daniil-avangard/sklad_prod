@@ -829,3 +829,9 @@ tr p {
 .clean-filters {
     height: 30px;
 }
+.bckgrnd-table-cell {
+    background-color: #ffe680 !important;
+/*    align-items: center !important;
+    justify-content: center !important;*/
+    text-align: center !important;
+}
