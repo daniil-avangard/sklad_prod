@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Enum\Order\StatusEnum;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderShipped;
+use Exception;
+use Throwable;
 
 
 class BasketController extends Controller
@@ -174,7 +176,12 @@ class BasketController extends Controller
 
 //        return redirect()->to(route('user.order', $newComposerOrder))->with('success', 'Заказ сохранен');
         $testUser = "abdyushevr@avangard.ru";
-        Mail::to($testUser)->send(new OrderShipped());
+        try {
+            Mail::to($testUser)->send(new OrderShipped());
+        } catch (Throwable $e) {
+            report($e);
+        }
+        
         return redirect()->to(route('orders'))->with('success', 'Заказ сохранен');
     }
     
