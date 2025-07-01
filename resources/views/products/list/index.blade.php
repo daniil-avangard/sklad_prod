@@ -1,5 +1,5 @@
 @extends('layouts.base')
-@vite(['resources/css/app.css', 'resources/js/app.js'])
+<!--@vite(['resources/css/app.css', 'resources/js/app.js'])-->
 @push('styles-plugins')
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -21,18 +21,18 @@
                             <th class="text-center orders_picture_row" rowspan="2">Изображение</th>
                             <th class="text-center" rowspan="2">Название</th>
                             <th class="text-center tbl-borders-right" rowspan="2">Даты актуализации</th>
-                            <th class="text-center tbl-borders-right tbl-borders-top" colspan="4">KKO</th>
-                            <th class="text-center tbl-borders-right tbl-borders-top" colspan="2">Экспресс</th>
+                            <th class="text-center tbl-borders-right tbl-borders-top bckgrnd-table-cell" colspan="4">KKO</th>
+                            <th class="text-center tbl-borders-right tbl-borders-top bckgrnd-table-cell" colspan="2">Экспресс</th>
                             <th class="text-center" colspan="2">Действия</th>
                         </tr>
 
                         <tr>
-                            <th class="text-center" colspan="1">Оперзал</th>
-                            <th class="text-center" colspan="1">Открытие счетов</th>
-                            <th class="text-center" colspan="1">Менеджерам</th>
-                            <th class="text-center tbl-borders-right" colspan="1">Операционистам</th>
-                            <th class="text-center" colspan="1">Оперзал</th>
-                            <th class="text-center tbl-borders-right" colspan="1">Операционистам</th>
+                            <th class="text-center bckgrnd-table-cell" colspan="1">Оперзал</th>
+                            <th class="text-center bckgrnd-table-cell" colspan="1">Открытие счетов</th>
+                            <th class="text-center bckgrnd-table-cell" colspan="1">Менеджерам</th>
+                            <th class="text-center tbl-borders-right bckgrnd-table-cell" colspan="1">Операционистам</th>
+                            <th class="text-center bckgrnd-table-cell" colspan="1">Оперзал</th>
+                            <th class="text-center tbl-borders-right bckgrnd-table-cell" colspan="1">Операционистам</th>
                             <th class="text-center" colspan="1">Количество</th>
                             <th class="text-center" colspan="1"></th>
                         </tr>
@@ -44,18 +44,18 @@
                                 </td>
                                 <td>
                                     <p class="d-inline-block align-middle mb-0">
-                                        @can('view', \App\Models\Product::class)
+<!--                                        @can('view', \App\Models\Product::class)-->
                                             <a href="{{ route('products.info', $product) }}"
                                                 class="d-inline-block align-middle mb-0 product-name">{{ $product->name }}</a>
                                             <br>
                                             <span class="text-muted font-13">{{ $product->sku }}</span>
-                                        @else
+<!--                                        @else
                                             <span
                                                 class="d-inline-block align-middle mb-0 product-name">{{ $product->name }}</span>
                                             <br>
-                                        @endcan
+                                        @endcan-->
 
-                                        <span class="text-muted font-13">{{ $product->sku }}</span>
+<!--                                        <span class="text-muted font-13">{{ $product->sku }}</span>-->
                                     </p>
                                 </td>
 <!--                                <td>{{ $product->category->name }}</td>-->
@@ -76,18 +76,18 @@
                                             {{ \Carbon\Carbon::parse($dateOfActuality)->format('d.m.Y') }}</p>
                                     @endforeach
                                 </td>
-                                <td>{!! kko_express_check($product->kko_hall) !!}</td>
-                                <td>{!! kko_express_check($product->kko_account_opening) !!}</td>
-                                <td>
+                                <td class="bckgrnd-table-cell">{!! kko_express_check($product->kko_hall) !!}</td>
+                                <td class="bckgrnd-table-cell">{!! kko_express_check($product->kko_account_opening) !!}</td>
+                                <td class="bckgrnd-table-cell">
                                     {!! kko_express_check($product->kko_manager) !!}
                                 </td>
-                                <td class="tbl-borders-right">
+                                <td class="tbl-borders-right bckgrnd-table-cell">
                                     {!! kko_express_check($product->kko_operator) !!}
                                 </td>
-                                <td>
+                                <td class="bckgrnd-table-cell">
                                     {!! kko_express_check($product->express_hall) !!}
                                 </td>
-                                <td class="tbl-borders-right">
+                                <td class="tbl-borders-right bckgrnd-table-cell">
                                     {!! kko_express_check($product->express_operator) !!}
                                 </td>
 
