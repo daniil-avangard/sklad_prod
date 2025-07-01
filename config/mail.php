@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'postmark'),
+    'default' => env('MAIL_MAILER', 'smtp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,9 +39,9 @@ return [
 
         'smtp' => [
             'transport' => 'smtp',
-            'url' => env('MAIL_HOST'),
-            'host' => env('MAIL_HOST', 'smtp.postmarkapp.com'),
-            'port' => env('MAIL_PORT', 25),
+            'url' => env('MAIL_URL'),
+            'host' => env('MAIL_HOST', 'smtp.gmail.com'),
+            'port' => env('MAIL_PORT', 587),
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
@@ -62,7 +62,7 @@ return [
 
         'postmark' => [
             'transport' => 'postmark',
-             'message_stream_id' => env('POSTMARK_MESSAGE_STREAM_ID'),
+            'message_stream_id' => env('POSTMARK_MESSAGE_STREAM_ID'),
             // 'client' => [
             //     'timeout' => 5,
             // ],
