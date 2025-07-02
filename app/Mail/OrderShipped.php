@@ -28,8 +28,9 @@ class OrderShipped extends Mailable
      */
     public function envelope(): Envelope
     {
+        $sendFrom = strval(env('MAIL_FROM_ADDRESS'));
         return new Envelope(
-            from: new Address('abdyushevr@avangard.ru'),
+            from: new Address($sendFrom),
 //            replyTo: [
 //                new Address('abdyushevr@avangard.ru'),
 //            ],
