@@ -27,7 +27,7 @@ class CreatePermissionsCommand extends Command
         $this->createRoleWithPermissions(UserRoleEnum::SUPER_ADMIN->label(), UserRoleEnum::SUPER_ADMIN->value, true, range(1001, 1061));
         $this->createRoleWithPermissions(UserRoleEnum::MANAGER->label(), UserRoleEnum::MANAGER->value, false, [1024, 1027]);
         $this->createRoleWithPermissions(UserRoleEnum::DIVISION_MANAGER->label(), UserRoleEnum::DIVISION_MANAGER->value, false, [1016, 1024, 1025, 1026, 1028, 1030, 1031]);
-        $this->createRoleWithPermissions(UserRoleEnum::TOP_MANAGER->label(), UserRoleEnum::TOP_MANAGER->value, false, [1003, 1006, 1010, 1011, 1015, 1016, 1020, 1024, 1025, 1026, 1028, 1029, 1030, 1031, 1032, 1033, 1035, 1036, 1042, 1047, 1052, 1057]);
+        $this->createRoleWithPermissions(UserRoleEnum::TOP_MANAGER->label(), UserRoleEnum::TOP_MANAGER->value, false, [1003, 1006, 1010, 1011, 1015, 1016, 1020, 1024, 1025, 1026, 1028, 1029, 1030, 1031, 1032, 1033, 1035, 1036, 1057]);
         $this->createRoleWithPermissions(UserRoleEnum::WAREHOUSEMAN->label(), UserRoleEnum::WAREHOUSEMAN->value, false, [1005, 1006, 1007, 1008, 1009, 1011, 1012, 1013, 1014, 1020, 1034, 1035, 1036, 1037, 1038, 1039]);
 
         $this->info('Полномочия установлены');

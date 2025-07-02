@@ -44,18 +44,10 @@
                                 </td>
                                 <td>
                                     <p class="d-inline-block align-middle mb-0">
-<!--                                        @can('view', \App\Models\Product::class)-->
                                             <a href="{{ route('products.info', $product) }}"
                                                 class="d-inline-block align-middle mb-0 product-name">{{ $product->name }}</a>
                                             <br>
                                             <span class="text-muted font-13">{{ $product->sku }}</span>
-<!--                                        @else
-                                            <span
-                                                class="d-inline-block align-middle mb-0 product-name">{{ $product->name }}</span>
-                                            <br>
-                                        @endcan-->
-
-<!--                                        <span class="text-muted font-13">{{ $product->sku }}</span>-->
                                     </p>
                                 </td>
 <!--                                <td>{{ $product->category->name }}</td>-->
