@@ -10,6 +10,8 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Headers;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class OrderShipped extends Mailable
 {
@@ -18,9 +20,9 @@ class OrderShipped extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(protected $userEmail)
     {
-        //
+        
     }
 
     /**
@@ -45,6 +47,9 @@ class OrderShipped extends Mailable
     {
         return new Content(
             view: 'mail.test',
+            with: [
+                'userEmail' => $this->userEmail,
+            ],
         );
     }
 
