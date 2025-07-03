@@ -177,8 +177,9 @@ class BasketController extends Controller
 
 //        return redirect()->to(route('user.order', $newComposerOrder))->with('success', 'Заказ сохранен');
         $testUser = "abdyushevr@avangard.ru";
+        $appUser1 = $newComposerOrder->user;
         try {
-            Mail::to($testUser)->send(new OrderShipped($appUser));
+            Mail::to($testUser)->send(new OrderShipped($appUser1));
         } catch (Throwable $e) {
             report($e);
         }
