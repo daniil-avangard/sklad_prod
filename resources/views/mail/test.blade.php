@@ -1,3 +1,3 @@
 <div>
-    Hello smtp From Sklad app!
+    Hello smtp From Sklad app: {{ $userEmail }}!
 </div>

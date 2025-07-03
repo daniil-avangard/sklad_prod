@@ -17,6 +17,9 @@ use App\Models\Division;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderShipped;
+use Throwable;
 
 class OrderController extends Controller
 {
@@ -181,6 +184,15 @@ class OrderController extends Controller
                 $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $createOrderNew['createOrder']);
             }
             
+        }
+        
+        $testUser = "abdyushevr@avangard.ru";
+        foreach ($divisionsArr as $createOrderNew) {
+            try {
+                Mail::to($testUser)->send(new OrderShipped($createOrderNew['createOrder']->user));
+            } catch (Throwable $e) {
+                report($e);
+            }
         }
 
         return redirect()->to(route('orders.new'));
