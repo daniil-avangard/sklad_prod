@@ -148,6 +148,7 @@ class BasketController extends Controller
 
     public function saveOrder(Request $request)
     {
+        $appUser = Auth::user();
 //        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
         $divisionGroups = Auth::user()->division_id;
 
@@ -176,8 +177,9 @@ class BasketController extends Controller
 
 //        return redirect()->to(route('user.order', $newComposerOrder))->with('success', 'Заказ сохранен');
         $testUser = "abdyushevr@avangard.ru";
+        $appUser1 = $newComposerOrder->user;
         try {
-            Mail::to($testUser)->send(new OrderShipped());
+            Mail::to($testUser)->send(new OrderShipped($appUser1));
         } catch (Throwable $e) {
             report($e);
         }

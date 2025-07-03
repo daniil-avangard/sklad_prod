@@ -10,17 +10,19 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Headers;
+use App\Models\User;
 
 class OrderShipped extends Mailable
 {
     use Queueable, SerializesModels;
+    public $userEmail;
 
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(User $user)
     {
-        //
+        $this->userEmail = $user->first_name;
     }
 
     /**
@@ -45,6 +47,9 @@ class OrderShipped extends Mailable
     {
         return new Content(
             view: 'mail.test',
+            with: [
+                'userEmail' => $this->userEmail,
+            ],
         );
     }
 
