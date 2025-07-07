@@ -179,7 +179,8 @@ class BasketController extends Controller
 
 //        return redirect()->to(route('user.order', $newComposerOrder))->with('success', 'Заказ сохранен');
         $dateTime = Carbon::now();
-        ProcessPodcast::dispatch($this->sentEmail($newComposerOrder))->delay($dateTime->addMinutes(3));
+        $this->sentEmail($newComposerOrder);
+//        ProcessPodcast::dispatch($this->sentEmail($newComposerOrder))->withoutDelay();
         
         return redirect()->to(route('orders'))->with('success', 'Заказ сохранен');
     }
@@ -188,11 +189,13 @@ class BasketController extends Controller
     {
         $testUser = "abdyushevr@avangard.ru";
         $appUser1 = $newComposerOrder->user;
-        try {
-            Mail::to($testUser)->send(new OrderShipped($appUser1));
-        } catch (Throwable $e) {
-            report($e);
-        }
+//        try {
+//            Mail::to($testUser)->send(new OrderShipped($appUser1));
+            Mail::to($testUser)
+                ->later(now()->addMinutes(2), new OrderShipped($appUser1));
+//        } catch (Throwable $e) {
+//            report($e);
+//        }
     }
     
     // Создание одного нового единоно заказа 
