@@ -12,8 +12,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Enum\Order\StatusEnum;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderShipped;
+use App\Jobs\ProcessPodcast;
 use Exception;
 use Throwable;
+use Illuminate\Support\Carbon;
+use DateTime;
 
 
 class BasketController extends Controller
@@ -167,7 +170,6 @@ class BasketController extends Controller
         }
 
         // начинаем схлопывать заказы в статусе 'в ожидании'
-
         $newComposerOrder = $this->createOneNewOrder($divisionGroups, $order);
 //        dd($lengthNew['10004']['quantity']);
 
@@ -176,15 +178,24 @@ class BasketController extends Controller
 
 
 //        return redirect()->to(route('user.order', $newComposerOrder))->with('success', 'Заказ сохранен');
-        $testUser = "abdyushevr@avangard.ru";
-        $appUser1 = $newComposerOrder->user;
-        try {
-            Mail::to($testUser)->send(new OrderShipped($appUser1));
-        } catch (Throwable $e) {
-            report($e);
-        }
+        $dateTime = Carbon::now();
+        $this->sentEmail($newComposerOrder);
+//        ProcessPodcast::dispatch($this->sentEmail($newComposerOrder))->withoutDelay();
         
         return redirect()->to(route('orders'))->with('success', 'Заказ сохранен');
+    }
+    
+    private function sentEmail($newComposerOrder)
+    {
+        $testUser = "abdyushevr@avangard.ru";
+        $appUser1 = $newComposerOrder->user;
+//        try {
+//            Mail::to($testUser)->send(new OrderShipped($appUser1));
+            Mail::to($testUser)
+                ->later(now()->addMinutes(2), new OrderShipped($appUser1));
+//        } catch (Throwable $e) {
+//            report($e);
+//        }
     }
     
     // Создание одного нового единоно заказа 

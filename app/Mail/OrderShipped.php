@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Headers;
 use App\Models\User;
 
-class OrderShipped extends Mailable
+class OrderShipped extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public $userEmail;
@@ -76,5 +76,10 @@ class OrderShipped extends Mailable
                 'X-PM-Message-Stream' => 'outbound',
             ],
         );
+    }
+    
+    public function handle(): void
+    {
+        //
     }
 }
