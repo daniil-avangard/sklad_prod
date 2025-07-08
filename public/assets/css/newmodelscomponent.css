@@ -831,7 +831,13 @@ tr p {
 }
 .bckgrnd-table-cell {
     background-color: #ffe680 !important;
-/*    align-items: center !important;
-    justify-content: center !important;*/
+    text-align: center !important;
+}
+.bckgrnd-table-cell-1 {
+    background-color: #eaf1dd !important;
+    text-align: center !important;
+}
+.bckgrnd-table-cell-2 {
+    background-color: #daeef3 !important;
     text-align: center !important;
 }
