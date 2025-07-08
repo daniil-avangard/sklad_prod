@@ -17,13 +17,15 @@ class OrderShipped extends Mailable
 {
     use Queueable, SerializesModels;
     public $userEmail;
+    public $message;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(User $user)
+    public function __construct(User $user, $message)
     {
-        $this->userEmail = $user->first_name;
+        $this->userEmail = $user->email;
+        $this->message = strval($message);
     }
 
     /**
@@ -50,6 +52,7 @@ class OrderShipped extends Mailable
             view: 'mail.test',
             with: [
                 'userEmail' => $this->userEmail,
+                'userMess' => $this->message,
             ],
         );
     }

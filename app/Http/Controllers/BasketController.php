@@ -198,13 +198,15 @@ class BasketController extends Controller
     {
         $testUser = "abdyushevr@avangard.ru";
         $appUser1 = $newComposerOrder->user;
-        try {
-            Mail::to($testUser)->send(new OrderShipped($appUser1));
+        $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на утверждение куратору.";
+        $message1 = strval($message);
+//        try {
+            Mail::to($testUser)->send(new OrderShipped($appUser1, $message1));
 //            Mail::to($testUser)
 //                ->later(now()->addMinutes(2), new OrderShipped($appUser1));
-        } catch (Throwable $e) {
-            report($e);
-        }
+//        } catch (Throwable $e) {
+//            report($e);
+//        }
     }
     
     // Создание одного нового единоно заказа 

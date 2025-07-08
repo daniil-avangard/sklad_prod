@@ -30,6 +30,9 @@ use App\Policies\OldOrderPolicy;
 use App\Policies\OrderPolicy;
 use DaveJamesMiller\Breadcrumbs\BreadcrumbsServiceProvider;
 use Illuminate\Cookie\Middleware\EncryptCookies;
+use App\Jobs\ProcessPodcast;
+use App\Services\AudioProcessor;
+use Illuminate\Contracts\Foundation\Application;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -81,7 +84,11 @@ class AppServiceProvider extends ServiceProvider
                 }
             );
         }
+        
         EncryptCookies::except(['check', 'skladRoleUser', 'selectSkladDivision', 'selectSkladOrderStatus', 'selectSkladProductOrder', 'selectSkladCheckBoxBlock']);
-//        EncryptCookies::except('skladRoleUser');
+        
+        $this->app->bindMethod([ProcessPodcast::class, 'handle'], function (ProcessPodcast $job, Application $app) {
+            return $job->handle($app->make(AudioProcessor::class));
+        });
     }
 }
