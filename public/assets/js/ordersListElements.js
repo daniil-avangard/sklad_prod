@@ -164,7 +164,7 @@ class ExcellTable {
                                             },
                                     body: JSON.stringify(dataToSend)
                                     });
-            console.log(indexCurrentRow, self.allDataForExcell[indexCurrentRow], self.onlyNewOrdersData[self.allDataForExcell[indexCurrentRow].name]);
+//            console.log(indexCurrentRow, self.allDataForExcell[indexCurrentRow], self.onlyNewOrdersData[self.allDataForExcell[indexCurrentRow].name]);
             let compareMinumum1 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) : self.allDataForExcell[indexCurrentRow].warehouse - self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name];
             let compareMinumum2 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 2].innerHTML) : self.allDataForExcell[indexCurrentRow].min_stock;
             console.log('compareMinumum = ', compareMinumum1, compareMinumum2, deltaItemQuontity);
