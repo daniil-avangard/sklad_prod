@@ -1,3 +1,4 @@
 <div>
-    Hello smtp From Sklad app: {{ $userEmail }}!
+    <p>{{ $userMess }}</p>
+    <p>{{ $userEmail }}</p>
 </div>

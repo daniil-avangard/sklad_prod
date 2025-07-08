@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderShipped;
+use App\Jobs\ProcessPodcast;
 use Throwable;
 use DateTime;
 
@@ -187,16 +188,34 @@ class OrderController extends Controller
             
         }
         
-        $testUser = "abdyushevr@avangard.ru";
+        
         foreach ($divisionsArr as $createOrderNew) {
-            try {
-                Mail::to($testUser)->send(new OrderShipped($createOrderNew['createOrder']->user));
-            } catch (Throwable $e) {
-                report($e);
-            }
+            ProcessPodcast::dispatch($this->sentEmail($createOrderNew['createOrder'], $toProcessStatus))->withoutDelay();
+//            $testUser = "abdyushevr@avangard.ru";
+//            try {
+//                Mail::to($testUser)->send(new OrderShipped($createOrderNew['createOrder']->user));
+//            } catch (Throwable $e) {
+//                report($e);
+//            }
         }
 
         return redirect()->to(route('orders.new'));
+    }
+    
+    private function sentEmail($newComposerOrder, $toProcessStatus)
+    {
+        $testUser = "abdyushevr@avangard.ru";
+        $appUser1 = $newComposerOrder->user;
+        $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на утверждение начальнику куратора.";
+        if ($toProcessStatus == StatusEnum::TRANSFERRED_TO_WAREHOUSE->value) {
+            $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на склад.";
+        }
+        $message1 = strval($message);
+        try {
+            Mail::to($testUser)->send(new OrderShipped($appUser1, $message1));
+        } catch (Throwable $e) {
+            report($e);
+        }
     }
 
     private function forNewTable($divisionGroups, $orders)
