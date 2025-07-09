@@ -170,7 +170,8 @@ class ExcellTable {
             console.log('compareMinumum = ', compareMinumum1, compareMinumum2, deltaItemQuontity);
             
 //            let compareMinumum = (compareMinumum1 - deltaItemQuontity) >= (compareMinumum2);
-            let compareMinumum = self.flagRoleForExcell ? (compareMinumum1 - deltaItemQuontity) >= 0 : true;
+//            let compareMinumum = self.flagRoleForExcell ? (compareMinumum1 - deltaItemQuontity) >= 0 : true;
+            let compareMinumum = true;
             if (compareMinumum) {
                 try {
                     const response = await fetch(request);  
