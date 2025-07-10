@@ -180,16 +180,18 @@ class BasketController extends Controller
 //        return redirect()->to(route('user.order', $newComposerOrder))->with('success', 'Заказ сохранен');
         $dateTime = Carbon::now();
 //        $this->sentEmail($newComposerOrder);
-        ProcessPodcast::dispatch($this->sentEmail($newComposerOrder))->withoutDelay();
+//        ProcessPodcast::dispatch($this->sentEmail($newComposerOrder))->delay($dateTime->addMinutes(3));
 //        ProcessPodcast::dispatch(function () use ($newComposerOrder) {
-//            $testUser = "abdyushevr@avangard.ru";
-//            $appUser1 = $newComposerOrder->user;
-//            try {
-//                Mail::to($testUser)->send(new OrderShipped($appUser1));
-//            } catch (Throwable $e) {
-//                report($e);
-//            }   
-//        })->withoutDelay();
+            $testUser = "abdyushevr@avangard.ru";
+            $appUser1 = $newComposerOrder->user;
+            $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на утверждение куратору.";
+            $message1 = strval($message);
+            try {
+                Mail::to($testUser)->later($dateTime->addMinutes(2), new OrderShipped($appUser1, $message1));
+            } catch (Throwable $e) {
+                report($e);
+            }   
+//        })->delay($dateTime->addMinutes(2));
         
         return redirect()->to(route('orders'))->with('success', 'Заказ сохранен');
     }
