@@ -187,7 +187,7 @@ class BasketController extends Controller
             $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на утверждение куратору.";
             $message1 = strval($message);
             try {
-                Mail::to($testUser)->queue(new OrderShipped($appUser1, $message1));
+                Mail::to($testUser)->later($dateTime->addMinutes(2), new OrderShipped($appUser1, $message1));
             } catch (Throwable $e) {
                 report($e);
             }   
