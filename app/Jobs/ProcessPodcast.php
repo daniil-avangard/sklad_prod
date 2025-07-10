@@ -24,7 +24,7 @@ class ProcessPodcast implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(AudioProcessor $processor): void
     {
         //
     }

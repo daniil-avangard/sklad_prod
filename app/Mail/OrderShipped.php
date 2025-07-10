@@ -13,7 +13,7 @@ use Illuminate\Mail\Mailables\Headers;
 use Illuminate\Services\AudioProcessor;
 use App\Models\User;
 
-class OrderShipped extends Mailable
+class OrderShipped extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     public $userEmail;
