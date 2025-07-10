@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Models\Order;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderShipped;
+use Throwable;
 
 class ProcessPodcast implements ShouldQueue
 {
@@ -35,8 +36,10 @@ class ProcessPodcast implements ShouldQueue
     {
         $testUser = "abdyushevr@avangard.ru";
         $appUser1 = $this->orderData->user;
-        $message = "Ваш заказ №" . $this->orderData->id . " отправлен на утверждение куратору.";
-        $message1 = strval($message);
-        Mail::to($testUser)->send(new OrderShipped($appUser1, $message1));
+        try {
+            Mail::to($testUser)->send(new OrderShipped($appUser1, $this->messageData));
+        } catch (Throwable $e) {
+            report($e);
+        } 
     }
 }
