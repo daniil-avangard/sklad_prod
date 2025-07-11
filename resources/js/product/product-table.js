@@ -32,16 +32,16 @@ class ProductTable {
         const tableColumns = this.accessColumnByUserRole[role];
 
         // Слушатели на селекты
-        this.#filterBySelect(tableColumns.company, this.companyFilter);
-        this.#filterBySelect(tableColumns.category, this.categoryFilter);
-        this.#filterBySelect(tableColumns.kko_operator, this.kko_operator);
-        this.#filterBySelect(tableColumns.express_operator, this.express_operator);
+        if (tableColumns.company) this.#filterBySelect(tableColumns.company, this.companyFilter);
+        if (tableColumns.category) this.#filterBySelect(tableColumns.category, this.categoryFilter);
+        if (tableColumns.kko_operator) this.#filterBySelect(tableColumns.kko_operator, this.kko_operator);
+        if (tableColumns.express_operator) this.#filterBySelect(tableColumns.express_operator, this.express_operator);
 
         // Фильтрация по чекбоксам
-        this.#filterByCheckbox(tableColumns.kko_hall, this.kko_hall);
-        this.#filterByCheckbox(tableColumns.kko_account_opening, this.kko_account_opening);
-        this.#filterByCheckbox(tableColumns.kko_manager, this.kko_manager);
-        this.#filterByCheckbox(tableColumns.express_hall, this.express_hall);
+        if (tableColumns.kko_hall) this.#filterByCheckbox(tableColumns.kko_hall, this.kko_hall);
+        if (tableColumns.kko_account_opening) this.#filterByCheckbox(tableColumns.kko_account_opening, this.kko_account_opening);
+        if (tableColumns.kko_manager) this.#filterByCheckbox(tableColumns.kko_manager, this.kko_manager);
+        if (tableColumns.express_hall) this.#filterByCheckbox(tableColumns.express_hall, this.express_hall);
 
         // Очистка формы и значений
         if (this.resetProductTableButton) {
@@ -135,8 +135,8 @@ class ProductTable {
 // Номера колонок для фильтрации по ролям
 const accessColumnByUserRole = {
     "division-manager": {
-        company: 1,
-        category: 2,
+//        company: 1,
+//        category: 2,
         kko_operator: 6,
         express_operator: 8,
         // Чекбоксы
