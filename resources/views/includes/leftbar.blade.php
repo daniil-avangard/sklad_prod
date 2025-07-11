@@ -51,8 +51,9 @@
                 
             </ul>
         </li>-->
-        @can('view', \App\Models\Product::class)
+        @can('viewAny', \App\Models\Order::class)
             <li>
+                
                 <a href="javascript: void(0);">
                     <i data-feather="home" class="align-self-center menu-icon"></i>
                     <span>Справочники</span>
@@ -60,8 +61,9 @@
                         <i class="mdi mdi-chevron-right"></i>
                     </span>
                 </a>
+                
                 <ul class="nav-second-level" aria-expanded="false">
-                    @can('view', \App\Models\Product::class)
+                    @can('viewAny', \App\Models\Order::class)
                         <li class="nav-item"><a class="nav-link" href="{{ route('products') }}"><i
                                     class="ti-control-record"></i>Продукты</a></li>
                     @endcan

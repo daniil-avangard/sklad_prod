@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderShipped;
 use App\Jobs\ProcessPodcast;
 use Throwable;
-use DateTime;
+use Illuminate\Support\Carbon;
 
 class OrderController extends Controller
 {
@@ -182,21 +182,17 @@ class OrderController extends Controller
 //        dd($divisionsArr);
         if ($toProcessStatus == StatusEnum::PROCESSING->value) {
 //            $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $order);
-            foreach ($divisionsArr as $createOrderNew) {
+            foreach ($divisionsArr as $ind => $createOrderNew) {
                 $newComposeOrder = $this->createOneProcessOrder($divisionGroups1, $createOrderNew['createOrder']);
+                $divisionsArr[$ind]['createOrder'] = $newComposeOrder;
             }
             
         }
         
         
         foreach ($divisionsArr as $createOrderNew) {
-            ProcessPodcast::dispatch($this->sentEmail($createOrderNew['createOrder'], $toProcessStatus))->withoutDelay();
-//            $testUser = "abdyushevr@avangard.ru";
-//            try {
-//                Mail::to($testUser)->send(new OrderShipped($createOrderNew['createOrder']->user));
-//            } catch (Throwable $e) {
-//                report($e);
-//            }
+            $this->sentEmail($createOrderNew['createOrder'], $toProcessStatus);
+//            ProcessPodcast::dispatch($this->sentEmail($createOrderNew['createOrder'], $toProcessStatus))->withoutDelay();
         }
 
         return redirect()->to(route('orders.new'));
@@ -204,6 +200,7 @@ class OrderController extends Controller
     
     private function sentEmail($newComposerOrder, $toProcessStatus)
     {
+        $dateTime = Carbon::now();
         $testUser = "abdyushevr@avangard.ru";
         $appUser1 = $newComposerOrder->user;
         $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на утверждение начальнику куратора.";
@@ -211,11 +208,12 @@ class OrderController extends Controller
             $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на склад.";
         }
         $message1 = strval($message);
-        try {
-            Mail::to($testUser)->send(new OrderShipped($appUser1, $message1));
-        } catch (Throwable $e) {
-            report($e);
-        }
+        ProcessPodcast::dispatch($newComposerOrder, $message1)->withoutDelay();
+//        try {
+//            Mail::to($testUser)->send(new OrderShipped($appUser1, $message1));
+//        } catch (Throwable $e) {
+//            report($e);
+//        }
     }
 
     private function forNewTable($divisionGroups, $orders)

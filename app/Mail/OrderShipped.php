@@ -10,10 +10,9 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Headers;
-use Illuminate\Services\AudioProcessor;
 use App\Models\User;
 
-class OrderShipped extends Mailable implements ShouldQueue
+class OrderShipped extends Mailable
 {
     use Queueable, SerializesModels;
     public $userEmail;
