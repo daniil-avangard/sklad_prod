@@ -181,7 +181,7 @@ class BasketController extends Controller
         $dateTime = Carbon::now();
         $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на утверждение куратору.";
         $message1 = strval($message);
-        ProcessPodcast::dispatch($newComposerOrder, $message1)->delay($dateTime->addMinutes(2));
+        ProcessPodcast::dispatch($newComposerOrder, $message1)->withoutDelay();
 //        ProcessPodcast::dispatch($this->sentEmail($newComposerOrder))->delay($dateTime->addMinutes(3));
 //        ProcessPodcast::dispatch(function () use ($newComposerOrder) {
         // работающая часть
