@@ -291,6 +291,7 @@ class FilterPage {
                             }
                         });
                     });
+                    if (document.getElementById('chartContainer')) self.draw(product, dataForGraphic, "notsimple");
                     self.draw(product, dataForGraphic, "notsimple");
                     self.draw1(product, dataForGraphic, "notsimple");
                     document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
@@ -340,8 +341,12 @@ class FilterPage {
                         }
                     });
 //                    console.log(product, dataForGraphic);
-                    self.draw(product, dataForGraphic, "simple");
-                    document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
+                    if (document.getElementById('chartContainer')) {
+                        self.draw(product, dataForGraphic, "simple");
+                        document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
+                    }
+//                    self.draw(product, dataForGraphic, "simple");
+                    
                 } else {
                     alert('Выберите продукт');
                 }
