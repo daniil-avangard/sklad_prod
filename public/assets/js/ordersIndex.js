@@ -292,7 +292,7 @@ class FilterPage {
                         });
                     });
                     if (document.getElementById('chartContainer')) self.draw(product, dataForGraphic, "notsimple");
-                    self.draw(product, dataForGraphic, "notsimple");
+//                    self.draw(product, dataForGraphic, "notsimple");
                     self.draw1(product, dataForGraphic, "notsimple");
                     document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
 //                    console.log(dataForGraphic);
