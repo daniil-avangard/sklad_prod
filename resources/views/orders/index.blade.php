@@ -299,9 +299,11 @@
                                 <label for="dec2024">Дек</label>         
                             </fieldset>
                         </div>
+                        @can('viewAny', \App\Models\Order::class)
                         <div class="filters-button-part">  
                             <button id="grafic-months" class="select-work-buttons">Построить график</button>
                         </div>
+                        @endcan
                     </div>
                     
                 </div>
@@ -372,7 +374,7 @@
                         @endforeach
                     </tbody>
                 </table>
-                <div id="chartContainer" class="highChart"></div>
+                <!--<div id="chartContainer" class="highChart"></div>-->
                 <div id="chartContainer-1" class="highChart"></div>
             </div>
         </div>
