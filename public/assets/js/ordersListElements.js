@@ -197,12 +197,18 @@ class ExcellTable {
                         }
                         
                         let compareToMinimumRatio = (compareMinumum1 - deltaItemQuontity) - compareMinumum2;
+                        let compareToMinimumRatio2 = (compareMinumum1 - deltaItemQuontity);
 //                        console.log("красный ряд = ", compareMinumum1, compareMinumum2, parentTR);
                         if (self.flagRoleForExcell) {
-                            if (compareToMinimumRatio > 0) {
+                            if (compareToMinimumRatio >= 0) {
                                 parentTR.classList.remove("row-color");
+                                parentTR.classList.remove("row-color-accept");
                             } else {
-                                parentTR.classList.add("row-color");
+                                if (compareToMinimumRatio2 < 0) {
+                                    parentTR.classList.add("row-color");
+                                } else {
+                                    parentTR.classList.add("row-color-accept");
+                                }
                             }
                         }
                         
