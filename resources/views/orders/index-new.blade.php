@@ -37,13 +37,17 @@
                                 @endif
                             </tr>
                             @foreach ($uniqGoods as $good)
-                                @if (($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) - $good['min_stock'] > 0)
+                                @if (($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) - $good['min_stock'] >= 0)
                                 <tr>
                                 @else
-                                    @if ($flagForExcell == "show")
+                                    @if ($flagForExcell == "show" && ($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) < 0)
                                     <tr class="row-color">
                                     @else
-                                    <tr>
+                                    @if ($flagForExcell == "show" && ($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) >= 0)
+                                    <tr class="row-color-accept">
+                                    @else
+                                    <tr> 
+                                    @endif
                                     @endif
                                 @endif
                                     <td class="first-col-1">

@@ -145,7 +145,7 @@ class OrderController extends Controller
         $totalNewData = $result[4];
 //        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
 //        $test = $uniqGoods[1]['name'];
-//        dd($allDivisionsDataNew, $uniqGoods);
+//        dd($totalNewData, $uniqGoods);
         return view('orders.index-new', compact('currentSessionOrders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew', 'uniqGoodsTotalOrdered', 'flagForExcell', 'totalNewData'));
     }
 
