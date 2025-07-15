@@ -733,6 +733,9 @@ tr p {
 .month-field label:hover {
     background: #f2f2f2;
 }
+/*.label-on-hover {
+    background: #f2f2f2 !important;
+}*/
 .month-field input[type='checkbox']:checked + label{
     background: #337ab7;
     color: #FFF;
@@ -741,6 +744,14 @@ tr p {
     background: #87b4de;
     color: #FFF;
 }
+/*.label-on-hover-checked-true {
+    background: #337ab7 !important;
+    color: #FFF !important;
+}*/
+/*.label-on-hover-checked {
+    background: #87b4de !important;
+    color: #FFF !important;
+}*/
 .month-field label {
     background: #337ab7;
     color: #FFF;

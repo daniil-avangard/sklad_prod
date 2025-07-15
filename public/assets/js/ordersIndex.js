@@ -14,6 +14,8 @@ class FilterPage {
         this.cleanStatusProdFilter = document.getElementById('clean-status-product');
         this.tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
         this.monthDetails = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
+        this.monthLabels = document.querySelectorAll(".month-field label");
+        this.monthInputChecks = document.querySelectorAll(".month-field input[type='checkbox']");
         
         this.initsettings();
         this.initSettingsPopUpElements();
@@ -186,6 +188,21 @@ class FilterPage {
         if (self.checkBoxBlock) {
             Array.from(self.checkBoxArray1).forEach((checkBox, ind) => {
                 checkBox.onchange = () => {
+                    const d = new Date();
+                    const currentMonth = d.getMonth();
+                    const inputMonth = parseInt(checkBox.value.substring(0, 2));
+                    console.log(parseInt(checkBox.value.substring(0, 2)));
+                    if (inputMonth > currentMonth + 1) {
+                        checkBox.checked = false;
+                        return;
+                    }
+//                    checkBox.classList.toggle("label-on-hover-checked-true");
+//                    if (checkBox.checked) {
+//                        checkBox.classList.add("label-on-hover-checked-true");
+//                    } else {
+//                        checkBox.classList.remove("label-on-hover-checked-true");
+//                    }
+                    
                     let arrCheck = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
                     document.cookie = `selectSkladCheckBoxBlock=${arrCheck.join(",")}`;
                     if (self.selectDivision) {
@@ -196,7 +213,41 @@ class FilterPage {
                 }
             });
         }
+        
+//        self.initSettingsForHover();
  
+    }
+    
+    initSettingsForHover() {
+        const self = this;
+        Array.from(self.monthLabels).forEach((el, ind) => {
+            el.onmouseover = () => {
+                console.log("hello world");
+                if (self.monthInputChecks[ind].checked) {
+                    el.classList.add("label-on-hover-checked");
+                    el.classList.remove("label-on-hover-checked-true");
+                } else {
+                    el.classList.add("label-on-hover");
+                }     
+            }
+            el.onmouseout = () => {
+                if (self.monthInputChecks[ind].checked) {
+                    el.classList.remove("label-on-hover-checked");
+                    el.classList.add("label-on-hover-checked-true");
+                } else {
+                    el.classList.remove("label-on-hover");
+                } 
+            }
+        });
+        
+//        Array.from(self.monthInputChecks).forEach((el, index) => {
+//            el.onmouseover = () => {
+//                el.classList.toggle("label-on-hover");
+//            }
+//            el.onmouseout = () => {
+//                el.classList.toggle("label-on-hover");
+//            }
+//        });
     }
     
     initSettingsPopUpElements() {
