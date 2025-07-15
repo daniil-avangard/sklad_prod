@@ -205,8 +205,10 @@ class ExcellTable {
                                 parentTR.classList.remove("row-color-accept");
                             } else {
                                 if (compareToMinimumRatio2 < 0) {
+                                    parentTR.classList.remove("row-color-accept");
                                     parentTR.classList.add("row-color");
                                 } else {
+                                    parentTR.classList.remove("row-color");
                                     parentTR.classList.add("row-color-accept");
                                 }
                             }
