@@ -548,7 +548,10 @@ tr p {
     height: 100px !important;
 }
 .row-color {
-    background-color: #ffe6e6;
+    background-color: #ffe6e6 !important;
+}
+.row-color-accept {
+    background-color: #ccd9ff !important;
 }
 .basket-button-change {
     background-color: #ffe680 !important;

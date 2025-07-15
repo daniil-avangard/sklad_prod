@@ -177,7 +177,7 @@ const tableConfig = {
     language: {
         url: '/assets/lang/datatables_ru.json',
     },
-    lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Все"]],
+    lengthMenu: [[-1], ["Все"]],
     dom: "<'row'<'col-sm-6'B><'col-sm-6'f>>" +      // Верх: кнопки и поиск
         "<'row'<'col-sm-12'tr>>" +                // Средина: таблица
         "<'row pt-2'<'col-sm-6'i><'col-sm-3 d-flex align-items-center'l><'col-sm-3'p>>",     // Низ: информация слева, пагинация + "Show entries" справа
