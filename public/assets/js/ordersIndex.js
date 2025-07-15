@@ -190,9 +190,11 @@ class FilterPage {
                 checkBox.onchange = () => {
                     const d = new Date();
                     const currentMonth = d.getMonth();
+                    const currentYear = d.getFullYear();
                     const inputMonth = parseInt(checkBox.value.substring(0, 2));
+                    const inputYear = parseInt(checkBox.value.substring(2, 6));
                     console.log(parseInt(checkBox.value.substring(0, 2)));
-                    if (inputMonth > currentMonth + 1) {
+                    if (inputYear >= currentYear && inputMonth > currentMonth + 1) {
                         checkBox.checked = false;
                         return;
                     }
