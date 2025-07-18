@@ -131,17 +131,17 @@ class ExcellTable {
         let newInput = document.createElement('input');
         newInput.setAttribute("type", "number");
         newInput.setAttribute("min", "0");
-        newInput.setAttribute("class", "form-control form-control-sm");
+        newInput.setAttribute("class", "form-control form-control-sm input-excell");
         newInput.value = parseInt(dataOrigin.innerHTML);
         let newAccept = document.createElement('button');
         newAccept.setAttribute("class", "btn btn-success btn-sm waves-effect waves-light btn-excel");
         let newIcon = document.createElement('i');
-        newIcon.setAttribute("class", "mdi mdi-check");
+        newIcon.setAttribute("class", "mdi mdi-check transform-excell-icon");
         newAccept.appendChild(newIcon);
         let newDanger = document.createElement('button');
         newDanger.setAttribute("class", "btn btn-danger btn-sm waves-effect waves-light btn-excel");
         let newIconDanger = document.createElement('i');
-        newIconDanger.setAttribute("class", "mdi mdi-close");
+        newIconDanger.setAttribute("class", "mdi mdi-close transform-excell-icon");
         newDanger.appendChild(newIconDanger);
 
         newAccept.onclick = async () => {
