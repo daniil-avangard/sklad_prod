@@ -85,6 +85,7 @@
 
     function initMainIconTabMenu() {
         $('.main-icon-menu .nav-link').on('click', function(e){
+            console.log("Проверяем по меню");
             $("body").removeClass("enlarge-menu");
             e.preventDefault();
             $(this).addClass('active');
@@ -100,8 +101,17 @@
     function initActiveMenu() {
         // === following js will activate the menu in left side bar based on url ====
         $(".leftbar-tab-menu a, .left-sidenav a").each(function () {
+            console.log("Кликаем по меню");
             var pageUrl = window.location.href.split(/[?#]/)[0];
-            if (this.href == pageUrl) { 
+            let anchorUrl = this.href;
+            const url = new URL(window.location.href);
+            let firstPathPart = url.pathname.split("/")[1].toString();
+            const url1 = new URL(anchorUrl);
+            let anchorFirstPart = url1.pathname.split("/")[1];
+            console.log(firstPathPart, anchorFirstPart);
+//            if (this.href == pageUrl) { 
+            if (firstPathPart == anchorFirstPart) {
+                
                 $(this).addClass("active");                
                 $(this).parent().addClass("active"); // add active to li of the current link                 
                 $(this).parent().parent().addClass("in");
@@ -126,8 +136,15 @@
 
     function initMainIconMenu() {
         $(".navigation-menu a").each(function () {
+            let self =this;
             var pageUrl = window.location.href.split(/[?#]/)[0];
+            const url = new URL(window.location.href);
+            let firstPathPart = url.pathname.split("/")[0].toString();
+            const url1 = new URL(self.href);
+            let anchorFirstPart = url1.pathname.split("/")[0].toString();
             if (this.href == pageUrl) {
+//            if (firstPathPart == anchorFirstPart) {
+                console.log(firstPathPart, anchorFirstPart);
                 $(this).parent().addClass("active"); // add active to li of the current link
                 $(this).parent().parent().parent().addClass("active"); // add active class to an anchor
                 $(this).parent().parent().parent().parent().parent().addClass("active"); // add active class to an anchor
@@ -150,6 +167,16 @@
             }
         });
     }
+    
+    function initCheckMainMenu() {
+        let parentMenus = document.querySelectorAll('.nav-second-level');
+        console.log("провряем загрузку страницы = ", parentMenus.length);
+        if (parentMenus.length == 1) {
+            if (!(parentMenus[0].classList.contains('mm-show'))) {
+                parentMenus[0].classList.add("mm-show");
+            }
+        }
+    }
 
     function init() {
         initDateRangrPicker();
@@ -162,6 +189,7 @@
         initMainIconMenu();
         initTopbarMenu();
         Waves.init();
+        initCheckMainMenu();
     }
 
     init();

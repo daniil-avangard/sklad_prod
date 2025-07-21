@@ -9481,4 +9481,8 @@ input.add-file-input {
     display: none;
 }
 
+.navbar-custom .nav-user-name {
+    color: #ffffff !important;
+}
+
 /*# sourceMappingURL=app.css.map */
