@@ -2,13 +2,24 @@
     width: 14px;
     height: 14px;
 }
-
 .button-icon--big {
     width: 20px;
     height: 20px;
 }
-
-
 .button-icon-wrapper {
     padding: 0.2rem 0.5rem;
+}
+.brand, .navbar-custom {
+    background-color: #006237 !important;
+    color: #ffffff !important;
+}
+.navbar-custom .nav-user-name {
+    color: #ffffff !important;
+}
+.navbar-custom .nav-link {
+    color: #ffffff !important;
+}
+.brand img {
+    width: 150px !important;
+    height: 20px !important;
 }

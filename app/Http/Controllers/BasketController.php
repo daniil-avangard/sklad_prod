@@ -179,7 +179,7 @@ class BasketController extends Controller
 
 //        return redirect()->to(route('user.order', $newComposerOrder))->with('success', 'Заказ сохранен');
         $dateTime = Carbon::now();
-        $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на утверждение куратору.";
+        $message = "Ваш заказ №" . $newComposerOrder->id . " от " . $newComposerOrder->created_at . " отправлен на утверждение куратору.";
         $message1 = strval($message);
         ProcessPodcast::dispatch($newComposerOrder, $message1)->withoutDelay();
 //        ProcessPodcast::dispatch($this->sentEmail($newComposerOrder))->delay($dateTime->addMinutes(3));

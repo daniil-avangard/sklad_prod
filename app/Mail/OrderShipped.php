@@ -11,6 +11,7 @@ use Illuminate\Mail\Mailables\Address;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Headers;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class OrderShipped extends Mailable
 {
@@ -25,6 +26,7 @@ class OrderShipped extends Mailable
     {
         $this->userEmail = $user->email;
         $this->message = strval($message);
+        $this->userEmailFrom = strval(Auth::user()->email);
     }
 
     /**
@@ -32,7 +34,7 @@ class OrderShipped extends Mailable
      */
     public function envelope(): Envelope
     {
-        $sendFrom = strval(env('MAIL_FROM_ADDRESS'));
+        $sendFrom = strval(env('MAIL_MODE_STATUS')) == "dev" ? strval(env('MAIL_FROM_ADDRESS')): $this->userEmailFrom;
         return new Envelope(
             from: new Address($sendFrom),
 //            replyTo: [
