@@ -26,6 +26,7 @@ class ProcessPodcast implements ShouldQueue
     public function __construct(Order $orderData, $messageData)
     {
         $this->orderData = $orderData;
+        $this->orderEmail = strval($orderData->user->email);
         $this->messageData = $messageData;
     }
 
@@ -34,7 +35,7 @@ class ProcessPodcast implements ShouldQueue
      */
     public function handle(): void
     {
-        $testUser = "abdyushevr@avangard.ru";
+        $testUser = strval(env('MAIL_MODE_STATUS')) == "dev" ? "abdyushevr@avangard.ru" : $this->orderEmail;
         $appUser1 = $this->orderData->user;
         try {
             Mail::to($testUser)->send(new OrderShipped($appUser1, $this->messageData));

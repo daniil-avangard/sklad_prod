@@ -41,8 +41,8 @@
                     <img src="/assets/images/logo-sm.png" alt="logo-small" class="logo-sm">
                 </span> --}}
                 <span>
-                    <img src="/assets/images/logo_avangardrus.jpg" alt="logo-large" class="logo-lg logo-dark">
-                    <img src="/assets/images/logo_avangardrus.jpg" alt="logo-large" class="logo-lg logo-light">
+                    <img src="/assets/images/bankAvangardNewLogo.svg" alt="logo-large" class="logo-lg logo-dark">
+                    <img src="/assets/images/bankAvangardNewLogo.svg" alt="logo-large" class="logo-lg logo-light">
                 </span>
             </a>
         </div>
@@ -85,7 +85,7 @@
         <script>
             var Toast = Swal.mixin({
                 toast: true,
-                position: 'top-end',
+                position: 'center',
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
