@@ -18,6 +18,7 @@ class OrderShipped extends Mailable
     use Queueable, SerializesModels;
     public $userEmail;
     public $message;
+    public $userEmailFrom;
 
     /**
      * Create a new message instance.

@@ -19,6 +19,7 @@ class ProcessPodcast implements ShouldQueue
     use Queueable;
     public $orderData;
     public $messageData;
+    public $orderEmail;
 
     /**
      * Create a new job instance.
