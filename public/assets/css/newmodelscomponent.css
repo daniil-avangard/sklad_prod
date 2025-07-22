@@ -898,3 +898,20 @@ tr p {
     background-color: #FF8800 !important;
     border-color: transparent !important;
 }
+.textarea-width {
+    width: 100% !important;
+}
+.basket-button-position-correction {
+    position: absolute;
+    bottom: 18px !important;
+    right: 10px !important;
+}
+.basket-button-position-correction-1 {
+    position: absolute;
+    bottom: 18px !important;
+    right: 170px !important;
+}
+.col-height-correction {
+    height: 100px !important;
+    margin-top: 10px !important;
+}

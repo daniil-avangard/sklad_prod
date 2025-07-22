@@ -100,24 +100,18 @@
                         </table>
                         </div>
                     </div>
-                    <div class="row justify-content-center">
-                        <div class="col-md-6 align-self-center">
-
-                            <div class="mt-4">
+                    <div class="row justify-content-center col-height-correction">
+                        
                                 <x-form id="save-order-form" action="{{ route('basket.saveorder') }}" method="POST">
-                                    <textarea name="comment" class="form-control" placeholder="Комментарий к заказу"></textarea>
-                                    <button class="btn btn-primary mt-2">Отправить заказ</button>
+                                    <textarea name="comment" class="form-control textarea-width" placeholder="Комментарий к заказу"></textarea>
+                                    <button class="btn btn-primary mt-2 btn-products-colors basket-button-position-correction-1">Отправить заказ</button>
                                 </x-form>
-                            </div>
-                            <div class="mt-4">
+                            
+                      
                                 <x-form action="{{ route('basket.clear') }}" method="POST">
-                                    <button class="btn btn-danger">Очистить корзину</button>
+                                    <button class="btn btn-danger basket-button-change-1 basket-button-position-correction">Очистить корзину</button>
                                 </x-form>
-                            </div>
-                        </div><!--end col-->
-                        <div class="col-md-6">
-
-                        </div><!--end col-->
+                            
                     </div><!--end row-->
                 </div><!--end card-->
             </div><!--end card-body-->
