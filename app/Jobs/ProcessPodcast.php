@@ -21,16 +21,18 @@ class ProcessPodcast implements ShouldQueue
     use Queueable;
     public $orderData;
     public $messageData;
-//    public $orderEmail;
+    public $emailFrom;
+    public $orderEmail;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(Order $orderData, $messageData)
+    public function __construct(Order $orderData, $messageData, $emailFrom, $userToEmail)
     {
         $this->orderData = $orderData;
-//        $this->orderEmail = strval($orderData->user->email);
+        $this->orderEmail = strval($userToEmail);
         $this->messageData = $messageData;
+        $this->emailFrom = $emailFrom;
     }
 
     /**
@@ -38,13 +40,13 @@ class ProcessPodcast implements ShouldQueue
      */
     public function handle(): void
     {
-//        $testUser = strval(Config::get('sklad.emailmodestatus')) == "dev" ? "abdyushevr@avangard.ru" : $this->orderEmail;
+//        $testUser = Config::get('sklad.emailmodestatus') == "dev" ? "abdyushevr@avangard.ru" : $this->orderEmail;
 //        Mail::to("abdyushevr@avangard.ru")->send(new TestEmail());
         
-        $testUser = "abdyushevr@avangard.ru";
+        $userEmailFrom = $this->orderEmail;
         $appUser1 = $this->orderData->user;
 //        try {
-            Mail::to($testUser)->send(new OrderShipped($appUser1, $this->messageData));
+            Mail::to($this->orderEmail)->send(new OrderShipped($appUser1, $this->messageData, $this->emailFrom));
 //        } catch (Throwable $e) {
 //            report($e);
 //        } 

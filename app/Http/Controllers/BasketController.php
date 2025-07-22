@@ -186,7 +186,10 @@ class BasketController extends Controller
 //        dd(Config::get('sklad.emailmodestatus'));
         $message = "Ваш заказ №" . $newComposerOrder->id . " от " . $newComposerOrder->created_at . " отправлен на утверждение куратору.";
         $message1 = strval($message);
-        ProcessPodcast::dispatch($newComposerOrder, $message1);
+        $emailFrom = Config::get('sklad.emailmodestatus') == "dev" ? strval(Config::get('sklad.emailaddress')) : strval(Auth::user()->email);
+        $userToEmail = Config::get('sklad.emailmodestatus') == "dev" ? "abdyushevr@avangard.ru" : $newComposerOrder->user->email;
+//        dd(Config::get('sklad.emailmodestatus') == "dev", Config::get('sklad.emailmodestatus'));
+        ProcessPodcast::dispatch($newComposerOrder, $message1, $emailFrom, $userToEmail);
 //        ProcessPodcast::dispatch($this->sentEmail($newComposerOrder))->delay($dateTime->addMinutes(3));
 //        EmailSend::dispatch(function () {
         // работающая часть
