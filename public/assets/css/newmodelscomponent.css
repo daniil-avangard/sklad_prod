@@ -865,3 +865,13 @@ tr p {
 .btn-products-colors {
     background-color: #006237 !important;
 }
+.btn-basket-prod-colors {
+    background-color: #FF8800 !important;
+}
+.buttons-orders-elm img {
+    width: 17px;
+    height: 15px;
+}
+.span-left {
+    margin-left: 3px !important;
+}

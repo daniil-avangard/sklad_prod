@@ -56,6 +56,7 @@ if (butonAddAllToBasket) {
                 dataForButtons.forEach((elm, ind) => {
                     buttonsForm[elm[2]].innerHTML = res.quontity[ind] + " добавлено в корзину";
 //                    buttonsForm[elm[2]].innerHTML = elm[1] + " добавлено в корзину";
+                    buttonsForm[elm[2]].classList.remove("btn-products-colors");
                     buttonsForm[elm[2]].classList.add("basket-button-change");
                     addProductToBasketForms[elm[2]].reset();
                 });
@@ -113,6 +114,7 @@ addProductToBasketForms.forEach((basketForm, ind) => {
                 .then((data) => {
                     console.log('data = ', data);
                     buttonsForm[ind].innerHTML = data.quontity + " добавлено в корзину";
+                    buttonsForm[ind].classList.remove("btn-products-colors");
                     buttonsForm[ind].classList.add("basket-button-change");
 
                     //                let button = basketForm.getElementsByTagName("BUTTON")[0];
