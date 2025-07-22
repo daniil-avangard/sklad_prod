@@ -19,16 +19,16 @@ class OrderShipped extends Mailable
     use Queueable, SerializesModels;
     public $userEmail;
     public $message;
-//    public $userEmailFrom;
+    public $userEmailFrom;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(User $user, $message)
+    public function __construct(User $user, $message, $userEmailFrom)
     {
         $this->userEmail = $user->email;
         $this->message = strval($message);
-//        $this->userEmailFrom = strval(Auth::user()->email);
+        $this->userEmailFrom = $userEmailFrom;
     }
 
     /**
@@ -37,7 +37,7 @@ class OrderShipped extends Mailable
     public function envelope(): Envelope
     {
 //        $sendFrom = strval(Config::get('sklad.emailmodestatus')) == "dev" ? strval(Config::get('sklad.emailaddress')) : $this->userEmailFrom;
-        $sendFrom = strval(Config::get('sklad.emailaddress'));
+        $sendFrom = $this->userEmailFrom;
         return new Envelope(
             from: new Address($sendFrom),
 //            replyTo: [
