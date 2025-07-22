@@ -86,6 +86,8 @@
             var Toast = Swal.mixin({
                 toast: true,
                 position: 'center',
+                background: "#D9D9D9",
+                width: 260,
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,

@@ -70,17 +70,25 @@
                                         </td>
                                         <td>
                                             <x-form class="add-product-to-basket-form" action="{{ route('basket.update', $product) }}" method="POST">
-                                                <input class="form-control form-control-sm w-50" type="number"
+                                                <div class="buttons-orders-cotroller">
+                                                <div class="buttons-orders-elm">
+                                                <input class="form-control form-control-sm w-70" type="number"
                                                     name="quantity" value="{{ $product->pivot->quantity }}" min="1"
                                                     id="quantity">
-                                                <button type="submit" class="btn btn-primary btn-sm">Обновить</button>
+                                                </div>
+                                                    <div class="buttons-orders-elm buttons-orders-cotroller-1">
+                                                <button type="submit" class="btn btn-primary btn-sm update-button">
+                                                    <img src="/assets/images/update_svg.svg" alt="logo-large" class="logo-lg logo-light update-button">
+                                                </button>
+                                                    </div>
+                                                </div>
                                             </x-form>
                                         </td>
                                         <td>
 
                                             <!--<a href="{{ route('basket.remove', $product) }}" class="text-dark"><i
                                                     class="mdi mdi-close-circle-outline font-18"></i></a> -->
-                                            <button data-productid="{{$product->id}}" class="btn btn-danger btn-sm delete-from-basket">Удалить</button>
+                                            <button data-productid="{{$product->id}}" class="btn btn-danger btn-sm delete-from-basket basket-button-change-1">Удалить</button>
 
                                             {{-- <a href="" class="text-dark"><i
                                                     class="mdi mdi-close-circle-outline font-18"></i></a> --}}
