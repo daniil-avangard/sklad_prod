@@ -12,13 +12,14 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Headers;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Config;
 
 class OrderShipped extends Mailable
 {
     use Queueable, SerializesModels;
     public $userEmail;
     public $message;
-    public $userEmailFrom;
+//    public $userEmailFrom;
 
     /**
      * Create a new message instance.
@@ -27,7 +28,7 @@ class OrderShipped extends Mailable
     {
         $this->userEmail = $user->email;
         $this->message = strval($message);
-        $this->userEmailFrom = strval(Auth::user()->email);
+//        $this->userEmailFrom = strval(Auth::user()->email);
     }
 
     /**
@@ -35,7 +36,8 @@ class OrderShipped extends Mailable
      */
     public function envelope(): Envelope
     {
-        $sendFrom = strval(env('MAIL_MODE_STATUS')) == "dev" ? strval(env('MAIL_FROM_ADDRESS')): $this->userEmailFrom;
+//        $sendFrom = strval(Config::get('sklad.emailmodestatus')) == "dev" ? strval(Config::get('sklad.emailaddress')) : $this->userEmailFrom;
+        $sendFrom = strval(Config::get('sklad.emailaddress'));
         return new Envelope(
             from: new Address($sendFrom),
 //            replyTo: [
@@ -75,13 +77,5 @@ class OrderShipped extends Mailable
 
     */
 
-    public function headers(): Headers
-    {
-        return new Headers(
-            text: [
-                'X-PM-Message-Stream' => 'outbound',
-            ],
-        );
-    }
     
 }
