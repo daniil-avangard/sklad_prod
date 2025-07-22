@@ -13,10 +13,13 @@ use App\Enum\Order\StatusEnum;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderShipped;
 use App\Jobs\ProcessPodcast;
+use App\Jobs\EmailSend;
 use Exception;
 use Throwable;
 use Illuminate\Support\Carbon;
 use DateTime;
+use Config;
+use App\Mail\TestEmail;
 
 
 class BasketController extends Controller
@@ -179,23 +182,25 @@ class BasketController extends Controller
 
 //        return redirect()->to(route('user.order', $newComposerOrder))->with('success', 'Заказ сохранен');
         $dateTime = Carbon::now();
+//        $testCongig = Config::get('sklad.emailaddress');
+//        dd(Config::get('sklad.emailmodestatus'));
         $message = "Ваш заказ №" . $newComposerOrder->id . " от " . $newComposerOrder->created_at . " отправлен на утверждение куратору.";
         $message1 = strval($message);
-        ProcessPodcast::dispatch($newComposerOrder, $message1)->withoutDelay();
+        ProcessPodcast::dispatch($newComposerOrder, $message1);
 //        ProcessPodcast::dispatch($this->sentEmail($newComposerOrder))->delay($dateTime->addMinutes(3));
-//        ProcessPodcast::dispatch(function () use ($newComposerOrder) {
+//        EmailSend::dispatch(function () {
         // работающая часть
-//            $testUser = "abdyushevr@avangard.ru";
+//            $testUser = "rafradio@gmail.com";
 //            $appUser1 = $newComposerOrder->user;
 //            $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на утверждение куратору.";
 //            $message1 = strval($message);
 //            try {
-//                Mail::to($testUser)->later($dateTime->addMinutes(2), new OrderShipped($appUser1, $message1));
+//                Mail::to("abdyushevr@avangard.ru")->send(new TestEmail());
 //            } catch (Throwable $e) {
 //                report($e);
 //            }   
             
-//        })->delay($dateTime->addMinutes(2));
+//        })->withoutDelay();
         
         return redirect()->to(route('orders'))->with('success', 'Заказ сохранен');
     }
