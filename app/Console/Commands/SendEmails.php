@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Mail\TestEmail;
 use Illuminate\Support\Facades\Mail;
+use App\Jobs\EmailSend;
 
 class SendEmails extends Command
 {
@@ -27,6 +28,9 @@ class SendEmails extends Command
      */
     public function handle()
     {
-        Mail::to("abdyushevr@avangard.ru")->send(new TestEmail());
+        EmailSend::dispatch(function () {
+            Mail::to("abdyushevr@avangard.ru")->send(new TestEmail());
+        });
+        
     }
 }
