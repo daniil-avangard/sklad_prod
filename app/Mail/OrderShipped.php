@@ -37,7 +37,7 @@ class OrderShipped extends Mailable
     public function envelope(): Envelope
     {
 //        $sendFrom = strval(Config::get('sklad.emailmodestatus')) == "dev" ? strval(Config::get('sklad.emailaddress')) : $this->userEmailFrom;
-        $sendFrom = strval('rafradio@gmail.com');
+        $sendFrom = strval(Config::get('sklad.emailaddress'));
         return new Envelope(
             from: new Address($sendFrom),
 //            replyTo: [
