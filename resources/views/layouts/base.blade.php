@@ -88,7 +88,6 @@
                 position: 'center',
                 background: "#D9D9D9",
                 width: 260,
-                height: 130,
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
