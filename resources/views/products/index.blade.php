@@ -165,35 +165,35 @@
                         style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                         <thead>
                             <tr>
-                                <th rowspan="2">Название</th>
-                                <th rowspan="2" class="tbl-borders-right">Компания</th>
-                                <th colspan="4" class="text-center tbl-borders-right tbl-borders-top bckgrnd-table-cell-1">
+                                <th rowspan="2" class="text-center bckgrnd-table-cell-2">Название</th>
+                                <th rowspan="2" class="text-center bckgrnd-table-cell-2">Компания</th>
+                                <th colspan="4" class="text-center bckgrnd-table-cell-2">
                                     ККО
                                 </th>
-                                <th colspan="2" class="text-center tbl-borders-right tbl-borders-top bckgrnd-table-cell-2">
+                                <th colspan="2" class="text-center bckgrnd-table-cell-2">
                                     Экспресс
                                 </th>
-                                <th rowspan="2">Действия</th>
+                                <th rowspan="2" class="text-center bckgrnd-table-cell-2">Действия</th>
                             </tr>
                             <tr>
                                 {{-- ККО --}}
-                                <th class="bckgrnd-table-cell-1">
+                                <th class="bckgrnd-table-cell-2">
                                     Оперзал
                                 </th>
-                                <th class="bckgrnd-table-cell-1">
+                                <th class="bckgrnd-table-cell-2">
                                     Открытие счетов
                                 </th>
-                                <th class="bckgrnd-table-cell-1">
+                                <th class="bckgrnd-table-cell-2">
                                     Менеджерам
                                 </th>
-                                <th class="tbl-borders-right bckgrnd-table-cell-1">
+                                <th class="bckgrnd-table-cell-2">
                                     Операционистам
                                 </th>
                                 {{-- Экспресс --}}
                                 <th class="bckgrnd-table-cell-2">
                                     Оперзал
                                 </th>
-                                <th class="tbl-borders-right bckgrnd-table-cell-2">
+                                <th class="bckgrnd-table-cell-2">
                                     Операционистам
                                 </th>
                             </tr>
@@ -204,7 +204,7 @@
                                     <td>
                                         <a href="{{ route('products.show', $product) }}">{{ $product->name }}</a>
                                     </td>
-                                    <td class="tbl-borders-right">{{ $product->companyName }}</td>
+                                    <td class="">{{ $product->companyName }}</td>
                                     {{-- ККО --}}
                                     <td class="bckgrnd-table-cell-1" data-search={{ $product->kko_hall }}>
                                         {!! kko_express_check($product->kko_hall) !!}
@@ -215,14 +215,14 @@
                                     <td class="bckgrnd-table-cell-1" data-search={{ $product->kko_manager }}>
                                         {!! kko_express_check($product->kko_manager) !!}
                                     </td>
-                                    <td class="tbl-borders-right bckgrnd-table-cell-1" data-search={{ $product->kko_operator }}>
+                                    <td class="bckgrnd-table-cell-1" data-search={{ $product->kko_operator }}>
                                         {!! kko_express_check($product->kko_operator) !!}
                                     </td>
                                     {{-- Экспресс --}}
-                                    <td class="bckgrnd-table-cell-2" data-search={{ $product->express_hall }}>
+                                    <td class="bckgrnd-table-cell-1" data-search={{ $product->express_hall }}>
                                         {!! kko_express_check($product->express_hall) !!}
                                     </td>
-                                    <td class="tbl-borders-right bckgrnd-table-cell-2" data-search={{ $product->express_operator }}>
+                                    <td class="bckgrnd-table-cell-1" data-search={{ $product->express_operator }}>
                                         {{-- {{ $product->express_operator }} --}}
                                         {!! kko_express_check($product->express_operator) !!}
                                     </td>
