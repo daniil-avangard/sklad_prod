@@ -18,23 +18,23 @@
                 <div class="table-container-goods">
                     <table id="datatable" class="table table-bordered">
                         <tr>
-                            <th class="text-center orders_picture_row" rowspan="2">Изображение</th>
-                            <th class="text-center" rowspan="2">Название</th>
-                            <th class="text-center tbl-borders-right" rowspan="2">Даты актуализации</th>
-                            <th class="text-center tbl-borders-right tbl-borders-top bckgrnd-table-cell-1" colspan="4">KKO</th>
-                            <th class="text-center tbl-borders-right tbl-borders-top bckgrnd-table-cell-2" colspan="2">Экспресс</th>
-                            <th class="text-center" colspan="2">Действия</th>
+                            <th class="text-center orders_picture_row bckgrnd-table-cell-2" rowspan="2">Изображение</th>
+                            <th class="text-center bckgrnd-table-cell-2" rowspan="2">Название</th>
+                            <th class="text-center bckgrnd-table-cell-2" rowspan="2">Даты актуализации</th>
+                            <th class="text-center bckgrnd-table-cell-2" colspan="4">KKO</th>
+                            <th class="text-center bckgrnd-table-cell-2" colspan="2">Экспресс</th>
+                            <th class="text-center bckgrnd-table-cell-2" colspan="2">Действия</th>
                         </tr>
 
                         <tr>
-                            <th class="text-center bckgrnd-table-cell-1" colspan="1">Оперзал</th>
-                            <th class="text-center bckgrnd-table-cell-1" colspan="1">Открытие счетов</th>
-                            <th class="text-center bckgrnd-table-cell-1" colspan="1">Менеджерам</th>
-                            <th class="text-center tbl-borders-right bckgrnd-table-cell-1" colspan="1">Операционистам</th>
-                            <th class="text-center bckgrnd-table-cell-2" colspan="1">Оперзал</th>
-                            <th class="text-center tbl-borders-right bckgrnd-table-cell-2" colspan="1">Операционистам</th>
-                            <th class="text-center" colspan="1">Количество</th>
-                            <th class="text-center" colspan="1"></th>
+                            <th class="text-center bckgrnd-table-cell-1 bckgrnd-table-cell-2" colspan="1">Оперзал</th>
+                            <th class="text-center bckgrnd-table-cell-1 bckgrnd-table-cell-2" colspan="1">Открытие счетов</th>
+                            <th class="text-center bckgrnd-table-cell-1 bckgrnd-table-cell-2" colspan="1">Менеджерам</th>
+                            <th class="text-center bckgrnd-table-cell-1 bckgrnd-table-cell-2" colspan="1">Операционистам</th>
+                            <th class="text-center bckgrnd-table-cell-1 bckgrnd-table-cell-2" colspan="1">Оперзал</th>
+                            <th class="text-center bckgrnd-table-cell-1 bckgrnd-table-cell-2" colspan="1">Операционистам</th>
+                            <th class="text-center bckgrnd-table-cell-2" colspan="1">Количество</th>
+                            <th class="text-center bckgrnd-table-cell-2" colspan="1"></th>
                         </tr>
 
                         @foreach ($products as $product)
@@ -51,7 +51,7 @@
                                     </p>
                                 </td>
 <!--                                <td>{{ $product->category->name }}</td>-->
-                                <td class="tbl-borders-right">
+                                <td class="">
                                     @php
                                         $dateOfActualities = $product->variants
                                             ->where('is_active', true)
@@ -73,13 +73,13 @@
                                 <td class="bckgrnd-table-cell-1">
                                     {!! kko_express_check($product->kko_manager) !!}
                                 </td>
-                                <td class="tbl-borders-right bckgrnd-table-cell-1">
+                                <td class="bckgrnd-table-cell-1">
                                     {!! kko_express_check($product->kko_operator) !!}
                                 </td>
-                                <td class="bckgrnd-table-cell-2">
+                                <td class="bckgrnd-table-cell-1">
                                     {!! kko_express_check($product->express_hall) !!}
                                 </td>
-                                <td class="tbl-borders-right bckgrnd-table-cell-2">
+                                <td class="bckgrnd-table-cell-1">
                                     {!! kko_express_check($product->express_operator) !!}
                                 </td>
 
@@ -93,7 +93,7 @@
                                     </td>
                                     <td>
                                         @if ($arrayProductsInBasket[$product->id] == 0)
-                                        <button class="btn btn-primary" type="submit">
+                                        <button class="btn btn-primary btn-products-colors" type="submit">
                                             Добавить в
                                             корзину
                                         </button>
@@ -115,7 +115,7 @@
                     <button id="redirect-to-basket" class="btn btn-success mb-3">Перейти в корзину</button>
                 </div>
                 <div class="buttons-orders-elm">
-                    <button id="all-items-to-basket" class="btn btn-primary mb-3">Добавить все товары в корзину</button>
+                    <button id="all-items-to-basket" class="btn btn-primary mb-3 btn-products-colors">Добавить все товары в корзину</button>
                 </div>
             </div>
         </div> <!-- end col -->

@@ -855,10 +855,13 @@ tr p {
     text-align: center !important;
 }
 .bckgrnd-table-cell-1 {
-    background-color: #eaf1dd !important;
+/*    background-color: #eaf1dd !important;*/
     text-align: center !important;
 }
 .bckgrnd-table-cell-2 {
-    background-color: #daeef3 !important;
-    text-align: center !important;
+    background-color: #F1FCF6 !important;
+/*    text-align: center !important;*/
+}
+.btn-products-colors {
+    background-color: #006237 !important;
 }

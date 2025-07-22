@@ -4,15 +4,15 @@ let butonAddAllToBasket = document.getElementById('all-items-to-basket');
 let buttonsForm = document.querySelectorAll('button[type=submit]');
 let inputFormElements = document.querySelectorAll('input[type=number]');
 
-if (document.getElementById('datatable')) {
-    let tableTrArray = Array.from(document.getElementById('datatable').rows).slice(-1)[0];
-
-    Array.from(tableTrArray.cells).forEach((tds, ind) => {
-        if ([3, 4, 5, 6, 7, 8].includes(ind)) {
-            tds.classList.add("tbl-borders-bottom");
-        }
-    });   
-}
+//if (document.getElementById('datatable')) {
+//    let tableTrArray = Array.from(document.getElementById('datatable').rows).slice(-1)[0];
+//
+//    Array.from(tableTrArray.cells).forEach((tds, ind) => {
+//        if ([3, 4, 5, 6, 7, 8].includes(ind)) {
+//            tds.classList.add("tbl-borders-bottom");
+//        }
+//    });   
+//}
 
 
 if (buttonRedirectToBasket) {
