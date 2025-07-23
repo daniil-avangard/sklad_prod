@@ -173,7 +173,7 @@
                                 <th colspan="2" class="text-center bckgrnd-table-cell-2">
                                     Экспресс
                                 </th>
-                                <th rowspan="2" class="text-center bckgrnd-table-cell-2">Действия</th>
+<!--                                <th rowspan="2" class="text-center bckgrnd-table-cell-2">Действия</th>-->
                             </tr>
                             <tr>
                                 {{-- ККО --}}
@@ -226,7 +226,7 @@
                                         {{-- {{ $product->express_operator }} --}}
                                         {!! kko_express_check($product->express_operator) !!}
                                     </td>
-                                    <td>
+                                    <!--<td>
                                         @can('view', $product)
                                             <a href="{{ route('products.show', $product) }}"
                                                 class="btn btn-primary button-icon-wrapper">
@@ -251,7 +251,7 @@
                                                 </button>
                                             </x-form>
                                         @endcan
-                                    </td>
+                                    </td>-->
                                 </tr>
                             @endforeach
                     </table>
