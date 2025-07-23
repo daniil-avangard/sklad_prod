@@ -915,6 +915,14 @@ tr p {
     height: 100px !important;
     margin-top: 10px !important;
 }
-#swal2-content {
+.swal2-content {
     color: #000000 !important;
+}
+.swal2-header::after {
+    content: "" !important;
+    clear: both !important;
+    display: block !important;
+}
+.swal2-popup {
+    flex-direction: column !important;
 }
