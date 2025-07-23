@@ -25,7 +25,7 @@
                 <div class="card-body" style="overflow-x: auto;">
                     {{-- Фильтра --}}
                     <div class="filters mb-4" id="product-table-filters">
-                        <div class="d-flex justify-content-between align-middle mb-3">
+                        <div class="d-flex justify-content-between align-middle mb-3" style="flex-direction: column !important;">
                             <div class="d-flex">
                                 <!-- Фильтр по компании -->
                                 <label class="d-flex align-items-center me-4" for="companyFilter">
@@ -57,8 +57,8 @@
                                 </label>
                             </div>
 
-                            <div>
-                                <button id="chanel-filter-button" class="button btn-primary btn-sm p-1 ps-2 pe-2 border-0">
+                            <div class="d-flex" style="margin-top: 10px;">
+                                <button id="chanel-filter-button" class="button btn-primary btn-sm p-1 ps-2 pe-2 border-0 btn-products-colors">
                                     Фильтр по каналам распространения
 
                                     <span class="ms-1">
@@ -67,7 +67,7 @@
                                 </button>
 
                                 <button id="reset-product-table-button"
-                                    class="button btn-danger btn-sm p-1 ps-2 pe-2 border-0">
+                                    class="button btn-danger btn-sm p-1 ps-2 pe-2 border-0 btn-basket-prod-colors" style="margin-left: 10px;">
                                     Сбросить
                                 </button>
                             </div>

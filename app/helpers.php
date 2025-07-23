@@ -18,9 +18,9 @@ if (!function_exists('kko_express_check')) {
         }
 
         if ($value == 'yes' || $value === true) {
-            $status = "<i data-feather='check' style='color: green;'></i>";
+            $status = "<img src='/assets/images/galka_svg.svg' alt='logo-large' class='logo-lg logo-light'>";
         } elseif ($value == 'no' || $value === false || $value === null) {
-            $status = "<i data-feather='x' style='color: red;'></i>";
+            $status = "<img src='/assets/images/krest_svg.svg' alt='logo-large' class='logo-lg logo-light'>";
         } else {
             $status = Operator::tryFrom($value)->name() ?? (string)$value;
         }
