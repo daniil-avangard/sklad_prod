@@ -61,8 +61,10 @@ if (butonAddAllToBasket) {
                     addProductToBasketForms[elm[2]].reset();
                 });
                 Toast.fire({
-                        icon: 'success',
-                        title: "В корзину все добавлено"
+//                        icon: 'success',
+                        imageUrl: "/assets/images/basket_icon.svg",
+                        color: "#000000",
+                        text: "Все товары добавлены в корзину"
                     });
                 console.log("Проверяем api = ", res);
             }
