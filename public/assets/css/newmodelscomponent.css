@@ -915,3 +915,6 @@ tr p {
     height: 100px !important;
     margin-top: 10px !important;
 }
+#swal2-content {
+    color: #000000 !important;
+}
