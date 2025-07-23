@@ -45,10 +45,10 @@ class ProcessPodcast implements ShouldQueue
         
         $userEmailFrom = $this->orderEmail;
         $appUser1 = $this->orderData->user;
-//        try {
+        try {
             Mail::to($this->orderEmail)->send(new OrderShipped($appUser1, $this->messageData, $this->emailFrom));
-//        } catch (Throwable $e) {
-//            report($e);
-//        } 
+        } catch (Throwable $e) {
+            report($e);
+        } 
     }
 }

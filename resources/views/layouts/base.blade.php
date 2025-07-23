@@ -80,8 +80,9 @@
         <script src="/plugins/daterangepicker/daterangepicker.js"></script>
 
         <link href="/plugins/sweet-alert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
-
+        
         <script src="/plugins/sweet-alert2/sweetalert2.min.js"></script>
+<!--        <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">-->
         <script>
             var Toast = Swal.mixin({
                 toast: true,

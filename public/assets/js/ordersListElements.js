@@ -135,11 +135,13 @@ class ExcellTable {
         newInput.value = parseInt(dataOrigin.innerHTML);
         let newAccept = document.createElement('button');
         newAccept.setAttribute("class", "btn btn-success btn-sm waves-effect waves-light btn-excel");
+        newAccept.style.zIndex = 100;
         let newIcon = document.createElement('i');
         newIcon.setAttribute("class", "mdi mdi-check transform-excell-icon");
         newAccept.appendChild(newIcon);
         let newDanger = document.createElement('button');
         newDanger.setAttribute("class", "btn btn-danger btn-sm waves-effect waves-light btn-excel");
+        newDanger.style.zIndex = 100;
         let newIconDanger = document.createElement('i');
         newIconDanger.setAttribute("class", "mdi mdi-close transform-excell-icon");
         newDanger.appendChild(newIconDanger);
