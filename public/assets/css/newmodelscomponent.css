@@ -992,3 +992,9 @@ tr p {
 .p-orders-quant {
     text-align: center !important;
 }
+.img-exc-apt {
+    width: 24px;
+    height: 24px;
+    margin-left: 4px;
+    cursor: pointer;
+}
