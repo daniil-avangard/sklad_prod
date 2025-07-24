@@ -70,9 +70,11 @@
                             @endforeach
 			</table>
 		</div>
-            @can('view', \App\Models\Order::class)
+                <div class="excel-accept-button">
+                @can('view', \App\Models\Order::class)
                 <button id="acept-all-orders" class="btn btn-success mb-3">Утвердить все заказы</button>
-            @endcan
+                @endcan
+                </div>
         </div>
     </div>
 @endsection

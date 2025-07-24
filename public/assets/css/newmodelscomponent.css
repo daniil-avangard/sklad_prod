@@ -263,10 +263,15 @@ tr p {
     text-orientation: upright !important;
 }
 .rotated-table-text {
-    writing-mode: vertical-rl !important;
+/*    writing-mode: vertical-rl !important;
     transform: rotate(-180deg) !important;
-    letter-spacing: 2px !important;
-    max-height: 170px !important;
+    letter-spacing: 2px !important;*/
+    max-height: 66px !important;
+    height: 66px !important;
+    max-width: 120px !important;
+    min-width: 94px !important;
+    font-size: 12px !important
+    font-weight: 700 !important;
     text-wrap: wrap !important;
 }
 .new-table {
@@ -407,6 +412,7 @@ tr p {
     position: relative;
     width: 100% !important;
     height: 100% !important;
+    text-align: center;
 }
 .wrap-icon-digits-exell .tooltiptext {
   visibility: hidden;
@@ -495,8 +501,12 @@ tr p {
 }
 .table-container table th {
   white-space: nowrap;
-  padding: 10px 20px;
+  padding: 10px 10px;
   font-family: Arial;
+  text-align: center !important;
+  letter-spacing: 0 !important;
+  line-height: 100% !important;
+  
 }
 .table-container table td {
 /*  white-space: nowrap;*/
@@ -853,10 +863,15 @@ tr p {
 }
 #grafic-months {
     height: 30px;
-    background-color: #ffb822;
+    background-color: #006237 !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
 }
 .clean-filters {
     height: 30px;
+    background-color: #FF8800 !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
 }
 .bckgrnd-table-cell {
     background-color: #ffe680 !important;
@@ -929,8 +944,30 @@ tr p {
 /*#product-table_wrapper {
     margin-top: -50px !important;
 }
-#product-table_wrapper .btn-secondary {
+*/#product-table_wrapper .btn-secondary {
+    background-color: #006237 !important;
+}
+.custom-table {
+    margin-top: 20px;
+}
+.bg-warning {
+    background-color: #FF8800 !important;
+}
+.bg-info {
+    background-color: #006237 !important;
+}
+.excel-accept-button {
+    display: flex;
+    position: relative;
+    width: 100%;
+    height: 50px !important;
+    flex-direction: row;
+    align-items: flex-end;
+}
+#acept-all-orders {
     position: absolute !important;
-    left: 450px !important;
-    top: -50px !important;
-}*/
+    right: 0 !important;
+    top: 0 !important;
+    background-color: #006237 !important;
+
+}

@@ -95,7 +95,7 @@
         .bg-started-war {
             background-color: #0e77ac !important;
         }
-
+        
         .bg-assembled {
             background-color: #0a567c !important;
         }
@@ -201,9 +201,9 @@
                                 @endforeach
                             </select>
                         </div>
-<!--                        <div class="filters-button-part">
+                        <div class="filters-button-part">
                             <button class="select-work-buttons clean-filters">Очистить фильтры</button>
-                        </div>-->
+                        </div>
                     </div>
                     @endcan
                     
@@ -217,9 +217,11 @@
                                 @endforeach
                             </select>
                         </div>
-<!--                        <div class="filters-button-part">
-                            <button id="clean-status-product" class="select-work-buttons">Очистить Статусы и Товары</button>
-                        </div>-->
+                        @if ($flagForIndex == "notShow")
+                        <div class="filters-button-part">
+                            <button class="select-work-buttons clean-filters">Очистить фильтры</button>
+                        </div>
+                        @endif
                     </div>
                     
                     <div class="order-filters">
@@ -233,10 +235,10 @@
                             </select>
 <!--                            <button id="grafic-button">График по городам</button>-->
                         </div>
-                        <div class="filters-button-part">
-<!--                            <button id="clean-months" class="select-work-buttons">Очистить месяцы</button>-->
+<!--                        <div class="filters-button-part">
+                            <button id="clean-months" class="select-work-buttons">Очистить месяцы</button>
                             <button class="select-work-buttons clean-filters">Очистить фильтры</button>
-                        </div>
+                        </div>-->
                     </div>
                     
                     <div class="order-filters">
@@ -319,11 +321,11 @@
                             </th>
                             </th>-->
 <!--                        <th scope="col">ID</th>-->
-                            <th scope="col">Подразделение</th>
-                            <th scope="col">Товары</th>
-                            <th scope="col">Количество</th>
-                            <th scope="col">Статус</th>
-                            <th scope="col">Дата</th>
+                            <th scope="col" class="bckgrnd-table-cell-2">Подразделение</th>
+                            <th scope="col" class="bckgrnd-table-cell-2">Товары</th>
+                            <th scope="col" class="bckgrnd-table-cell-2">Количество</th>
+                            <th scope="col" class="bckgrnd-table-cell-2">Статус</th>
+                            <th scope="col" class="bckgrnd-table-cell-2">Дата</th>
                         </tr>
                     </thead>
                     <tbody>
