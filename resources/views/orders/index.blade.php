@@ -321,14 +321,20 @@
                             </th>
                             </th>-->
 <!--                        <th scope="col">ID</th>-->
-                            <th scope="col" class="bckgrnd-table-cell-2">Подразделение</th>
-                            <th scope="col" class="bckgrnd-table-cell-2">Товары</th>
-                            <th scope="col" class="bckgrnd-table-cell-2">Количество</th>
-                            <th scope="col" class="bckgrnd-table-cell-2">Статус</th>
-                            <th scope="col" class="bckgrnd-table-cell-2">Дата</th>
+                            <th scope="col" class="text-center bckgrnd-table-cell-2">Подразделение</th>
+                            <th scope="col" class="text-center bckgrnd-table-cell-2">Товары</th>
+                            <th scope="col" class="text-center bckgrnd-table-cell-2">Количество</th>
+                            <th scope="col" class="text-center bckgrnd-table-cell-2">Статус</th>
+                            <th scope="col" class="text-center bckgrnd-table-cell-2">Дата</th>
                         </tr>
                     </thead>
                     <tbody>
+                        @php
+                            $flagforrow = "f";
+                        @endphp
+                        @php
+                            $flagforrow1 = "f";
+                        @endphp
                         @foreach ($orders as $order)
                             <tr class="order-rows">
 <!--                                <th scope="row">
@@ -351,10 +357,22 @@
                                 <!--                                <td>  Было
                                                  $order->division->name
                                             </td>-->
-                                <td>
+                                <td class="td-with-row-color">
+                                    
+                                    
                                     @foreach ($allItems[$order->id] as $item)
+                                        @if ($flagforrow == "f")
                                         <div class="order-popup-parent" data-productid="{{ $item['productId'] }}">
-                                            <p>{{ $item['name'] }}</p>
+                                        @php
+                                        $flagforrow = "t";
+                                        @endphp
+                                        @else
+                                        <div class="order-popup-parent order-index-row" data-productid="{{ $item['productId'] }}">
+                                        @php
+                                        $flagforrow = "f";
+                                        @endphp
+                                        @endif
+                                            <p class="p-orders">{{ $item['name'] }}</p>
                                             <div class="order-popup-child">
 
                                                 <img src="{{ asset('storage/' . $item['image']) }}" alt="" class=" mx-auto  d-block popup-child-img" height="150">
@@ -363,14 +381,24 @@
                                         </div>
                                     @endforeach
                                 </td>
-                                <td>
+                                <td class="td-with-row-color">
                                     @foreach ($allItems[$order->id] as $item)
-                                        <p><span>{{ $item['quantity'] }}</span></p>
+                                        @if ($flagforrow1 == "f")
+                                        <p class="p-orders-quant"><span>{{ $item['quantity'] }}</span></p>
+                                        @php
+                                        $flagforrow1 = "t";
+                                        @endphp
+                                        @else
+                                        <p class="p-orders-quant order-index-row"><span>{{ $item['quantity'] }}</span></p>
+                                        @php
+                                        $flagforrow1 = "f";
+                                        @endphp
+                                        @endif
                                     @endforeach
                                 </td>
-                                <td><span class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}</span>
+                                <td class="text-center"><span class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}</span>
                                 </td>
-                                <td>{{ $order->created_at->format('d.m.Y H:i') }}</td>
+                                <td class="text-center">{{ $order->created_at->format('d.m.Y H:i') }}</td>
 
                             </tr>
                         @endforeach
