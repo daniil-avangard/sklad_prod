@@ -374,6 +374,9 @@ tr p {
 }
 .input-excell {
   width: 70px !important;
+  height: 14px !important;
+  padding: 2px !important;
+  font-size: 10px !important;
 }
 .long-table table {
     border: 1px solid #eaf0f9;
@@ -993,8 +996,8 @@ tr p {
     text-align: center !important;
 }
 .img-exc-apt {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     margin-left: 4px;
     cursor: pointer;
 }
