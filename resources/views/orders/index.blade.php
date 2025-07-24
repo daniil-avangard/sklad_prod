@@ -372,7 +372,7 @@
                                         $flagforrow = "f";
                                         @endphp
                                         @endif
-                                            <p>{{ $item['name'] }}</p>
+                                            <p class="p-orders">{{ $item['name'] }}</p>
                                             <div class="order-popup-child">
 
                                                 <img src="{{ asset('storage/' . $item['image']) }}" alt="" class=" mx-auto  d-block popup-child-img" height="150">
@@ -384,12 +384,12 @@
                                 <td class="td-with-row-color">
                                     @foreach ($allItems[$order->id] as $item)
                                         @if ($flagforrow1 == "f")
-                                        <p class=""><span>{{ $item['quantity'] }}</span></p>
+                                        <p class="p-orders-quant"><span>{{ $item['quantity'] }}</span></p>
                                         @php
                                         $flagforrow1 = "t";
                                         @endphp
                                         @else
-                                        <p class="order-index-row"><span>{{ $item['quantity'] }}</span></p>
+                                        <p class="p-orders-quant order-index-row"><span>{{ $item['quantity'] }}</span></p>
                                         @php
                                         $flagforrow1 = "f";
                                         @endphp

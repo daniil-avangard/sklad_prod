@@ -986,3 +986,9 @@ tr p {
 .orders-cell-height {
     height: 25.8px !important;
 }
+.p-orders {
+    padding-left: 16px !important;
+}
+.p-orders-quant {
+    text-align: center !important;
+}
