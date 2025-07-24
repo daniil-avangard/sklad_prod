@@ -396,9 +396,9 @@
                                         @endif
                                     @endforeach
                                 </td>
-                                <td><span class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}</span>
+                                <td class="text-center"><span class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}</span>
                                 </td>
-                                <td>{{ $order->created_at->format('d.m.Y H:i') }}</td>
+                                <td class="text-center">{{ $order->created_at->format('d.m.Y H:i') }}</td>
 
                             </tr>
                         @endforeach
