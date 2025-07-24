@@ -24,16 +24,16 @@
                 <div class="table-container">
 			<table id="excel-table" class="long-table">
                             <tr>
-                                <th class="first-col head-bold">Товары</th>
+                                <th class="first-col head-bold bckgrnd-table-cell-2">Товары</th>
                                 @foreach ($divisionNames as $divisionName)
-                                    <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }}">{{ $divisionName['name'] }}</th>
+                                    <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }} bckgrnd-table-cell-2">{{ $divisionName['name'] }}</th>
                                 @endforeach
                                 @if ($flagForExcell == "show")
-                                <th class="head-bold">Заказано</th>  
-                                <th class="head-bold">Доступно<br>для<br>заказа</th>
-                                <th class="head-bold">Остаток<br>после<br>заказов</th>
-                                <th class="head-bold">Минимально<br>допустимый<br>остаток</th>
-                                <th class="head-bold">Тираж<br>для<br>дозаказа</th>                               
+                                <th class="head-bold bckgrnd-table-cell-2">Заказано</th>  
+                                <th class="head-bold bckgrnd-table-cell-2">Доступно<br>для<br>заказа</th>
+                                <th class="head-bold bckgrnd-table-cell-2">Остаток<br>после<br>заказов</th>
+                                <th class="head-bold bckgrnd-table-cell-2">Минимально<br>допустимый<br>остаток</th>
+                                <th class="head-bold bckgrnd-table-cell-2">Тираж<br>для<br>дозаказа</th>                               
                                 @endif
                             </tr>
                             @foreach ($uniqGoods as $good)
@@ -60,11 +60,11 @@
                                     </td>
                                     @include('orders.digits-cell')
                                     @if ($flagForExcell == "show")
-                                        <td class="another-col">{{ $good['total'] - $totalNewData[$good['name']] }}</td>
-                                        <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] - $totalNewData[$good['name']] }}</td>
-                                        <td class="another-col">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] }}</td>
-                                        <td class="another-col">{{ $good['min_stock'] }}</td>
-                                        <td class="another-col"> - </td>                                       
+                                        <td class="another-col tr-another-cell">{{ $good['total'] - $totalNewData[$good['name']] }}</td>
+                                        <td class="another-col tr-another-cell">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] - $totalNewData[$good['name']] }}</td>
+                                        <td class="another-col tr-another-cell">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] }}</td>
+                                        <td class="another-col tr-another-cell">{{ $good['min_stock'] }}</td>
+                                        <td class="another-col tr-another-cell"> - </td>                                       
                                     @endif
                                 </tr>
                             @endforeach

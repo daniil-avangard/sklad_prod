@@ -271,7 +271,7 @@ tr p {
     max-width: 120px !important;
     min-width: 94px !important;
     font-size: 12px !important
-    font-weight: 700 !important;
+    font-weight: 500 !important;
     text-wrap: wrap !important;
 }
 .new-table {
@@ -388,7 +388,7 @@ tr p {
     font-weight: bold;
 }
 .color-for-approve {
-    color: red;
+    color: #4A4A4A;
 }
 .color-division-1 {
     background-color: #ffc5c5 !important;
@@ -969,5 +969,8 @@ tr p {
     right: 0 !important;
     top: 0 !important;
     background-color: #006237 !important;
-
+}
+.tr-another-cell {
+    color: #4A4A4A !important;
+    text-align: center !important;
 }
