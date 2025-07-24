@@ -45,6 +45,7 @@ class OrderController extends Controller
         $divisionAllOrders = Order::whereIn('division_id',[$divisionID])->get()->sortByDesc('created_at');
         $role = Auth::user()->roles()->pluck('name')->toArray();
         $roleCockies = Auth::user()->roles()->pluck('value')->toArray();
+        $flagForIndex = (in_array(UserRoleEnum::MANAGER->label(), $role)) ? "notShow" : "show";
         Cookie::queue('skladRoleUser', $roleCockies[0], time()+3600, null, null, false, false);
 //        dd($role[0]);
         // Собираю названия дивизионов
@@ -82,7 +83,7 @@ class OrderController extends Controller
             }
         }
 
-        return response(view('orders.index', compact('orders', 'allItems', 'groupDivisionsNames1', 'allOrdersStatus', 'allOrdersProducts')))->cookie('check', 'new', time()+3600, null, null, false, false);
+        return response(view('orders.index', compact('orders', 'allItems', 'groupDivisionsNames1', 'allOrdersStatus', 'allOrdersProducts', 'flagForIndex')))->cookie('check', 'new', time()+3600, null, null, false, false);
     }
 
     public function indexNew()
