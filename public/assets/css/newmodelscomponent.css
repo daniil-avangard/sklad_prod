@@ -974,3 +974,15 @@ tr p {
     color: #4A4A4A !important;
     text-align: center !important;
 }
+.order-index-row {
+    background-color: #F5F5F5 !important;
+}
+.td-with-row-color {
+    padding: 0 !important;
+}
+.margin-with-row-color {
+    padding: 7.2px 4.8px !important;
+}
+.orders-cell-height {
+    height: 25.8px !important;
+}
