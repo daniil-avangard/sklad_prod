@@ -43,7 +43,7 @@ if (butonAddAllToBasket) {
             const request = new Request(url, {
                                     method: "POST",
                                     headers: {
-                                                'Accept': 'application/json;'
+                                                'Content-Type': 'application/json;'
                                             },
                                     body: JSON.stringify(dataToSend)
                                     });
@@ -63,7 +63,6 @@ if (butonAddAllToBasket) {
                 Toast.fire({
 //                        icon: 'success',
                         imageUrl: "/assets/images/basket_icon.svg",
-                        color: "#000000",
                         text: "Все товары добавлены в корзину"
                     });
                 console.log("Проверяем api = ", res);
