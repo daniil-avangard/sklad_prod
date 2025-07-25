@@ -43,7 +43,7 @@ if (butonAddAllToBasket) {
             const request = new Request(url, {
                                     method: "POST",
                                     headers: {
-                                                'Content-Type': 'application/json;charset=utf-8',
+                                                'Content-Type': 'application/json;'
                                             },
                                     body: JSON.stringify(dataToSend)
                                     });
@@ -63,7 +63,6 @@ if (butonAddAllToBasket) {
                 Toast.fire({
 //                        icon: 'success',
                         imageUrl: "/assets/images/basket_icon.svg",
-                        color: "#000000",
                         text: "Все товары добавлены в корзину"
                     });
                 console.log("Проверяем api = ", res);
@@ -94,17 +93,23 @@ addProductToBasketForms.forEach((basketForm, ind) => {
 
         const data = new FormData(basketForm);
         // const productId = basketForm.dataset.productId;
-        console.log(data.get("quantity"));
+        for (let [name, value] of data) {
+            console.log(`${name} = ${value}`);
+        }
+        
         const url = basketForm.action;
+        console.log("проверяем формы = ", url);
+        let dataToSend = {data: data.get("quantity"), _token: $('meta[name="csrf-token"]').attr('content')};
+        console.log("проверяем формы = ", dataToSend);
         if (data.get("quantity") != 0) {
             
         
             fetch(url, {
-                method: "POST",
-                body: data,
+                method: "POST", 
                 headers: {
-                    "Accept": 'application/json',
-                }
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify(dataToSend),
             })
                 .then((response) => {
                     if (!response.ok) {
@@ -115,9 +120,14 @@ addProductToBasketForms.forEach((basketForm, ind) => {
                 })
                 .then((data) => {
                     console.log('data = ', data);
-                    buttonsForm[ind].innerHTML = data.quontity + " добавлено в корзину";
-                    buttonsForm[ind].classList.remove("btn-products-colors");
-                    buttonsForm[ind].classList.add("basket-button-change");
+                    const url1 = new URL(window.location.href);
+                    console.log(url1.pathname);
+                    if (url1.pathname == '/product/list') {
+                        buttonsForm[ind].innerHTML = data.quontity + " добавлено в корзину";
+                        buttonsForm[ind].classList.remove("btn-products-colors");
+                        buttonsForm[ind].classList.add("basket-button-change");
+                        basketForm.reset();
+                    }
 
                     //                let button = basketForm.getElementsByTagName("BUTTON")[0];
                     //                console.log('button = ', buttonsForm[ind]);
@@ -128,7 +138,7 @@ addProductToBasketForms.forEach((basketForm, ind) => {
                     });
                     Array.from(inputFormElements).map(x => x.style.backgroundColor = "transparent");
                     buttonsForm[ind].disabled = false;
-                    basketForm.reset();
+                    
                 })
                 .catch((error) => {
                     Toast.fire({

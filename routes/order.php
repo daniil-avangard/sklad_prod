@@ -5,9 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductListController;
 use App\Http\Controllers\BasketController;
 use App\Http\Controllers\Order\OrderController;
+use Illuminate\Foundation\Http\Middleware\ValidateCsrfToken;
 
-
-Route::middleware('auth', 'admin')->group(function () {
+Route::middleware([ValidateCsrfToken::class, 'auth', 'admin'])->group(function () {
 
     Route::get('/product/list', [ProductListController::class, 'index'])->name('products.list');
     Route::get('/product/list/{product}', [ProductListController::class, 'show'])->name('products.info');
@@ -21,6 +21,7 @@ Route::middleware('auth', 'admin')->group(function () {
             throw new NotFoundHttpException();
         });
     Route::post('/basket/add-all', [BasketController::class, 'addAll'])->name('basket.add-all');
+    
     Route::post('/basket/update/{product}', [BasketController::class, 'updateQuantity'])
         ->where('product', '[0-9]+')
         ->name('basket.update');
