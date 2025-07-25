@@ -71,15 +71,15 @@
                                         <td>
                                             <x-form class="add-product-to-basket-form" action="{{ route('basket.update', $product) }}" method="POST">
                                                 <div class="buttons-orders-cotroller">
-                                                <div class="buttons-orders-elm">
-                                                <input class="form-control form-control-sm w-70" type="number"
-                                                    name="quantity" value="{{ $product->pivot->quantity }}" min="1"
-                                                    id="quantity">
-                                                </div>
+                                                    <div class="buttons-orders-elm">
+                                                    <input class="form-control form-control-sm w-70" type="number"
+                                                        name="quantity" value="{{ $product->pivot->quantity }}" min="1"
+                                                        id="quantity">
+                                                    </div>
                                                     <div class="buttons-orders-elm buttons-orders-cotroller-1">
-                                                <button type="submit" class="btn btn-primary btn-sm update-button">
-                                                    <img src="/assets/images/update_svg.svg" alt="logo-large" class="logo-lg logo-light update-button">
-                                                </button>
+                                                        <button type="submit" class="btn btn-primary btn-sm update-button">
+                                                            <img src="/assets/images/update_svg.svg" alt="logo-large" class="logo-lg logo-light update-button">
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </x-form>

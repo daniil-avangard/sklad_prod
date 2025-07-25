@@ -59,7 +59,7 @@ class BasketController extends Controller
         $basket = $this->basket;
 
         // Получение количества из запроса, если не указано, то по умолчанию 1
-        $quantity = max(1, (int)$request->input('quantity', 1)); // Убедитесь, что количество не меньше 1
+        $quantity = max(1, (int)$request['data']); // Убедитесь, что количество не меньше 1
 
         // Проверка, существует ли продукт в корзине
         $basketProduct = $basket->products()->where('product_id', $product->id)->first();
@@ -122,8 +122,13 @@ class BasketController extends Controller
 
     public function updateQuantity(Request $request, Product $product)
     {
+        
+        // Проверка на наличие продукта
+        if (!$product) {
+            return response()->json(['error' => 'Товар не найден.'], 404);
+        }
         // Получение количества из запроса
-        $quantity = $request->input('quantity');
+        $quantity = $request['data'];
 
         // Поиск продукта в корзине
         $basket_product = $this->basket->products()->where('product_id', $product->id)->first();
@@ -132,8 +137,12 @@ class BasketController extends Controller
             $basket_product->pivot->quantity = $quantity;
             $basket_product->pivot->save();
         }
+        return response()->json([
+            'success' => 'Добавлено',
+            'quontity' => $quantity
+        ]);
 
-        return redirect()->back()->with('success', 'Количество обновлено');
+//        return redirect()->back()->with('success', 'Количество обновлено');
     }
 
 
