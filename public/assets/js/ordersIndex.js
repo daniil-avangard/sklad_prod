@@ -112,7 +112,7 @@ class FilterPage {
                 } else {
                     self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
                 }
-                document.getElementById('chartContainer').innerHTML = "";
+//                document.getElementById('chartContainer').innerHTML = "";
                 document.getElementById('chartContainer-1').innerHTML = "";
             }
         });
@@ -347,7 +347,7 @@ class FilterPage {
                     if (document.getElementById('chartContainer')) self.draw(product, dataForGraphic, "notsimple");
 //                    self.draw(product, dataForGraphic, "notsimple");
                     self.draw1(product, dataForGraphic, "notsimple");
-                    document.getElementById('chartContainer').scrollIntoView({ behavior: "smooth", block: "end" });
+                    document.getElementById('chartContainer-1').scrollIntoView({ behavior: "smooth", block: "end" });
 //                    console.log(dataForGraphic);
                 } else {
                     if (arrayMonths.length == 0) {
