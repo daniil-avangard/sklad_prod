@@ -135,12 +135,12 @@ class ExcellTable {
         newInput.value = parseInt(dataOrigin.innerHTML);
         
         let newAccept = document.createElement('img');
-        newAccept.setAttribute("src", "/assets/images/Ex_apt.png");
+        newAccept.setAttribute("src", "/assets/images/Ex_apt_svg.svg");
         newAccept.setAttribute("class", "img-exc-apt");
         newAccept.style.zIndex = 100;
         
         let newDanger = document.createElement('img');
-        newDanger.setAttribute("src", "/assets/images/Ex_Den.png");
+        newDanger.setAttribute("src", "/assets/images/Ex_den_svg.svg");
         newDanger.setAttribute("class", "img-exc-apt");
         newDanger.style.zIndex = 100;
         
