@@ -18,7 +18,7 @@
                        class="clickForOrder color-for-approve wrap-icon-digits-exell"
                        data-type="number" 
                        data-pk="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['id'] }}" 
-                       data-title="Введите количество"
+                       data-title="{{ $good['name'] }}"
                        data-origin="{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}"
                        data-new="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}"
                        data-orderid="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['orderId']['id'] }}"

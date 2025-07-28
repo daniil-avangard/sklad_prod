@@ -49,7 +49,7 @@ class ExcellTable {
         document.getElementById('date-orders').innerHTML = this.flagRoleForExcell ? "27" : "25";
         this.initSettings();
         this.settingsCheckBoxToZero();
-        console.log(this.tableInputToZero);
+//        console.log(this.tableInputToZero);
         this.checkDateForButton();
     }
     catch(error) {
@@ -296,8 +296,49 @@ class ExcellTable {
   settingsCheckBoxToZero() {
     let self = this;
     const toZeroClickFunction = (el) => {
+        let productName = el.dataset.product;
+        let parentTR = el.parentNode.parentNode.parentNode.parentNode;
+        let indexCurrentRow = parentTR.rowIndex;
+//        let tableExcelTrArray = document.getElementById('excel-table').getElementsByTagName("TR");
+        let currentCells = parentTR.querySelectorAll('td');
+        let cellsLength = currentCells.length;
         if (el.checked) {
-            console.log("hello check boxes");
+            Object.entries(self.allDivisionsDataNew).forEach(([key, value]) => {
+                if (value[productName]['quontity'] != 0) {
+                    currentCells.forEach((cell, id) => {
+                        if (id > 0 && id < cellsLength - 5) {
+                            if (cell.getElementsByTagName("P").length == 1 && cell.getElementsByTagName("P")[0].dataset.title == productName) {
+                                console.log("hello check boxes NEW = " , cell.getElementsByTagName("P")[0].dataset.title);
+                                cell.getElementsByTagName("P")[0].innerHTML = "0";
+                            }
+                        }
+                    });
+                    console.log("hello check boxes = " , value[productName]['quontity'], value[productName]['id'], indexCurrentRow);
+                }
+            });
+           
+        } else {
+            let data = [];
+            Object.entries(self.allDivisionsDataNew).forEach(([key, value]) => {
+                
+                if (value[productName]['quontity'] != 0) {
+                    data.push(value[productName]['quontity']);
+                    console.log(key, value[productName]['quontity']);
+                    
+                   
+                }
+            });
+            let i = 0;
+            currentCells.forEach((cell, id) => {
+                        if (id > 0 && id < cellsLength - 5) {
+                            if (cell.getElementsByTagName("P").length == 1 && cell.getElementsByTagName("P")[0].dataset.title == productName) {
+
+                                cell.getElementsByTagName("P")[0].innerHTML = data[i];
+                                i += 1;
+                            }
+                    }
+                        
+                    });
         }
     }
     

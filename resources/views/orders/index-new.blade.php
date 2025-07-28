@@ -53,7 +53,7 @@
                                     <td class="first-col-1">
                                         <div class="flex-excel">
                                             <div class="buttons-orders-elm buttons-orders-elm-icon flex-excel-elm">
-                                                <input class="checkbox-filter-new" type="checkbox" value="1" >
+                                                <input class="checkbox-filter-new" type="checkbox" value="1" data-product="{{ $good['name'] }}">
                                             </div>
                                             <div class="order-popup-parent flex-excel-elm-name">
                                                 <p>{{ $good['name'] }}</p>
