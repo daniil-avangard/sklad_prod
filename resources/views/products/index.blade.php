@@ -202,7 +202,17 @@
                             @foreach ($products as $product)
                                 <tr>
                                     <td>
-                                        <a href="{{ route('products.show', $product) }}">{{ $product->name }}</a>
+                                        <div class="buttons-orders-cotroller">
+                                            <div class="buttons-orders-elm buttons-orders-elm-text">
+                                                <a href="{{ route('products.show', $product) }}">{{ $product->name }}</a>
+                                            </div>
+                                            <div class="buttons-orders-elm buttons-orders-elm-icon">
+                                                <a href="{{ route('products.show', $product) }}"
+                                                    >
+                                                    <img src="/assets/images/show_icon.svg" alt="logo-large" class="logo-lg logo-light">
+                                                </a>
+                                            </div>
+                                        </div>
                                     </td>
                                     <td class="">{{ $product->companyName }}</td>
                                     {{-- ККО --}}

@@ -864,6 +864,20 @@ tr p {
     display: flex;
     position: relative;
 }
+.buttons-orders-elm-text {
+    width: 80%;
+    text-wrap: wrap !important;
+}
+.buttons-orders-elm-icon {
+    width: 10%;
+    align-items: center;
+    justify-content: center;
+    color: #F5F5F5 !important;
+}
+.buttons-orders-elm-icon img {
+    width: 24px !important;
+    height: 20px !important;
+}
 #grafic-months {
     height: 30px;
     background-color: #006237 !important;
