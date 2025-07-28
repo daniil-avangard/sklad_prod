@@ -7,6 +7,7 @@ class ExcellTable {
     this.pElementsOrders = document.querySelectorAll('.clickForOrder');
 //    this.editElementsOrders = document.querySelectorAll('.edit-button-excell');
     this.tableThMain = document.getElementById('excel-table').getElementsByTagName("TH")[0];
+    this.tableInputToZero = document.querySelectorAll('.checkbox-filter-new');
     
     this.start();
     this.dataFromApi();
@@ -39,12 +40,16 @@ class ExcellTable {
         console.log("Проверяем api = ", res);
         console.log("парсим объект = ", res.uniqGoods);
         console.log(" flagForExcell = ", res.totalNewData);
+        console.log(" alldivisionData = ", res.allDivisionsDataNew);
         this.flagRoleForExcell = res.flagForExcell == 'show';
         this.allDataForExcell = res.uniqGoods;
         this.uniqGoodsTotalOrdered = res.uniqGoodsTotalOrdered;
         this.onlyNewOrdersData = res.totalNewData;
+        this.allDivisionsDataNew = res.allDivisionsDataNew;
         document.getElementById('date-orders').innerHTML = this.flagRoleForExcell ? "27" : "25";
         this.initSettings();
+        this.settingsCheckBoxToZero();
+        console.log(this.tableInputToZero);
         this.checkDateForButton();
     }
     catch(error) {
@@ -205,10 +210,15 @@ class ExcellTable {
                         if (this.flagRoleForExcell) {
                             arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) - deltaItemQuontity;
                             arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
+                            self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
+                            self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
+                            self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] += deltaItemQuontity;
                         } else {
                             self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
                             self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
+                            self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] += deltaItemQuontity;
                         }
+                        console.log("Проверка данных после изменений = ", self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity']);
                         
                         let compareToMinimumRatio = (compareMinumum1 - deltaItemQuontity) - compareMinumum2;
                         let compareToMinimumRatio2 = (compareMinumum1 - deltaItemQuontity);
@@ -281,6 +291,23 @@ class ExcellTable {
         }
 
     });
+  }
+  
+  settingsCheckBoxToZero() {
+    let self = this;
+    const toZeroClickFunction = (el) => {
+        if (el.checked) {
+            console.log("hello check boxes");
+        }
+    }
+    
+    Array.from(self.tableInputToZero).forEach((el, index) => {
+      el.onchange = () => {
+          toZeroClickFunction(el);
+      }
+
+    });
+      
   }
 }
 

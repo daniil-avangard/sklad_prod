@@ -571,6 +571,8 @@ class OrderController extends Controller
     public function updateQuantity(Request $request)
     {
         $this->authorize('updateQuantity', Order::class);
+        $orderId = OrderItem::find($request->id)->order_id;
+        $orderFind = Order::find($orderId)->division->name;
         if (!(is_array($request->id))) {
             $item = OrderItem::find($request->id);
             $item->quantity = $request->quantity;
@@ -585,7 +587,7 @@ class OrderController extends Controller
         //        $item = OrderItem::find($request->id);
         //        $item->quantity = $request->quantity;
         //        $item->save();
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'divisionName' => $orderFind]);
     }
 
     public function updateFullOrder(Request $request)
@@ -676,7 +678,7 @@ class OrderController extends Controller
         $allDivisionsDataNew = $result[3];
         $totalNewData = $result[4];
         //
-        return response()->json(['success' => true, 'uniqGoods' => $uniqGoods, 'uniqGoodsTotalOrdered' => $uniqGoodsTotalOrdered, 'flagForExcell' => $flagForExcell, 'totalNewData' => $totalNewData]);
+        return response()->json(['success' => true, 'uniqGoods' => $uniqGoods, 'uniqGoodsTotalOrdered' => $uniqGoodsTotalOrdered, 'flagForExcell' => $flagForExcell, 'totalNewData' => $totalNewData, 'allDivisionsDataNew' => $allDivisionsDataNew]);
     }
 
     // Статуты бля заказаков
