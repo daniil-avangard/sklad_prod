@@ -133,8 +133,11 @@ addProductToBasketForms.forEach((basketForm, ind) => {
                     //                console.log('button = ', buttonsForm[ind]);
 
                     Toast.fire({
-                        icon: 'success',
-                        title: data.success
+//                        icon: 'success',
+//                        title: data.success,
+                        imageUrl: "/assets/images/basket_icon.svg",
+                        text: "Товар добавлен в корзину"
+                        
                     });
                     Array.from(inputFormElements).map(x => x.style.backgroundColor = "transparent");
                     buttonsForm[ind].disabled = false;

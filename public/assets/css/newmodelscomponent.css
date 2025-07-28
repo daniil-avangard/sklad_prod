@@ -1014,4 +1014,5 @@ tr p {
     height: 22px;
     margin-left: 4px;
     cursor: pointer;
+    transform: translateY(2px);
 }
