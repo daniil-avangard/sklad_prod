@@ -857,6 +857,31 @@ tr p {
     width: 98%;
     justify-content: space-between;
 }
+.flex-excel {
+    display: flex;
+    position: relative;
+    width: 98%;
+    height: 100% !important;
+    align-items: flex-start;
+}
+.flex-excel-elm {
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    height: 100% !important;
+}
+.flex-excel-elm-name {
+    width: 80% !important;
+}
+.checkbox-filter-new {
+    position: relative;
+    display: flex;
+    transform: translateY(50%);
+}
+.flex-excel input[type="checkbox"]:checked {
+        accent-color: #006237 !important;
+        border-color: #006237 !important;
+    }
 .buttons-orders-cotroller-1 {
     margin-left: 10px !important;
 }

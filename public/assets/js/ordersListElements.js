@@ -7,6 +7,7 @@ class ExcellTable {
     this.pElementsOrders = document.querySelectorAll('.clickForOrder');
 //    this.editElementsOrders = document.querySelectorAll('.edit-button-excell');
     this.tableThMain = document.getElementById('excel-table').getElementsByTagName("TH")[0];
+    this.tableInputToZero = document.querySelectorAll('.checkbox-filter-new');
     
     this.start();
     this.dataFromApi();
@@ -39,12 +40,16 @@ class ExcellTable {
         console.log("Проверяем api = ", res);
         console.log("парсим объект = ", res.uniqGoods);
         console.log(" flagForExcell = ", res.totalNewData);
+        console.log(" alldivisionData = ", res.allDivisionsDataNew);
         this.flagRoleForExcell = res.flagForExcell == 'show';
         this.allDataForExcell = res.uniqGoods;
         this.uniqGoodsTotalOrdered = res.uniqGoodsTotalOrdered;
         this.onlyNewOrdersData = res.totalNewData;
+        this.allDivisionsDataNew = res.allDivisionsDataNew;
         document.getElementById('date-orders').innerHTML = this.flagRoleForExcell ? "27" : "25";
         this.initSettings();
+        this.settingsCheckBoxToZero();
+//        console.log(this.tableInputToZero);
         this.checkDateForButton();
     }
     catch(error) {
@@ -205,10 +210,15 @@ class ExcellTable {
                         if (this.flagRoleForExcell) {
                             arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) - deltaItemQuontity;
                             arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
+                            self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
+                            self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
+                            self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] = updateItemQuontity;
                         } else {
                             self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
                             self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
+                            self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] = updateItemQuontity;
                         }
+                        console.log("Проверка данных после изменений = ", self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity']);
                         
                         let compareToMinimumRatio = (compareMinumum1 - deltaItemQuontity) - compareMinumum2;
                         let compareToMinimumRatio2 = (compareMinumum1 - deltaItemQuontity);
@@ -281,6 +291,66 @@ class ExcellTable {
         }
 
     });
+  }
+  
+  settingsCheckBoxToZero() {
+    let self = this;
+    const toZeroClickFunction = (el) => {
+        let productName = el.dataset.product;
+        let parentTR = el.parentNode.parentNode.parentNode.parentNode;
+        let indexCurrentRow = parentTR.rowIndex;
+//        let tableExcelTrArray = document.getElementById('excel-table').getElementsByTagName("TR");
+        let currentCells = parentTR.querySelectorAll('td');
+        let cellsLength = currentCells.length;
+        if (el.checked) {
+            Object.entries(self.allDivisionsDataNew).forEach(([key, value]) => {
+                if (value[productName]['quontity'] != 0) {
+                    currentCells.forEach((cell, id) => {
+                        if (id > 0 && id < cellsLength - 5) {
+                            if (cell.getElementsByTagName("P").length == 1 && cell.getElementsByTagName("P")[0].dataset.title == productName) {
+                                console.log("hello check boxes NEW = " , cell.getElementsByTagName("P")[0].dataset.title);
+                                cell.getElementsByTagName("P")[0].innerHTML = "0";
+                            }
+                        }
+                    });
+                    console.log("hello check boxes = " , value[productName]['quontity'], value[productName]['id'], indexCurrentRow);
+                }
+            });
+           
+        } else {
+            let data = new Map();
+            Object.entries(self.allDivisionsDataNew).forEach(([key, value]) => {
+                
+                if (value[productName]['quontity'] != 0) {
+                    data.set(key, value[productName]['quontity']);
+//                    data.push(value[productName]['quontity']);
+//                    console.log(key, value[productName]['quontity']);
+                    
+                   
+                }
+            });
+            console.log(data);
+            let i = 0;
+            currentCells.forEach((cell, id) => {
+                        if (id > 0 && id < cellsLength - 5) {
+                            if (cell.getElementsByTagName("P").length == 1 && cell.getElementsByTagName("P")[0].dataset.title == productName) {
+                                let citi = cell.getElementsByTagName("P")[0].dataset.division;
+                                cell.getElementsByTagName("P")[0].innerHTML = data.get(citi);
+                                i += 1;
+                            }
+                    }
+                        
+                    });
+        }
+    }
+    
+    Array.from(self.tableInputToZero).forEach((el, index) => {
+      el.onchange = () => {
+          toZeroClickFunction(el);
+      }
+
+    });
+      
   }
 }
 

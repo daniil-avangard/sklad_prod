@@ -51,10 +51,15 @@
                                     @endif
                                 @endif
                                     <td class="first-col-1">
-                                        <div class="order-popup-parent">
-                                            <p>{{ $good['name'] }}</p>
-                                            <div class="order-popup-child order-popup-child-1">
-                                                <img src="{{ asset('storage/' . $good['image']) }}" alt="" class="mx-auto d-block visual-events popup-child-img" height="150">
+                                        <div class="flex-excel">
+                                            <div class="buttons-orders-elm buttons-orders-elm-icon flex-excel-elm">
+                                                <input class="checkbox-filter-new" type="checkbox" value="1" data-product="{{ $good['name'] }}">
+                                            </div>
+                                            <div class="order-popup-parent flex-excel-elm-name">
+                                                <p>{{ $good['name'] }}</p>
+                                                <div class="order-popup-child order-popup-child-1">
+                                                    <img src="{{ asset('storage/' . $good['image']) }}" alt="" class="mx-auto d-block visual-events popup-child-img" height="150">
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
