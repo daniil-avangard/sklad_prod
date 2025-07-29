@@ -53,6 +53,7 @@ class ProductListController extends Controller
         }
         
         $arrayProductsInBasket = [];
+        $dateActualization = [];
         foreach ($products as $product) {
             $basketProduct = $basket->products()->where('product_id', $product->id)->first();
             if ($basketProduct) {
@@ -60,10 +61,15 @@ class ProductListController extends Controller
             } else {
                 $arrayProductsInBasket[$product->id] = 0;
             }
+            $dateActualization[$product->name] = $product->variants->where('is_active', true)->pluck('date_of_actuality')->unique()->values()->sortDesc()->toArray();
+            if ($product->id == 10001) {
+//                dd($dateActualization[$product->name]);
+//                dd($product->variants->where('is_active', true)->pluck('date_of_actuality')->unique()->values()->sortDesc()->toArray());
+            }
         }
         
-
-        return view('products.list.index', compact('products', 'arrayProductsInBasket'));
+//        dd($products);
+        return view('products.list.index', compact('products', 'arrayProductsInBasket', 'dateActualization'));
     }
 
     public function show(Product $product)
