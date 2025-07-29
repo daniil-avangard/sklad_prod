@@ -19,6 +19,7 @@
                        data-type="number" 
                        data-pk="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['id'] }}" 
                        data-title="{{ $good['name'] }}"
+                       data-division="{{ $divisionName['name'] }}"
                        data-origin="{{ $allDivisionsData[$divisionName['name']][$good['name']]['quontity'] }}"
                        data-new="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['quontity'] }}"
                        data-orderid="{{ $allDivisionsDataNew[$divisionName['name']][$good['name']]['orderId']['id'] }}"

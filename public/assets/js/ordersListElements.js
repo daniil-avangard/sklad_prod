@@ -212,11 +212,11 @@ class ExcellTable {
                             arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
                             self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
                             self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
-                            self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] += deltaItemQuontity;
+                            self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] = updateItemQuontity;
                         } else {
                             self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
                             self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
-                            self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] += deltaItemQuontity;
+                            self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] = updateItemQuontity;
                         }
                         console.log("Проверка данных после изменений = ", self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity']);
                         
@@ -318,22 +318,24 @@ class ExcellTable {
             });
            
         } else {
-            let data = [];
+            let data = new Map();
             Object.entries(self.allDivisionsDataNew).forEach(([key, value]) => {
                 
                 if (value[productName]['quontity'] != 0) {
-                    data.push(value[productName]['quontity']);
-                    console.log(key, value[productName]['quontity']);
+                    data.set(key, value[productName]['quontity']);
+//                    data.push(value[productName]['quontity']);
+//                    console.log(key, value[productName]['quontity']);
                     
                    
                 }
             });
+            console.log(data);
             let i = 0;
             currentCells.forEach((cell, id) => {
                         if (id > 0 && id < cellsLength - 5) {
                             if (cell.getElementsByTagName("P").length == 1 && cell.getElementsByTagName("P")[0].dataset.title == productName) {
-
-                                cell.getElementsByTagName("P")[0].innerHTML = data[i];
+                                let citi = cell.getElementsByTagName("P")[0].dataset.division;
+                                cell.getElementsByTagName("P")[0].innerHTML = data.get(citi);
                                 i += 1;
                             }
                     }
