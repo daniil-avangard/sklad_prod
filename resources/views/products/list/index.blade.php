@@ -63,20 +63,15 @@
                                 </td>
 <!--                                <td>{{ $product->category->name }}</td>-->
                                 <td class="">
-                                    @php
-                                        $dateOfActualities = $product->variants
-                                            ->where('is_active', true)
-                                            ->pluck('date_of_actuality')
-                                            ->unique()
-                                            ->values()
-                                            ->sortDesc();
-                                    @endphp
-                                    @foreach ($dateOfActualities as $dateOfActuality)
+                                    @foreach ($dateActualization[$product->name] as $dateOfActuality)
                                         @if (is_null($dateOfActuality))
                                             <p class="m-0">Без даты</p>
+                                        @else
+                                            <p class="m-0">
+                                                {{ \Carbon\Carbon::parse($dateOfActuality)->format('d.m.Y') }}
+                                            </p>
                                         @endif
-                                        <p class="m-0">
-                                            {{ \Carbon\Carbon::parse($dateOfActuality)->format('d.m.Y') }}</p>
+                                        
                                     @endforeach
                                 </td>
                                 <td class="bckgrnd-table-cell-1">{!! kko_express_check($product->kko_hall) !!}</td>
