@@ -122,9 +122,9 @@ class OrderController extends Controller
         foreach ($absolutelyAllOrders as $order) {
             foreach ($order->items as $item) {
                 if (!isset($uniqGoodsTotalOrdered[$item->product->name])) {
-                    $uniqGoodsTotalOrdered[$item->product->name] = $item->quantity;
+                    $uniqGoodsTotalOrdered[$item->product->name] = $order->status == StatusEnum::NEW->value ? 0 : $item->quantity;
                 } else {
-                    $uniqGoodsTotalOrdered[$item->product->name] += $item->quantity;
+                    $uniqGoodsTotalOrdered[$item->product->name] = $order->status == StatusEnum::NEW->value ? $uniqGoodsTotalOrdered[$item->product->name] + 0 : $uniqGoodsTotalOrdered[$item->product->name] + $item->quantity;
                 }
             }
         }
@@ -588,6 +588,15 @@ class OrderController extends Controller
         //        $item->quantity = $request->quantity;
         //        $item->save();
         return response()->json(['success' => true, 'divisionName' => $orderFind]);
+    }
+    
+    public function excellToZero(Request $request)
+    {
+        $this->authorize('update', Order::class);
+        foreach ($request['data'] as $data) {
+            
+        }
+        return response()->json(['success' => true]);
     }
 
     public function updateFullOrder(Request $request)
