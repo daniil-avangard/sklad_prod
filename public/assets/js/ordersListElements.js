@@ -295,6 +295,25 @@ class ExcellTable {
   
   settingsCheckBoxToZero() {
     let self = this;
+    const summirize = (arrayCurrentTD, deltaItemQuontity, parentTR) => {
+        if (self.flagRoleForExcell) {
+            arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) + deltaItemQuontity;
+            arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) - deltaItemQuontity;
+            let compareToMinimum = parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) - parseInt(arrayCurrentTD[arrayCurrentTD.length - 2].innerHTML);
+            if (compareToMinimum >= 0) {
+                parentTR.classList.remove("row-color");
+                parentTR.classList.remove("row-color-accept");
+            } else {
+                if (parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) < 0) {
+                    parentTR.classList.remove("row-color-accept");
+                    parentTR.classList.add("row-color");
+                } else {
+                    parentTR.classList.add("row-color-accept");
+                    parentTR.classList.remove("row-color");
+                }
+            }
+        }
+    }
     const toZeroClickFunction = (el) => {
         let productName = el.dataset.product;
         let parentTR = el.parentNode.parentNode.parentNode.parentNode;
@@ -302,45 +321,45 @@ class ExcellTable {
 //        let tableExcelTrArray = document.getElementById('excel-table').getElementsByTagName("TR");
         let currentCells = parentTR.querySelectorAll('td');
         let cellsLength = currentCells.length;
+        let arrayCurrentTD = parentTR.children;
+        
         if (el.checked) {
+            let data = new Map();
+            let deltaItemQuontity = 0;
             Object.entries(self.allDivisionsDataNew).forEach(([key, value]) => {
                 if (value[productName]['quontity'] != 0) {
-                    currentCells.forEach((cell, id) => {
-                        if (id > 0 && id < cellsLength - 5) {
-                            if (cell.getElementsByTagName("P").length == 1 && cell.getElementsByTagName("P")[0].dataset.title == productName) {
-                                console.log("hello check boxes NEW = " , cell.getElementsByTagName("P")[0].dataset.title);
-                                cell.getElementsByTagName("P")[0].innerHTML = "0";
-                            }
-                        }
-                    });
+                    deltaItemQuontity += value[productName]['quontity'];
+                    data.set(key, [0, value[productName]['id']]);
+                    
                     console.log("hello check boxes = " , value[productName]['quontity'], value[productName]['id'], indexCurrentRow);
                 }
             });
+            currentCells.forEach((cell, id) => {
+                if (cell.getElementsByTagName("P").length == 1 && cell.getElementsByTagName("P")[0].dataset.title == productName) {
+                    console.log("hello check boxes NEW = " , cell.getElementsByTagName("P")[0].dataset.title);
+                    cell.getElementsByTagName("P")[0].innerHTML = "0";
+                }
+            });
+            summirize(arrayCurrentTD, deltaItemQuontity, parentTR);
            
         } else {
             let data = new Map();
-            Object.entries(self.allDivisionsDataNew).forEach(([key, value]) => {
-                
+            let deltaItemQuontity = 0;
+            Object.entries(self.allDivisionsDataNew).forEach(([key, value]) => {           
                 if (value[productName]['quontity'] != 0) {
+                    deltaItemQuontity += value[productName]['quontity'];
                     data.set(key, value[productName]['quontity']);
-//                    data.push(value[productName]['quontity']);
-//                    console.log(key, value[productName]['quontity']);
-                    
-                   
                 }
             });
-            console.log(data);
-            let i = 0;
+//            console.log(currentCells);
             currentCells.forEach((cell, id) => {
-                        if (id > 0 && id < cellsLength - 5) {
-                            if (cell.getElementsByTagName("P").length == 1 && cell.getElementsByTagName("P")[0].dataset.title == productName) {
-                                let citi = cell.getElementsByTagName("P")[0].dataset.division;
-                                cell.getElementsByTagName("P")[0].innerHTML = data.get(citi);
-                                i += 1;
-                            }
-                    }
-                        
-                    });
+                if (cell.getElementsByTagName("P").length == 1 && cell.getElementsByTagName("P")[0].dataset.title == productName) {
+                    let citi = cell.getElementsByTagName("P")[0].dataset.division;
+                    cell.getElementsByTagName("P")[0].innerHTML = data.get(citi);
+                }
+
+            });
+            summirize(arrayCurrentTD, -1 * deltaItemQuontity, parentTR);
         }
     }
     
