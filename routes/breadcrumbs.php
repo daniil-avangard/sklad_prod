@@ -242,7 +242,7 @@ Breadcrumbs::for('user.settings', function ($trail) {
 
 Breadcrumbs::for('products.list', function ($trail) {
     $trail->parent('main');
-    $trail->push('Лист продуктов', route('products.list'));
+    $trail->push('Лист продуктов', route('products'));
 });
 
 // Просмотр продукта

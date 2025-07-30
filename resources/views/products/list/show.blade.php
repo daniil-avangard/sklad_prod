@@ -7,7 +7,7 @@
         'title' => $product->name,
         'route' => 'products.info',
         'breadcrumbs' => 'Продукты',
-        'back_route' => 'products.list',
+        'back_route' => 'products',
     ])
 
     <div class="row">
