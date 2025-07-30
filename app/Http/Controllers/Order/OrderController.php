@@ -22,6 +22,7 @@ use App\Mail\OrderShipped;
 use App\Jobs\ProcessPodcast;
 use Throwable;
 use Illuminate\Support\Carbon;
+use Config;
 
 class OrderController extends Controller
 {
@@ -218,7 +219,11 @@ class OrderController extends Controller
             $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на склад.";
         }
         $message1 = strval($message);
-        ProcessPodcast::dispatch($newComposerOrder, $message1)->withoutDelay();
+//        ProcessPodcast::dispatch($newComposerOrder, $message1)->withoutDelay();
+//        $emailFrom = Config::get('sklad.emailmodestatus') == "dev" ? strval(Config::get('sklad.emailaddress')) : strval(Auth::user()->email);
+        $emailFrom = Config::get('sklad.emailmodestatus') == "dev" ? strval(Config::get('sklad.emailaddress')) : strval(Config::get('sklad.emailaddress'));
+        $userToEmail = Config::get('sklad.emailmodestatus') == "dev" ? "abdyushevr@avangard.ru" : $newComposerOrder->user->email;
+        ProcessPodcast::dispatch($newComposerOrder, $message1, $emailFrom, $userToEmail);
 //        try {
 //            Mail::to($testUser)->send(new OrderShipped($appUser1, $message1));
 //        } catch (Throwable $e) {
