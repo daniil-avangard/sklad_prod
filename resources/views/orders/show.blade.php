@@ -99,9 +99,12 @@
                                             @foreach ($dateOfActualities as $dateOfActuality)
                                                 @if (is_null($dateOfActuality))
                                                     <p class="m-0">Без даты</p>
+                                                @else
+                                                    <p class="m-0">
+                                                        {{ \Carbon\Carbon::parse($dateOfActuality)->format('d.m.Y') }}
+                                                    </p>
                                                 @endif
-                                                <p class="m-0">
-                                                    {{ \Carbon\Carbon::parse($dateOfActuality)->format('d.m.Y') }}</p>
+                                                
                                             @endforeach
                                         </td>
 <!--                                        <td>{{ $item->product->variants->sum('quantity') - $item->product->variants->sum('reserved') }}
