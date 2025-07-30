@@ -53,29 +53,32 @@ if (butonAddAllToBasket) {
                     throw new Error(`Response status: ${response.status}`);
                 }
                 let res = await response.json();
-                dataForButtons.forEach((elm, ind) => {
-                    buttonsForm[elm[2]].innerHTML = res.quontity[ind] + " добавлено в корзину";
+                const url = new URL(window.location.origin);
+                url.pathname = '/basket/';
+                window.open(url, "_self");
+//                dataForButtons.forEach((elm, ind) => {
+//                    buttonsForm[elm[2]].innerHTML = res.quontity[ind] + " добавлено в корзину";
 //                    buttonsForm[elm[2]].innerHTML = elm[1] + " добавлено в корзину";
-                    buttonsForm[elm[2]].classList.remove("btn-products-colors");
-                    buttonsForm[elm[2]].classList.add("basket-button-change");
-                    addProductToBasketForms[elm[2]].reset();
-                });
-                Toast.fire({
+//                    buttonsForm[elm[2]].classList.remove("btn-products-colors");
+//                    buttonsForm[elm[2]].classList.add("basket-button-change");
+//                    addProductToBasketForms[elm[2]].reset();
+//                });
+//                Toast.fire({
 //                        icon: 'success',
-                        imageUrl: "/assets/images/basket_icon.svg",
-                        text: "Все товары добавлены в корзину"
-                    });
-                console.log("Проверяем api = ", res);
+//                        imageUrl: "/assets/images/basket_icon.svg",
+//                        text: "Все товары добавлены в корзину"
+//                    });
+//                console.log("Проверяем api = ", res);
             }
             catch(error) {
                 console.log(error.message);
             }
         }
-        document.body.style.cursor = "auto";
-        buttonsForm.forEach( btn => {
-            btn.disabled = false;
-        });
-        Array.from(inputFormElements).map(x => x.style.backgroundColor = "transparent");
+//        document.body.style.cursor = "auto";
+//        buttonsForm.forEach( btn => {
+//            btn.disabled = false;
+//        });
+//        Array.from(inputFormElements).map(x => x.style.backgroundColor = "transparent");
 //        console.log("Изменение всех значений = ", dataToApi);
     }
 }

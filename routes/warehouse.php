@@ -52,5 +52,6 @@ Route::middleware([ValidateCsrfToken::class, 'auth', 'admin'])->group(function (
     Route::post('/assembly/updateKorobka', [ArivalController::class, 'updateKorobka'])->name('assembly.updateKorobka');
     Route::post('/assembly/korobkaChangeStatus', [ArivalController::class, 'korobkaChangeStatus'])->name('assembly.korobkaChangeStatus');
     Route::post('/excell', [OrderController::class, 'excellData']);
+    Route::post('/excellToZero', [OrderController::class, 'excellToZero']);
     Route::post('/addAllProducts', [BasketController::class, 'addAll']);
 });

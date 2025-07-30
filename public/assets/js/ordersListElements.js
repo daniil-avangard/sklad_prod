@@ -210,6 +210,7 @@ class ExcellTable {
                         if (this.flagRoleForExcell) {
                             arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) - deltaItemQuontity;
                             arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
+                            console.log("Total = ", self.allDataForExcell);
                             self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
                             self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
                             self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] = updateItemQuontity;
@@ -295,6 +296,31 @@ class ExcellTable {
   
   settingsCheckBoxToZero() {
     let self = this;
+    
+    const summirizeToApi = async (dataToAPi) => {
+        if (dataToAPi.length > 0) {
+            let url = '/excellToZero';
+            let dataToSend = {data: dataToAPi, _token: $('meta[name="csrf-token"]').attr('content')};
+            const request = new Request(url, {
+                                    method: "POST",
+                                    headers: {
+                                                'Content-Type': 'application/json;charset=utf-8',
+                                            },
+                                    body: JSON.stringify(dataToSend)
+                                    });
+            try {
+                const response = await fetch(request);  
+                if (!response.ok) {
+                    throw new Error(`Response status: ${response.status}`);
+                }
+                let res = await response.json();
+                console.log(res);
+            } 
+            catch(error) {
+                console.log(error.message);
+            }
+        }
+    }
     const summirize = (arrayCurrentTD, deltaItemQuontity, parentTR) => {
         if (self.flagRoleForExcell) {
             arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) + deltaItemQuontity;
@@ -341,6 +367,7 @@ class ExcellTable {
                 }
             });
             summirize(arrayCurrentTD, deltaItemQuontity, parentTR);
+            summirizeToApi([...data.values()]);
            
         } else {
             let data = new Map();
@@ -348,14 +375,14 @@ class ExcellTable {
             Object.entries(self.allDivisionsDataNew).forEach(([key, value]) => {           
                 if (value[productName]['quontity'] != 0) {
                     deltaItemQuontity += value[productName]['quontity'];
-                    data.set(key, value[productName]['quontity']);
+                    data.set(key, [value[productName]['quontity'], value[productName]['id']]);
                 }
             });
-//            console.log(currentCells);
+            console.log([...data.values()]);
             currentCells.forEach((cell, id) => {
                 if (cell.getElementsByTagName("P").length == 1 && cell.getElementsByTagName("P")[0].dataset.title == productName) {
                     let citi = cell.getElementsByTagName("P")[0].dataset.division;
-                    cell.getElementsByTagName("P")[0].innerHTML = data.get(citi);
+                    cell.getElementsByTagName("P")[0].innerHTML = data.get(citi)[0];
                 }
 
             });
