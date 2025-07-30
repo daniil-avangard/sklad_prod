@@ -278,7 +278,7 @@ class FilterPage {
             
             const clickEvent = () => {
                 const url = new URL(window.location.origin);
-                url.pathname = '/products/' + el.dataset.productid;
+                url.pathname = '/product/list/' + el.dataset.productid;
                 window.open(url, "_self");
 //                console.log("Проверка клика на открытие товара = ", url.toString());
             }
