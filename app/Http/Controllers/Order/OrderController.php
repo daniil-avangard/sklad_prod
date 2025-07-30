@@ -147,6 +147,11 @@ class OrderController extends Controller
         $allDivisionsData = $result[2];
         $allDivisionsDataNew = $result[3];
         $totalNewData = $result[4];
+        foreach ($uniqGoods as $good) {
+            if ($good['name'] == "Товар для теста") {
+                dd($good['warehouse'], $uniqGoodsTotalOrdered[$good['name']], $good['total'],  $totalNewData[$good['name']], $uniqGoodsNewOrdered[$good['name']]);
+            }
+        }
 //        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
 //        $test = $uniqGoods[1]['name'];
 //        dd($totalNewData, $uniqGoods);
