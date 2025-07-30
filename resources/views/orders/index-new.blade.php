@@ -40,10 +40,10 @@
                                 @if (($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) - $good['min_stock'] >= 0)
                                 <tr>
                                 @else
-                                    @if ($flagForExcell == "show" && ($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) < 0)
+                                    @if ($flagForExcell == "show" && ($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] + $uniqGoodsNewOrdered[$good['name']]) < 0)
                                     <tr class="row-color">
                                     @else
-                                    @if ($flagForExcell == "show" && ($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) >= 0)
+                                    @if ($flagForExcell == "show" && ($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] + $uniqGoodsNewOrdered[$good['name']]) >= 0)
                                     <tr class="row-color-accept">
                                     @else
                                     <tr> 
@@ -66,8 +66,8 @@
                                     @include('orders.digits-cell')
                                     @if ($flagForExcell == "show")
                                         <td class="another-col tr-another-cell">{{ $good['total'] - $totalNewData[$good['name']] }}</td>
-                                        <td class="another-col tr-another-cell">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] - $totalNewData[$good['name']] }}</td>
-                                        <td class="another-col tr-another-cell">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] }}</td>
+                                        <td class="another-col tr-another-cell">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] - $totalNewData[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>
+                                        <td class="another-col tr-another-cell">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>
                                         <td class="another-col tr-another-cell">{{ $good['min_stock'] }}</td>
                                         <td class="another-col tr-another-cell"> - </td>                                       
                                     @endif
