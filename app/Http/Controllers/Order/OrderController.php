@@ -594,7 +594,11 @@ class OrderController extends Controller
     {
         $this->authorize('update', Order::class);
         foreach ($request['data'] as $data) {
-            
+            $orderId = OrderItem::find($data[1])->order_id;
+            $orderFind = Order::find($orderId)->division->name;
+            $item = OrderItem::find($data[1]);
+            $item->quantity = $data[0];
+            $item->save();
         }
         return response()->json(['success' => true]);
     }

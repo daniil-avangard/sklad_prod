@@ -387,6 +387,7 @@ class ExcellTable {
 
             });
             summirize(arrayCurrentTD, -1 * deltaItemQuontity, parentTR);
+            summirizeToApi([...data.values()]);
         }
     }
     
