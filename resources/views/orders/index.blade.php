@@ -320,12 +320,13 @@
                                 </label>
                             </th>
                             </th>-->
-<!--                        <th scope="col">ID</th>-->
+                            <th scope="col" class="text-center bckgrnd-table-cell-2">Номер заказа</th>
+                            <th scope="col" class="text-center bckgrnd-table-cell-2">Дата</th>
                             <th scope="col" class="text-center bckgrnd-table-cell-2">Подразделение</th>
                             <th scope="col" class="text-center bckgrnd-table-cell-2">Товары</th>
                             <th scope="col" class="text-center bckgrnd-table-cell-2">Количество</th>
                             <th scope="col" class="text-center bckgrnd-table-cell-2">Статус</th>
-                            <th scope="col" class="text-center bckgrnd-table-cell-2">Дата</th>
+                            
                         </tr>
                     </thead>
                     <tbody>
@@ -343,6 +344,17 @@
                                         <div class="control__indicator"></div>
                                     </label>
                                 </th>-->
+                                <td>
+                                    @can('view', $order)
+                                    <a     
+                                        href="{{ route('orders.show', $order) }}">
+                                    {{ $order->id }}
+                                    </a>
+                                    @else
+                                    {{ $order->id }}
+                                    @endcan
+                                </td>
+                                <td class="text-center">{{ $order->created_at->format('d.m.Y H:i') }}</td>
                                 <td>
                                     @can('view', $order)
                                     <a     
@@ -398,7 +410,7 @@
                                 </td>
                                 <td class="text-center"><span class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}</span>
                                 </td>
-                                <td class="text-center">{{ $order->created_at->format('d.m.Y H:i') }}</td>
+                                
 
                             </tr>
                         @endforeach
