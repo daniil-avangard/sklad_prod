@@ -123,11 +123,12 @@ class OrderController extends Controller
         foreach ($absolutelyAllOrders as $order) {
             foreach ($order->items as $item) {
                 if (!isset($uniqGoodsTotalOrdered[$item->product->name])) {
-                    $uniqGoodsTotalOrdered[$item->product->name] = $order->status == StatusEnum::NEW->value ? 0 : $item->quantity;
-                    $uniqGoodsNewOrdered[$item->product->name] = $order->status == StatusEnum::NEW->value ? $item->quantity : 0;
+//                    dd($order->status , StatusEnum::NEW->value);
+                    $uniqGoodsTotalOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? 0 : $item->quantity;
+                    $uniqGoodsNewOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $item->quantity : 0;
                 } else {
-                    $uniqGoodsTotalOrdered[$item->product->name] = $order->status == StatusEnum::NEW->value ? $uniqGoodsTotalOrdered[$item->product->name] + 0 : $uniqGoodsTotalOrdered[$item->product->name] + $item->quantity;
-                    $uniqGoodsNewOrdered[$item->product->name] = $order->status == StatusEnum::NEW->value ? $uniqGoodsNewOrdered[$item->product->name] + $item->quantity : $uniqGoodsNewOrdered[$item->product->name] + 0;
+                    $uniqGoodsTotalOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $uniqGoodsTotalOrdered[$item->product->name] + 0 : $uniqGoodsTotalOrdered[$item->product->name] + $item->quantity;
+                    $uniqGoodsNewOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $uniqGoodsNewOrdered[$item->product->name] + $item->quantity : $uniqGoodsNewOrdered[$item->product->name] + 0;
                 }
             }
         }
@@ -149,7 +150,7 @@ class OrderController extends Controller
         $totalNewData = $result[4];
         foreach ($uniqGoods as $good) {
             if ($good['name'] == "Товар для теста") {
-                dd($good['warehouse'], $uniqGoodsTotalOrdered[$good['name']], $good['total'],  $totalNewData[$good['name']], $uniqGoodsNewOrdered[$good['name']]);
+//                dd($good['warehouse'], $uniqGoodsTotalOrdered[$good['name']], $good['total'],  $totalNewData[$good['name']], $uniqGoodsNewOrdered[$good['name']]);
             }
         }
 //        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
