@@ -119,12 +119,15 @@ class OrderController extends Controller
 //        $absolutelyAllOrders = Order::whereIn('status',[StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get();
         $absolutelyAllOrders = Order::whereIn('status',[StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get();
         $uniqGoodsTotalOrdered = array();
+        $uniqGoodsNewOrdered = array();
         foreach ($absolutelyAllOrders as $order) {
             foreach ($order->items as $item) {
                 if (!isset($uniqGoodsTotalOrdered[$item->product->name])) {
                     $uniqGoodsTotalOrdered[$item->product->name] = $order->status == StatusEnum::NEW->value ? 0 : $item->quantity;
+                    $uniqGoodsNewOrdered[$item->product->name] = $order->status == StatusEnum::NEW->value ? $item->quantity : 0;
                 } else {
                     $uniqGoodsTotalOrdered[$item->product->name] = $order->status == StatusEnum::NEW->value ? $uniqGoodsTotalOrdered[$item->product->name] + 0 : $uniqGoodsTotalOrdered[$item->product->name] + $item->quantity;
+                    $uniqGoodsNewOrdered[$item->product->name] = $order->status == StatusEnum::NEW->value ? $uniqGoodsNewOrdered[$item->product->name] + $item->quantity : $uniqGoodsNewOrdered[$item->product->name] + 0;
                 }
             }
         }
@@ -147,7 +150,7 @@ class OrderController extends Controller
 //        $test = $allDivisionsData[$divisionNames[0]][$uniqGoods[1]['name']];
 //        $test = $uniqGoods[1]['name'];
 //        dd($totalNewData, $uniqGoods);
-        return view('orders.index-new', compact('currentSessionOrders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew', 'uniqGoodsTotalOrdered', 'flagForExcell', 'totalNewData'));
+        return view('orders.index-new', compact('currentSessionOrders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew', 'uniqGoodsTotalOrdered', 'flagForExcell', 'totalNewData', 'uniqGoodsNewOrdered'));
     }
 
     public function indexNewUpdate()
