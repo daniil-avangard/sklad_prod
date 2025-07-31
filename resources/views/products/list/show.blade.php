@@ -16,7 +16,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-6 align-self-center">
-                            <img src="{{ asset('storage/' . $product->image) }}" alt="" class=" mx-auto  d-block"
+                            <img src="{{ asset('storage/' . $product->image) }}" alt="" class="popup-child-img"
                                 height="300">
                         </div><!--end col-->
                         <div class="col-lg-6 align-self-center">

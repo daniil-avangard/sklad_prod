@@ -74,11 +74,11 @@ if (butonAddAllToBasket) {
                 console.log(error.message);
             }
         }
-//        document.body.style.cursor = "auto";
-//        buttonsForm.forEach( btn => {
-//            btn.disabled = false;
-//        });
-//        Array.from(inputFormElements).map(x => x.style.backgroundColor = "transparent");
+        document.body.style.cursor = "auto";
+        buttonsForm.forEach( btn => {
+            btn.disabled = false;
+        });
+        Array.from(inputFormElements).map(x => x.style.backgroundColor = "transparent");
 //        console.log("Изменение всех значений = ", dataToApi);
     }
 }
