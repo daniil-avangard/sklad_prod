@@ -440,10 +440,12 @@ tr p {
 }
 
 .input-excell {
+
     width: 70px !important;
     height: 14px !important;
     padding: 2px !important;
     font-size: 10px !important;
+
 }
 
 .long-table table {
