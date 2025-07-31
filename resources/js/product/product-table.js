@@ -58,7 +58,8 @@ class ProductTable {
                 throw Error('Ошибка загрузка роли.')
             }
 
-            const data = await response.json()
+            const data = await response.json();
+            console.log("Проверяем роль = ", data);
             return data?.role ?? '';
         } catch (error) {
             console.error(error);
@@ -89,9 +90,11 @@ class ProductTable {
     }
 
     #filterByCheckbox(columnIndex, checkbox) {
+        console.log("Прослушиваем чекбокс 1 = ");
         if (!checkbox) return;
 
         checkbox.addEventListener('change', () => {
+            console.log("Прослушиваем чекбокс 2 = ");
             const isChecked = checkbox.checked;
 
             if (isChecked) {
