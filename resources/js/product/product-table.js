@@ -94,7 +94,7 @@ class ProductTable {
         if (!checkbox) return;
 
         checkbox.addEventListener('change', () => {
-            console.log("Прослушиваем чекбокс 2 = ");
+            console.log("Прослушиваем чекбокс 2 = ", columnIndex);
             const isChecked = checkbox.checked;
 
             if (isChecked) {
@@ -137,38 +137,38 @@ class ProductTable {
 
 // Номера колонок для фильтрации по ролям
 const accessColumnByUserRole = {
-    "division-manager": {
-//        company: 1,
-//        category: 2,
-        kko_operator: 6,
-        express_operator: 8,
+    "manager": {
+        company: 1,
+        category: 2,
+        kko_operator: 5,
+        express_operator: 7,
         // Чекбоксы
-        kko_hall: 3,
-        kko_account_opening: 4,
-        kko_manager: 5,
-        express_hall: 7
+        kko_hall: 2,
+        kko_account_opening: 3,
+        kko_manager: 4,
+        express_hall: 6
     },
     "top-manager": {
         company: 1,
         category: 2,
-        kko_operator: 8,
-        express_operator: 10,
+        kko_operator: 5,
+        express_operator: 7,
         // Чекбоксы
-        kko_hall: 5,
-        kko_account_opening: 6,
-        kko_manager: 7,
-        express_hall: 9
+        kko_hall: 2,
+        kko_account_opening: 3,
+        kko_manager: 4,
+        express_hall: 6
     },
     "super-admin": {
         company: 1,
         category: 2,
-        kko_operator: 8,
-        express_operator: 10,
+        kko_operator: 5,
+        express_operator: 7,
         // Чекбоксы
-        kko_hall: 5,
-        kko_account_opening: 6,
-        kko_manager: 7,
-        express_hall: 9
+        kko_hall: 2,
+        kko_account_opening: 3,
+        kko_manager: 4,
+        express_hall: 6
     },
 }
 
