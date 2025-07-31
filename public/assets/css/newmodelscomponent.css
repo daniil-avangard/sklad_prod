@@ -441,10 +441,10 @@ tr p {
 
 .input-excell {
 
-  width: 70px !important;
-  height: .85rem !important;
-  padding: 2px !important;
-  font-size: .8125rem !important;
+    width: 70px !important;
+    height: 14px !important;
+    padding: 2px !important;
+    font-size: 10px !important;
 
 }
 
@@ -1242,5 +1242,93 @@ tr p {
     height: 22px;
     margin-left: 4px;
     cursor: pointer;
-    transform: translateY(4px);
+    transform: translateY(2px);
+}
+
+
+/* Меню */
+
+.left-sidenav-menu li>a,
+.left-sidenav-menu li ul li>a,
+.left-sidenav-menu li.mm-active .nav-item.active a.nav-link.active {
+    color: #4A4A4A;
+}
+
+.left-sidenav-menu li.mm-active .nav-item.active a.nav-link.active i {
+    color: #999999;
+}
+
+.left-sidenav-menu li>a i {
+    width: 17px;
+    opacity: 1;
+    color: #4A4A4A;
+}
+
+.ti-control-record:before {
+    position: relative;
+    content: "●";
+    top: -2px;
+    font-size: 12px;
+    color: #999999;
+}
+
+.left-sidenav-menu li>a:hover,
+.nav-link:hover,
+.nav-link:focus,
+.left-sidenav-menu li ul li>a:hover {
+    color: #4A4A4A;
+}
+
+.left-sidenav-menu li.nav-item {
+    list-style: none;
+    display: block;
+    width: 100%;
+    overflow: hidden;
+}
+
+.left-sidenav-menu li.nav-item::before {
+    content: '';
+    position: absolute;
+    left: -16px;
+    width: 230px;
+    height: 30px;
+    background-color: #F5F5F5;
+    transform: translateX(-100%);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    z-index: -1;
+}
+
+.left-sidenav-menu li:hover::before {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.left-sidenav-menu li ul {
+    position: relative;
+}
+
+.left-sidenav-menu li>a .menu-icon {    
+    background-image: url(https://pro.avangard.ru/img/icons/reklama.svg);
+    background-image: url(/assets/images/icon_menu.svg);
+}
+
+.left-sidenav-menu li>a .menu-icon path, 
+.left-sidenav-menu li>a .menu-icon polyline {
+    display: none;   
+}
+
+.left-sidenav-menu li.mm-active .menu-arrow i:before {
+    content: "";
+    height: 10px;
+    width: 10px;
+    background-image: url(/assets/images/icon_arrow.svg);
+    transform: rotate(90deg);
+}
+
+.mdi-chevron-right::before {
+    content: "";
+    height: 10px;
+    width: 10px;
+    background-image: url(/assets/images/icon_arrow.svg);
 }
