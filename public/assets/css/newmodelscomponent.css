@@ -442,10 +442,9 @@ tr p {
 .input-excell {
 
     width: 70px !important;
-    height: 14px !important;
+    height: 0.85rm !important;
     padding: 2px !important;
-    font-size: 10px !important;
-
+    font-size: 0.8139rm !important;
 }
 
 .long-table table {
@@ -563,7 +562,7 @@ tr p {
 .icon-digits-exell {
     margin-left: 5px;
     cursor: pointer;
-    transform: translateY(2px) !important;
+    transform: translateY(4px) !important;
     color: #888;
     font-size: 14px;
 }
