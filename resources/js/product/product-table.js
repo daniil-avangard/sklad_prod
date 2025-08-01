@@ -148,6 +148,17 @@ const accessColumnByUserRole = {
         kko_manager: 4,
         express_hall: 6
     },
+    "division-manager": {
+        company: 1,
+        category: 2,
+        kko_operator: 5,
+        express_operator: 7,
+        // Чекбоксы
+        kko_hall: 2,
+        kko_account_opening: 3,
+        kko_manager: 4,
+        express_hall: 6
+    },
     "top-manager": {
         company: 1,
         category: 2,

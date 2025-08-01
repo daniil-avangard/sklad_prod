@@ -16,6 +16,9 @@ class ExcellTable {
   
   start() {
       this.butonChangeOrderAllStatus.disabled = true;
+      Array.from(this.tableInputToZero).forEach((el, ind) => {
+          el.disabled = true;
+      });
       const month = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
       const d = new Date();
       document.getElementById('month-orders').innerHTML = d.getMonth() == 11 ? month[0] : month[d.getMonth()+1];
@@ -51,6 +54,9 @@ class ExcellTable {
         this.settingsCheckBoxToZero();
 //        console.log(this.tableInputToZero);
         this.checkDateForButton();
+        Array.from(this.tableInputToZero).forEach((el, ind) => {
+            el.disabled = false;
+        });
     }
     catch(error) {
         console.log(error.message);
@@ -128,10 +134,26 @@ class ExcellTable {
     
     const excellCellClickFunction = (el) => {
         let parentNode = el.parentNode;
+        
+        // проверяем наличие других инпутов
+        let arrayOpenedP = Array.from(self.pElementsOrders, x => x.parentNode)
+                .filter(x => x.children.length > 1);
+        if (arrayOpenedP.length > 0) {
+            arrayOpenedP.forEach((el, ind) => {
+                el.children[3].click();
+            });
+//            console.log("arrayOpenedP = ", arrayOpenedP[0].children[3]);
+        }
+        
+        
         let dataOrigin = parentNode.firstElementChild;
         let parentTR = parentNode.parentNode.parentNode.parentNode;
         let parentChildsArray = Array.from(parentNode.children);
         parentChildsArray.forEach((elm, index) => {elm.classList.add("order-visible");});
+        
+        
+        
+        
 
         let newInput = document.createElement('input');
         newInput.setAttribute("type", "number");
