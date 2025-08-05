@@ -1,6 +1,6 @@
 <div class="menu-content h-100" data-simplebar>
     <ul class="metismenu left-sidenav-menu">
-        <li class="menu-label mt-0">Main</li>
+        <li class="menu-label mt-0">Меню</li>
 
         <li>
             <a href="javascript: void(0)">
