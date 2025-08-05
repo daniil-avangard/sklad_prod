@@ -205,21 +205,27 @@ class ExcellTable {
         newInput.onkeydown = (event) => {
             if (event.key === 'Tab' || event.key === 'Enter') {
                 event.preventDefault();
-                console.log(event.key);
+//                console.log(event.key);
             }
         }
         
-        newInput.onkeyup = (event) => {
+        newInput.onkeyup = async (event) => {
             
             console.log(event.key);
             if (event.key === 'Tab') {
                 event.preventDefault();
-                console.log('tab pressed');
+//                console.log('tab pressed');
+                newAccept.click();
+//                newAccept.click().then(() => {
+//                    self.pElementsOrders[indexP+1].click();
+//                });
                 self.pElementsOrders[indexP+1].click();
+                
             }
         }
         
         newAccept.onclick = async () => {
+//          return new Promise (async (resolve, reject) => {
             let arrayCurrentTD = parentTR.children;
             let indexCurrentRow = parentTR.rowIndex - 1;
             newInput.disabled = true;
@@ -267,7 +273,9 @@ class ExcellTable {
                             arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) - deltaItemQuontity;
                             arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
                             console.log("Total = ", self.allDataForExcell);
+                            console.log("Total = ", indexCurrentRow);
                             self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
+                            console.log("Total = ", self.allDataForExcell[indexCurrentRow].total);
                             self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
                             self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] = updateItemQuontity;
                         } else {
@@ -320,6 +328,8 @@ class ExcellTable {
             newAccept.remove();
             newDanger.remove();
             parentChildsArray.forEach((elm, index) => {elm.classList.remove("order-visible");});
+//            resolve();
+//          });
         }
 
 
