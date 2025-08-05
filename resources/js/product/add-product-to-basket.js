@@ -139,9 +139,7 @@ addProductToBasketForms.forEach((basketForm, ind) => {
 //                        icon: 'success',
 //                        title: data.success,
                         imageUrl: "/assets/images/basket_icon.svg",
-                        text: "Товар добавлен в корзину",
-                        showConfirmButton: true,
-                        confirmButtonText: "ok"
+                        text: "Товар добавлен в корзину"
                     });
                     Array.from(inputFormElements).map(x => x.style.backgroundColor = "transparent");
                     buttonsForm[ind].disabled = false;

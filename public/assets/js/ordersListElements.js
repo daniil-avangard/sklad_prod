@@ -202,10 +202,19 @@ class ExcellTable {
 //        newIconDanger.setAttribute("class", "mdi mdi-close transform-excell-icon");
 //        newDanger.appendChild(newIconDanger);
 
+        newInput.onkeydown = (event) => {
+            if (event.key === 'Tab' || event.key === 'Enter') {
+                event.preventDefault();
+                console.log(event.key);
+            }
+        }
+        
         newInput.onkeyup = (event) => {
             
-            if (event.key === 'Enter') {
-                console.log('enter pressed');
+            console.log(event.key);
+            if (event.key === 'Tab') {
+                event.preventDefault();
+                console.log('tab pressed');
                 self.pElementsOrders[indexP+1].click();
             }
         }
