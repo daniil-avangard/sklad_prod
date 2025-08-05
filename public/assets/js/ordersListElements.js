@@ -116,8 +116,25 @@ class ExcellTable {
             self.butonChangeOrderAllStatus.disabled = true;
             const url = new URL(window.location.origin);
             url.pathname = '/ordersNewUpdate';
-            alert("Все заказы утверждены. Сейчас перезагрузится страница.");
-            window.open(url, "_self");
+            let textForToast = this.flagRoleForExcell ? "Заказы переведутся на склад." : "Заказы переведутся на утверждение начальнику куратора.";
+            Toast.fire({
+                icon: 'success',
+                text: textForToast,
+                showConfirmButton: true,
+                showCancelButton: true,
+                confirmButtonText: "Ok",
+                cancelButtonText: "Отмена",
+                timer: 30000
+            }).then((result) => {
+                console.log("result.isConfirmed = ", result);
+                if ((result.isConfirmed || result.dismiss == 'timer')) {
+                    window.open(url, "_self");
+                } else {
+                    self.butonChangeOrderAllStatus.disabled = false;
+                }
+            });
+//            alert("Все заказы утверждены. Сейчас перезагрузится страница.");
+            
         } else if (tableExcelTrArray.filter((elm) => elm.className == "row-color").length > 0) {
             Toast.fire({
                     icon: 'error',
@@ -132,7 +149,7 @@ class ExcellTable {
         }
     }
     
-    const excellCellClickFunction = (el) => {
+    const excellCellClickFunction = (el, indexP) => {
         let parentNode = el.parentNode;
         
         // проверяем наличие других инпутов
@@ -185,6 +202,14 @@ class ExcellTable {
 //        newIconDanger.setAttribute("class", "mdi mdi-close transform-excell-icon");
 //        newDanger.appendChild(newIconDanger);
 
+        newInput.onkeyup = (event) => {
+            
+            if (event.key === 'Enter') {
+                console.log('enter pressed');
+                self.pElementsOrders[indexP+1].click();
+            }
+        }
+        
         newAccept.onclick = async () => {
             let arrayCurrentTD = parentTR.children;
             let indexCurrentRow = parentTR.rowIndex - 1;
@@ -300,6 +325,7 @@ class ExcellTable {
         parentNode.insertBefore(newInput, parentNode.children[1]);
         parentNode.insertBefore(newAccept, parentNode.children[2]);
         parentNode.insertBefore(newDanger, parentNode.children[3]);
+        newInput.select();
     }
     
 //    Array.from(self.editElementsOrders).forEach((el, index) => {
@@ -310,7 +336,7 @@ class ExcellTable {
 
     Array.from(self.pElementsOrders).forEach((el, index) => {
         el.onclick = () => {
-            excellCellClickFunction(el);
+            excellCellClickFunction(el, index);
         }
 
     });
