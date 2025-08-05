@@ -211,7 +211,7 @@ class ExcellTable {
         
         newInput.onkeyup = async (event) => {
             
-            console.log(event.key);
+//            console.log(event.key);
             if (event.key === 'Tab') {
                 event.preventDefault();
 //                console.log('tab pressed');
@@ -274,16 +274,23 @@ class ExcellTable {
                             arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
                             console.log("Total = ", self.allDataForExcell);
                             console.log("Total = ", indexCurrentRow);
-                            self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
-                            console.log("Total = ", self.allDataForExcell[indexCurrentRow].total);
-                            self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
-                            self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] = updateItemQuontity;
+                            let nameProd = dataOrigin.dataset.title;
+                            let prodField = 0;
+                            Object.keys(self.allDataForExcell).forEach(key => {
+                                if (self.allDataForExcell[key].name == nameProd) prodField = key;
+                            });
+                            console.log("Total = ", prodField);
+                            self.allDataForExcell[prodField].total += deltaItemQuontity;
+                            
+                            self.uniqGoodsTotalOrdered[self.allDataForExcell[prodField].name] += deltaItemQuontity;
+                            self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[prodField].name]['quontity'] = updateItemQuontity;
+                            console.log("Total = name = ", self.uniqGoodsTotalOrdered[self.allDataForExcell[prodField].name]);
                         } else {
                             self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
                             self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
                             self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] = updateItemQuontity;
                         }
-                        console.log("Проверка данных после изменений = ", self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity']);
+//                        console.log("Проверка данных после изменений = ", self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity']);
                         
                         let compareToMinimumRatio = (compareMinumum1 - deltaItemQuontity) - compareMinumum2;
                         let compareToMinimumRatio2 = (compareMinumum1 - deltaItemQuontity);
@@ -334,7 +341,7 @@ class ExcellTable {
 
 
         newDanger.onclick = () => {
-            console.log("Проверяем значение inputa = ", newInput.value);
+//            console.log("Проверяем значение inputa = ", newInput.value);
             newInput.remove();
             newAccept.remove();
             newDanger.remove();
