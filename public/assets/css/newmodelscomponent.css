@@ -1170,6 +1170,9 @@ tr p {
 .swal2-popup {
     flex-direction: column !important;
 }
+.swal2-actions {
+    margin-top: 10px !important;
+}
 
 /*#product-table_wrapper {
     margin-top: -50px !important;
