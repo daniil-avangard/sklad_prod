@@ -18,6 +18,7 @@ class ExcellTable {
       this.butonChangeOrderAllStatus.disabled = true;
       Array.from(this.tableInputToZero).forEach((el, ind) => {
           el.disabled = true;
+          el.checked = true;
       });
       const month = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
       const d = new Date();
@@ -49,6 +50,7 @@ class ExcellTable {
         this.uniqGoodsTotalOrdered = res.uniqGoodsTotalOrdered;
         this.onlyNewOrdersData = res.totalNewData;
         this.allDivisionsDataNew = res.allDivisionsDataNew;
+        this.uniqGoodsNewOrdered = res.uniqGoodsNewOrdered;
         document.getElementById('date-orders').innerHTML = this.flagRoleForExcell ? "27" : "25";
         this.initSettings();
         this.settingsCheckBoxToZero();
@@ -223,9 +225,14 @@ class ExcellTable {
                                                 },
                                         body: JSON.stringify(dataToSend)
                                         });
+                let nameProd = dataOrigin.dataset.title;
+                let prodField = 0;
+                Object.keys(self.allDataForExcell).forEach(key => {
+                    if (self.allDataForExcell[key].name == nameProd) prodField = key;
+                });
     //            console.log(indexCurrentRow, self.allDataForExcell[indexCurrentRow], self.onlyNewOrdersData[self.allDataForExcell[indexCurrentRow].name]);
-                let compareMinumum1 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) : self.allDataForExcell[indexCurrentRow].warehouse - self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name];
-                let compareMinumum2 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 2].innerHTML) : self.allDataForExcell[indexCurrentRow].min_stock;
+                let compareMinumum1 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) : self.allDataForExcell[prodField].warehouse - self.uniqGoodsTotalOrdered[self.allDataForExcell[prodField].name];
+                let compareMinumum2 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 2].innerHTML) : self.allDataForExcell[prodField].min_stock;
                 console.log('compareMinumum = ', compareMinumum1, compareMinumum2, deltaItemQuontity);
 
     //            let compareMinumum = (compareMinumum1 - deltaItemQuontity) >= (compareMinumum2);
@@ -430,7 +437,7 @@ class ExcellTable {
         let cellsLength = currentCells.length;
         let arrayCurrentTD = parentTR.children;
         
-        if (el.checked) {
+        if (!(el.checked)) {
             let data = new Map();
             let deltaItemQuontity = 0;
             Object.entries(self.allDivisionsDataNew).forEach(([key, value]) => {

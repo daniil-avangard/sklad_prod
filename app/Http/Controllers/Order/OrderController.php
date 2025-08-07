@@ -124,7 +124,6 @@ class OrderController extends Controller
         foreach ($absolutelyAllOrders as $order) {
             foreach ($order->items as $item) {
                 if (!isset($uniqGoodsTotalOrdered[$item->product->name])) {
-//                    dd($order->status , StatusEnum::NEW->value);
                     $uniqGoodsTotalOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? 0 : $item->quantity;
                     $uniqGoodsNewOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $item->quantity : 0;
                 } else {
@@ -150,7 +149,7 @@ class OrderController extends Controller
         $allDivisionsDataNew = $result[3];
         $totalNewData = $result[4];
         foreach ($uniqGoods as $good) {
-            if ($good['name'] == "Товар для теста") {
+            if ($good['name'] == "Ручка") {
 //                dd($good['warehouse'], $uniqGoodsTotalOrdered[$good['name']], $good['total'],  $totalNewData[$good['name']], $uniqGoodsNewOrdered[$good['name']]);
             }
         }
@@ -678,16 +677,17 @@ class OrderController extends Controller
         }
 
         $absolutelyAllOrders = Order::whereIn('status',[StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get();
-        $uniqGoodsTotalOrdered = array();
-        foreach ($absolutelyAllOrders as $order) {
-            foreach ($order->items as $item) {
-                if (!isset($uniqGoodsTotalOrdered[$item->product->name])) {
-                    $uniqGoodsTotalOrdered[$item->product->name] = $item->quantity;
-                } else {
-                    $uniqGoodsTotalOrdered[$item->product->name] += $item->quantity;
-                }
-            }
-        }
+//        $uniqGoodsTotalOrdered = array();
+//        $uniqGoodsNewOrdered = array();
+//        foreach ($absolutelyAllOrders as $order) {
+//            foreach ($order->items as $item) {
+//                if (!isset($uniqGoodsTotalOrdered[$item->product->name])) {
+//                    $uniqGoodsTotalOrdered[$item->product->name] = $item->quantity;
+//                } else {
+//                    $uniqGoodsTotalOrdered[$item->product->name] += $item->quantity;
+//                }
+//            }
+//        }
 
         $allItems = [];
 
@@ -695,6 +695,21 @@ class OrderController extends Controller
             $allItems[$order->id] = array();
             foreach ($order->items as $item) {
                 $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity, 'image' => $item->product->image);
+            }
+        }
+        
+//        $absolutelyAllOrders = Order::whereIn('status',[StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get();
+        $uniqGoodsTotalOrdered = array();
+        $uniqGoodsNewOrdered = array();
+        foreach ($absolutelyAllOrders as $order) {
+            foreach ($order->items as $item) {
+                if (!isset($uniqGoodsTotalOrdered[$item->product->name])) {
+                    $uniqGoodsTotalOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? 0 : $item->quantity;
+                    $uniqGoodsNewOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $item->quantity : 0;
+                } else {
+                    $uniqGoodsTotalOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $uniqGoodsTotalOrdered[$item->product->name] + 0 : $uniqGoodsTotalOrdered[$item->product->name] + $item->quantity;
+                    $uniqGoodsNewOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $uniqGoodsNewOrdered[$item->product->name] + $item->quantity : $uniqGoodsNewOrdered[$item->product->name] + 0;
+                }
             }
         }
 
@@ -705,7 +720,7 @@ class OrderController extends Controller
         $allDivisionsDataNew = $result[3];
         $totalNewData = $result[4];
         //
-        return response()->json(['success' => true, 'uniqGoods' => $uniqGoods, 'uniqGoodsTotalOrdered' => $uniqGoodsTotalOrdered, 'flagForExcell' => $flagForExcell, 'totalNewData' => $totalNewData, 'allDivisionsDataNew' => $allDivisionsDataNew]);
+        return response()->json(['success' => true, 'uniqGoods' => $uniqGoods, 'uniqGoodsTotalOrdered' => $uniqGoodsTotalOrdered, 'uniqGoodsNewOrdered' => $uniqGoodsNewOrdered, 'flagForExcell' => $flagForExcell, 'totalNewData' => $totalNewData, 'allDivisionsDataNew' => $allDivisionsDataNew]);
     }
 
     // Статуты бля заказаков

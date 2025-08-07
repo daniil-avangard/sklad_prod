@@ -3,12 +3,14 @@
 @section('title_page', $product->name)
 
 @section('content')
+    @can('viewAny', \App\Models\Order::class)
     @include('includes.breadcrumb', [
         'title' => $product->name,
         'route' => 'products.info',
         'breadcrumbs' => 'Продукты',
         'back_route' => 'products',
     ])
+    @endcan
 
     <div class="row">
         <div class="col-12">
