@@ -207,10 +207,14 @@
                                     <td>
                                         <div class="buttons-orders-cotroller">
                                             <div class="buttons-orders-elm buttons-orders-elm-text">
+                                                @if ($userRole == "super-admin")
+                                                <a href="{{ route('products.show', $product) }}">{{ $product->name }}</a>
+                                                @else
                                                 <a href="{{ route('products.info', $product) }}">{{ $product->name }}</a>
+                                                @endif
                                             </div>
                                             <div class="buttons-orders-elm buttons-orders-elm-icon">
-                                                <a href="{{ route('products.info', $product) }}"
+                                                <a href="{{ route('products.show', $product) }}"
                                                     >
                                                     <img src="/assets/images/show_icon.svg" alt="logo-large" class="logo-lg logo-light">
                                                 </a>

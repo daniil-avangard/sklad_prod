@@ -34,7 +34,7 @@ class ProductController extends Controller
 
         $canCreateProduct = Gate::allows('create', Product::class);
         $userRole = Auth::user()->roles()->first()?->value;
-        // dd($userRole);
+//        dd($userRole);
 
         if ($userRole === UserRoleEnum::SUPER_ADMIN->value) {
             $products = Product::with('variants')->orderBy('name')->get()
@@ -117,7 +117,7 @@ class ProductController extends Controller
     // "express_hall" => false
     // "express_operator" => "no"
 
-        return view('products.index', compact('products', 'canCreateProduct', 'productCategories', 'productCompanies'));
+        return view('products.index', compact('products', 'canCreateProduct', 'productCategories', 'productCompanies', 'userRole'));
     }
 
     public function create()
