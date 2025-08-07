@@ -214,10 +214,17 @@
                                                 @endif
                                             </div>
                                             <div class="buttons-orders-elm buttons-orders-elm-icon">
+                                                @if ($userRole == "super-admin")
                                                 <a href="{{ route('products.show', $product) }}"
                                                     >
                                                     <img src="/assets/images/show_icon.svg" alt="logo-large" class="logo-lg logo-light">
                                                 </a>
+                                                @else
+                                                <a href="{{ route('products.info', $product) }}"
+                                                    >
+                                                    <img src="/assets/images/show_icon.svg" alt="logo-large" class="logo-lg logo-light">
+                                                </a>
+                                                @endif
                                             </div>
                                         </div>
                                     </td>
