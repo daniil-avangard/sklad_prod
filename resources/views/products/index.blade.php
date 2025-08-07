@@ -22,7 +22,7 @@
     ])
 @endcan
 
-    <div class="row">
+    <div class="row page-product">
         <div class="col-12">
             <div class="card">
                 <div class="card-body" style="overflow-x: auto;">
@@ -76,7 +76,7 @@
                             </div>
                         </div>
 
-                        <div id="chanel-filters" class="visually-hidden d-flex columns-2 gap-2 mb-4 ms-0 me-0">
+                        <div id="chanel-filters" class="visually-hidden d-flex columns-2 mb-4 ms-0 me-0">
                             <div class="card col-6 mb-0 p-0">
                                 <div class="card-header p-2">
                                     <h4 class="card-title">ККО</h4>
