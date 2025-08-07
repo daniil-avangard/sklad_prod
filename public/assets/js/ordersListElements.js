@@ -18,6 +18,7 @@ class ExcellTable {
       this.butonChangeOrderAllStatus.disabled = true;
       Array.from(this.tableInputToZero).forEach((el, ind) => {
           el.disabled = true;
+          el.checked = true;
       });
       const month = ["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
       const d = new Date();
@@ -49,6 +50,7 @@ class ExcellTable {
         this.uniqGoodsTotalOrdered = res.uniqGoodsTotalOrdered;
         this.onlyNewOrdersData = res.totalNewData;
         this.allDivisionsDataNew = res.allDivisionsDataNew;
+        this.uniqGoodsNewOrdered = res.uniqGoodsNewOrdered;
         document.getElementById('date-orders').innerHTML = this.flagRoleForExcell ? "27" : "25";
         this.initSettings();
         this.settingsCheckBoxToZero();
@@ -430,7 +432,7 @@ class ExcellTable {
         let cellsLength = currentCells.length;
         let arrayCurrentTD = parentTR.children;
         
-        if (el.checked) {
+        if (!(el.checked)) {
             let data = new Map();
             let deltaItemQuontity = 0;
             Object.entries(self.allDivisionsDataNew).forEach(([key, value]) => {
