@@ -202,6 +202,126 @@ class ExcellTable {
 //        newIconDanger.setAttribute("class", "mdi mdi-close transform-excell-icon");
 //        newDanger.appendChild(newIconDanger);
 
+        const funcForNewAccept = async () => {
+            return new Promise (async (resolve, reject) => {
+                let arrayCurrentTD = parentTR.children;
+                let indexCurrentRow = parentTR.rowIndex - 1;
+                newInput.disabled = true;
+                newAccept.disabled = true;
+                newDanger.disabled = true;
+
+                let initialItemQuontity = parseInt(dataOrigin.innerHTML);
+                let updateItemQuontity = newInput.value != "" ? parseInt(newInput.value) >= 0 ? parseInt(newInput.value) : 0 : 0;
+                let deltaItemQuontity = updateItemQuontity - initialItemQuontity;
+                let url = '/orders/update-quantity';
+                let dataToSend = {id: dataOrigin.dataset.pk, quantity: updateItemQuontity, _token: $('meta[name="csrf-token"]').attr('content')};
+    //            console.log('dataToSend = ', self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name]);
+                const request = new Request(url, {
+                                        method: "POST",
+                                        headers: {
+                                                    'Content-Type': 'application/json;charset=utf-8',
+                                                },
+                                        body: JSON.stringify(dataToSend)
+                                        });
+    //            console.log(indexCurrentRow, self.allDataForExcell[indexCurrentRow], self.onlyNewOrdersData[self.allDataForExcell[indexCurrentRow].name]);
+                let compareMinumum1 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) : self.allDataForExcell[indexCurrentRow].warehouse - self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name];
+                let compareMinumum2 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 2].innerHTML) : self.allDataForExcell[indexCurrentRow].min_stock;
+                console.log('compareMinumum = ', compareMinumum1, compareMinumum2, deltaItemQuontity);
+
+    //            let compareMinumum = (compareMinumum1 - deltaItemQuontity) >= (compareMinumum2);
+    //            let compareMinumum = self.flagRoleForExcell ? (compareMinumum1 - deltaItemQuontity) >= 0 : true;
+                let compareMinumum = true;
+                if (compareMinumum) {
+                    try {
+                        const response = await fetch(request);  
+                        if (!response.ok) {
+                            throw new Error(`Response status: ${response.status}`);
+                        }
+                        let res = await response.json();
+                        console.log(res);
+                        if (res.success) {
+                            Toast.fire({
+                                        icon: 'success',
+                                        timer: 300,
+                                        title: 'Количество обновлено'
+                                    });
+                            dataOrigin.innerHTML = updateItemQuontity;
+    //                        console.log("Проверка кол-ва заказанного = ", arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML, deltaItemQuontity);
+                            if (this.flagRoleForExcell) {
+                                arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) - deltaItemQuontity;
+                                arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
+                                
+                                console.log("Total = ", indexCurrentRow);
+                                let nameProd = dataOrigin.dataset.title;
+                                let prodField = 0;
+                                Object.keys(self.allDataForExcell).forEach(key => {
+                                    if (self.allDataForExcell[key].name == nameProd) prodField = key;
+                                });
+                                console.log("Total = ", prodField);
+                                self.allDataForExcell[prodField].total += deltaItemQuontity;
+                                console.log("Total = ", self.allDataForExcell);
+                                self.uniqGoodsTotalOrdered[self.allDataForExcell[prodField].name] += deltaItemQuontity;
+                                self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[prodField].name]['quontity'] = updateItemQuontity;
+                                console.log("Total = name = ", self.uniqGoodsTotalOrdered[self.allDataForExcell[prodField].name]);
+                            } else {
+                                let nameProd = dataOrigin.dataset.title;
+                                let prodField = 0;
+                                Object.keys(self.allDataForExcell).forEach(key => {
+                                    if (self.allDataForExcell[key].name == nameProd) prodField = key;
+                                });
+                                self.allDataForExcell[prodField].total += deltaItemQuontity;
+                                self.uniqGoodsTotalOrdered[self.allDataForExcell[prodField].name] += deltaItemQuontity;
+                                self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[prodField].name]['quontity'] = updateItemQuontity;
+                            }
+    //                        console.log("Проверка данных после изменений = ", self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity']);
+
+                            let compareToMinimumRatio = (compareMinumum1 - deltaItemQuontity) - compareMinumum2;
+                            let compareToMinimumRatio2 = (compareMinumum1 - deltaItemQuontity);
+    //                        console.log("красный ряд = ", compareMinumum1, compareMinumum2, parentTR);
+                            if (self.flagRoleForExcell) {
+                                if (compareToMinimumRatio >= 0) {
+                                    parentTR.classList.remove("row-color");
+                                    parentTR.classList.remove("row-color-accept");
+                                } else {
+                                    if (compareToMinimumRatio2 < 0) {
+                                        parentTR.classList.remove("row-color-accept");
+                                        parentTR.classList.add("row-color");
+                                    } else {
+                                        parentTR.classList.remove("row-color");
+                                        parentTR.classList.add("row-color-accept");
+                                    }
+                                }
+                            }
+
+                        } else {
+
+                            Toast.fire({
+                                        icon: 'error',
+                                        title: 'Ошибка при обновлении количества'
+                                    });
+                        }
+
+
+                    }
+                    catch(error) {
+                        console.log(error.message);
+                    }
+                } else {
+                    console.log("проверка = ", compareMinumum1, initialItemQuontity, parentTR);
+                    Toast.fire({
+                                        icon: 'error',
+                                        title: `Максимальное количество ${compareMinumum1 + initialItemQuontity}`
+                                    });
+                }
+
+                newInput.remove();
+                newAccept.remove();
+                newDanger.remove();
+                parentChildsArray.forEach((elm, index) => {elm.classList.remove("order-visible");});
+                resolve();
+            });
+        }
+        
         newInput.onkeydown = (event) => {
             if (event.key === 'Tab' || event.key === 'Enter') {
                 event.preventDefault();
@@ -210,135 +330,22 @@ class ExcellTable {
         }
         
         newInput.onkeyup = async (event) => {
-            
-//            console.log(event.key);
             if (event.key === 'Tab') {
                 event.preventDefault();
-//                console.log('tab pressed');
-                newAccept.click();
-//                newAccept.click().then(() => {
-//                    self.pElementsOrders[indexP+1].click();
-//                });
-                self.pElementsOrders[indexP+1].click();
-                
+//                newAccept.click();
+                funcForNewAccept().then(() => {
+                    if (indexP + 1 < self.pElementsOrders.length) self.pElementsOrders[indexP+1].click();
+                });
+            }
+            if (event.key === 'Enter') {
+                console.log(el.dataset.division);
+                if (indexP+1 < self.pElementsOrders.length) {
+                    
+                }
             }
         }
         
-        newAccept.onclick = async () => {
-//          return new Promise (async (resolve, reject) => {
-            let arrayCurrentTD = parentTR.children;
-            let indexCurrentRow = parentTR.rowIndex - 1;
-            newInput.disabled = true;
-            newAccept.disabled = true;
-            newDanger.disabled = true;
-
-            let initialItemQuontity = parseInt(dataOrigin.innerHTML);
-            let updateItemQuontity = newInput.value != "" ? parseInt(newInput.value) >= 0 ? parseInt(newInput.value) : 0 : 0;
-            let deltaItemQuontity = updateItemQuontity - initialItemQuontity;
-            let url = '/orders/update-quantity';
-            let dataToSend = {id: dataOrigin.dataset.pk, quantity: updateItemQuontity, _token: $('meta[name="csrf-token"]').attr('content')};
-//            console.log('dataToSend = ', self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name]);
-            const request = new Request(url, {
-                                    method: "POST",
-                                    headers: {
-                                                'Content-Type': 'application/json;charset=utf-8',
-                                            },
-                                    body: JSON.stringify(dataToSend)
-                                    });
-//            console.log(indexCurrentRow, self.allDataForExcell[indexCurrentRow], self.onlyNewOrdersData[self.allDataForExcell[indexCurrentRow].name]);
-            let compareMinumum1 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) : self.allDataForExcell[indexCurrentRow].warehouse - self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name];
-            let compareMinumum2 = self.flagRoleForExcell ? parseInt(arrayCurrentTD[arrayCurrentTD.length - 2].innerHTML) : self.allDataForExcell[indexCurrentRow].min_stock;
-            console.log('compareMinumum = ', compareMinumum1, compareMinumum2, deltaItemQuontity);
-            
-//            let compareMinumum = (compareMinumum1 - deltaItemQuontity) >= (compareMinumum2);
-//            let compareMinumum = self.flagRoleForExcell ? (compareMinumum1 - deltaItemQuontity) >= 0 : true;
-            let compareMinumum = true;
-            if (compareMinumum) {
-                try {
-                    const response = await fetch(request);  
-                    if (!response.ok) {
-                        throw new Error(`Response status: ${response.status}`);
-                    }
-                    let res = await response.json();
-                    console.log(res);
-                    if (res.success) {
-                        Toast.fire({
-                                    icon: 'success',
-                                    timer: 300,
-                                    title: 'Количество обновлено'
-                                });
-                        dataOrigin.innerHTML = updateItemQuontity;
-//                        console.log("Проверка кол-ва заказанного = ", arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML, deltaItemQuontity);
-                        if (this.flagRoleForExcell) {
-                            arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 3].innerHTML) - deltaItemQuontity;
-                            arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML = parseInt(arrayCurrentTD[arrayCurrentTD.length - 5].innerHTML) + deltaItemQuontity;
-                            console.log("Total = ", self.allDataForExcell);
-                            console.log("Total = ", indexCurrentRow);
-                            let nameProd = dataOrigin.dataset.title;
-                            let prodField = 0;
-                            Object.keys(self.allDataForExcell).forEach(key => {
-                                if (self.allDataForExcell[key].name == nameProd) prodField = key;
-                            });
-                            console.log("Total = ", prodField);
-                            self.allDataForExcell[prodField].total += deltaItemQuontity;
-                            
-                            self.uniqGoodsTotalOrdered[self.allDataForExcell[prodField].name] += deltaItemQuontity;
-                            self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[prodField].name]['quontity'] = updateItemQuontity;
-                            console.log("Total = name = ", self.uniqGoodsTotalOrdered[self.allDataForExcell[prodField].name]);
-                        } else {
-                            self.allDataForExcell[indexCurrentRow].total += deltaItemQuontity;
-                            self.uniqGoodsTotalOrdered[self.allDataForExcell[indexCurrentRow].name] += deltaItemQuontity;
-                            self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity'] = updateItemQuontity;
-                        }
-//                        console.log("Проверка данных после изменений = ", self.allDivisionsDataNew[res.divisionName][self.allDataForExcell[indexCurrentRow].name]['quontity']);
-                        
-                        let compareToMinimumRatio = (compareMinumum1 - deltaItemQuontity) - compareMinumum2;
-                        let compareToMinimumRatio2 = (compareMinumum1 - deltaItemQuontity);
-//                        console.log("красный ряд = ", compareMinumum1, compareMinumum2, parentTR);
-                        if (self.flagRoleForExcell) {
-                            if (compareToMinimumRatio >= 0) {
-                                parentTR.classList.remove("row-color");
-                                parentTR.classList.remove("row-color-accept");
-                            } else {
-                                if (compareToMinimumRatio2 < 0) {
-                                    parentTR.classList.remove("row-color-accept");
-                                    parentTR.classList.add("row-color");
-                                } else {
-                                    parentTR.classList.remove("row-color");
-                                    parentTR.classList.add("row-color-accept");
-                                }
-                            }
-                        }
-                        
-                    } else {
-                        
-                        Toast.fire({
-                                    icon: 'error',
-                                    title: 'Ошибка при обновлении количества'
-                                });
-                    }
-
-
-                }
-                catch(error) {
-                    console.log(error.message);
-                }
-            } else {
-                console.log("проверка = ", compareMinumum1, initialItemQuontity, parentTR);
-                Toast.fire({
-                                    icon: 'error',
-                                    title: `Максимальное количество ${compareMinumum1 + initialItemQuontity}`
-                                });
-            }
-
-            newInput.remove();
-            newAccept.remove();
-            newDanger.remove();
-            parentChildsArray.forEach((elm, index) => {elm.classList.remove("order-visible");});
-//            resolve();
-//          });
-        }
-
+        newAccept.onclick = funcForNewAccept;
 
         newDanger.onclick = () => {
 //            console.log("Проверяем значение inputa = ", newInput.value);
