@@ -41,7 +41,17 @@ class ProductVariantsController extends Controller
 
         // Проверяем, существует ли вариант продукта с таким же SKU
         if (ProductVariant::where('sku', $sku)->exists()) {
-            return redirect()->back()->withErrors(['sku' => 'Вариант продукта с такой датой актуальности уже существует'])->withInput();
+            $milesec = microtime();
+            $lastPart = explode(' ', $milesec);
+            $microPart = $lastPart[0];
+            $microDigits = substr($microPart, 2);
+            $last_8 = substr($microDigits, -8);
+//            $milesec = round(microtime(true) * 100000);
+//            dd($last_8);
+            $sku = $product->sku . '-' . $last_8;
+            if (ProductVariant::where('sku', $sku)->exists()) {
+                return redirect()->back()->withErrors(['sku' => 'Вариант продукта с такой датой актуальности уже существует'])->withInput();
+            }
         }
 
 
@@ -76,20 +86,38 @@ class ProductVariantsController extends Controller
 
     public function update(Product $product, ProductVariant $variant, Request $request)
     {
+//        dd($product, $variant);
         $data = $request->only(['is_active', 'reserved', 'date_of_actuality']);
         $data['reserved'] ? $data['reserved'] = $request->reserved : $data['reserved'] = 0;
         // Обработка чекбокса is_active
         $data['is_active'] = $request->has('is_active');
+        
+        $sku = $variant->sku;
 
         if ($request->date_of_actuality) {
-            $sku = $product->sku . '-' . date('dmY', strtotime($request->date_of_actuality));
+            if (ProductVariant::where('sku', $sku)->exists()) {
+                $sku = $variant->sku;
+            } else {
+                $sku = $product->sku . '-' . date('dmY', strtotime($request->date_of_actuality));
+            }
         } else {
-            $sku = $product->sku;
+            if ($request->date_of_actuality == null) {
+                if (ProductVariant::where('sku', $sku)->exists()) {
+                    $sku = $variant->sku;
+                } else {
+                    $sku = $product->sku;
+                }
+            } else {
+                $sku = $product->sku;
+            }
         }
+//        dd($sku);
 
         // Проверяем, существует ли вариант продукта с таким же SKU
-        if (ProductVariant::where('sku', $sku)->where('id', '!=', $variant->id)->exists()) {
-            return redirect()->back()->withErrors(['sku' => 'Вариант продукта с такой датой актуальности уже существует'])->withInput();
+        if ($request->date_of_actuality != null) {
+            if (ProductVariant::where('sku', $sku)->where('id', '!=', $variant->id)->exists()) {
+                return redirect()->back()->withErrors(['sku' => 'Вариант продукта с такой датой актуальности уже существует'])->withInput();
+            }
         }
 
         if ($request->reserved > $variant->quantity) {
