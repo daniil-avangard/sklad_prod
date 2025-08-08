@@ -241,7 +241,7 @@
                         </div>-->
                     </div>
                     
-                    <div class="order-filters">
+                    <div class="order-filters month-filters">
 
                         <div>Период:</div>
                         <div class="filters-work-part filters-work-part-months filters-graph-part">             

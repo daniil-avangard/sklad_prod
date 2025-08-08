@@ -872,7 +872,7 @@ tr p {
     width: 308px;
     /* правка */
     height: 85px;
-    margin-top: 8px;
+    margin-bottom: 11px;
     /* правка */
     /*    border: 0.5px solid #000000; */
     color: #303e67;
@@ -959,14 +959,23 @@ tr p {
     margin-bottom: 3px;
 }
 
+.order-filters:nth-child(1) .filters-work-part,
+.order-filters:nth-child(2) .filters-work-part,
+.order-filters:nth-child(3) .filters-work-part {
+    width: 100%;
+    flex-direction: row;
+}
+
 .filters-graph-part {
     height: 80.5px !important;
 }
 
+.order-filters .filters-work-part.filters-work-part-months,
 .filters-work-part-months {
     width: 281px;
     overflow-x: hidden;
     overflow-y: auto;
+    flex-direction: column;
 }
 
 .filters-work-part-months::-webkit-scrollbar {
@@ -1519,10 +1528,19 @@ form-control:focus {
     line-height: normal;
 }
 
+.block-filters-index {
+    flex-wrap: wrap;
+}
+
 .block-filters-index .clean-filters {
     width: 134px !important;
     font-size: 12px !important;
     border-radius: 5px;
+}
+
+/* таблица продуктов */
+.page-product #product-table thead {
+    visibility: collapse;
 }
 
 /* header navbar*/
@@ -1636,6 +1654,7 @@ form-control:focus {
 .page-product .card {
     max-width: 100%;
 }
+
 .page-product #chanel-filters .card-header {
     border: 1px solid #D9D9D9;
 }
@@ -1647,7 +1666,7 @@ form-control:focus {
 }
 
 #chanel-filters .card:first-child .card-header,
-#chanel-filters .card:first-child .card-body{
+#chanel-filters .card:first-child .card-body {
     border-right: 0;
 }
 
@@ -1725,23 +1744,12 @@ textarea.form-control {
     display: none;
 }
 
-.order-filters:nth-child(1) .filters-work-part,
-.order-filters:nth-child(2) .filters-work-part,
-.order-filters:nth-child(3) .filters-work-part {
-    width: 100%;
-    flex-direction: row;
-}
-
 .filters-work-part .index-top-filters {
     max-width: 180px;
     height: 20px;
     margin-left: 16px;
     font-size: 12px;
     border: 1px solid #D9D9D9;
-}
-
-.month-field:first-child {
-    margin-top: 0px;
 }
 
 .month-field label {
@@ -1755,4 +1763,31 @@ textarea.form-control {
 
 .month-field input[type='checkbox']:checked+label {
     background: #006237;
+}
+
+.order-filters.month-filters {
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 350px;
+    gap: 14px;
+    align-content: space-between;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    color: #4A4A4A;
+    background-color: #ffffff;
+}
+
+.dropdown-menu .dropdown-item:hover,
+.dropdown-menu .dropdown-item:focus {
+    background-color: #F5F5F5;
+    color: #4A4A4A;
+}
+
+
+@media screen and (max-width: 1190px) {
+    .block-filters-index {
+        gap: 20px;
+    }
 }
