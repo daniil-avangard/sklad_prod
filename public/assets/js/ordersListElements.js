@@ -238,7 +238,7 @@ class ExcellTable {
     //            let compareMinumum = (compareMinumum1 - deltaItemQuontity) >= (compareMinumum2);
     //            let compareMinumum = self.flagRoleForExcell ? (compareMinumum1 - deltaItemQuontity) >= 0 : true;
                 let compareMinumum = true;
-                if (compareMinumum) {
+                if (compareMinumum && deltaItemQuontity != 0) {
                     try {
                         const response = await fetch(request);  
                         if (!response.ok) {
@@ -314,11 +314,14 @@ class ExcellTable {
                         console.log(error.message);
                     }
                 } else {
-                    console.log("проверка = ", compareMinumum1, initialItemQuontity, parentTR);
-                    Toast.fire({
-                                        icon: 'error',
-                                        title: `Максимальное количество ${compareMinumum1 + initialItemQuontity}`
-                                    });
+                    if (!(compareMinumum) && deltaItemQuontity != 0) {
+                        console.log("проверка = ", compareMinumum1, initialItemQuontity, parentTR);
+                        Toast.fire({
+                                            icon: 'error',
+                                            title: `Максимальное количество ${compareMinumum1 + initialItemQuontity}`
+                                        });
+                    }
+                    
                 }
 
                 newInput.remove();
