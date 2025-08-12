@@ -1825,7 +1825,8 @@ textarea.form-control {
 /*    transform: translateY(100%);*/
     background-color: #fff;
     width: 92%;
-    max-height: 100px !important;
+    height: 100px;
+/*    min-height: 100px !important;*/
     overflow-y: auto;
     z-index: 1;
     border: 1px solid #D9D9D9;

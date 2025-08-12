@@ -313,17 +313,17 @@
                             <label for="productsOfOrders1">Товары:</label>
                             <div class="searchable">
                                 <input class="index-top-filters" type="search" name="productsOfOrders1" id="productsOfOrders1" placeholder="Все">
-                                <div id="product-list-data" class="dropdown__box-list">
-                                    <div class="dropdown-item dropdown-item-new" data-productoption="">
+                                <ul id="product-list-data" class="dropdown__box-list">
+                                    <li class="dropdown-item dropdown-item-new" data-productoption="">
                                         Все
-                                    </div>
+                                    </li>
                                     @foreach ($allOrdersProducts as $productOrder)
-                                        <div class="dropdown-item dropdown-item-new" data-productoption="{{ $productOrder['name'] }}">
+                                        <li class="dropdown-item dropdown-item-new" data-productoption="{{ $productOrder['name'] }}">
                                                 {{ $productOrder['name'] }}
-                                        </div>
+                                        </li>
                                     @endforeach
                                     
-                                </div>
+                                </ul>
                             </div>
 
                         </div>

@@ -224,7 +224,10 @@ class FilterPage {
             }
                       
             self.selectProductOrderNew.onblur = (event) => {
-//                console.log('clicked child = ', document.activeElement);
+                const productListData1 = document.getElementById('product-list-data');
+                Array.from(productListData1.children).forEach((elm, ind) => {
+                    elm.style.display = "block";
+                });
                 self.productListData.classList.remove("dropdown__box-list-visible");
             }
             
