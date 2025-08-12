@@ -187,14 +187,48 @@ class FilterPage {
             }
         }
         
+//        if (self.productListData) {
+//            self.productListData.onclick = (event) => {
+//                console.log('clicked child = ', event.target.parentElement.id);
+//            }
+//            self.productListData.onblur = (event) => {
+//                console.log('clicked child = ', event.target.parentElement.id);
+//            }
+//            
+//        }
+        
         if (self.selectProductOrderNew) {
             self.selectProductOrderNew.onfocus = () => {
-                self.productListData.classList.add("dropdown__box-list-visible");
+                self.selectProductOrderNew.select();
+                const productListData1 = document.getElementById('product-list-data');
+                productListData1.classList.add("dropdown__box-list-visible");
+
+                productListData1.onmousedown = (event) => {
+//                    event.preventDefault();
+                    console.log('clicked child = ', event.target.dataset.productoption);
+                    if (event.target.dataset.productoption) self.selectProductOrderNew.value = event.target.dataset.productoption;
+                }
+
             }
             
-            self.selectProductOrderNew.onblur = () => {
+            self.selectProductOrderNew.oninput = (event) => {
+                const productListData1 = document.getElementById('product-list-data');
+                let text = self.selectProductOrderNew.value.toUpperCase();
+                Array.from(productListData1.children).forEach((elm, ind) => {
+                    if (elm.dataset.productoption.toUpperCase().indexOf(text) > -1) {
+                        elm.style.display = "block";
+                    } else {
+                        elm.style.display = "none";
+                    }
+                });
+            }
+                      
+            self.selectProductOrderNew.onblur = (event) => {
+//                console.log('clicked child = ', document.activeElement);
                 self.productListData.classList.remove("dropdown__box-list-visible");
             }
+            
+            
         }
 
         if (self.checkBoxBlock) {

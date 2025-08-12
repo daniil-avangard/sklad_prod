@@ -314,27 +314,17 @@
                             <div class="searchable">
                                 <input class="index-top-filters" type="search" name="productsOfOrders1" id="productsOfOrders1" placeholder="Все">
                                 <div id="product-list-data" class="dropdown__box-list">
-                                    <div class="dropdown-item dropdown-item-new">
-                                            <span id="dropdown-item-name" class="dropdown-item-name dropdown-item-name-new" data-productoption="Все">
-                                                Все
-                                            </span>
+                                    <div class="dropdown-item dropdown-item-new" data-productoption="">
+                                        Все
                                     </div>
                                     @foreach ($allOrdersProducts as $productOrder)
-                                        <div class="dropdown-item dropdown-item-new">
-                                            <span id="dropdown-item-name" class="dropdown-item-name dropdown-item-name-new" data-productoption="{{ $productOrder['name'] }}">
+                                        <div class="dropdown-item dropdown-item-new" data-productoption="{{ $productOrder['name'] }}">
                                                 {{ $productOrder['name'] }}
-                                            </span>
                                         </div>
                                     @endforeach
                                     
                                 </div>
                             </div>
-                            <!--<select name='productsOfOrders1' id='products-of-orders-1' class="index-top-filters">
-                                <option value="">Все</option>
-                                @foreach ($allOrdersProducts as $productOrder)
-                                    <option value="{{ $productOrder['name'] }}">{{ $productOrder['name'] }}</option>
-                                @endforeach
-                            </select>-->
 
                         </div>
                     </div>

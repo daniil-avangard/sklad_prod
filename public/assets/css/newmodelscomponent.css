@@ -1845,3 +1845,6 @@ textarea.form-control {
     margin-left: 2px !important;
     padding-left: 2px !important;
 }
+.dropdown-item-name-new {
+    width: 100% !important;
+}
