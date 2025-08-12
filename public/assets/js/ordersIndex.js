@@ -5,6 +5,8 @@ class FilterPage {
         this.selectDivision = document.getElementById('divisiones-names');
         this.selectOrderStatus = document.getElementById('status-of-orders');
         this.selectProductOrder = document.getElementById('products-of-orders');
+        this.selectProductOrderNew = document.getElementById('productsOfOrders1');
+        this.productListData = document.getElementById('product-list-data');
         this.graphicProduct = document.getElementById('grafic-button');
         this.graphicDataProduct = document.getElementById('grafic-months');
         this.checkBoxBlock = document.getElementById('month-field');
@@ -182,6 +184,16 @@ class FilterPage {
                 } else {
                     self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
                 }
+            }
+        }
+        
+        if (self.selectProductOrderNew) {
+            self.selectProductOrderNew.onfocus = () => {
+                self.productListData.classList.add("dropdown__box-list-visible");
+            }
+            
+            self.selectProductOrderNew.onblur = () => {
+                self.productListData.classList.remove("dropdown__box-list-visible");
             }
         }
 
