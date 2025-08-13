@@ -324,18 +324,18 @@
                         @endcan
                     </div>
                     
-                    <!--<div class="order-filters">
+                    <div class="order-filters">
                         <div class="filters-work-part">
-                            <label for="productsOfOrders1">Товары:</label>
+                            <label for="productsOfOrders1">Номер:</label>
                             <div class="searchable">
-                                <input class="index-top-filters" type="search" name="productsOfOrders1" id="productsOfOrders1" placeholder="Все">
-                                <ul id="product-list-data" class="dropdown__box-list">
-                                    <li class="dropdown-item dropdown-item-new" data-productoption="">
+                                <input class="index-top-filters" type="text" name="productsOfOrders1" id="idOfOrders" placeholder="Все">
+                                <ul id="id-list-data" class="dropdown__box-list">
+                                    <li class="dropdown-item dropdown-item-new" data-productoption="Все">
                                         Все
                                     </li>
-                                    @foreach ($allOrdersProducts as $productOrder)
-                                        <li class="dropdown-item dropdown-item-new" data-productoption="{{ $productOrder['name'] }}">
-                                                {{ $productOrder['name'] }}
+                                    @foreach ($orders as $order)
+                                        <li class="dropdown-item dropdown-item-new" data-productoption="{{ $order->id }}">
+                                                {{ $order->id }}
                                         </li>
                                     @endforeach
                                     
@@ -343,7 +343,8 @@
                             </div>
 
                         </div>
-                    </div>-->
+                    </div>
+                    
                     
                 </div>
 
