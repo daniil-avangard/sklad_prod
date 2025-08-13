@@ -4,7 +4,10 @@ class FilterPage {
         this.popUpsChilds = document.querySelectorAll('.order-popup-child');
         this.selectDivision = document.getElementById('divisiones-names');
         this.selectOrderStatus = document.getElementById('status-of-orders');
-        this.selectProductOrder = document.getElementById('products-of-orders');
+//        this.selectProductOrder = document.getElementById('products-of-orders');
+        this.selectProductOrder = document.getElementById('productsOfOrders1');
+//        this.selectProductOrderNew = document.getElementById('productsOfOrders1');
+        this.productListData = document.getElementById('product-list-data');
         this.graphicProduct = document.getElementById('grafic-button');
         this.graphicDataProduct = document.getElementById('grafic-months');
         this.checkBoxBlock = document.getElementById('month-field');
@@ -174,15 +177,73 @@ class FilterPage {
             }
         }
 
+//        if (self.selectProductOrder) {
+//            self.selectProductOrder.onchange = () => {
+//                document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
+//                if (self.selectDivision) {
+//                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+//                } else {
+//                    console.log("check product");
+//                    self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+//                }
+//            }
+//        }
+        
         if (self.selectProductOrder) {
-            self.selectProductOrder.onchange = () => {
-                document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
-                if (self.selectDivision) {
-                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
-                } else {
-                    self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
+            self.selectProductOrder.onfocus = () => {
+                self.selectProductOrder.select();
+                const productListData1 = document.getElementById('product-list-data');
+                productListData1.classList.add("dropdown__box-list-visible");
+
+                productListData1.onmousedown = (event) => {
+//                    event.preventDefault();
+                    console.log('clicked child = ', event.target.dataset.productoption);
+                    if (event.target.dataset.productoption) {
+                        console.log('inside clicked child = ');
+                        self.selectProductOrder.value = event.target.dataset.productoption;
+                        let valuProductCookie = self.selectProductOrder.value == "Все" ? "" : self.selectProductOrder.value;
+                        document.cookie = `selectSkladProductOrder=${valuProductCookie}`;
+                        let valuProduct = self.selectProductOrder.value == "Все" ? false : self.selectProductOrder.value;
+                        if (self.selectDivision) {
+                            self.display(self.selectDivision.value, self.selectOrderStatus.value, valuProduct, true);
+                        } else {
+                            console.log("check product");
+                            self.display(false, self.selectOrderStatus.value, valuProduct, true);
+                        }
+                    }
                 }
+
             }
+            
+            self.selectProductOrder.oninput = (event) => {
+                const productListData1 = document.getElementById('product-list-data');
+                let text = self.selectProductOrder.value.toUpperCase();
+                let count1 = 0;
+                Array.from(productListData1.children).forEach((elm, ind) => {
+                    if (elm.dataset.productoption.toUpperCase().indexOf(text) > -1) {
+                        elm.style.display = "block";
+                        count1++;
+                    } else {
+                        elm.style.display = "none";
+                    }
+                });
+                console.log(count1);
+//                if (count1 < 3) {
+//                    productListData1.style.height = String(20 * count1) + "px";
+//                    console.log(productListData1.children[0].scrollHeight);
+//                }
+                
+            }
+                      
+            self.selectProductOrder.onblur = (event) => {
+                const productListData1 = document.getElementById('product-list-data');
+                Array.from(productListData1.children).forEach((elm, ind) => {
+                    elm.style.display = "block";
+                });
+                self.productListData.classList.remove("dropdown__box-list-visible");
+            }
+            
+            
         }
 
         if (self.checkBoxBlock) {
@@ -410,6 +471,7 @@ class FilterPage {
     
     display(division, status, product, checkBox) {
         const self = this;
+        if (product == "Все") product = false;
         this.tableTrArray.forEach(row => {
             row.classList.remove('row-hidden');
             let arrayProductsDivs = row.cells[3].querySelectorAll('.order-popup-parent');

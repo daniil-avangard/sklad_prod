@@ -224,7 +224,7 @@
                         @endif
                     </div>
                     
-                    <div class="order-filters">
+                    <!--<div class="order-filters">
                         <div class="filters-work-part">
                             <label for="productsOfOrders">Товары:</label>
                             <select name='productsOfOrders' id='products-of-orders' class="index-top-filters">
@@ -233,12 +233,28 @@
                                     <option value="{{ $productOrder['name'] }}">{{ $productOrder['name'] }}</option>
                                 @endforeach
                             </select>
-<!--                            <button id="grafic-button">График по городам</button>-->
                         </div>
-<!--                        <div class="filters-button-part">
-                            <button id="clean-months" class="select-work-buttons">Очистить месяцы</button>
-                            <button class="select-work-buttons clean-filters">Очистить фильтры</button>
-                        </div>-->
+                    </div>-->
+                    
+                    <div class="order-filters">
+                        <div class="filters-work-part">
+                            <label for="productsOfOrders1">Товары:</label>
+                            <div class="searchable">
+                                <input class="index-top-filters" type="text" name="productsOfOrders1" id="productsOfOrders1" placeholder="Все">
+                                <ul id="product-list-data" class="dropdown__box-list">
+                                    <li class="dropdown-item dropdown-item-new" data-productoption="Все">
+                                        Все
+                                    </li>
+                                    @foreach ($allOrdersProducts as $productOrder)
+                                        <li class="dropdown-item dropdown-item-new" data-productoption="{{ $productOrder['name'] }}">
+                                                {{ $productOrder['name'] }}
+                                        </li>
+                                    @endforeach
+                                    
+                                </ul>
+                            </div>
+
+                        </div>
                     </div>
                     
                     <div class="order-filters month-filters">
@@ -307,6 +323,27 @@
                         </div>
                         @endcan
                     </div>
+                    
+                    <!--<div class="order-filters">
+                        <div class="filters-work-part">
+                            <label for="productsOfOrders1">Товары:</label>
+                            <div class="searchable">
+                                <input class="index-top-filters" type="search" name="productsOfOrders1" id="productsOfOrders1" placeholder="Все">
+                                <ul id="product-list-data" class="dropdown__box-list">
+                                    <li class="dropdown-item dropdown-item-new" data-productoption="">
+                                        Все
+                                    </li>
+                                    @foreach ($allOrdersProducts as $productOrder)
+                                        <li class="dropdown-item dropdown-item-new" data-productoption="{{ $productOrder['name'] }}">
+                                                {{ $productOrder['name'] }}
+                                        </li>
+                                    @endforeach
+                                    
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>-->
                     
                 </div>
 
