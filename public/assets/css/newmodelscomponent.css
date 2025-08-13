@@ -910,8 +910,10 @@ tr p {
 }
 
 .month-field input[type='checkbox']:checked:hover+label {
-    background: #87b4de;
-    color: #FFF;
+    /* background: #87b4de; */
+    /* color: #FFF; */
+    background: #f1fcf6;
+    color: #303e67;
 }
 
 /*.label-on-hover-checked-true {
@@ -1585,7 +1587,20 @@ form-control:focus {
 /* Прочее */
 
 .form-select {
-    border: 1px solid #D9D9D9;
+    width: 180px;
+    height: 20px;
+    padding: 1px;
+    padding-left: 7px;
+    cursor: pointer;
+}
+
+.form-select option {
+    cursor: pointer;
+}
+
+.form-select option:hover {
+    background-color: #F5F5F5;
+    cursor: pointer;
 }
 
 #redirect-to-basket.btn-basket-prod-colors {
@@ -1788,6 +1803,100 @@ textarea.form-control {
 }
 
 
+/* form-select */
+
+select.form-select,
+::picker(select) {
+    appearance: base-select;
+    color: #4A4A4A;
+    border: 1px solid #D9D9D9;
+}
+
+.form-select:focus {
+    outline: none;
+    box-shadow: -2px 4px 6px 0 rgba(0, 0, 0, 0.2);
+    border-color: #D9D9D9;
+}
+
+::picker(select) {
+    box-shadow: #000000;
+    box-shadow: -2px 4px 6px 0 rgba(0, 0, 0, 0.2);
+}
+
+.form-select option:hover {
+    background-color: #F5F5F5;
+    color: #4A4A4A;
+}
+
+div.dataTables_wrapper div.dataTables_length select {
+    width: 85px;
+    padding: 3px;
+}
+
+::picker-icon {
+    display: none;
+}
+
+option::checkmark {
+    display: none;
+}
+
+/* страницы */
+.page-link {
+    color: #4A4A4A;
+    border: 1px solid #D9D9D9;
+}
+
+.page-item.disabled .page-link {
+    color: #D9D9D9;
+    border-color: #D9D9D9;
+}
+
+.page-item.active .page-link {
+    color: #4A4A4A;
+    background-color: unset;
+    border-color: #D9D9D9;
+    box-shadow: unset;
+    z-index: 3;
+}
+
+.paginate_button {
+    width: 30px;
+    height: 30px;
+}
+
+.dataTables_paginate ul.pagination .page-link {
+    height: 30px;
+    padding: 3px;
+    font-size: 14px;
+    text-align-last: center;
+}
+
+.dataTables_paginate ul.pagination .next .page-link,
+.dataTables_paginate ul.pagination .previous .page-link {
+    font-size: 0;
+}
+
+.dataTables_paginate ul.pagination .next .page-link:before,
+.dataTables_paginate ul.pagination .previous .page-link:before {
+    content: "";
+    display: block;
+    height: 19px;
+    width: 13px;
+    background-image: url(/assets/images/arrow.svg);
+    background-repeat: no-repeat;
+}
+
+.dataTables_paginate ul.pagination .next .page-link:before {}
+
+.dataTables_paginate ul.pagination .previous .page-link:before {
+    transform: rotate(180deg);
+}
+
+.pagination {
+    visibility: hidden;
+}
+
 @media screen and (max-width: 1190px) {
     .block-filters-index {
         gap: 20px;
@@ -1845,6 +1954,7 @@ textarea.form-control {
     width: 100% !important;
     margin-left: 2px !important;
     padding-left: 2px !important;
+    cursor: pointer;
 }
 .dropdown-item-name-new {
     width: 100% !important;
