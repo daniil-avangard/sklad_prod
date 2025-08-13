@@ -275,6 +275,7 @@ class FilterPage {
                         document.cookie = `selectSkladIDOrder=${valuProductCookie}`;
                         let valueID = self.selectIDOrder.value == "Все" ? false : self.selectIDOrder.value;
                         if (self.selectDivision) {
+                            console.log("here we are");
                             self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
                         } else {
                             console.log("check product");
@@ -542,7 +543,7 @@ class FilterPage {
     display(division, status, product, checkBox, idOrder) {
         const self = this;
         if (product == "Все") product = false;
-        if (idOrder == "Все") product = false;
+        if (idOrder == "Все") idOrder = false;
         
         this.tableTrArray.forEach(row => {
             row.classList.remove('row-hidden');
@@ -574,8 +575,10 @@ class FilterPage {
             this.tableTrArray
                     .filter(row => {
                         let cell = row.cells[0];
+                        let text = row.cells[0].children.length > 0 ? row.cells[0].children[0].innerHTML.trim() : cell.innerHTML.trim();
+                        console.log(cell.innerHTML.trim());
 //                        let text = self.selectOrderStatus.options[self.selectOrderStatus.selectedIndex].text;
-                        return (cell.innerHTML.trim() != idOrder);
+                        return (text != idOrder);
                     })
                     .forEach(row => row.classList.add('row-hidden'));
             

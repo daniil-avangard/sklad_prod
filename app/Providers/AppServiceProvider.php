@@ -85,7 +85,7 @@ class AppServiceProvider extends ServiceProvider
             );
         }
         
-        EncryptCookies::except(['check', 'skladRoleUser', 'selectSkladDivision', 'selectSkladOrderStatus', 'selectSkladProductOrder', 'selectSkladCheckBoxBlock']);
+        EncryptCookies::except(['check', 'skladRoleUser', 'selectSkladDivision', 'selectSkladOrderStatus', 'selectSkladProductOrder', 'selectSkladCheckBoxBlock', 'selectSkladIDOrder']);
         
 //        $this->app->bindMethod([ProcessPodcast::class, 'handle'], function (ProcessPodcast $job, Application $app) {
 //            return $job->handle($app->make(AudioProcessor::class));
