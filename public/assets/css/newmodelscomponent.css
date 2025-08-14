@@ -963,7 +963,8 @@ tr p {
 .order-filters:nth-child(1) .filters-work-part,
 .order-filters:nth-child(2) .filters-work-part,
 .order-filters:nth-child(3) .filters-work-part,
-.order-filters:nth-child(4) .filters-work-part {
+.order-filters:nth-child(4) .filters-work-part,
+.order-filters:nth-child(5) .filters-work-part {
     width: 100%;
     flex-direction: row;
 }
