@@ -35,6 +35,7 @@ class LoginController extends Controller
         Cookie::queue('selectSkladOrderStatus', '', time()+3600, null, null, false, false);
         Cookie::queue('selectSkladProductOrder', '', time()+3600, null, null, false, false);
         Cookie::queue('selectSkladCheckBoxBlock', '', time()+3600, null, null, false, false);
+        Cookie::queue('selectSkladIDOrder', '', time()+3600, null, null, false, false);
         return redirect()->intended(route('home'));
     }
 
