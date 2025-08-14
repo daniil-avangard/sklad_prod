@@ -202,8 +202,10 @@ class FilterPage {
 //            }
 //        }
 
-        const funcForFilters = (parent, child) => {
-            parent.onfocus = () => {
+        const funcForFilters = (parent, child, cookieName) => {
+            parent.onfocus = (event) => {
+//                event.preventDefault();
+                console.log("фокус = ", event.target);
                 parent.select();
                 const productListData1 = document.getElementById(child);
                 productListData1.classList.add("dropdown__box-list-visible");
@@ -215,9 +217,7 @@ class FilterPage {
                         console.log('inside clicked child = ');
                         parent.value = event.target.dataset.productoption;
                         let valuProductCookie = parent.value == "Все" ? "" : parent.value;
-                        if (parent.id == 'idOfOrders') document.cookie = `selectSkladIDOrder=${valuProductCookie}`;
-                        if (parent.id == 'productsOfOrders1') document.cookie = `selectSkladProductOrder=${valuProductCookie}`;
-                        if (parent.id == 'divisiones-names') document.cookie = `selectSkladDivision=${valuProductCookie}`;
+                        document.cookie = `${cookieName}=${valuProductCookie}`;
                         let valueID = parent.value == "Все" ? false : parent.value;
                         if (self.selectDivision) {
                             if (parent.id == 'idOfOrders') self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
@@ -242,6 +242,18 @@ class FilterPage {
                         elm.style.display = "none";
                     }
                 });
+                if (text == "") {
+                    let valueID = false;
+                    if (self.selectDivision) {
+                        if (parent.id == 'idOfOrders') self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
+                        if (parent.id == 'productsOfOrders1') self.display(self.selectDivision.value, self.selectOrderStatus.value, valueID, true, self.selectIDOrder.value);
+                        if (parent.id == 'divisiones-names') self.display(valueID, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
+                    } else {
+                        if (parent.id == 'idOfOrders') self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
+                        if (parent.id == 'productsOfOrders1') self.display(false, self.selectOrderStatus.value, valueID, true, self.selectIDOrder.value);
+                    }
+                    document.cookie = `${cookieName}=${parent.value}`;
+                }
                 
             }
                       
@@ -311,15 +323,15 @@ class FilterPage {
             
 //        }
         if (self.selectDivision) {
-            funcForFilters(self.selectDivision, 'cities-list-data');
+            funcForFilters(self.selectDivision, 'cities-list-data', 'selectSkladDivision');
         }
         
         if (self.selectProductOrder) {
-            funcForFilters(self.selectProductOrder, 'product-list-data');
+            funcForFilters(self.selectProductOrder, 'product-list-data', 'selectSkladProductOrder');
         }
         
         if (self.selectIDOrder) {
-            funcForFilters(self.selectIDOrder, 'id-list-data');
+            funcForFilters(self.selectIDOrder, 'id-list-data', 'selectSkladIDOrder');
         }
 
         if (self.checkBoxBlock) {

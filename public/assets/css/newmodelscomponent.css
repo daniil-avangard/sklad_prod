@@ -1895,7 +1895,7 @@ option::checkmark {
     transform: rotate(180deg);
 }
 
-.pagination {
+#product-table_wrapper .pagination {
     visibility: hidden;
 }
 
@@ -1960,4 +1960,8 @@ option::checkmark {
 }
 .dropdown-item-name-new {
     width: 100% !important;
+}
+.unclicked {
+    pointer-events: none !important;
+    height: 20px !important;
 }
