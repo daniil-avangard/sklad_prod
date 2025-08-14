@@ -189,8 +189,36 @@
 <!--                @can('view', \App\Models\Order::class)
                     <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
                 @endcan-->
+                
                 <div class="block-filters-index">
+                    
                     @can('viewAny', \App\Models\Order::class)
+                    <div class="order-filters">
+                        <div class="filters-work-part">
+                            <label for="productsOfOrders1">Город:</label>
+                            <div class="searchable">
+                                <input class="index-top-filters" type="text" name="productsOfOrders1" id="divisiones-names" placeholder="Все">
+                                <ul id="cities-list-data" class="dropdown__box-list">
+                                    <li class="dropdown-item dropdown-item-new" data-productoption="Все">
+                                        Все
+                                    </li>
+                                    @foreach ($groupDivisionsNames1 as $divisionName)
+                                        <li class="dropdown-item dropdown-item-new" data-productoption="{{ $divisionName['name'] }}">
+                                                {{ $divisionName['name'] }}
+                                        </li>
+                                    @endforeach
+                                    
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div class="filters-button-part">
+                            <button class="select-work-buttons clean-filters">Очистить фильтры</button>
+                        </div>
+                    </div>
+                    @endcan
+                    
+                    <!--@can('viewAny', \App\Models\Order::class)
                     <div class="order-filters">
                         <div class="filters-work-part">
                             <label for="divisions">Город:</label>
@@ -205,7 +233,7 @@
                             <button class="select-work-buttons clean-filters">Очистить фильтры</button>
                         </div>
                     </div>
-                    @endcan
+                    @endcan-->
                     
                     <div class="order-filters">
                         <div class="filters-work-part">

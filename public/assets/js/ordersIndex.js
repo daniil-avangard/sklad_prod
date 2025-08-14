@@ -167,17 +167,17 @@ class FilterPage {
     initsettings() {
         const self = this;
         
-        if (self.selectDivision) {
-            self.selectDivision.onchange = () => {
-                document.cookie = `selectSkladDivision=${self.selectDivision.value}`;
-                if (self.selectOrderStatus) {
-                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
-                } else {
-                    self.display(self.selectDivision.value, false, self.selectProductOrder.value, true, self.selectIDOrder.value);
-                }
-
-            }
-        }
+//        if (self.selectDivision) {
+//            self.selectDivision.onchange = () => {
+//                document.cookie = `selectSkladDivision=${self.selectDivision.value}`;
+//                if (self.selectOrderStatus) {
+//                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
+//                } else {
+//                    self.display(self.selectDivision.value, false, self.selectProductOrder.value, true, self.selectIDOrder.value);
+//                }
+//
+//            }
+//        }
 
         if (self.selectOrderStatus) {
             self.selectOrderStatus.onchange = () => {
@@ -201,11 +201,11 @@ class FilterPage {
 //                }
 //            }
 //        }
-        
-        if (self.selectProductOrder) {
-            self.selectProductOrder.onfocus = () => {
-                self.selectProductOrder.select();
-                const productListData1 = document.getElementById('product-list-data');
+
+        const funcForFilters = (parent, child) => {
+            parent.onfocus = () => {
+                parent.select();
+                const productListData1 = document.getElementById(child);
                 productListData1.classList.add("dropdown__box-list-visible");
 
                 productListData1.onmousedown = (event) => {
@@ -213,108 +213,113 @@ class FilterPage {
                     console.log('clicked child = ', event.target.dataset.productoption);
                     if (event.target.dataset.productoption) {
                         console.log('inside clicked child = ');
-                        self.selectProductOrder.value = event.target.dataset.productoption;
-                        let valuProductCookie = self.selectProductOrder.value == "Все" ? "" : self.selectProductOrder.value;
-                        document.cookie = `selectSkladProductOrder=${valuProductCookie}`;
-                        let valuProduct = self.selectProductOrder.value == "Все" ? false : self.selectProductOrder.value;
+                        parent.value = event.target.dataset.productoption;
+                        let valuProductCookie = parent.value == "Все" ? "" : parent.value;
+                        if (parent.id == 'idOfOrders') document.cookie = `selectSkladIDOrder=${valuProductCookie}`;
+                        if (parent.id == 'productsOfOrders1') document.cookie = `selectSkladProductOrder=${valuProductCookie}`;
+                        if (parent.id == 'divisiones-names') document.cookie = `selectSkladDivision=${valuProductCookie}`;
+                        let valueID = parent.value == "Все" ? false : parent.value;
                         if (self.selectDivision) {
-                            self.display(self.selectDivision.value, self.selectOrderStatus.value, valuProduct, true, self.selectIDOrder.value);
+                            if (parent.id == 'idOfOrders') self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
+                            if (parent.id == 'productsOfOrders1') self.display(self.selectDivision.value, self.selectOrderStatus.value, valueID, true, self.selectIDOrder.value);
+                            if (parent.id == 'divisiones-names') self.display(valueID, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
                         } else {
-                            console.log("check product");
-                            self.display(false, self.selectOrderStatus.value, valuProduct, true, self.selectIDOrder.value);
+                            if (parent.id == 'idOfOrders') self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
+                            if (parent.id == 'productsOfOrders1') self.display(false, self.selectOrderStatus.value, valueID, true, self.selectIDOrder.value);
                         }
                     }
                 }
 
             }
             
-            self.selectProductOrder.oninput = (event) => {
-                const productListData1 = document.getElementById('product-list-data');
-                let text = self.selectProductOrder.value.toUpperCase();
-                let count1 = 0;
+            parent.oninput = (event) => {
+                const productListData1 = document.getElementById(child);
+                let text = parent.value.toUpperCase();
                 Array.from(productListData1.children).forEach((elm, ind) => {
                     if (elm.dataset.productoption.toUpperCase().indexOf(text) > -1) {
                         elm.style.display = "block";
-                        count1++;
                     } else {
                         elm.style.display = "none";
                     }
                 });
-                console.log(count1);
-//                if (count1 < 3) {
-//                    productListData1.style.height = String(20 * count1) + "px";
-//                    console.log(productListData1.children[0].scrollHeight);
-//                }
                 
             }
                       
-            self.selectProductOrder.onblur = (event) => {
-                const productListData1 = document.getElementById('product-list-data');
+            parent.onblur = (event) => {
+                const productListData1 = document.getElementById(child);
                 Array.from(productListData1.children).forEach((elm, ind) => {
                     elm.style.display = "block";
                 });
-                self.productListData.classList.remove("dropdown__box-list-visible");
+                productListData1.classList.remove("dropdown__box-list-visible");
             }
+        }
+        
+//        if (self.selectProductOrder) {
+//            self.selectProductOrder.onfocus = () => {
+//                self.selectProductOrder.select();
+//                const productListData1 = document.getElementById('product-list-data');
+//                productListData1.classList.add("dropdown__box-list-visible");
+
+//                productListData1.onmousedown = (event) => {
+////                    event.preventDefault();
+//                    console.log('clicked child = ', event.target.dataset.productoption);
+//                    if (event.target.dataset.productoption) {
+//                        console.log('inside clicked child = ');
+//                        self.selectProductOrder.value = event.target.dataset.productoption;
+//                        let valuProductCookie = self.selectProductOrder.value == "Все" ? "" : self.selectProductOrder.value;
+//                        document.cookie = `selectSkladProductOrder=${valuProductCookie}`;
+//                        let valuProduct = self.selectProductOrder.value == "Все" ? false : self.selectProductOrder.value;
+//                        if (self.selectDivision) {
+//                            self.display(self.selectDivision.value, self.selectOrderStatus.value, valuProduct, true, self.selectIDOrder.value);
+//                        } else {
+//                            console.log("check product");
+//                            self.display(false, self.selectOrderStatus.value, valuProduct, true, self.selectIDOrder.value);
+//                        }
+//                    }
+//                }
+
+//            }
+            
+//            self.selectProductOrder.oninput = (event) => {
+//                const productListData1 = document.getElementById('product-list-data');
+//                let text = self.selectProductOrder.value.toUpperCase();
+//                let count1 = 0;
+//                Array.from(productListData1.children).forEach((elm, ind) => {
+//                    if (elm.dataset.productoption.toUpperCase().indexOf(text) > -1) {
+//                        elm.style.display = "block";
+//                        count1++;
+//                    } else {
+//                        elm.style.display = "none";
+//                    }
+//                });
+//                console.log(count1);
+////                if (count1 < 3) {
+////                    productListData1.style.height = String(20 * count1) + "px";
+////                    console.log(productListData1.children[0].scrollHeight);
+////                }
+//                
+//            }
+                      
+//            self.selectProductOrder.onblur = (event) => {
+//                const productListData1 = document.getElementById('product-list-data');
+//                Array.from(productListData1.children).forEach((elm, ind) => {
+//                    elm.style.display = "block";
+//                });
+//                self.productListData.classList.remove("dropdown__box-list-visible");
+//            }
             
             
+//        }
+        if (self.selectDivision) {
+            funcForFilters(self.selectDivision, 'cities-list-data');
+        }
+        
+        if (self.selectProductOrder) {
+            funcForFilters(self.selectProductOrder, 'product-list-data');
         }
         
         if (self.selectIDOrder) {
-            self.selectIDOrder.onfocus = () => {
-                self.selectIDOrder.select();
-                const productListData1 = document.getElementById('id-list-data');
-                productListData1.classList.add("dropdown__box-list-visible");
-
-                productListData1.onmousedown = (event) => {
-//                    event.preventDefault();
-                    console.log('clicked child = ', event.target.dataset.productoption);
-                    if (event.target.dataset.productoption) {
-                        console.log('inside clicked child = ');
-                        self.selectIDOrder.value = event.target.dataset.productoption;
-                        let valuProductCookie = self.selectIDOrder.value == "Все" ? "" : self.selectIDOrder.value;
-                        document.cookie = `selectSkladIDOrder=${valuProductCookie}`;
-                        let valueID = self.selectIDOrder.value == "Все" ? false : self.selectIDOrder.value;
-                        if (self.selectDivision) {
-                            console.log("here we are");
-                            self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
-                        } else {
-                            console.log("check product");
-                            self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
-                        }
-                    }
-                }
-
-            }
-            
-            self.selectIDOrder.oninput = (event) => {
-                const productListData1 = document.getElementById('id-list-data');
-                let text = self.selectIDOrder.value.toUpperCase();
-                let count1 = 0;
-                Array.from(productListData1.children).forEach((elm, ind) => {
-                    if (elm.dataset.productoption.toUpperCase().indexOf(text) > -1) {
-                        elm.style.display = "block";
-                        count1++;
-                    } else {
-                        elm.style.display = "none";
-                    }
-                });
-                console.log(count1);
-//                if (count1 < 3) {
-//                    productListData1.style.height = String(20 * count1) + "px";
-//                    console.log(productListData1.children[0].scrollHeight);
-//                }
-                
-            }
-                      
-            self.selectIDOrder.onblur = (event) => {
-                const productListData1 = document.getElementById('id-list-data');
-                Array.from(productListData1.children).forEach((elm, ind) => {
-                    elm.style.display = "block";
-                });
-                self.idListData.classList.remove("dropdown__box-list-visible");
-            }
-            
-            
+            funcForFilters(self.selectIDOrder, 'id-list-data');
         }
 
         if (self.checkBoxBlock) {
@@ -340,6 +345,7 @@ class FilterPage {
                     let arrCheck = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
                     document.cookie = `selectSkladCheckBoxBlock=${arrCheck.join(",")}`;
                     if (self.selectDivision) {
+                        console.log("Сейчас здесь");
                         self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox, self.selectIDOrder.value);
                     } else {
                         self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox, self.selectIDOrder.value);
@@ -542,6 +548,7 @@ class FilterPage {
     
     display(division, status, product, checkBox, idOrder) {
         const self = this;
+        if (division == "Все") division = false;
         if (product == "Все") product = false;
         if (idOrder == "Все") idOrder = false;
         
