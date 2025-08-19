@@ -128,7 +128,7 @@ class ExcellTable {
                 confirmButtonColor: "#006237",
                 cancelButtonText: "Отмена",
                 cancelButtonColor: "#FF8800",
-                timer: 3000
+                timer: 300000
             }).then((result) => {
                 console.log("result.isConfirmed = ", result);
                 if ((result.value || result.dismiss == 'timer')) {

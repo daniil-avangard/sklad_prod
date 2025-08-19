@@ -1185,6 +1185,7 @@ tr p {
 
 .swal2-content {
     color: #000000 !important;
+    margin-bottom: 10px !important;
 }
 
 .swal2-header::after {
@@ -1965,4 +1966,7 @@ option::checkmark {
 .unclicked {
     pointer-events: none !important;
     height: 20px !important;
+}
+.swal2-confirm {
+    width: 77px !important;
 }
