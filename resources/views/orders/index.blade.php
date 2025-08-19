@@ -195,7 +195,7 @@
                     @can('viewAny', \App\Models\Order::class)
                     <div class="order-filters">
                         <div class="filters-work-part">
-                            <label for="productsOfOrders1">Город:</label>
+                            <label for="productsOfOrders1" class="unclicked">Город:</label>
                             <div class="searchable">
                                 <input class="index-top-filters" type="text" name="productsOfOrders1" id="divisiones-names" placeholder="Все">
                                 <ul id="cities-list-data" class="dropdown__box-list">
@@ -237,7 +237,7 @@
                     
                     <div class="order-filters">
                         <div class="filters-work-part">
-                            <label for="statusOfOrder">Статус:</label>
+                            <label for="statusOfOrder" class="unclicked">Статус:</label>
                             <select name='statusOfOrder' id='status-of-orders' class="index-top-filters">
                                 <option value="">Все</option>
                                 @foreach ($allOrdersStatus as $statusOrder)
@@ -266,7 +266,7 @@
                     
                     <div class="order-filters">
                         <div class="filters-work-part">
-                            <label for="productsOfOrders1">Товары:</label>
+                            <label for="productsOfOrders1" class="unclicked">Товары:</label>
                             <div class="searchable">
                                 <input class="index-top-filters" type="text" name="productsOfOrders1" id="productsOfOrders1" placeholder="Все">
                                 <ul id="product-list-data" class="dropdown__box-list">
@@ -354,7 +354,7 @@
                     
                     <div class="order-filters">
                         <div class="filters-work-part">
-                            <label for="productsOfOrders1">Номер:</label>
+                            <label for="productsOfOrders1" class="unclicked">Номер:</label>
                             <div class="searchable">
                                 <input class="index-top-filters" type="text" name="productsOfOrders1" id="idOfOrders" placeholder="Все">
                                 <ul id="id-list-data" class="dropdown__box-list">

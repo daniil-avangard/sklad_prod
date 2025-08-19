@@ -76,10 +76,10 @@ class ExcellTable {
   
   initSettings() {
     let self = this;
-    window.addEventListener("error", (event) => {
-      log.textContent = `${log.textContent}${event.type}: ${event.message}\n`;
-      console.log(event);
-    });
+//    window.addEventListener("error", (event) => {
+//      log.textContent = `${log.textContent}${event.type}: ${event.message}\n`;
+//      console.log(event);
+//    });
     
     // Всплывающие поп апы картинок
     Array.from(self.popUps1).forEach((el, index) => {
@@ -125,11 +125,13 @@ class ExcellTable {
                 showConfirmButton: true,
                 showCancelButton: true,
                 confirmButtonText: "Ok",
+                confirmButtonColor: "#006237",
                 cancelButtonText: "Отмена",
-                timer: 30000
+                cancelButtonColor: "#FF8800",
+                timer: 3000
             }).then((result) => {
                 console.log("result.isConfirmed = ", result);
-                if ((result.isConfirmed || result.dismiss == 'timer')) {
+                if ((result.value || result.dismiss == 'timer')) {
                     window.open(url, "_self");
                 } else {
                     self.butonChangeOrderAllStatus.disabled = false;
@@ -447,7 +449,6 @@ class ExcellTable {
                 if (value[productName]['quontity'] != 0) {
                     deltaItemQuontity += value[productName]['quontity'];
                     data.set(key, [0, value[productName]['id']]);
-                    
                     console.log("hello check boxes = " , value[productName]['quontity'], value[productName]['id'], indexCurrentRow);
                 }
             });
@@ -470,9 +471,12 @@ class ExcellTable {
                 }
             });
             console.log([...data.values()]);
+            console.log(data);
+            console.log(currentCells);
             currentCells.forEach((cell, id) => {
                 if (cell.getElementsByTagName("P").length == 1 && cell.getElementsByTagName("P")[0].dataset.title == productName) {
                     let citi = cell.getElementsByTagName("P")[0].dataset.division;
+                    console.log(productName, citi, self.allDivisionsDataNew);
                     cell.getElementsByTagName("P")[0].innerHTML = data.get(citi)[0];
                 }
 
