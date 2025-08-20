@@ -112,9 +112,13 @@ class ExcellTable {
     
     self.butonChangeOrderAllStatus.onclick = () => {
         let tableExcelDigits = document.querySelectorAll('.wrap-icon-digits-exell');
-        let tableExcelTrArray = Array.from(document.getElementById('excel-table').getElementsByTagName("TR"));
+        let tableExcelTrArray = Array.from(document.getElementById('excel-table').getElementsByTagName("TR")).slice(1);
+        let rowWithRedAndChecked = tableExcelTrArray.filter((elm, ind) => {
+            return (elm.className == "row-color" && self.tableInputToZero[ind].checked);
+        });
         //console.log("Красного цвета = ", tableExcelTrArray.filter((elm) => elm.className == "row-color").length== 0);
-        if (tableExcelTrArray.filter((elm) => elm.className == "row-color").length == 0 && tableExcelDigits.length > 0) {
+//        if (tableExcelTrArray.filter((elm) => elm.className == "row-color").length == 0 && tableExcelDigits.length > 0) {
+        if (rowWithRedAndChecked.length == 0 && tableExcelDigits.length > 0) {
             self.butonChangeOrderAllStatus.disabled = true;
             const url = new URL(window.location.origin);
             url.pathname = '/ordersNewUpdate';
@@ -128,7 +132,7 @@ class ExcellTable {
                 confirmButtonColor: "#006237",
                 cancelButtonText: "Отмена",
                 cancelButtonColor: "#FF8800",
-                timer: 300000
+                timer: 3000
             }).then((result) => {
                 console.log("result.isConfirmed = ", result);
                 if ((result.value || result.dismiss == 'timer')) {
@@ -139,7 +143,7 @@ class ExcellTable {
             });
 //            alert("Все заказы утверждены. Сейчас перезагрузится страница.");
             
-        } else if (tableExcelTrArray.filter((elm) => elm.className == "row-color").length > 0) {
+        } else if (rowWithRedAndChecked.length > 0) {
             Toast.fire({
                     icon: 'error',
                     title: 'Ошибка при обновлении статусов'
@@ -477,7 +481,7 @@ class ExcellTable {
                 if (cell.getElementsByTagName("P").length == 1 && cell.getElementsByTagName("P")[0].dataset.title == productName) {
                     let citi = cell.getElementsByTagName("P")[0].dataset.division;
                     console.log(productName, citi, self.allDivisionsDataNew);
-                    cell.getElementsByTagName("P")[0].innerHTML = data.get(citi)[0];
+                    if (data.has(citi)) cell.getElementsByTagName("P")[0].innerHTML = data.get(citi)[0];
                 }
 
             });
