@@ -16,7 +16,7 @@
 
     <div class="row">
         <div class="col-9">
-            
+
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
@@ -28,17 +28,17 @@
                         </div><!--end col-->
                     </div> <!--end row-->
                 </div>
-                <div class="card-body">                    
+                <div class="card-body">
                         <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}">Начать сборку</button>
-                    
+
                         <button id="package-assembled" class="btn btn-warning">Собран</button>
-                    
+
                         <button id="package-shipped" class="btn btn-danger">Отправлен</button>
-                    
+
                         <button id="status-back" class="btn btn-warning">Статус Назад</button>
                 </div>
             </div>
-            
+
 
             <div class="card">
                 <div class="card-body">
@@ -134,7 +134,7 @@
 
             </div>
 
-            
+
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
@@ -183,7 +183,7 @@
                                                 <button class="add-track">Добавить</button>
                                             @endcan
 
-                                            <button class="clean-track">Очисить</button>
+                                            <button class="clean-track">Очистить</button>
                                         </td>
                                         <td>
                                             @can('delete', \App\Models\Korobka::class)
@@ -201,7 +201,7 @@
                         <div class="card-body"><button id="korobka-add" class="btn btn-primary">Добавить коробку</button></div>
                     </div>
             </div>
-           
+
 
         </div>
         <div class="col-3">
