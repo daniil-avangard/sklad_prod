@@ -179,16 +179,12 @@
                                             <label>Трек-номер</label>
                                             <input type="text" id="" name="korobka" value='{{ $korobka->track_number }}'>
 
-                                            @can('update', \App\Models\Korobka::class)
-                                                <button class="add-track">Добавить</button>
-                                            @endcan
+                                            <button class="add-track">Добавить</button>
 
                                             <button class="clean-track">Очисить</button>
                                         </td>
                                         <td>
-                                            @can('delete', \App\Models\Korobka::class)
-                                                <button class="delete-korobka" data-pk="{{ $korobka->id }}">Удалить</button>
-                                            @endcan
+                                            <button class="delete-korobka" data-pk="{{ $korobka->id }}">Удалить</button>
                                         </td>
                                     </tr>
                                 </tbody>
