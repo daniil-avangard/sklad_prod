@@ -33,6 +33,7 @@ class ProductTable {
         const tableColumns = this.accessColumnByUserRole[role];
         
         this.arrayOfCheckboxes1 = [[tableColumns.kko_hall, this.kko_hall], [tableColumns.kko_account_opening, this.kko_account_opening], [tableColumns.kko_manager, this.kko_manager], [tableColumns.express_hall, this.express_hall]];
+        this.arrayOfFilters1 = [[tableColumns.kko_operator, this.kko_operator], [tableColumns.express_operator, this.express_operator]];
 
         // Слушатели на селекты
         if (tableColumns.company) this.#filterBySelect(tableColumns.company, this.companyFilter);
@@ -74,12 +75,13 @@ class ProductTable {
         
         let checkedArray = this.arrayOfCheckboxes1.map(elm => [elm[1].checked, elm[0]]);
         let checkedArrayNew = checkedArray.filter(elm => elm[0]);
+        let filterArrayValued = this.arrayOfFilters1.filter(elm => elm[1].value != "all" && elm[1].value != "");
         
         if (value === "all" || value === "") {
             this.table.column(columnIndex).search("", true, false);
         } else {
             if (checkedArrayNew.length > 0) {
-                console.log("мы здесь = ", columnIndex, value);
+//                console.log("мы здесь = ", columnIndex, value);
                     $.fn.DataTable.ext.search.push(
                             function(settings, data, dataIndex) {
                                 let searchTem = '1';
@@ -89,7 +91,10 @@ class ProductTable {
                                         if (data[elm[1]].includes(searchTem)) flag = true;
                                     }
                                 });
-                                if (data[columnIndex].includes(value)) flag = true;
+                                filterArrayValued.forEach((elm1, ind) => {
+                                    if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                });
+//                                if (data[columnIndex].includes(value)) flag = true;
                                 if (flag) return true;
                                 return false;
                             }
@@ -125,7 +130,10 @@ class ProductTable {
             const isChecked = checkbox.checked;
 
             if (isChecked) {
+                this.table.search('').columns().search('').draw();
                 let checkedArray = this.arrayOfCheckboxes1.map(elm => [elm[1].checked, elm[0]]);
+                let filterArrayValued = this.arrayOfFilters1.filter(elm => elm[1].value != "all" && elm[1].value != "");
+//                console.log("filterArrayValued = ", filterArrayValued[0][1].value);
                 $.fn.DataTable.ext.search.push(
                         function(settings, data, dataIndex) {
                             let searchTem = '1';
@@ -135,6 +143,11 @@ class ProductTable {
                                     if (data[elm[1]].includes(searchTem)) flag = true;
                                 }
                             });
+                            if (filterArrayValued.length > 0) {
+                                filterArrayValued.forEach((elm1, ind) => {
+                                    if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                });
+                            }
                             if (flag) return true;
                             return false;
                         }
