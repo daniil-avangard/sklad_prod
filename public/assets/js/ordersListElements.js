@@ -144,6 +144,7 @@ class ExcellTable {
 //            alert("Все заказы утверждены. Сейчас перезагрузится страница.");
             
         } else if (rowWithRedAndChecked.length > 0) {
+            rowWithRedAndChecked[0].scrollIntoView({ behavior: "smooth", block: "end" });
             Toast.fire({
                     icon: 'error',
                     title: 'Ошибка при обновлении статусов'
