@@ -27,18 +27,18 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="mb-3">
-                                            <b>Артикул: </b>
-                                            {{ $product->sku }}
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="mb-3">
                                             <b>Категория: </b>
                                             {{ $product->category->name }}
                                         </div>
                                         <div class="mb-3">
                                             <b>Компания: </b>
                                             {{ $product->company->name }}
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-3">
+                                            <b>Артикул: </b>
+                                            {{ $product->sku }}
                                         </div>
                                     </div>
                                 </div>
@@ -98,15 +98,15 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Артикул</th>
                             <th>Дата актуализации</th>
                             <th>Макет</th>
+                            <th>Артикул</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($variants as $variant)
                             <tr>
-                                <td>{{ $variant->sku }}</td>
+                                
                                 <td>{{ $variant->date_of_actuality ? date('d.m.Y', strtotime($variant->date_of_actuality)) : 'Нет даты' }}
                                 </td>
                                 <td>
@@ -116,6 +116,7 @@
                                         <span class="text-muted">Нет макета</span>
                                     @endif
                                 </td>
+                                <td>{{ $variant->sku }}</td>
                             </tr>
                         @endforeach
                     </tbody>

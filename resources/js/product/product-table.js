@@ -21,6 +21,7 @@ class ProductTable {
         this.kko_account_opening = document.querySelector('#kko_account_opening');
         this.kko_manager = document.querySelector('#kko_manager');
         this.express_hall = document.querySelector('#express_hall');
+        this.arrayOfCheckboxes = [this.kko_hall, this.kko_account_opening, this.kko_manager, this.express_hall];
     }
 
     async init() {
@@ -30,6 +31,9 @@ class ProductTable {
         // Получает номера колонок для фильтрации на основе роли
         const role = await this.#fetchUserRole();
         const tableColumns = this.accessColumnByUserRole[role];
+        
+        this.arrayOfCheckboxes1 = [[tableColumns.kko_hall, this.kko_hall], [tableColumns.kko_account_opening, this.kko_account_opening], [tableColumns.kko_manager, this.kko_manager], [tableColumns.express_hall, this.express_hall]];
+        this.arrayOfFilters1 = [[tableColumns.kko_operator, this.kko_operator], [tableColumns.express_operator, this.express_operator]];
 
         // Слушатели на селекты
         if (tableColumns.company) this.#filterBySelect(tableColumns.company, this.companyFilter);
@@ -68,11 +72,41 @@ class ProductTable {
     }
 
     #filterColumn(columnIndex, value) {
+        
+        let checkedArray = this.arrayOfCheckboxes1.map(elm => [elm[1].checked, elm[0]]);
+        let checkedArrayNew = checkedArray.filter(elm => elm[0]);
+        let filterArrayValued = this.arrayOfFilters1.filter(elm => elm[1].value != "all" && elm[1].value != "");
+        
         if (value === "all" || value === "") {
             this.table.column(columnIndex).search("", true, false);
         } else {
-            this.table.column(columnIndex)
-                .search(`^${value}$`, true, false)
+            if (checkedArrayNew.length > 0) {
+//                console.log("мы здесь = ", columnIndex, value);
+                    $.fn.DataTable.ext.search.push(
+                            function(settings, data, dataIndex) {
+                                let searchTem = '1';
+                                let flag = false;
+                                checkedArrayNew.forEach((elm, ind) => {
+                                    if (elm[0]) {
+                                        if (data[elm[1]].includes(searchTem)) flag = true;
+                                    }
+                                });
+                                filterArrayValued.forEach((elm1, ind) => {
+                                    if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                });
+//                                if (data[columnIndex].includes(value)) flag = true;
+                                if (flag) return true;
+                                return false;
+                            }
+
+                    );
+                    this.table.draw();
+                    $.fn.DataTable.ext.search.splice(0, 1);
+                    
+                } else {
+                    this.table.column(columnIndex).search(`^${value}$`, true, false);
+                    this.table.draw();
+                }
         }
     }
 
@@ -85,25 +119,75 @@ class ProductTable {
             // console.log("Значение:", selectValue);
 
             this.#filterColumn(columnIndex, selectValue);
-            this.table.draw();
+//            this.table.draw();
         });
     }
 
     #filterByCheckbox(columnIndex, checkbox) {
-        console.log("Прослушиваем чекбокс 1 = ");
         if (!checkbox) return;
 
         checkbox.addEventListener('change', () => {
-            console.log("Прослушиваем чекбокс 2 = ", columnIndex);
             const isChecked = checkbox.checked;
 
             if (isChecked) {
-                this.table.column(columnIndex).search('1', true, false);
+                this.table.search('').columns().search('').draw();
+                let checkedArray = this.arrayOfCheckboxes1.map(elm => [elm[1].checked, elm[0]]);
+                let filterArrayValued = this.arrayOfFilters1.filter(elm => elm[1].value != "all" && elm[1].value != "");
+//                console.log("filterArrayValued = ", filterArrayValued[0][1].value);
+                $.fn.DataTable.ext.search.push(
+                        function(settings, data, dataIndex) {
+                            let searchTem = '1';
+                            let flag = false;
+                            checkedArray.forEach((elm, ind) => {
+                                if (elm[0]) {
+                                    if (data[elm[1]].includes(searchTem)) flag = true;
+                                }
+                            });
+                            if (filterArrayValued.length > 0) {
+                                filterArrayValued.forEach((elm1, ind) => {
+                                    if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                });
+                            }
+                            if (flag) return true;
+                            return false;
+                        }
+                    
+                );
+                this.table.draw();
+                $.fn.DataTable.ext.search.splice(0, 1);
+                console.log(checkedArray);
             } else {
-                this.table.column(columnIndex).search('', true, false);
+                let checkedArray = this.arrayOfCheckboxes1.map(elm => [elm[1].checked, elm[0]]);
+                let checkedArrayNew = checkedArray.filter(elm => elm[0]);
+                if (checkedArrayNew.length > 0) {
+                    $.fn.DataTable.ext.search.push(
+                            function(settings, data, dataIndex) {
+                                let searchTem = '1';
+                                let flag = false;
+                                checkedArrayNew.forEach((elm, ind) => {
+                                    if (elm[0]) {
+                                        if (data[elm[1]].includes(searchTem)) flag = true;
+                                    }
+                                });
+                                if (flag) return true;
+                                return false;
+                            }
+
+                    );
+                    this.table.draw();
+                    $.fn.DataTable.ext.search.splice(0, 1);
+                    
+                } else {
+//                    this.table.column(columnIndex).search('', true, false);
+                    console.log('checkedArray.length = ', checkedArray.length);
+                    this.table.search('').columns().search('').draw();
+//                    this.table.draw();
+                }
             }
 
-            this.table.draw();
+//            this.table.draw();
+            
+//            console.log($.fn.DataTable.ext.search.length);
         });
     }
 
