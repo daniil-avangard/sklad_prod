@@ -29,11 +29,11 @@
                                     <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }} bckgrnd-table-cell-2">{{ $divisionName['name'] }}</th>
                                 @endforeach
                                 @if ($flagForExcell == "show")
-                                <th class="head-bold bckgrnd-table-cell-2">Заказано</th>  
-                                <th class="head-bold bckgrnd-table-cell-2">Доступно<br>для<br>заказа</th>
-                                <th class="head-bold bckgrnd-table-cell-2">Остаток<br>после<br>заказов</th>
-                                <th class="head-bold bckgrnd-table-cell-2">Минимально<br>допустимый<br>остаток</th>
-                                <th class="head-bold bckgrnd-table-cell-2">Тираж<br>для<br>дозаказа</th>                               
+                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-another-column-3">Заказано</th>  
+                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-another-column-2">Доступно<br>для<br>заказа</th>
+                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-another-column-1">Остаток<br>после<br>заказов</th>
+                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-another-column">Минимально<br>допустимый<br>остаток</th>
+                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-last-column">Тираж<br>для<br>дозаказа</th>                               
                                 @endif
                             </tr>
                             @foreach ($uniqGoods as $good)
@@ -65,11 +65,11 @@
                                     </td>
                                     @include('orders.digits-cell')
                                     @if ($flagForExcell == "show")
-                                        <td class="another-col tr-another-cell">{{ $good['total'] - $totalNewData[$good['name']] }}</td>
-                                        <td class="another-col tr-another-cell">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] - $totalNewData[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>
-                                        <td class="another-col tr-another-cell">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>
-                                        <td class="another-col tr-another-cell">{{ $good['min_stock'] }}</td>
-                                        <td class="another-col tr-another-cell"> - </td>                                       
+                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column-3">{{ $good['total'] - $totalNewData[$good['name']] }}</td>
+                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column-2">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] - $totalNewData[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>
+                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column-1">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>
+                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column">{{ $good['min_stock'] }}</td>
+                                        <td class="another-col tr-another-cell for-anothe-col-width for-last-column"> - </td>                                       
                                     @endif
                                 </tr>
                             @endforeach
