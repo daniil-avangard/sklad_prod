@@ -18,18 +18,24 @@ class ExcellTable {
   adjustHTML() {
       let rowOfTable = document.getElementById('excel-table').rows[0];
       let cellsCount = rowOfTable.cells;
-      if (cellsCount.length > 6) {
+      let content = cellsCount[cellsCount.length - 1].innerHTML;
+      if (cellsCount.length > 6 && content == "Тираж<br>для<br>дозаказа") {
         let checkThisCellFromLeft = cellsCount[cellsCount.length - 6];
         const rect = checkThisCellFromLeft.getBoundingClientRect();
-        console.log("Проверяем кол-во ячеек = ", cellsCount.length, rect.left);
-        let cssArray = ["for-another-column-3", "for-another-column-2", "for-another-column-1", "for-another-column", "for-another-column-3", "for-last-column"];
-        if (rect.left < 1000) {
+        console.log("Проверяем кол-во ячеек = ", cellsCount.length, rect.left, screen.width);
+        let cssArray = ["for-another-column-3", "for-another-column-2", "for-another-column-1", "for-another-column", "for-last-column"];
+        if (screen.width - rect.left > 600) {
             Array.from(document.getElementById('excel-table').rows).forEach((row, ind) => {
                 let lng = row.cells.length;
                 let arrCells = Array.from(row.cells).slice(lng-5);
+                arrCells.forEach((cel, ind) => {
+//                    console.log("cel.innerHTML = ", cel.innerHTML);
+                    cel.classList.remove(cssArray[ind]);
+                });
                 if (ind == 0) {
                     arrCells.forEach((cel, ind) => {
                         console.log("cel.innerHTML = ", cel.innerHTML);
+//                        cel.classList.remove(cssArray[ind]);
                     });
                 }
             });
