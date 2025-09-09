@@ -646,6 +646,43 @@ tr p {
     z-index: 9;
     background: #fff;
 }
+.table-container table .for-last-column {
+    position: -webkit-sticky;
+    position: sticky;
+    width: 100px;
+    right: 0;
+    z-index: 10;
+    background: #fff;
+}
+
+.table-container table .for-another-column {
+    position: -webkit-sticky;
+    position: sticky;
+    right: 73.2px;
+    z-index: 10;
+    background: #fff;
+}
+.table-container table .for-another-column-1 {
+    position: -webkit-sticky;
+    position: sticky;
+    right: 174.8px;
+    z-index: 10;
+    background: #fff;
+}
+.table-container table .for-another-column-2 {
+    position: -webkit-sticky;
+    position: sticky;
+    right: 246.0px;
+    z-index: 10;
+    background: #fff;
+}
+.table-container table .for-another-column-3 {
+    position: -webkit-sticky;
+    position: sticky;
+    right: 316.8px;
+    z-index: 10;
+    background: #fff;
+}
 
 .table-container table tr th:first-child {
     z-index: 15;
