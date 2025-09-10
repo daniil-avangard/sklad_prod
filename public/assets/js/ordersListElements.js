@@ -175,7 +175,8 @@ class ExcellTable {
             rowWithRedAndChecked[0].scrollIntoView({ behavior: "smooth", block: "end" });
             Toast.fire({
                     icon: 'error',
-                    title: 'Ошибка при обновлении статусов'
+                    text: "Необходимо исправить количество товара, чтобы остаток стал больше или равен 0",
+                    timer: 5000
                 });
 
         } else {
