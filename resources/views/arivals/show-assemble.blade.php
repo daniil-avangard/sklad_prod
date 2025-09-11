@@ -4,6 +4,9 @@
     <link type="text/css" href="/plugins/x-editable/css/bootstrap-editable.css" rel="stylesheet">
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+<!--    <style type="text/css" media="print">
+        @page { size: landscape; }
+    </style>-->
 @endpush
 @section('content')
     @include('includes.breadcrumb', [
@@ -14,6 +17,29 @@
         'back_route' => 'assembly',
     ])
 
+    <div class="row">
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="card-title">Информация о заказчике</h4>
+                        </div><!--end col-->
+                    </div> <!--end row-->
+                </div><!--end card-header-->
+                <div class="card-body">
+                    <p> <b>Подразделение: </b> {{ \App\Models\Division::find($order->user->division_id)->name }}</p>
+                    <p> <b>ФИО: </b> {{ $order->user->surname }} {{ $order->user->first_name }}
+                        {{ $order->user->middle_name }}
+                    </p>
+                    <p> <b>Должность: </b> {{ $order->user->position }}</p>
+                    <p> <b>Телефон: </b> {{ $order->user->phone }}</p>
+                    <p> <b>Email: </b> {{ $order->user->email }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="row">
         <div class="col-9">
             
@@ -36,6 +62,7 @@
                         <button id="package-shipped" class="btn btn-danger">Отправлен</button>
                     
                         <button id="status-back" class="btn btn-warning">Статус Назад</button>
+                        <button id="print-order" class="btn btn-primary">Печать заказа</button>
                 </div>
             </div>
             
@@ -200,26 +227,7 @@
            
 
         </div>
-        <div class="col-3">
-            <div class="card">
-                <div class="card-header">
-                    <div class="row align-items-center">
-                        <div class="col">
-                            <h4 class="card-title">Информация о заказчике</h4>
-                        </div><!--end col-->
-                    </div> <!--end row-->
-                </div><!--end card-header-->
-                <div class="card-body">
-                    <p> <b>Подразделение: </b> {{ \App\Models\Division::find($order->user->division_id)->name }}</p>
-                    <p> <b>ФИО: </b> {{ $order->user->surname }} {{ $order->user->first_name }}
-                        {{ $order->user->middle_name }}
-                    </p>
-                    <p> <b>Должность: </b> {{ $order->user->position }}</p>
-                    <p> <b>Телефон: </b> {{ $order->user->phone }}</p>
-                    <p> <b>Email: </b> {{ $order->user->email }}</p>
-                </div>
-            </div>
-        </div>
+        
     </div>
 @endsection
 
