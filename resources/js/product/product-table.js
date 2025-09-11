@@ -78,7 +78,25 @@ class ProductTable {
         let filterArrayValued = this.arrayOfFilters1.filter(elm => elm[1].value != "all" && elm[1].value != "");
         
         if (value === "all" || value === "") {
-            this.table.column(columnIndex).search("", true, false);
+            if (filterArrayValued.length > 0) {
+                $.fn.DataTable.ext.search.push(
+                            function(settings, data, dataIndex) {
+                                let searchTem = '1';
+                                let flag = false;
+                                
+                                filterArrayValued.forEach((elm1, ind) => {
+                                    if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                });
+//                                if (data[columnIndex].includes(value)) flag = true;
+                                return flag;
+                            }
+                    );
+                    this.table.draw();
+                    $.fn.DataTable.ext.search.splice(0, 1);
+            } else {
+                this.table.search('').columns().search('').draw();
+//                this.table.column(columnIndex).search("", true, false);
+            }
         } else {
             if (checkedArrayNew.length > 0) {
 //                console.log("мы здесь = ", columnIndex, value);
@@ -104,8 +122,22 @@ class ProductTable {
                     $.fn.DataTable.ext.search.splice(0, 1);
                     
                 } else {
-                    this.table.column(columnIndex).search(`^${value}$`, true, false);
+                    $.fn.DataTable.ext.search.push(
+                            function(settings, data, dataIndex) {
+                                let searchTem = '1';
+                                let flag = false;
+                                
+                                filterArrayValued.forEach((elm1, ind) => {
+                                    if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                });
+//                                if (data[columnIndex].includes(value)) flag = true;
+                                return flag;
+                            }
+                    );
                     this.table.draw();
+                    $.fn.DataTable.ext.search.splice(0, 1);
+//                    this.table.column(columnIndex).search(`^${value}$`, true, false);
+//                    this.table.draw();
                 }
         }
     }
