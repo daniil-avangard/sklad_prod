@@ -50,7 +50,7 @@
     
     <div class="row">
         <div class="col-9">
-            
+
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
@@ -62,6 +62,7 @@
                         </div><!--end col-->
                     </div> <!--end row-->
                 </div>
+
                 <div class="card-body" style="padding-left: 5px !important; padding-right: 0;">  
                     <div class="buttons-orders-cotroller">
                         <div class="buttons-orders-elm">
@@ -76,9 +77,10 @@
                                 <span style="margin-left: 5px;">Печать заказа</span>
                             </button>
                         </div>
+
                 </div>
             </div>
-            
+
 
             <div class="card">
                 <div class="card-body">
@@ -174,7 +176,7 @@
 
             </div>
 
-            
+
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
@@ -221,7 +223,7 @@
 
                                             <button class="add-track">Добавить</button>
 
-                                            <button class="clean-track">Очисить</button>
+                                            <button class="clean-track">Очистить</button>
                                         </td>
                                         <td>
                                             <button class="delete-korobka" data-pk="{{ $korobka->id }}">Удалить</button>
@@ -237,7 +239,7 @@
                         <div class="card-body"><button id="korobka-add" class="btn btn-primary">Добавить коробку</button></div>
                     </div>
             </div>
-           
+
 
         </div>
         

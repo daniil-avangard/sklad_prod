@@ -1,0 +1,14 @@
+=== Инструкция для деплоя проекта ===
+
+> Запустить деплой
+sudo -i
+cd /var/www
+deploy_poly
+cd /sklad
+php artisan queue:restart
+
+> Супервизор
+sudo supervisorctl stop all
+sudo supervisorctl reread
+sudo supervisorctl update
+sudo supervisorctl start all
