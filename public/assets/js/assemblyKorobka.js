@@ -328,5 +328,7 @@ if (document.getElementById("print-order")) {
         setTimeout(function() {
             head.removeChild(style);
         }, 100);
+        document.getElementById("print-order").disabled=false;
+        document.getElementById("print-order").blur();
     }
 }
