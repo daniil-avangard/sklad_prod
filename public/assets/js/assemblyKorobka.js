@@ -306,3 +306,27 @@ if (document.getElementById("status-back")) {
 
     }
 }
+
+if (document.getElementById("print-order")) {
+
+    
+    document.getElementById("print-order").onclick = () => {
+        let css = '@page { size: landscape; }';
+        let head = document.head || document.getElementsByTagName('head')[0];
+        let style = document.createElement('style');
+        style.type = 'text/css';
+        style.media = 'print';
+        if (style.styleSheet) { // For IE
+            style.styleSheet.cssText = css;
+        } else {
+            style.appendChild(document.createTextNode(css));
+        }
+        head.appendChild(style);
+        
+        window.print();
+        
+        setTimeout(function() {
+            head.removeChild(style);
+        }, 100);
+    }
+}

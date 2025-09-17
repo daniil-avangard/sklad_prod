@@ -2007,3 +2007,9 @@ option::checkmark {
 .swal2-confirm {
     width: 77px !important;
 }
+.empty-card-header {
+    margin-top: 47px !important;
+}
+.btn-margin {
+    margin-left: 10px !important;
+}
