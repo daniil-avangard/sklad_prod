@@ -18,7 +18,7 @@
     ])
 
     <div class="row">
-        <div class="col-3">
+        <div class="col-4">
             <div class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
@@ -33,6 +33,14 @@
                         {{ $order->user->middle_name }}
                     </p>
                     <p> <b>Должность: </b> {{ $order->user->position }}</p>
+                    <p> <b>Телефон: </b> {{ $order->user->phone }}</p>
+                    <p> <b>Email: </b> {{ $order->user->email }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 empty-card-header">
+            <div class="card">
+                <div class="card-body">
                     <p> <b>Телефон: </b> {{ $order->user->phone }}</p>
                     <p> <b>Email: </b> {{ $order->user->email }}</p>
                 </div>
@@ -54,15 +62,20 @@
                         </div><!--end col-->
                     </div> <!--end row-->
                 </div>
-                <div class="card-body">                    
-                        <button id="start-assembl" class="btn btn-primary" data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}">Начать сборку</button>
-                    
-                        <button id="package-assembled" class="btn btn-warning">Собран</button>
-                    
-                        <button id="package-shipped" class="btn btn-danger">Отправлен</button>
-                    
-                        <button id="status-back" class="btn btn-warning">Статус Назад</button>
-                        <button id="print-order" class="btn btn-primary">Печать заказа</button>
+                <div class="card-body" style="padding-left: 5px !important; padding-right: 0;">  
+                    <div class="buttons-orders-cotroller">
+                        <div class="buttons-orders-elm">
+                            <button id="start-assembl" class="btn btn-primary btn-margin" data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}">Начать сборку</button>
+                            <button id="package-assembled" class="btn btn-warning btn-margin">Собран</button>
+                            <button id="package-shipped" class="btn btn-danger btn-margin">Отправлен</button>
+                            <button id="status-back" class="btn btn-warning btn-margin">Статус Назад</button>
+                        </div>
+                        <div class="buttons-orders-elm">
+                            <button id="print-order" class="btn btn-primary">
+                                <img src="/assets/images/printer.svg" alt="logo-large" class="logo-lg logo-light">
+                                <span style="margin-left: 5px;">Печать заказа</span>
+                            </button>
+                        </div>
                 </div>
             </div>
             
