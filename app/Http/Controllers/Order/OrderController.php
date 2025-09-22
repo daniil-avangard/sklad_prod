@@ -515,6 +515,295 @@ class OrderController extends Controller
 
         return view('orders.show', compact('order', 'currentStatus', 'allGoodsInOrders'));
     }
+    
+    public function warehouseData()
+    {
+//        $this->authorize('viewAny', Order::class);
+        $currentMonth = date('m');
+        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+
+        $role = [UserRoleEnum::SUPER_ADMIN->label()];
+
+        $flagForExcell = "show";
+//        if (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role)) {
+//            $flagForExcell = "show";
+//        } else {
+//            $flagForExcell = (in_array(UserRoleEnum::DIVISION_MANAGER->label(), $role)) ? "notShow" : "show";
+//        }
+//        dd($role1[0]);
+
+//        $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
+//            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
+//        })->get()->sortByDesc('created_at');
+        
+        $orders = Order::get()->sortByDesc('created_at');
+        
+        $currentSessionOrders = [];
+        
+        foreach ($orders as $order) {
+            if ($order->created_at->format('m') == $currentMonth) {
+                    $currentSessionOrders[] = $order;
+            }
+        }
+
+//        $absolutelyAllOrders = Order::whereIn('status',[StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get();
+        $absolutelyAllOrders = Order::whereIn('status',[StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get();
+        $uniqGoodsTotalOrdered = array();
+        $uniqGoodsNewOrdered = array();
+        foreach ($absolutelyAllOrders as $order) {
+            foreach ($order->items as $item) {
+                if (!isset($uniqGoodsTotalOrdered[$item->product->name])) {
+                    $uniqGoodsTotalOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? 0 : $item->quantity;
+                    $uniqGoodsNewOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $item->quantity : 0;
+                } else {
+                    $uniqGoodsTotalOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $uniqGoodsTotalOrdered[$item->product->name] + 0 : $uniqGoodsTotalOrdered[$item->product->name] + $item->quantity;
+                    $uniqGoodsNewOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $uniqGoodsNewOrdered[$item->product->name] + $item->quantity : $uniqGoodsNewOrdered[$item->product->name] + 0;
+                }
+            }
+        }
+
+        $allItems = [];
+
+        foreach ($currentSessionOrders as $order) {
+            $allItems[$order->id] = array();
+            foreach ($order->items as $item) {
+                $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity, 'image' => $item->product->image);
+            }
+        }
+
+        $result = $this->forWarehouseData($divisionGroups, $currentSessionOrders);
+        $uniqGoods = $result[0];
+        $divisionNames = $result[1];
+        $allDivisionsData = $result[2];
+        $allDivisionsDataNew = $result[3];
+        $totalNewData = $result[4];
+        foreach ($uniqGoods as $good) {
+            if ($good['name'] == "Ручка") {
+//                dd($good['warehouse'], $uniqGoodsTotalOrdered[$good['name']], $good['total'],  $totalNewData[$good['name']], $uniqGoodsNewOrdered[$good['name']]);
+            }
+        }
+
+        return view('arivals.warehouse-info', compact('currentSessionOrders', 'allItems', 'uniqGoods', 'divisionNames', 'allDivisionsData', 'allDivisionsDataNew', 'uniqGoodsTotalOrdered', 'flagForExcell', 'totalNewData', 'uniqGoodsNewOrdered'));
+    }
+    
+    private function forWarehouseData($divisionGroups, $orders)
+    {
+        $role = Auth::user()->roles()->pluck('id')->toArray();
+        $role1 = Auth::user()->roles()->pluck('name')->toArray();
+        $divisionGroupsID = Auth::user()->divisionGroups()->pluck('id');
+        $divisionGroupsID1 = Auth::user()->divisionGroups()->pluck('id');
+        
+        $currentRole = (in_array(UserRoleEnum::TOP_MANAGER->label(), $role1)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $allDivisionsNames = Division::all()->map(function ($division) {
+            return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
+        })->toArray();
+
+
+//        $groupDivisionsNames1 = Division::whereIn('id', function ($query) use ($divisionGroupsID1) {
+//            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroupsID1);
+//        })->get();
+//        $groupDivisionsNames1 = $groupDivisionsNames1->map(function ($division) {
+//            return array('name'=>$division->name, 'sort'=>$division->sort_for_excel);
+//        })->toArray();
+
+//        $allDivisionsNames =  (in_array(UserRoleEnum::SUPER_ADMIN->label(), $role1)) ? $allDivisionsNames : $groupDivisionsNames1;
+
+        $divisionStateOrders = array();
+        $divisionStateOrdersNew = array();
+        $allDivisionsProcessingNew = array();
+
+        $arrayOfStatuses = array(StatusEnum::WAREHOUSE_START->value, StatusEnum::SHIPPED->value, StatusEnum::ASSEMBLED->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value, StatusEnum::DELIVERED->value);
+
+        foreach ($orders as $order) {
+            if (in_array($order->status->value, $arrayOfStatuses)) {
+                $divisionStateOrders[] = $order;
+                $divisionStateOrdersNew[] = $order;
+//                if ($order->status->value == $currentRole) {
+//                    $divisionStateOrdersNew[] = $order;
+//                }
+                if ($order->status->value == StatusEnum::NEW->value) {
+                    $allDivisionsProcessingNew[] = $order;
+                }
+            }
+        }
+
+        $allGoodsInOrders = array();
+        $allDivisions = array();
+        $allDivisionsData = array();
+        $allDivisionsDataNew = array();
+        $allProcessingNew = array();
+        
+        foreach ($divisionStateOrders as $order) {
+            foreach ($order->items as $item) {
+                if (!isset($allDivisionsData[$order->division->name])) {
+                    if (!isset($allDivisionsData[$order->division->name][$item->product->name])) {
+                        $allDivisionsData[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order->id);
+                    } else {
+                        $allDivisionsData[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
+                    }
+                } else {
+                    if (!isset($allDivisionsData[$order->division->name][$item->product->name])) {
+                        $allDivisionsData[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id);
+                    } else {
+                        $allDivisionsData[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
+                    }
+                }
+                $allGoodsInOrders[] = array('name' => $item->product->name, 'image' => $item->product->image, 'warehouse' => $item->product->variants->sum('quantity'), 'min_stock' => $item->product->min_stock);
+            }
+        }
+
+        // Только новые для этой роли
+
+        foreach ($divisionStateOrdersNew as $order) {
+            foreach ($order->items as $item) {
+                if (!isset($allDivisionsDataNew[$order->division->name])) {
+                    if (!isset($allDivisionsDataNew[$order->division->name][$item->product->name])) {
+                        $allDivisionsDataNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order);
+                    } else {
+                        $allDivisionsDataNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
+                    }
+                } else {
+                    if (!isset($allDivisionsDataNew[$order->division->name][$item->product->name])) {
+                        $allDivisionsDataNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order);
+                    } else {
+                        $allDivisionsDataNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
+                    }
+                }
+
+            }
+        }
+        
+        // Для только новых заказов
+        foreach ($allDivisionsProcessingNew as $order) {
+            foreach ($order->items as $item) {
+                if (!isset($allProcessingNew[$order->division->name])) {
+                    if (!isset($allProcessingNew[$order->division->name][$item->product->name])) {
+                        $allProcessingNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order);
+                    } else {
+                        $allProcessingNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
+                    }
+                } else {
+                    if (!isset($allProcessingNew[$order->division->name][$item->product->name])) {
+                        $allProcessingNew[$order->division->name][$item->product->name] = array('quontity' => $item->quantity, 'id' => $item->id, 'orderId' => $order);
+                    } else {
+                        $allProcessingNew[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
+                    }
+                }
+
+            }
+        }
+
+        foreach ($allDivisionsData as $k => $v) {
+            $allDivisions[] = $k;
+        }
+
+        foreach ($allDivisionsData as $k => $v) {
+            foreach ($allGoodsInOrders as $x) {
+                if (!(array_key_exists($x['name'] ,$v))) {
+                    $allDivisionsData[$k][$x['name']] = array('quontity' => 0, 'id' => 0);
+                }
+            }
+        }
+
+        foreach ($allDivisionsDataNew as $k => $v) {
+            foreach ($allGoodsInOrders as $x) {
+                if (!(array_key_exists($x['name'] ,$v))) {
+                    $allDivisionsDataNew[$k][$x['name']] = array('quontity' => 0, 'id' => 0);
+                }
+            }
+        }
+        
+        // Для только новых заказов
+        foreach ($allProcessingNew as $k => $v) {
+            foreach ($allGoodsInOrders as $x) {
+                if (!(array_key_exists($x['name'] ,$v))) {
+                    $allProcessingNew[$k][$x['name']] = array('quontity' => 0, 'id' => 0);
+                }
+            }
+        }
+
+        $allGoodsInOrders = array_unique($allGoodsInOrders, SORT_REGULAR);
+
+        foreach ($allGoodsInOrders as $index => $x) {
+            $total = 0;
+            foreach ($allDivisionsData as $k => $v) {
+                $total += $allDivisionsData[$k][$x['name']]['quontity'];
+            }
+            $x['total'] = $total;
+            $allGoodsInOrders[$index] = $x;
+        }
+
+        foreach ($allDivisionsNames as $division) {
+            if (!(in_array($division['name'], $allDivisions))) {
+                $allDivisions[] = $division['name'];
+            }
+        }
+
+        foreach ($allDivisions as $name) {
+            if (!isset($allDivisionsDataNew[$name])) {
+                foreach ($allGoodsInOrders as $item) {
+                    $allDivisionsDataNew[$name][$item['name']] = array('quontity' => 0, 'id' => 0);
+                }
+            }
+            // Для только новых заказов
+            if (!isset($allProcessingNew[$name])) {
+                foreach ($allGoodsInOrders as $item) {
+                    $allProcessingNew[$name][$item['name']] = array('quontity' => 0, 'id' => 0);
+                }
+            }
+            if (!isset($allDivisionsData[$name])) {
+                foreach ($allGoodsInOrders as $item) {
+                    $allDivisionsData[$name][$item['name']] = array('quontity' => 0, 'id' => 0);
+                }
+            }
+
+        }
+        
+        $totalNewArray = array();
+        
+        foreach ($allGoodsInOrders as $x) {
+            $totalNewQuontity = 0;
+            foreach ($allDivisions as $name) {
+                $totalNewQuontity += $allProcessingNew[$name][$x['name']]['quontity'];
+            }
+            $totalNewArray[$x['name']] = $totalNewQuontity;
+        }
+        
+//        dd($totalNewArray);
+        
+        $nullDivisionsGoods = [];
+        foreach ($allGoodsInOrders as $key => $item) {
+            $sumQuantItem = 0;  
+            foreach ($allDivisions as $name) { 
+                $sumQuantItem += $allDivisionsDataNew[$name][$item['name']]['quontity'];
+            }
+            if ($sumQuantItem == 0) {
+                $nullDivisionsGoods[] = $key;
+            }
+        }
+          
+        array_multisort(array_column($allDivisionsNames, 'sort'), SORT_ASC, $allDivisionsNames);
+        
+        $result = array();
+        $allGoodsInOrdersUpdated = [];
+        if (count($nullDivisionsGoods) != 0) {
+            foreach ($nullDivisionsGoods as $dellItem) {
+                unset($allGoodsInOrders[$dellItem]);
+            }
+            foreach ($allGoodsInOrders as $item) {
+                $allGoodsInOrdersUpdated[] = $item;
+            }
+            $result = array($allGoodsInOrdersUpdated, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew, $totalNewArray);
+            
+        } else {
+            $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew, $totalNewArray);
+        }
+
+        return $result;
+
+    }
+
+
 
     public function create()
     {
