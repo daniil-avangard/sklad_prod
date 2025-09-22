@@ -19,8 +19,8 @@
     ])
     <div class="row">
         <div class="col-12">
-            <h4 class="page-title-svod-h4">Таблица для утверждения заказов на <span id="month-orders">май</span></h4>
-            <h6 class="page-title-svod-h6">Заказы необходимо проверить и утвердить в период с <span id="date-orders">25</span> числа и до окончания месяца</h6>
+            <h4 class="page-title-svod-h4">Таблица, необходимых для отправки заказов на <span id="month-orders">май</span></h4>
+            <h6 class="page-title-svod-h6">Утвержденные заказы в период с <span id="date-orders">25</span> числа и до окончания месяца</h6>
                 <div class="table-container">
 			<table id="excel-table" class="long-table">
                             <tr>
@@ -29,11 +29,9 @@
                                     <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }} bckgrnd-table-cell-2">{{ $divisionName['name'] }}</th>
                                 @endforeach
                                 @if ($flagForExcell == "show")
-                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-another-column-3">Заказано</th>  
-                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-another-column-2">Доступно<br>для<br>заказа</th>
-                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-another-column-1">Остаток<br>после<br>заказов</th>
-                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-another-column">Минимально<br>допустимый<br>остаток</th>
-                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-last-column">Тираж<br>для<br>дозаказа</th>                               
+                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-another-column-100">Заказано</th>  
+                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-another-column-10">Доступно<br>для<br>заказа</th>
+                                <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-last-column">Остаток<br>после<br>заказов</th>                             
                                 @endif
                             </tr>
                             @foreach ($uniqGoods as $good)
@@ -62,21 +60,14 @@
                                     </td>
                                     @include('arivals.digits-cell')
                                     @if ($flagForExcell == "show")
-                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column-3">{{ $good['total'] - $totalNewData[$good['name']] }}</td>
-                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column-2">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] - $totalNewData[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>
-                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column-1">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>
-                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column">{{ $good['min_stock'] }}</td>
-                                        <td class="another-col tr-another-cell for-anothe-col-width for-last-column"> - </td>                                       
+                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column-100">{{ $good['total'] - $totalNewData[$good['name']] }}</td>
+                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column-10">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] - $totalNewData[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>
+                                        <td class="another-col tr-another-cell for-anothe-col-width for-last-column">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>                         
                                     @endif
                                 </tr>
                             @endforeach
 			</table>
 		</div>
-                <div class="excel-accept-button">
-                @can('view', \App\Models\Order::class)
-                <button id="acept-all-orders" class="btn btn-success mb-3">Утвердить все заказы</button>
-                @endcan
-                </div>
         </div>
     </div>
 @endsection
@@ -85,5 +76,5 @@
 <!--    <script src="/plugins/x-editable/js/bootstrap-editable.min.js"></script>-->
 <!--    <script src="/assets/pages/orders/update_new.quantity.js"></script>-->
 <!--    <script src="/assets/js/checkBoxesOrdersList.js"></script>-->
-<!--    <script src="/assets/js/ordersListElements.js"></script>-->
+    <script src="/assets/js/warehouseData.js"></script>
 @endpush

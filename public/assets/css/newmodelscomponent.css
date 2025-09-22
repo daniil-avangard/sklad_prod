@@ -668,6 +668,20 @@ tr p {
     z-index: 10;
     background: #fff;
 }
+.table-container table .for-another-column-10 {
+    position: -webkit-sticky;
+    position: sticky;
+    right: 72.6px;
+    z-index: 10;
+    background: #fff;
+}
+.table-container table .for-another-column-100 {
+    position: -webkit-sticky;
+    position: sticky;
+    right: 147.2px;
+    z-index: 10;
+    background: #fff;
+}
 .table-container table .for-another-column-2 {
     position: -webkit-sticky;
     position: sticky;
