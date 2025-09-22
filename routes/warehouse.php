@@ -54,4 +54,6 @@ Route::middleware([ValidateCsrfToken::class, 'auth', 'admin'])->group(function (
     Route::post('/excell', [OrderController::class, 'excellData']);
     Route::post('/excellToZero', [OrderController::class, 'excellToZero']);
     Route::post('/addAllProducts', [BasketController::class, 'addAll']);
+    
+    Route::get('/excellToWarehouse', [OrderController::class, 'warehouseData'])->name('assembly.data');
 });
