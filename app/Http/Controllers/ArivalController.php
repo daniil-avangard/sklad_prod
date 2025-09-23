@@ -12,6 +12,8 @@ use Illuminate\Auth\Access\AuthorizationException;
 //use Illuminate\Foundation\Configuration\Middleware;
 use App\Models\ProductVariant;
 use Illuminate\Support\Facades\Auth;
+use App\Models\DivisionGroup;
+use App\Models\Division;
 use App\Models\Order;
 use App\Models\Korobka;
 use App\Enum\Order\StatusEnum;
@@ -140,6 +142,14 @@ class ArivalController extends Controller
         $this->authorize('viewAny', Korobka::class);
 
         $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+        
+        $divisionGroupsID1 = Auth::user()->divisionGroups()->pluck('id');
+        $groupDivisionsNames1 = Division::whereIn('id', function ($query) use ($divisionGroupsID1) {
+            $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroupsID1);
+        })->get();
+        $groupDivisionsNames1 = $groupDivisionsNames1->map(function ($division) {
+            return array('name'=>$division->name, 'id'=>$division->id);
+        })->toArray();
 
         $orders = Order::whereIn('division_id', function ($query) use ($divisionGroups) {
             $query->select('division_id')->from('division_division_group')->whereIn('division_group_id', $divisionGroups);
@@ -152,7 +162,29 @@ class ArivalController extends Controller
                 $listForAssmbling[] = $order;
             }
         }
-        return view('arivals.assembly', compact('listForAssmbling'));
+        
+        $allOrdersStatus = [];
+        $allOrdersProducts = [];
+
+        foreach ($listForAssmbling as $order) {
+            $allItems[$order->id] = array();
+            $valueForStatus = array('value' => $order->status->value, 'label' => StatusEnum::names()[$order->status->value]);
+            foreach ($order->items as $item) {
+                $valueForProducts = array('name' => $item->product->name, 'id' => $item->product->id);
+                if (!(in_array($valueForProducts, $allOrdersProducts))) {
+                    $allOrdersProducts[] = $valueForProducts;
+                }
+            }
+            
+            if (!(in_array($valueForStatus, $allOrdersStatus))) {
+                $allOrdersStatus[] = $valueForStatus;
+            }
+            foreach ($order->items as $item) {
+                $allItems[$order->id][] = array('name' => $item->product->name, 'quantity' => $item->quantity, 'image' => $item->product->image, 'productId' => $item->product->id);
+            }
+        }
+        
+        return view('arivals.assembly', compact('listForAssmbling', 'groupDivisionsNames1', 'allOrdersStatus'));
     }
 
     public function showAssembl(Order $order)

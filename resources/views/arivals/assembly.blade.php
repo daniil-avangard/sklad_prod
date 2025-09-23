@@ -3,6 +3,73 @@
 @push('styles-plugins')
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        .order-popup-parent {
+            position: relative;
+            display: block;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .order-popup-child {
+            position: absolute;
+            visibility: hidden;
+            width: 160px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -80px;
+        }
+
+        .order-popup-child-near-top {
+            position: absolute;
+            visibility: hidden;
+            width: 160px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            z-index: 1;
+            bottom: -575%;
+            left: 50%;
+            margin-left: -80px;
+            z-index: 100 !important;
+        }
+        .show {
+            visibility: visible;
+            animation: fadeIn 0.1s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+        .order-filters {
+            display: flex;
+            flex-direction: column;
+            justify-content: left;
+            margin-right: 10px;
+            margin-bottom: 5px;
+        }
+        .block-filters-index {
+            display: flex;
+            flex-direction: row;
+        }
+        .highChart {
+            width: 100%;
+            height: 250px;
+            border: 0.5px solid #eaf0f9;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -17,10 +84,46 @@
         <div class="col-12">
 
             <div class="table-responsive">
-                @can('viewAny', App\Models\Korobka::class)
-                    <button id="view-selected" class="btn btn-success mb-3">Просмотреть выбранные заказы</button>
-                @endcan
-                <table class="table table-bordered custom-table">
+
+                <div class="block-filters-index">
+                    <div class="order-filters">
+                        <div class="filters-work-part">
+                            <label for="productsOfOrders1" class="unclicked">Город:</label>
+                            <div class="searchable">
+                                <input class="index-top-filters" type="text" name="productsOfOrders1" id="divisiones-names" placeholder="Все">
+                                <ul id="cities-list-data" class="dropdown__box-list">
+                                    <li class="dropdown-item dropdown-item-new" data-productoption="Все">
+                                        Все
+                                    </li>
+                                    @foreach ($groupDivisionsNames1 as $divisionName)
+                                        <li class="dropdown-item dropdown-item-new" data-productoption="{{ $divisionName['name'] }}">
+                                                {{ $divisionName['name'] }}
+                                        </li>
+                                    @endforeach
+                                    
+                                </ul>
+                            </div>
+
+                        </div>
+                        <div class="filters-button-part">
+                            <button class="select-work-buttons clean-filters">Очистить фильтры</button>
+                        </div>
+                    </div>
+                    
+                    <div class="order-filters">
+                        <div class="filters-work-part">
+                            <label for="statusOfOrder" class="unclicked">Статус:</label>
+                            <select name='statusOfOrder' id='status-of-orders' class="index-top-filters">
+                                <option value="">Все</option>
+                                @foreach ($allOrdersStatus as $statusOrder)
+                                    <option value="{{ $statusOrder['value'] }}">{{ $statusOrder['label'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                     
+                    </div>
+                </div>
+                <table id="orders-table" class="table table-bordered custom-table">
                     <thead>
                         <tr>
 <!--                            <th scope="col">
@@ -69,3 +172,7 @@
     </div>
 
 @endsection
+
+@push('scripts-plugins')
+    <script src="/assets/js/warehouseIndex.js"></script>
+@endpush
