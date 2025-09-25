@@ -19,15 +19,15 @@ class FilterPage {
         this.cleanStatusProdFilter = document.getElementById('clean-status-product');
         this.tableTrArray = Array.from(document.getElementById('orders-table').rows).slice(1);
         this.monthDetails = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
-        this.monthLabels = document.querySelectorAll(".month-field label");
-        this.monthInputChecks = document.querySelectorAll(".month-field input[type='checkbox']");
+//        this.monthLabels = document.querySelectorAll(".month-field label");
+//        this.monthInputChecks = document.querySelectorAll(".month-field input[type='checkbox']");
         
         this.initsettings();
-        this.initSettingsPopUpElements();
-        this.initSettingsGraphButton();
-        this.initSettingsDataGraphButton();
+//        this.initSettingsPopUpElements();
+//        this.initSettingsGraphButton();
+//        this.initSettingsDataGraphButton();
         this.initsettingsCleanFilters();
-        this.checkFilterCookies();
+//        this.checkFilterCookies();
     }
     
     checkFilterCookies() {
@@ -111,25 +111,27 @@ class FilterPage {
             el.onclick = () => {
                 if (self.selectDivision) {
                     self.selectDivision.value = "";
-                    document.cookie = `selectSkladDivision=${self.selectDivision.value}`;
+//                    document.cookie = `selectSkladDivision=${self.selectDivision.value}`;
                 }
                 self.selectOrderStatus.value = "";
-                document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
-                self.selectProductOrder.value = "";
-                document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
+//                document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
+//                
+//                self.selectProductOrder.value = "";
+//                document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
                 Array.from(self.checkBoxArray1).forEach((elm, ind) => {
                     elm.checked = false;
                 });
-                document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
+//                document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
+//                
                 self.selectIDOrder.value = "";
-                document.cookie = `selectSkladIDOrder=${self.selectIDOrder.value}`;
+//                document.cookie = `selectSkladIDOrder=${self.selectIDOrder.value}`;
                 if (self.selectDivision) {
-                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
+                    self.display(self.selectDivision.value, self.selectOrderStatus.value, false, true, self.selectIDOrder.value);
                 } else {
                     self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
                 }
 //                document.getElementById('chartContainer').innerHTML = "";
-                document.getElementById('chartContainer-1').innerHTML = "";
+//                document.getElementById('chartContainer-1').innerHTML = "";
             }
         });
         
@@ -138,7 +140,7 @@ class FilterPage {
                 Array.from(self.checkBoxArray1).forEach((elm, ind) => {
                         elm.checked = false;
                 });
-                document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
+//                document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
                 if (self.selectDivision) {
                     self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
                 } else {
@@ -150,9 +152,9 @@ class FilterPage {
         if (this.cleanStatusProdFilter) {
             this.cleanStatusProdFilter.onclick = () => {
                 self.selectOrderStatus.value = "";
-                document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
+//                document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
                 self.selectProductOrder.value = "";
-                document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
+//                document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
                 if (self.selectDivision) {
                     self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, false, self.selectIDOrder.value);
                 } else {
@@ -167,40 +169,16 @@ class FilterPage {
     initsettings() {
         const self = this;
         
-//        if (self.selectDivision) {
-//            self.selectDivision.onchange = () => {
-//                document.cookie = `selectSkladDivision=${self.selectDivision.value}`;
-//                if (self.selectOrderStatus) {
-//                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
-//                } else {
-//                    self.display(self.selectDivision.value, false, self.selectProductOrder.value, true, self.selectIDOrder.value);
-//                }
-//
-//            }
-//        }
-
         if (self.selectOrderStatus) {
             self.selectOrderStatus.onchange = () => {
-                document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
+//                document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
                 if (self.selectDivision) {
-                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
+                    self.display(self.selectDivision.value, self.selectOrderStatus.value, false, true, self.selectIDOrder.value);
                 } else {
                     self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
                 }
             }
         }
-
-//        if (self.selectProductOrder) {
-//            self.selectProductOrder.onchange = () => {
-//                document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
-//                if (self.selectDivision) {
-//                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true);
-//                } else {
-//                    console.log("check product");
-//                    self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true);
-//                }
-//            }
-//        }
 
         const funcForFilters = (parent, child, cookieName) => {
             parent.onfocus = (event) => {
@@ -217,12 +195,12 @@ class FilterPage {
                         console.log('inside clicked child = ');
                         parent.value = event.target.dataset.productoption;
                         let valuProductCookie = parent.value == "Все" ? "" : parent.value;
-                        document.cookie = `${cookieName}=${valuProductCookie}`;
+//                        document.cookie = `${cookieName}=${valuProductCookie}`;
                         let valueID = parent.value == "Все" ? false : parent.value;
                         if (self.selectDivision) {
-                            if (parent.id == 'idOfOrders') self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
+                            if (parent.id == 'idOfOrders') self.display(self.selectDivision.value, self.selectOrderStatus.value, false, true, valueID);
                             if (parent.id == 'productsOfOrders1') self.display(self.selectDivision.value, self.selectOrderStatus.value, valueID, true, self.selectIDOrder.value);
-                            if (parent.id == 'divisiones-names') self.display(valueID, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
+                            if (parent.id == 'divisiones-names') self.display(valueID, self.selectOrderStatus.value, false, true, self.selectIDOrder.value);
                         } else {
                             if (parent.id == 'idOfOrders') self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
                             if (parent.id == 'productsOfOrders1') self.display(false, self.selectOrderStatus.value, valueID, true, self.selectIDOrder.value);
@@ -252,7 +230,7 @@ class FilterPage {
                         if (parent.id == 'idOfOrders') self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
                         if (parent.id == 'productsOfOrders1') self.display(false, self.selectOrderStatus.value, valueID, true, self.selectIDOrder.value);
                     }
-                    document.cookie = `${cookieName}=${parent.value}`;
+//                    document.cookie = `${cookieName}=${parent.value}`;
                 }
                 
             }
@@ -270,9 +248,9 @@ class FilterPage {
             funcForFilters(self.selectDivision, 'cities-list-data', 'selectSkladDivision');
         }
         
-        if (self.selectProductOrder) {
-            funcForFilters(self.selectProductOrder, 'product-list-data', 'selectSkladProductOrder');
-        }
+//        if (self.selectProductOrder) {
+//            funcForFilters(self.selectProductOrder, 'product-list-data', 'selectSkladProductOrder');
+//        }
         
         if (self.selectIDOrder) {
             funcForFilters(self.selectIDOrder, 'id-list-data', 'selectSkladIDOrder');
@@ -299,12 +277,12 @@ class FilterPage {
 //                    }
                     
                     let arrCheck = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
-                    document.cookie = `selectSkladCheckBoxBlock=${arrCheck.join(",")}`;
+//                    document.cookie = `selectSkladCheckBoxBlock=${arrCheck.join(",")}`;
                     if (self.selectDivision) {
                         console.log("Сейчас здесь");
-                        self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox, self.selectIDOrder.value);
+                        self.display(self.selectDivision.value, self.selectOrderStatus.value, false, checkBox, self.selectIDOrder.value);
                     } else {
-                        self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox, self.selectIDOrder.value);
+                        self.display(false, self.selectOrderStatus.value, false, checkBox, self.selectIDOrder.value);
                     }
                 }
             });
@@ -507,19 +485,21 @@ class FilterPage {
         if (division == "Все") division = false;
         if (product == "Все") product = false;
         if (idOrder == "Все") idOrder = false;
+        if (status == "Все") idOrder = false;
         
         this.tableTrArray.forEach(row => {
             row.classList.remove('row-hidden');
-            let arrayProductsDivs = row.cells[3].querySelectorAll('.order-popup-parent');
-            let arrayProductsQuantities = row.cells[4].getElementsByTagName("P");
-            Array.from(arrayProductsDivs).forEach((elm, ind) => elm.classList.remove('row-hidden'));
-            Array.from(arrayProductsQuantities).forEach((elm, ind) => elm.classList.remove('row-hidden'));
+//            let arrayProductsDivs = row.cells[3].querySelectorAll('.order-popup-parent');
+//            let arrayProductsQuantities = row.cells[4].getElementsByTagName("P");
+//            Array.from(arrayProductsDivs).forEach((elm, ind) => elm.classList.remove('row-hidden'));
+//            Array.from(arrayProductsQuantities).forEach((elm, ind) => elm.classList.remove('row-hidden'));
         });
         
         if (division) {
             this.tableTrArray
                     .filter(row => {
-                        let cell = row.cells[2].getElementsByTagName("A")[0];
+//                        let cell = row.cells[1].getElementsByTagName("A")[0];
+                        let cell = row.cells[1];
                         return (cell.innerHTML.trim() != division)
                     })
                     .forEach(row => row.classList.add('row-hidden'));
@@ -527,7 +507,7 @@ class FilterPage {
         if (status) {
             this.tableTrArray
                     .filter(row => {
-                        let cell = row.cells[5].getElementsByTagName("SPAN")[0];
+                        let cell = row.cells[2].getElementsByTagName("SPAN")[0];
                         let text = self.selectOrderStatus.options[self.selectOrderStatus.selectedIndex].text;
                         return (cell.innerHTML.trim() != text);
                     })
@@ -539,7 +519,7 @@ class FilterPage {
                     .filter(row => {
                         let cell = row.cells[0];
                         let text = row.cells[0].children.length > 0 ? row.cells[0].children[0].innerHTML.trim() : cell.innerHTML.trim();
-                        console.log(cell.innerHTML.trim());
+//                        console.log(text);
 //                        let text = self.selectOrderStatus.options[self.selectOrderStatus.selectedIndex].text;
                         return (text != idOrder);
                     })
@@ -581,7 +561,7 @@ class FilterPage {
             if (arrCheck.length > 0) {
                 this.tableTrArray
                     .filter(row => {
-                        let valueMonthYear = row.cells[1].innerHTML.substring(3, 5) + row.cells[1].innerHTML.substring(6, 10);
+                        let valueMonthYear = row.cells[3].innerHTML.substring(3, 5) + row.cells[3].innerHTML.substring(6, 10);
                         return !(arrCheck.includes(valueMonthYear));
                     })
                     .forEach(row => row.classList.add('row-hidden'));
