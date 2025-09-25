@@ -263,6 +263,7 @@ const createKorobkaElement = async (flagForStart='none') => {
                                     let objLabel = document.createElement('label');
                                     objLabel.innerHTML = value.name;
                                     let objInput = document.createElement('input');
+                                    objInput.type = 'text';
                                     row.cells[1].insertBefore(objInput, elemBefor);
                                     row.cells[1].insertBefore(objLabel, objInput);
                                     
@@ -340,6 +341,7 @@ if (document.getElementById("div-for-checked")) {
                         let objLabel = document.createElement('label');
                         objLabel.innerHTML = value.name;
                         let objInput = document.createElement('input');
+                        objInput.type = 'text';
                         row.cells[1].insertBefore(objInput, elemBefor);
                         row.cells[1].insertBefore(objLabel, objInput);
 
