@@ -229,6 +229,13 @@ const createKorobkaElement = async (flagForStart='none') => {
         if (flagForStart=='start') {
             let newCheckDiv = document.createElement('div');
             newCheckDiv.setAttribute("class", "buttons-orders-elm warehous-check");
+            newCheckDiv.id = "div-for-checked";
+            const dataHtml = {
+                'delivery-track': {'input1': {name : "Трек-номер", type: 'big'}},
+                'delivery-kurier': {'input1': {name : "Дата", type: 'small'}, 'input2': {name : "Время", type: 'small'}},
+                'delivery-car': {'input1': {name : "Номер автомобиля", type: 'small'}, 'input2': {name : "Дата", type: 'small'}},
+                'delivery-another': {'input1': {name : "Комментарий", type: 'big'}}
+            };
             let arrayChecks = [['delivery-track', 'Перевозчик'], ['delivery-kurier', 'Курьер'], ['delivery-car', 'Машина'], ['delivery-another', 'Другое']];
             arrayChecks.forEach((elm, ind) => {
                 let newCheckbox = document.createElement('input');
@@ -237,16 +244,36 @@ const createKorobkaElement = async (flagForStart='none') => {
                 newCheckbox.setAttribute("class", "checkbox-filter-new btn-margin");
                 newCheckbox.id = elm[0];
                 function funcForCheck() {
-                    console.log("this = ", this);
                     if (this.checked) {
+                        let idCheck = this.id;
+                        Array.from(newCheckDiv.querySelectorAll('input[type="checkbox"]')).forEach((check, checkInd) => {
+                            if (check.id != idCheck) check.checked = false;
+                        });
                         let korobkaList = document.querySelectorAll('.assembly-korobka-row');
                         korobkaList.forEach((el, i) => {
                             let tableRows = el.getElementsByTagName("TR");
                             tableRows.forEach((row, ri) => {
-                                row.cells[1].innerHTML = elm[1];
+                                let lng = row.cells[1].children.length;
+                                Array.from(row.cells[1].children).slice(0, lng-2).forEach((child, chInd) => {
+                                    row.cells[1].removeChild(child);
+                                });
+                                const elemBefor = row.cells[1].children[0];
+                                const data = dataHtml[elm[0]];
+                                Object.entries(data).forEach(([key, value]) => {
+                                    let objLabel = document.createElement('label');
+                                    objLabel.innerHTML = value.name;
+                                    let objInput = document.createElement('input');
+                                    row.cells[1].insertBefore(objInput, elemBefor);
+                                    row.cells[1].insertBefore(objLabel, objInput);
+                                    
+                                });
+                                
                             });
                         
                         });
+                    } else {
+                        console.log("убираем check");
+                        this.checked = true;
                     }
                     
                 }
