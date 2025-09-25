@@ -208,7 +208,7 @@
                 </div>
                 
                 @if (count($korobkas) > 0)
-                    <div class="buttons-orders-elm warehous-check">
+                    <div class="buttons-orders-elm warehous-check" id="div-for-checked">
                         <input class="checkbox-filter-new btn-margin" type="checkbox" value="1" id="delivery-track">
                         <label for="delivery-track">Перевозчик</label>
                         <input class="checkbox-filter-new btn-margin" type="checkbox" value="1" id="delivery-kurier">
