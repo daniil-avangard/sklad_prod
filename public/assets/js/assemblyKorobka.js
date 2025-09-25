@@ -202,7 +202,7 @@ buttonsTrack.forEach((item, index) => {
     item.onclick = () => {addTrackToKorobka(itemForPK, parent);};
 });
 
-const createKorobkaElement = async () => {
+const createKorobkaElement = async (flagForStart='none') => {
 //    document.getElementById("Button").disabled=true
     let newLoader = document.createElement('span');
     newLoader.setAttribute("class", "loader-assembled");
@@ -226,6 +226,41 @@ const createKorobkaElement = async () => {
         clone.querySelectorAll('.delete-korobka')[0].dataset.pk = resultApi.data;
         clone.querySelectorAll('.add-track')[0].onclick = () => {addTrackToKorobka(clone.querySelectorAll('.delete-korobka')[0], clone);};
 
+        if (flagForStart=='start') {
+            let newCheckDiv = document.createElement('div');
+            newCheckDiv.setAttribute("class", "buttons-orders-elm warehous-check");
+            let arrayChecks = [['delivery-track', 'Перевозчик'], ['delivery-kurier', 'Курьер'], ['delivery-car', 'Машина'], ['delivery-another', 'Другое']];
+            arrayChecks.forEach((elm, ind) => {
+                let newCheckbox = document.createElement('input');
+                newCheckbox.type = 'checkbox';
+                newCheckbox.checked = ind == 0 ? true : false;
+                newCheckbox.setAttribute("class", "checkbox-filter-new btn-margin");
+                newCheckbox.id = elm[0];
+                function funcForCheck() {
+                    console.log("this = ", this);
+                    if (this.checked) {
+                        let korobkaList = document.querySelectorAll('.assembly-korobka-row');
+                        korobkaList.forEach((el, i) => {
+                            let tableRows = el.getElementsByTagName("TR");
+                            tableRows.forEach((row, ri) => {
+                                row.cells[1].innerHTML = elm[1];
+                            });
+                        
+                        });
+                    }
+                    
+                }
+                newCheckbox.onchange = funcForCheck.bind(newCheckbox);
+                let newCheckLabel = document.createElement('label');
+                newCheckLabel.htmlFor = elm[0];
+                newCheckLabel.innerHTML = elm[1];
+                newCheckDiv.appendChild(newCheckbox);
+                newCheckDiv.appendChild(newCheckLabel);
+            });
+            
+            parentKorobkaNode.insertBefore(newCheckDiv, parentKorobkaNode.lastChild.previousElementSibling);
+        }
+        
         parentKorobkaNode.insertBefore(clone, parentKorobkaNode.lastChild.previousElementSibling);
     }
     document.getElementById("status-title").removeChild(document.getElementById("loader-status"));
@@ -253,7 +288,7 @@ if (document.getElementById("start-assembl")) {
     document.getElementById("start-assembl").onclick = async () => {
         console.log(document.getElementById("start-assembl").dataset.korobkaflag);
         if (document.getElementById("start-assembl").dataset.korobkaflag == "no") {
-            await createKorobkaElement();
+            await createKorobkaElement("start");
             document.getElementById("korobka-add-wrap").classList.remove("korobka-item-none");
             document.getElementById("korobka-add-wrap").classList.add("korobka-item-show");
             document.getElementById("start-assembl").dataset.korobkaflag = "yes";

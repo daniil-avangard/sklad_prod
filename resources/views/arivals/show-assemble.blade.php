@@ -206,6 +206,19 @@
                     </div>
 
                 </div>
+                
+                @if (count($korobkas) > 0)
+                    <div class="buttons-orders-elm warehous-check">
+                        <input class="checkbox-filter-new btn-margin" type="checkbox" value="1" id="delivery-track">
+                        <label for="delivery-track">Перевозчик</label>
+                        <input class="checkbox-filter-new btn-margin" type="checkbox" value="1" id="delivery-kurier">
+                        <label for="delivery-kurier">Курьер</label>
+                        <input class="checkbox-filter-new btn-margin" type="checkbox" value="1" id="delivery-car">
+                        <label for="delivery-car">Машина</label>
+                        <input class="checkbox-filter-new btn-margin" type="checkbox" value="1" id="delivery-another">
+                        <label for="delivery-another">Другое</label>
+                    </div>
+                @endif
 
                 @foreach ($korobkas as $korobka)
                     <div class="row assembly-korobka-row">

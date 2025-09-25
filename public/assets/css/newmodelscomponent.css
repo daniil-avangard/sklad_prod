@@ -2026,3 +2026,10 @@ option::checkmark {
 .btn-margin {
     margin-left: 10px !important;
 }
+.warehous-check {
+    margin-top: 10px !important; 
+    margin-bottom: 10px !important;
+}
+.warehous-check label {
+    margin-left: 3px !important;
+}
