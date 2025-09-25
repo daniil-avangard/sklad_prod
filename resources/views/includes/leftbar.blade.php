@@ -1,5 +1,6 @@
 <div class="menu-content h-100" data-simplebar>
     <ul class="metismenu left-sidenav-menu">
+        @can('viewOrders', \App\Models\Order::class)
         <li class="menu-label mt-0">Меню</li>
 
         <li>
@@ -36,6 +37,7 @@
                 @endcan
             </ul>
         </li>
+        @endcan
 <!--        <li>
             <a href="javascript: void(0);"> <i data-feather="home"
                     class="align-self-center menu-icon"></i><span>Справочники</span><span class="menu-arrow"><i
