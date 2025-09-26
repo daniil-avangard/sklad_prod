@@ -2033,3 +2033,14 @@ option::checkmark {
 .warehous-check label {
     margin-left: 3px !important;
 }
+.shp-chk-lbl {
+    margin-right: 3px !important;
+}
+.shp-chk-small {
+    width: 100px !important;
+    margin-right: 3px !important;
+}
+.shp-chk-big {
+    width: 200px !important;
+    margin-right: 3px !important;
+}

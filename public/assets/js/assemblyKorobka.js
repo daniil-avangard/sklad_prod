@@ -232,8 +232,8 @@ const createKorobkaElement = async (flagForStart='none') => {
             newCheckDiv.id = "div-for-checked";
             const dataHtml = {
                 'delivery-track': {'input1': {name : "Трек-номер", type: 'big'}},
-                'delivery-kurier': {'input1': {name : "Дата", type: 'small'}, 'input2': {name : "Время", type: 'small'}},
-                'delivery-car': {'input1': {name : "Номер автомобиля", type: 'small'}, 'input2': {name : "Дата", type: 'small'}},
+                'delivery-kurier': {'input1': {name : "Дата", type: 'date'}, 'input2': {name : "Время", type: 'time'}},
+                'delivery-car': {'input1': {name : "Номер автомобиля", type: 'small'}, 'input2': {name : "Дата", type: 'date'}},
                 'delivery-another': {'input1': {name : "Комментарий", type: 'big'}}
             };
             let arrayChecks = [['delivery-track', 'Перевозчик'], ['delivery-kurier', 'Курьер'], ['delivery-car', 'Машина'], ['delivery-another', 'Другое']];
@@ -261,9 +261,27 @@ const createKorobkaElement = async (flagForStart='none') => {
                                 const data = dataHtml[elm[0]];
                                 Object.entries(data).forEach(([key, value]) => {
                                     let objLabel = document.createElement('label');
+                                    objLabel.setAttribute("class", "shp-chk-lbl");
                                     objLabel.innerHTML = value.name;
                                     let objInput = document.createElement('input');
-                                    objInput.type = 'text';
+                                    switch (value.type) {
+                                        case 'small':
+                                            objInput.type = 'text';
+                                            objInput.setAttribute("class", "shp-chk-small");
+                                            break;
+                                        case 'big':
+                                            objInput.type = 'text';
+                                            objInput.setAttribute("class", "shp-chk-big");
+                                            break;
+                                        case 'date':
+                                            objInput.type = 'date';
+                                            objInput.setAttribute("class", "shp-chk-small");
+                                            break;
+                                        case 'time':
+                                            objInput.type = 'time';
+                                            objInput.setAttribute("class", "shp-chk-small");
+                                            break;
+                                    }
                                     row.cells[1].insertBefore(objInput, elemBefor);
                                     row.cells[1].insertBefore(objLabel, objInput);
                                     
@@ -316,8 +334,8 @@ if (document.getElementById("div-for-checked")) {
     let newCheckDiv = document.getElementById("div-for-checked");
     const dataHtml = {
         'delivery-track': {'input1': {name : "Трек-номер", type: 'big'}},
-        'delivery-kurier': {'input1': {name : "Дата", type: 'small'}, 'input2': {name : "Время", type: 'small'}},
-        'delivery-car': {'input1': {name : "Номер автомобиля", type: 'small'}, 'input2': {name : "Дата", type: 'small'}},
+        'delivery-kurier': {'input1': {name : "Дата", type: 'date'}, 'input2': {name : "Время", type: 'time'}},
+        'delivery-car': {'input1': {name : "Номер автомобиля", type: 'small'}, 'input2': {name : "Дата", type: 'date'}},
         'delivery-another': {'input1': {name : "Комментарий", type: 'big'}}
     };
     let arrayChecks = [['delivery-track', 'Перевозчик'], ['delivery-kurier', 'Курьер'], ['delivery-car', 'Машина'], ['delivery-another', 'Другое']];
@@ -339,9 +357,27 @@ if (document.getElementById("div-for-checked")) {
                     const data = dataHtml[indCheck];
                     Object.entries(data).forEach(([key, value]) => {
                         let objLabel = document.createElement('label');
+                        objLabel.setAttribute("class", "shp-chk-lbl");
                         objLabel.innerHTML = value.name;
                         let objInput = document.createElement('input');
-                        objInput.type = 'text';
+                        switch (value.type) {
+                            case 'small':
+                                objInput.type = 'text';
+                                objInput.setAttribute("class", "shp-chk-small");
+                                break;
+                            case 'big':
+                                objInput.type = 'text';
+                                objInput.setAttribute("class", "shp-chk-big");
+                                break;
+                            case 'date':
+                                objInput.type = 'date';
+                                objInput.setAttribute("class", "shp-chk-small");
+                                break;
+                            case 'time':
+                                objInput.type = 'time';
+                                objInput.setAttribute("class", "shp-chk-small");
+                                break;
+                        }
                         row.cells[1].insertBefore(objInput, elemBefor);
                         row.cells[1].insertBefore(objLabel, objInput);
 
