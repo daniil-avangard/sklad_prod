@@ -101,7 +101,7 @@
                     href="#" role="button" aria-haspopup="false" aria-expanded="false">
                     <span class="ms-1 nav-user-name hidden-sm">{{ Auth::user()->surname }}
                         {{ Auth::user()->first_name }} {{ Auth::user()->middle_name }}</span>
-                    <img src="/assets/images/users/user-5.jpg" alt="profile-user" class="rounded-circle thumb-xs" />
+                    <img src="{{ Auth::user()->avatar ? asset('storage/' . Auth::user()->avatar) : '/assets/images/users/user-5.jpg' }}" alt="profile-user" class="rounded-circle thumb-xs" />
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item" href="{{ route('user.orders') }}"><i data-feather="shopping-cart"

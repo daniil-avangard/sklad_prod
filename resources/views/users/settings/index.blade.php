@@ -27,7 +27,7 @@
                                     </div> <!--end row-->
                                 </div><!--end card-header-->
                                 <div class="card-body">
-                                    <x-form method="PUT" action="{{ route('user.settings.update') }}">
+                                    <x-form method="PUT" action="{{ route('user.settings.update') }}" enctype="multipart/form-data">
                                         <div class="form-group row">
                                             <label
                                                 class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Фамилия</label>
@@ -65,6 +65,19 @@
                                                     <input type="text" class="form-control" name="phone"
                                                         value="{{ $user->phone }}" placeholder="Phone"
                                                         aria-describedby="basic-addon1">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center">Аватар</label>
+                                            <div class="col-lg-9 col-xl-8">
+                                                <input type="file" accept="image/*" class="form-control" name="avatar" id="avatarInput" style="display:none">
+                                                <button type="button" class="btn btn-outline-secondary btn-sm" id="avatarSelectBtn">Выбрать файл</button>
+                                                <div class="form-check mt-2">
+                                                    <input class="form-check-input" type="checkbox" name="delete_avatar" value="1" id="deleteAvatar">
+                                                    <label class="form-check-label" for="deleteAvatar">
+                                                        Удалить текущий аватар
+                                                    </label>
                                                 </div>
                                             </div>
                                         </div>
@@ -145,3 +158,41 @@
 
     </div><!--end row-->
 @endsection
+@push('scripts-plugins')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const trigger = document.querySelector('.dastone-profile_main-pic-change');
+            const fileInput = document.getElementById('avatarInput');
+            const selectBtn = document.getElementById('avatarSelectBtn');
+            const preview = document.getElementById('avatarPreview');
+
+            function openPicker() {
+                if (fileInput) fileInput.click();
+            }
+
+            if (trigger) {
+                trigger.addEventListener('click', function(e){
+                    e.preventDefault();
+                    openPicker();
+                });
+            }
+            if (selectBtn) {
+                selectBtn.addEventListener('click', function(e){
+                    e.preventDefault();
+                    openPicker();
+                });
+            }
+            if (fileInput) {
+                fileInput.addEventListener('change', function(){
+                    if (fileInput.files && fileInput.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            if (preview) preview.src = e.target.result;
+                        };
+                        reader.readAsDataURL(fileInput.files[0]);
+                    }
+                });
+            }
+        });
+    </script>
+@endpush
