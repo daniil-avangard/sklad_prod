@@ -128,7 +128,7 @@
                     @endcan
                     @can('view', \App\Models\Korobka::class)
                         <li class="nav-item"><a class="nav-link" href="{{ route('assembly.data') }}"><i
-                                    class="ti-control-record"></i>Переданные на склад</a></li>
+                                    class="ti-control-record"></i>Остатки товаров</a></li>
                     @endcan
                 </ul>
             </li>
