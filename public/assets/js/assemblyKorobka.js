@@ -61,6 +61,13 @@ const checkStatusForButtons = () => {
             changeDisabling("none");
             break;
     }
+    // Дополнительно: если отгружен, блокируем кнопку "Статус Назад"
+    if (document.getElementById("status-back")) {
+        document.getElementById("status-back").disabled = (status === "shipped");
+    }
+    // Если отгружен, отключаем радиокнопки способов доставки
+    const radios = document.querySelectorAll('#div-for-checked input[type="radio"][name="delivery-method"]');
+    radios.forEach(r => { r.disabled = (status === 'shipped'); });
 }
 
 checkStatusForButtons();
@@ -230,7 +237,12 @@ const regenerateInputsForRow = (row, selectedId) => {
         if (addBtn) addBtn.disabled = hasData ? true : !anyValue;
         if (cleanBtn) cleanBtn.disabled = !anyValue && !hasData ? true : false; // X активен если есть что чистить или сохранено
     };
-    inputs.forEach(inp => { inp.oninput = recomputeButtons; });
+    inputs.forEach(inp => { 
+        inp.oninput = () => { 
+            inp.classList.remove('invalid-input'); 
+            recomputeButtons(); 
+        }; 
+    });
     recomputeButtons();
 };
 
@@ -516,6 +528,9 @@ const createKorobkaElement = async (flagForStart='none') => {
         if (clone.querySelectorAll('.copy-korobka')[0]) {
             clone.querySelectorAll('.copy-korobka')[0].onclick = () => {copyKorobka(clone.querySelectorAll('.copy-korobka')[0], clone);};
         }
+        // Применяем актуальный способ и дефолты для только что созданной коробки
+        const selectedIdForNew = getSelectedDeliveryId();
+        regenerateInputsForRow(clone.querySelector('tr'), selectedIdForNew);
 
         if (flagForStart=='start') {
             let newCheckDiv = document.createElement('div');
@@ -595,6 +610,10 @@ const createKorobkaElement = async (flagForStart='none') => {
             });
             
             parentKorobkaNode.insertBefore(newCheckDiv, parentKorobkaNode.lastChild.previousElementSibling);
+            // Сразу сгенерируем поля по выбранному методу (по умолчанию первый) и подставим дефолты
+            const checkedRadio = newCheckDiv.querySelector('input[type="radio"][name="delivery-method"]:checked');
+            const initialId = checkedRadio ? checkedRadio.id : 'delivery-track';
+            regenerateInputsForAllRows(initialId);
         }
         
         parentKorobkaNode.insertBefore(clone, parentKorobkaNode.lastChild.previousElementSibling);
@@ -687,18 +706,46 @@ if (document.getElementById("package-shipped")) {
     document.getElementById("package-shipped").onclick = async () => {
         // Проверяем, что для каждой коробки заполнены поля выбранного метода
         const selectedId = getSelectedDeliveryId();
-        const korobkaRows = document.querySelectorAll('.assembly-korobka-row');
-        let valid = true;
+        // Берём только видимые реальные строки
+        const korobkaRows = document.querySelectorAll('.assembly-korobka-row:not(.korobka-item-none)');
+        // 1) Подсветить и остановиться на первом незаполненном поле
+        let firstInvalidInput = null;
         korobkaRows.forEach((el) => {
             const row = el.getElementsByTagName('TR')[0];
-            const inputs = Array.from(row.cells[1].querySelectorAll('input')).slice(0, row.cells[1].children.length-2);
-            inputs.forEach(i => { if (!i.value) valid = false; });
+            row.classList.remove('invalid-row');
+            const cell = row.cells[1];
+            // Поля текущего метода: text/date/time
+            const inputs = Array.from(cell.querySelectorAll('input[type="text"], input[type="date"], input[type="time"]'));
+            inputs.forEach(i => {
+                i.classList.remove('invalid-input');
+                if (!i.value || String(i.value).trim() === '') {
+                    i.classList.add('invalid-input');
+                    if (!firstInvalidInput) firstInvalidInput = i;
+                }
+            });
         });
-        if (valid) {
-            await changeOrderStatus("shipped");
-            document.getElementById("order-status").dataset.status = "shipped";
-            document.getElementById("order-status").innerHTML = "Отгружен";
+        if (firstInvalidInput) {
+            firstInvalidInput.scrollIntoView({behavior:'smooth', block:'center'});
+            firstInvalidInput.focus({preventScroll:true});
+            return; // не отправляем статус, есть незаполненные
         }
+        // 2) Если все заполнены, проверить, что данные сохранены в БД для текущего способа
+        const methodMap = { 'delivery-track':'track', 'delivery-kurier':'courier', 'delivery-car':'car', 'delivery-another':'other' };
+        const currentMethod = methodMap[selectedId];
+        const notSavedRows = [];
+        korobkaRows.forEach((el) => {
+            const row = el.getElementsByTagName('TR')[0];
+            const saved = (row.dataset.method || '') === currentMethod;
+            if (!saved) notSavedRows.push(row);
+        });
+        if (notSavedRows.length > 0) {
+            notSavedRows.forEach(r => r.classList.add('invalid-row'));
+            notSavedRows[0].scrollIntoView({behavior:'smooth', block:'center'});
+            return;
+        }
+        await changeOrderStatus("shipped");
+        document.getElementById("order-status").dataset.status = "shipped";
+        document.getElementById("order-status").innerHTML = "Отгружен";
         checkStatusForButtons();
     }
 }

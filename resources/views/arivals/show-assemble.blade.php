@@ -20,6 +20,9 @@
         .assembly-korobka-row .shp-chk-lbl{margin-right:6px;}
         /* Убираем горизонтальный скролл, если появлялся */
         .assembly-korobka-row .table-responsive{overflow-x:hidden;}
+        /* Ошибочное поле при проверке перед отгрузкой */
+        .assembly-korobka-row input.invalid-input{background-color:#ffe6e6 !important; border:1px solid #dc3545 !important;}
+        .assembly-korobka-row tr.invalid-row td{background-color:#ffe6e6 !important;}
     </style>
 <!--    <style type="text/css" media="print">
         @page { size: landscape; }
@@ -84,7 +87,7 @@
                         <div class="buttons-orders-elm">
                             <button id="start-assembl" class="btn btn-primary btn-margin" data-korobkaflag="{{ $flagKorobka }}" data-pk="{{ $order->id }}">Начать сборку</button>
                             <button id="package-assembled" class="btn btn-warning btn-margin">Собран</button>
-                            <button id="package-shipped" class="btn btn-danger btn-margin">Отправлен</button>
+                            <button id="package-shipped" class="btn btn-danger btn-margin">Отгружен</button>
                             <button id="status-back" class="btn btn-warning btn-margin">Статус Назад</button>
                         </div>
                         <div class="buttons-orders-elm">
