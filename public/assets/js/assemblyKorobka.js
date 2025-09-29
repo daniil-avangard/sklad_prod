@@ -202,7 +202,7 @@ buttonsTrack.forEach((item, index) => {
     item.onclick = () => {addTrackToKorobka(itemForPK, parent);};
 });
 
-const createKorobkaElement = async () => {
+const createKorobkaElement = async (flagForStart='none') => {
 //    document.getElementById("Button").disabled=true
     let newLoader = document.createElement('span');
     newLoader.setAttribute("class", "loader-assembled");
@@ -226,6 +226,87 @@ const createKorobkaElement = async () => {
         clone.querySelectorAll('.delete-korobka')[0].dataset.pk = resultApi.data;
         clone.querySelectorAll('.add-track')[0].onclick = () => {addTrackToKorobka(clone.querySelectorAll('.delete-korobka')[0], clone);};
 
+        if (flagForStart=='start') {
+            let newCheckDiv = document.createElement('div');
+            newCheckDiv.setAttribute("class", "buttons-orders-elm warehous-check");
+            newCheckDiv.id = "div-for-checked";
+            const dataHtml = {
+                'delivery-track': {'input1': {name : "Трек-номер", type: 'big'}},
+                'delivery-kurier': {'input1': {name : "Дата", type: 'date'}, 'input2': {name : "Время", type: 'time'}},
+                'delivery-car': {'input1': {name : "Номер автомобиля", type: 'small'}, 'input2': {name : "Дата", type: 'date'}},
+                'delivery-another': {'input1': {name : "Комментарий", type: 'big'}}
+            };
+            let arrayChecks = [['delivery-track', 'Перевозчик'], ['delivery-kurier', 'Курьер'], ['delivery-car', 'Машина'], ['delivery-another', 'Другое']];
+            arrayChecks.forEach((elm, ind) => {
+                let newCheckbox = document.createElement('input');
+                newCheckbox.type = 'checkbox';
+                newCheckbox.checked = ind == 0 ? true : false;
+                newCheckbox.setAttribute("class", "checkbox-filter-new btn-margin");
+                newCheckbox.id = elm[0];
+                function funcForCheck() {
+                    if (this.checked) {
+                        let idCheck = this.id;
+                        Array.from(newCheckDiv.querySelectorAll('input[type="checkbox"]')).forEach((check, checkInd) => {
+                            if (check.id != idCheck) check.checked = false;
+                        });
+                        let korobkaList = document.querySelectorAll('.assembly-korobka-row');
+                        korobkaList.forEach((el, i) => {
+                            let tableRows = el.getElementsByTagName("TR");
+                            tableRows.forEach((row, ri) => {
+                                let lng = row.cells[1].children.length;
+                                Array.from(row.cells[1].children).slice(0, lng-2).forEach((child, chInd) => {
+                                    row.cells[1].removeChild(child);
+                                });
+                                const elemBefor = row.cells[1].children[0];
+                                const data = dataHtml[elm[0]];
+                                Object.entries(data).forEach(([key, value]) => {
+                                    let objLabel = document.createElement('label');
+                                    objLabel.setAttribute("class", "shp-chk-lbl");
+                                    objLabel.innerHTML = value.name;
+                                    let objInput = document.createElement('input');
+                                    switch (value.type) {
+                                        case 'small':
+                                            objInput.type = 'text';
+                                            objInput.setAttribute("class", "shp-chk-small");
+                                            break;
+                                        case 'big':
+                                            objInput.type = 'text';
+                                            objInput.setAttribute("class", "shp-chk-big");
+                                            break;
+                                        case 'date':
+                                            objInput.type = 'date';
+                                            objInput.setAttribute("class", "shp-chk-small");
+                                            break;
+                                        case 'time':
+                                            objInput.type = 'time';
+                                            objInput.setAttribute("class", "shp-chk-small");
+                                            break;
+                                    }
+                                    row.cells[1].insertBefore(objInput, elemBefor);
+                                    row.cells[1].insertBefore(objLabel, objInput);
+                                    
+                                });
+                                
+                            });
+                        
+                        });
+                    } else {
+                        console.log("убираем check");
+                        this.checked = true;
+                    }
+                    
+                }
+                newCheckbox.onchange = funcForCheck.bind(newCheckbox);
+                let newCheckLabel = document.createElement('label');
+                newCheckLabel.htmlFor = elm[0];
+                newCheckLabel.innerHTML = elm[1];
+                newCheckDiv.appendChild(newCheckbox);
+                newCheckDiv.appendChild(newCheckLabel);
+            });
+            
+            parentKorobkaNode.insertBefore(newCheckDiv, parentKorobkaNode.lastChild.previousElementSibling);
+        }
+        
         parentKorobkaNode.insertBefore(clone, parentKorobkaNode.lastChild.previousElementSibling);
     }
     document.getElementById("status-title").removeChild(document.getElementById("loader-status"));
@@ -249,11 +330,77 @@ if (document.getElementById("korobka-add")) {
     }
 }
 
+if (document.getElementById("div-for-checked")) {
+    let newCheckDiv = document.getElementById("div-for-checked");
+    const dataHtml = {
+        'delivery-track': {'input1': {name : "Трек-номер", type: 'big'}},
+        'delivery-kurier': {'input1': {name : "Дата", type: 'date'}, 'input2': {name : "Время", type: 'time'}},
+        'delivery-car': {'input1': {name : "Номер автомобиля", type: 'small'}, 'input2': {name : "Дата", type: 'date'}},
+        'delivery-another': {'input1': {name : "Комментарий", type: 'big'}}
+    };
+    let arrayChecks = [['delivery-track', 'Перевозчик'], ['delivery-kurier', 'Курьер'], ['delivery-car', 'Машина'], ['delivery-another', 'Другое']];
+    function funcForCheck(indCheck) {
+        if (this.checked) {
+            let idCheck = this.id;
+            Array.from(newCheckDiv.querySelectorAll('input[type="checkbox"]')).forEach((check, checkInd) => {
+                if (check.id != idCheck) check.checked = false;
+            });
+            let korobkaList = document.querySelectorAll('.assembly-korobka-row');
+            korobkaList.forEach((el, i) => {
+                let tableRows = el.getElementsByTagName("TR");
+                tableRows.forEach((row, ri) => {
+                    let lng = row.cells[1].children.length;
+                    Array.from(row.cells[1].children).slice(0, lng-2).forEach((child, chInd) => {
+                        row.cells[1].removeChild(child);
+                    });
+                    const elemBefor = row.cells[1].children[0];
+                    const data = dataHtml[indCheck];
+                    Object.entries(data).forEach(([key, value]) => {
+                        let objLabel = document.createElement('label');
+                        objLabel.setAttribute("class", "shp-chk-lbl");
+                        objLabel.innerHTML = value.name;
+                        let objInput = document.createElement('input');
+                        switch (value.type) {
+                            case 'small':
+                                objInput.type = 'text';
+                                objInput.setAttribute("class", "shp-chk-small");
+                                break;
+                            case 'big':
+                                objInput.type = 'text';
+                                objInput.setAttribute("class", "shp-chk-big");
+                                break;
+                            case 'date':
+                                objInput.type = 'date';
+                                objInput.setAttribute("class", "shp-chk-small");
+                                break;
+                            case 'time':
+                                objInput.type = 'time';
+                                objInput.setAttribute("class", "shp-chk-small");
+                                break;
+                        }
+                        row.cells[1].insertBefore(objInput, elemBefor);
+                        row.cells[1].insertBefore(objLabel, objInput);
+
+                    });
+
+                });
+
+            });
+        } else {
+            console.log("убираем check");
+            this.checked = true;
+        }            
+    }
+    Array.from(newCheckDiv.querySelectorAll('input[type="checkbox"]')).forEach((elm, ind) => {
+        elm.onchange = funcForCheck.bind(elm, arrayChecks[ind][0]);
+    });
+}
+
 if (document.getElementById("start-assembl")) {
     document.getElementById("start-assembl").onclick = async () => {
         console.log(document.getElementById("start-assembl").dataset.korobkaflag);
         if (document.getElementById("start-assembl").dataset.korobkaflag == "no") {
-            await createKorobkaElement();
+            await createKorobkaElement("start");
             document.getElementById("korobka-add-wrap").classList.remove("korobka-item-none");
             document.getElementById("korobka-add-wrap").classList.add("korobka-item-show");
             document.getElementById("start-assembl").dataset.korobkaflag = "yes";

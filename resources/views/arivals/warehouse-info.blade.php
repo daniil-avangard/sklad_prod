@@ -12,15 +12,15 @@
 
 @section('content')
     @include('includes.breadcrumb', [
-        'title' => 'Заказы',
+        'title' => 'Остатки',
         'route' => 'orders',
-        'breadcrumbs' => 'Заказы',
+        'breadcrumbs' => 'Остатки',
         // 'add_route' => 'orders.create',
     ])
     <div class="row">
         <div class="col-12">
-            <h4 class="page-title-svod-h4">Таблица, необходимых для отправки заказов на <span id="month-orders">май</span></h4>
-            <h6 class="page-title-svod-h6">Утвержденные заказы в период с <span id="date-orders">25</span> числа и до окончания месяца</h6>
+            <h4 class="page-title-svod-h4" style="margin-bottom: 10px !important;">Остатки товаров</h4>
+            
                 <div class="table-container">
 			<table id="excel-table" class="long-table">
                             <tr>
