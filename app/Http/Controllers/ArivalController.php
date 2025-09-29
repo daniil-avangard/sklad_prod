@@ -197,7 +197,10 @@ class ArivalController extends Controller
         $order->items = $order->items->sortBy(function ($item) {
             return $item->product->name;
         });
-        $korobkas = Korobka::where('order_id', $order->id)->get();
+        $korobkas = Korobka::where('order_id', $order->id)
+            ->orderBy('counter_number')
+            ->orderBy('id')
+            ->get();
         $flagKorobka = "no";
         if (count($korobkas) > 0) {
             $flagKorobka = "yes";
@@ -215,12 +218,22 @@ class ArivalController extends Controller
 
         if ($request->action == "create") {
             $korobka = new Korobka();
-            $korobka->counter_number = $request->name;
+            // Назначаем следующий порядковый номер независимо от клиентского значения
+            $nextCounter = Korobka::where('order_id', $request->orderId)->max('counter_number');
+            $korobka->counter_number = ($nextCounter ? $nextCounter : 0) + 1;
             $korobka->order_id = $request->orderId;
             $korobka->save();
         } else {
             $korobka = Korobka::find($request->orderId);
+            $orderId = $korobka->order_id;
             $korobka->delete();
+            // Перенумеруем оставшиеся коробки
+            $rest = Korobka::where('order_id', $orderId)->orderBy('counter_number')->orderBy('id')->get();
+            $i = 1;
+            foreach ($rest as $k) {
+                $k->counter_number = $i++;
+                $k->save();
+            }
         }
 
         return response()->json(['success' => true, 'data' => $korobka->id]);
@@ -236,7 +249,83 @@ class ArivalController extends Controller
         $this->authorize('update', Korobka::class);
 
         $korobka = Korobka::find($request->orderId);
-        $korobka->track_number = $request->track;
+        if (!$korobka) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Korobka not found',
+                'received_id' => $request->orderId,
+            ], 422);
+        }
+
+        // Универсальная обработка способов доставки
+        $action = $request->input('action', 'save'); // save|clear
+        $method = $request->input('method'); // track|courier|car|other
+
+        if ($action === 'clear') {
+            // Очистка ТОЛЬКО выбранного способа
+            switch ($request->input('method')) {
+                case 'track':
+                    $korobka->track_number = null;
+                    if ($korobka->delivery_method === 'track') $korobka->delivery_method = null;
+                    break;
+                case 'courier':
+                    $korobka->courier_date = null;
+                    $korobka->courier_time = null;
+                    if ($korobka->delivery_method === 'courier') $korobka->delivery_method = null;
+                    break;
+                case 'car':
+                    $korobka->car_number = null;
+                    $korobka->car_date = null;
+                    if ($korobka->delivery_method === 'car') $korobka->delivery_method = null;
+                    break;
+                case 'other':
+                    $korobka->other_comment = null;
+                    if ($korobka->delivery_method === 'other') $korobka->delivery_method = null;
+                    break;
+            }
+            $korobka->save();
+            return response()->json(['success' => true]);
+        }
+
+        // Сохранение по методу
+        // Сохранение по методу. Проставляем delivery_method только для сохранённого варианта
+        $korobka->delivery_method = $method;
+        switch ($method) {
+            case 'track':
+                $korobka->track_number = $request->input('track');
+                // очистка прочих
+                $korobka->courier_date = null;
+                $korobka->courier_time = null;
+                $korobka->car_number = null;
+                $korobka->car_date = null;
+                $korobka->other_comment = null;
+                break;
+            case 'courier':
+                $korobka->courier_date = $request->input('date');
+                $korobka->courier_time = $request->input('time');
+                $korobka->track_number = null;
+                $korobka->car_number = null;
+                $korobka->car_date = null;
+                $korobka->other_comment = null;
+                break;
+            case 'car':
+                $korobka->car_number = $request->input('car_number');
+                $korobka->car_date = $request->input('date');
+                $korobka->track_number = null;
+                $korobka->courier_date = null;
+                $korobka->courier_time = null;
+                $korobka->other_comment = null;
+                break;
+            case 'other':
+                $korobka->other_comment = $request->input('comment');
+                $korobka->track_number = null;
+                $korobka->courier_date = null;
+                $korobka->courier_time = null;
+                $korobka->car_number = null;
+                $korobka->car_date = null;
+                break;
+        }
+
         $korobka->save();
         return response()->json(['success' => true]);
     }
@@ -266,5 +355,22 @@ class ArivalController extends Controller
         $order->save();
         $name = $order->status->name();
         return response()->json(['success' => true, 'data' => $orderStatus, 'name' => $name]);
+    }
+
+    public function setDeliveryMethod(Request $request)
+    {
+        $this->authorize('update', Korobka::class);
+        $orderId = $request->input('orderId');
+        $method = $request->input('method'); // track|courier|car|other
+        $map = ['delivery-track' => 'track', 'delivery-kurier' => 'courier', 'delivery-car' => 'car', 'delivery-another' => 'other'];
+        if (isset($map[$method])) $method = $map[$method];
+
+        // Проставляем метод всем коробкам заказа, чтобы при возврате восстановить
+        $korobkas = Korobka::where('order_id', $orderId)->get();
+        foreach ($korobkas as $k) {
+            $k->delivery_method = $method;
+            $k->save();
+        }
+        return response()->json(['success' => true, 'method' => $method]);
     }
 }

@@ -4,6 +4,23 @@
     <link type="text/css" href="/plugins/x-editable/css/bootstrap-editable.css" rel="stylesheet">
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        /* Фиксируем ширину таблиц сборки, чтобы они не «прыгали» */
+        .assembly-korobka-row .table{width:100%; max-width:780px; margin:0 auto; table-layout:fixed;}
+        .assembly-korobka-row .table td{vertical-align:middle;}
+        /* Колонки как Row[SizedBox(100), Expanded(), SizedBox(200)] */
+        .assembly-korobka-row .table td:nth-child(1){width:100px; white-space:nowrap;}
+        .assembly-korobka-row .table td:nth-child(3){width:200px; white-space:nowrap;}
+        .assembly-korobka-row .table td:nth-child(2){width:calc(100% - 300px);}        
+        .assembly-korobka-row .korobka-actions-td{display:flex;gap:8px;align-items:center;justify-content:flex-end;white-space:nowrap;}
+        .assembly-korobka-row .korobka-actions-td button{padding:4px 8px;font-size:12px;}
+        /* Чтобы элементы не ломали макет */
+        .assembly-korobka-row .shp-chk-small{max-width:140px;}
+        .assembly-korobka-row .shp-chk-big{width:100%; max-width:none;}
+        .assembly-korobka-row .shp-chk-lbl{margin-right:6px;}
+        /* Убираем горизонтальный скролл, если появлялся */
+        .assembly-korobka-row .table-responsive{overflow-x:hidden;}
+    </style>
 <!--    <style type="text/css" media="print">
         @page { size: landscape; }
     </style>-->
@@ -186,19 +203,25 @@
 
                 <div id="korobka-block-item" class="row assembly-korobka-row korobka-item-none">
                     <div class="table-responsive">
-                        <table class="table table-bordered">
+                            <table class="table table-bordered">
+                            <colgroup>
+                                <col style="width:100px">
+                                <col>
+                                <col style="width:200px">
+                            </colgroup>
                             <thead></thead>
                             <tbody>
-                                <tr>
+                                    <tr>
                                     <td>Коробка 1</td>
                                     <td>
                                         <label>Трек-номер</label>
                                         <input type="text" id="" name="korobka" value=''>
-                                        <button class="add-track">Добавить</button>
-                                        <button class="clean-track">Очистить</button>
+                                        <button type="button" class="clean-track">✕</button>
+                                        <button type="button" class="add-track">✓</button>
                                     </td>
-                                    <td>
-                                        <button class="delete-korobka" data-pk="{{ $order->id }}">Удалить</button>
+                                    <td class="korobka-actions-td">
+                                        <button type="button" class="delete-korobka" data-pk="{{ $order->id }}">Удалить</button>
+                                        <button type="button" class="copy-korobka" disabled>Дублировать</button>
                                     </td>
                                 </tr>
                             </tbody>
@@ -209,13 +232,13 @@
                 
                 @if (count($korobkas) > 0)
                     <div class="buttons-orders-elm warehous-check" id="div-for-checked">
-                        <input class="checkbox-filter-new btn-margin" type="checkbox" value="1" id="delivery-track">
+                        <input class="checkbox-filter-new btn-margin" type="radio" name="delivery-method" value="delivery-track" id="delivery-track">
                         <label for="delivery-track">Перевозчик</label>
-                        <input class="checkbox-filter-new btn-margin" type="checkbox" value="1" id="delivery-kurier">
+                        <input class="checkbox-filter-new btn-margin" type="radio" name="delivery-method" value="delivery-kurier" id="delivery-kurier">
                         <label for="delivery-kurier">Курьер</label>
-                        <input class="checkbox-filter-new btn-margin" type="checkbox" value="1" id="delivery-car">
+                        <input class="checkbox-filter-new btn-margin" type="radio" name="delivery-method" value="delivery-car" id="delivery-car">
                         <label for="delivery-car">Машина</label>
-                        <input class="checkbox-filter-new btn-margin" type="checkbox" value="1" id="delivery-another">
+                        <input class="checkbox-filter-new btn-margin" type="radio" name="delivery-method" value="delivery-another" id="delivery-another">
                         <label for="delivery-another">Другое</label>
                     </div>
                 @endif
@@ -224,20 +247,33 @@
                     <div class="row assembly-korobka-row">
                         <div class="table-responsive">
                             <table class="table table-bordered">
+                                <colgroup>
+                                    <col style="width:100px">
+                                    <col>
+                                    <col style="width:200px">
+                                </colgroup>
+                                <thead></thead>
+                            <table class="table table-bordered">
+                                <colgroup>
+                                    <col style="width:100px">
+                                    <col>
+                                    <col style="width:200px">
+                                </colgroup>
                                 <thead></thead>
                                 <tbody>
-                                    <tr>
+                                    <tr data-method="{{ $korobka->delivery_method }}" data-track="{{ $korobka->track_number }}" data-courier-date="{{ $korobka->courier_date }}" data-courier-time="{{ $korobka->courier_time }}" data-car-number="{{ $korobka->car_number }}" data-car-date="{{ $korobka->car_date }}" data-other-comment="{{ $korobka->other_comment }}">
                                         <td>Коробка {{ $korobka->counter_number }}</td>
                                         <td>
                                             <label>Трек-номер</label>
                                             <input type="text" id="" name="korobka" value='{{ $korobka->track_number }}'>
 
-                                            <button class="add-track">Добавить</button>
+                                            <button type="button" class="clean-track">✕</button>
 
-                                            <button class="clean-track">Очисить</button>
+                                            <button type="button" class="add-track">✓</button>
                                         </td>
-                                        <td>
-                                            <button class="delete-korobka" data-pk="{{ $korobka->id }}">Удалить</button>
+                                        <td class="korobka-actions-td">
+                                            <button type="button" class="delete-korobka" data-pk="{{ $korobka->id }}">Удалить</button>
+                                            <button type="button" class="copy-korobka" data-pk="{{ $korobka->id }}" {{ $korobka->delivery_method ? '' : 'disabled' }}>Дублировать</button>
                                         </td>
                                     </tr>
                                 </tbody>
