@@ -160,11 +160,15 @@ class ExcellTable {
                 confirmButtonColor: "#006237",
                 cancelButtonText: "Отмена",
                 cancelButtonColor: "#FF8800",
+                customClass: {
+                    confirmButton: 'swal2-btn-eq',
+                    cancelButton: 'swal2-btn-eq'
+                },
                 allowOutsideClick: false,
                 allowEscapeKey: false
             }).then((result) => {
                 console.log("result.isConfirmed = ", result);
-                if (result.isConfirmed) {
+                if (result.isConfirmed || result.value === true) {
                     window.open(url, "_self");
                 } else {
                     self.butonChangeOrderAllStatus.disabled = false;
