@@ -1008,8 +1008,51 @@ class OrderController extends Controller
         $allDivisionsData = $result[2];
         $allDivisionsDataNew = $result[3];
         $totalNewData = $result[4];
-        //
-        return response()->json(['success' => true, 'uniqGoods' => $uniqGoods, 'uniqGoodsTotalOrdered' => $uniqGoodsTotalOrdered, 'uniqGoodsNewOrdered' => $uniqGoodsNewOrdered, 'flagForExcell' => $flagForExcell, 'totalNewData' => $totalNewData, 'allDivisionsDataNew' => $allDivisionsDataNew]);
+        // Собираем комментарии по подразделениям для текущей роли (как и данные таблицы)
+        $roleNames = Auth::user()->roles()->pluck('name')->toArray();
+        $currentRoleStatus = (in_array(UserRoleEnum::TOP_MANAGER->label(), $roleNames)) ? StatusEnum::PROCESSING->value : StatusEnum::NEW->value;
+        $divisionComments = [];
+        $divisionManagerComments = [];
+        foreach ($currentSessionOrders as $order) {
+            if ($order->status->value == $currentRoleStatus) {
+                $commentText = trim((string)($order->comment ?? ''));
+                if ($commentText !== '') {
+                    $divName = $order->division->name;
+                    if (!isset($divisionComments[$divName])) {
+                        $divisionComments[$divName] = $commentText;
+                    } else {
+                        $divisionComments[$divName] = $divisionComments[$divName] . "\n\n" . $commentText;
+                    }
+                }
+                $managerCommentText = trim((string)($order->comment_manager ?? ''));
+                if ($managerCommentText !== '') {
+                    $divName = $order->division->name;
+                    if (!isset($divisionManagerComments[$divName])) {
+                        $divisionManagerComments[$divName] = $managerCommentText;
+                    } else {
+                        // показываем последний по времени комментарий более приоритетно
+                        $divisionManagerComments[$divName] = $managerCommentText;
+                    }
+                }
+                // один активный orderId на дивизион для редактирования комментария куратора
+                $divNameForId = $order->division->name;
+                if (!isset($divisionOrderIds[$divNameForId])) {
+                    $divisionOrderIds[$divNameForId] = $order->id;
+                }
+            }
+        }
+        return response()->json([
+            'success' => true,
+            'uniqGoods' => $uniqGoods,
+            'uniqGoodsTotalOrdered' => $uniqGoodsTotalOrdered,
+            'uniqGoodsNewOrdered' => $uniqGoodsNewOrdered,
+            'flagForExcell' => $flagForExcell,
+            'totalNewData' => $totalNewData,
+            'allDivisionsDataNew' => $allDivisionsDataNew,
+            'divisionComments' => $divisionComments,
+            'divisionManagerComments' => $divisionManagerComments,
+            'divisionOrderIds' => $divisionOrderIds ?? [],
+        ]);
     }
 
     // Статуты бля заказаков

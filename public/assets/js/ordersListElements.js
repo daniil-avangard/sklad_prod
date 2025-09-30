@@ -8,6 +8,7 @@ class ExcellTable {
 //    this.editElementsOrders = document.querySelectorAll('.edit-button-excell');
     this.tableThMain = document.getElementById('excel-table').getElementsByTagName("TH")[0];
     this.tableInputToZero = document.querySelectorAll('.checkbox-filter-new');
+    this.divisionCommentButtons = document.querySelectorAll('.division-comment-btn');
     
     this.adjustHTML();
     this.start();
@@ -79,6 +80,9 @@ class ExcellTable {
         this.onlyNewOrdersData = res.totalNewData;
         this.allDivisionsDataNew = res.allDivisionsDataNew;
         this.uniqGoodsNewOrdered = res.uniqGoodsNewOrdered;
+        this.divisionComments = res.divisionComments || {};
+        this.divisionManagerComments = res.divisionManagerComments || {};
+        this.divisionOrderIds = res.divisionOrderIds || {};
         document.getElementById('date-orders').innerHTML = this.flagRoleForExcell ? "27" : "25";
         this.initSettings();
         this.settingsCheckBoxToZero();
@@ -87,10 +91,108 @@ class ExcellTable {
         Array.from(this.tableInputToZero).forEach((el, ind) => {
             el.disabled = false;
         });
+        this.setupDivisionCommentsUI();
     }
     catch(error) {
         console.log(error.message);
     }
+  }
+
+  setupDivisionCommentsUI() {
+    if (!this.divisionCommentButtons || this.divisionCommentButtons.length === 0) return;
+    Array.from(this.divisionCommentButtons).forEach((btn) => {
+      const division = btn.dataset.division;
+      const clientComment = (this.divisionComments && this.divisionComments[division]) ? String(this.divisionComments[division]) : '';
+      const managerComment = (this.divisionManagerComments && this.divisionManagerComments[division]) ? String(this.divisionManagerComments[division]) : '';
+      const finalText = [clientComment, managerComment].filter(Boolean).join('\n\n');
+      const hasComment = finalText.trim().length > 0;
+      btn.disabled = !hasComment;
+      if (hasComment) {
+        btn.classList.remove('btn-outline-secondary');
+        btn.classList.add('btn-info');
+        btn.onclick = () => this.openCommentDialog(division, clientComment, managerComment);
+      } else {
+        btn.onclick = () => this.openCommentDialog(division, clientComment, managerComment);
+        btn.classList.remove('btn-info');
+        btn.classList.add('btn-outline-secondary');
+      }
+    });
+  }
+
+  openCommentDialog(division, clientComment, managerComment) {
+    let orderId = this.divisionOrderIds ? this.divisionOrderIds[division] : undefined;
+    if (!orderId) {
+      const p = document.querySelector(`.clickForOrder[data-division="${division}"][data-orderid]`);
+      if (p && p.dataset && p.dataset.orderid) orderId = p.dataset.orderid;
+    }
+    const readOnlyClient = clientComment && clientComment.trim().length > 0 ? clientComment : '';
+    const initialManager = managerComment || '';
+
+    const html = readOnlyClient ? `<div style="text-align:left;margin-bottom:8px"><b>Комментарий заказчика:</b><br>${this.escapeHtml(readOnlyClient).replace(/\n/g,'<br>')}</div>` : '';
+
+    Swal.fire({
+      title: 'Комментарий',
+      html: html,
+      input: 'textarea',
+      inputValue: initialManager,
+      inputPlaceholder: 'Введите комментарий куратора',
+      inputAttributes: { 'aria-label': 'Комментарий куратора' },
+      showCancelButton: true,
+      confirmButtonText: 'Сохранить',
+      cancelButtonText: 'Отмена',
+      confirmButtonColor: '#006237',
+      cancelButtonColor: '#FF8800',
+      customClass: { confirmButton: 'swal2-btn-eq', cancelButton: 'swal2-btn-eq' },
+      allowOutsideClick: true,
+      allowEscapeKey: true,
+      showClass: { popup: '' },
+      hideClass: { popup: '' }
+    }).then(async (result) => {
+      if (!result.isConfirmed) return;
+      const newComment = typeof result.value === 'string' ? result.value : '';
+      if (!orderId) {
+        Toast.fire({ icon: 'error', text: 'No order is available to attach a comment.' });
+        return;
+      }
+      try {
+        const params = new URLSearchParams();
+        params.append('id', orderId);
+        params.append('comment_manager', newComment);
+        params.append('_token', $('meta[name="csrf-token"]').attr('content'));
+        const resp = await fetch('/orders/update-comment-manager', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          credentials: 'same-origin',
+          body: params.toString()
+        });
+        if (!resp.ok) throw new Error(`Response status: ${resp.status}`);
+        const data = await resp.json();
+        if (data && data.success) {
+          this.divisionManagerComments[division] = newComment;
+          this.setupDivisionCommentsUI();
+          Toast.fire({ icon: 'success', text: 'Comment saved', timer: 1200 });
+        } else {
+          Toast.fire({ icon: 'error', text: 'Failed to save comment' });
+        }
+      } catch (e) {
+        console.log(e.message);
+        Toast.fire({ icon: 'error', text: 'Failed to save comment' });
+      }
+    });
+  }
+
+  escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
   }
   
   checkDateForButton() {
