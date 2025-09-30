@@ -12,6 +12,12 @@ class Korobka extends Model
     protected $fillable = [
         'counter_number',
         'track_number',
+        'delivery_method',
+        'courier_date',
+        'courier_time',
+        'car_number',
+        'car_date',
+        'other_comment',
         'order_id',
     ];
     

@@ -7,9 +7,9 @@
                         <div class="col-lg-4 align-self-center mb-3 mb-lg-0">
                             <div class="dastone-profile-main">
                                 <div class="dastone-profile-main-pic">
-                                    <img src="/assets/images/users/user-4.jpg" alt="" height="110"
+                                    <img id="avatarPreview" src="{{ $user->avatar ? asset('storage/' . $user->avatar) : '/assets/images/users/user-4.jpg' }}" alt="" height="110"
                                         class="rounded-circle">
-                                    <span class="dastone-profile_main-pic-change">
+                                    <span class="dastone-profile_main-pic-change" style="cursor:pointer" title="Загрузить аватар">
                                         <i class="fas fa-camera"></i>
                                     </span>
                                 </div>

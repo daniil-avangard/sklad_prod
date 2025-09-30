@@ -28,6 +28,8 @@ class UpdateDataRequest extends FormRequest
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['nullable', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:255'],
+            'avatar' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:10240'],
+            'delete_avatar' => ['nullable', 'boolean'],
         ];
     }
 }
