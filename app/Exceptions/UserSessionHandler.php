@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
-use Exception;
+// use Exception;
 
 class UserSessionHandler extends Exception
 {

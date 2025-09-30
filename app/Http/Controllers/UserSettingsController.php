@@ -10,6 +10,7 @@ use App\Http\Requests\UserSettings\UpdatePasswordRequest;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Order;
 use App\Models\OrderItem;
+use Illuminate\Support\Facades\Storage;
 
 class UserSettingsController extends Controller
 {
@@ -22,7 +23,30 @@ class UserSettingsController extends Controller
     public function update(UpdateDataRequest $request)
     {
         $user = User::find(Auth::user()->id);
-        $user->update($request->all());
+
+        $data = $request->only(['surname','first_name','middle_name','phone']);
+
+        // Удаление текущего аватара по флажку
+        if ($request->boolean('delete_avatar') && $user->avatar) {
+            if (Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $data['avatar'] = null;
+        }
+
+        // Загрузка нового аватара
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            // удалить старый, если есть
+            if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            $data['avatar'] = $path;
+        }
+
+        $user->fill($data);
+        $user->save();
+
         return redirect()->back()->with('success', 'Данные успешно обновлены');
     }
 

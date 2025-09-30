@@ -150,8 +150,8 @@ class ExcellTable {
             self.butonChangeOrderAllStatus.disabled = true;
             const url = new URL(window.location.origin);
             url.pathname = '/ordersNewUpdate';
-            let textForToast = this.flagRoleForExcell ? "Заказы переведутся на склад." : "Заказы переведутся на утверждение начальнику куратора.";
-            Toast.fire({
+        let textForToast = this.flagRoleForExcell ? "Заказы переведутся на склад." : "Заказы переведутся на утверждение начальнику куратора.";
+            Swal.fire({
                 icon: 'success',
                 text: textForToast,
                 showConfirmButton: true,
@@ -160,10 +160,15 @@ class ExcellTable {
                 confirmButtonColor: "#006237",
                 cancelButtonText: "Отмена",
                 cancelButtonColor: "#FF8800",
-                timer: 3000
+                customClass: {
+                    confirmButton: 'swal2-btn-eq',
+                    cancelButton: 'swal2-btn-eq'
+                },
+                allowOutsideClick: false,
+                allowEscapeKey: false
             }).then((result) => {
                 console.log("result.isConfirmed = ", result);
-                if ((result.value || result.dismiss == 'timer')) {
+                if (result.isConfirmed || result.value === true) {
                     window.open(url, "_self");
                 } else {
                     self.butonChangeOrderAllStatus.disabled = false;

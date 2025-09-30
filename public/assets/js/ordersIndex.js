@@ -717,5 +717,23 @@ class FilterPage {
 }
 
 document.addEventListener("DOMContentLoaded", function() {
+    if (window.Highcharts && Highcharts.setOptions) {
+        Highcharts.setOptions({
+            lang: {
+                contextButtonTitle: 'Меню экспорта',
+                viewFullscreen: 'Во весь экран',
+                exitFullscreen: 'Выйти из полноэкранного режима',
+                printChart: 'Печать графика',
+                downloadPNG: 'Скачать PNG изображение',
+                downloadJPEG: 'Скачать JPEG изображение',
+                downloadSVG: 'Скачать SVG векторное изображение',
+                downloadPDF: 'Скачать PDF документ',
+                downloadCSV: 'Скачать CSV',
+                downloadXLS: 'Скачать XLS',
+                viewData: 'Показать таблицу данных',
+                hideData: 'Скрыть таблицу данных'
+            }
+        });
+    }
     const obj = new FilterPage();
 });

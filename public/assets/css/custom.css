@@ -23,3 +23,8 @@
     width: 150px !important;
     height: 20px !important;
 }
+.swal2-btn-eq {
+  min-width: 120px;
+  padding-left: 16px !important;
+  padding-right: 16px !important;
+}
