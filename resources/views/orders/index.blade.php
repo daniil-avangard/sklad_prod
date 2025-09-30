@@ -4,12 +4,12 @@
 @section('title_page', 'Заказы')
 
 @push('scripts-plugins')
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/stock/modules/stock.js"></script>
-    <script src="https://code.highcharts.com/modules/series-label.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="/plugins/high-charts/highcharts.js"></script>
+    <script src="/plugins/high-charts/stock.js"></script>
+    <script src="/plugins/high-charts/accessibility.js"></script>
+    <script src="/plugins/high-charts/series-label.js"></script>
+    <script src="/plugins/high-charts/exporting.js"></script>
+    <script src="/plugins/high-charts/export-data.js"></script>
 @endpush
 
 @push('styles-plugins')
