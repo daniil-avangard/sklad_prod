@@ -36,6 +36,21 @@
                                 <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-last-column">Тираж<br>для<br>дозаказа</th>                               
                                 @endif
                             </tr>
+                            <tr class="comments-row">
+                                <th class="first-col bckgrnd-table-cell-2"></th>
+                                @foreach ($divisionNames as $divisionName)
+                                    <th class="bckgrnd-table-cell-2">
+                                        <button type="button" class="btn btn-outline-secondary btn-sm division-comment-btn" data-division="{{ $divisionName['name'] }}" disabled>Комментарий</button>
+                                    </th>
+                                @endforeach
+                                @if ($flagForExcell == "show")
+                                    <th class="bckgrnd-table-cell-2 for-anothe-col-width for-another-column-3"></th>
+                                    <th class="bckgrnd-table-cell-2 for-anothe-col-width for-another-column-2"></th>
+                                    <th class="bckgrnd-table-cell-2 for-anothe-col-width for-another-column-1"></th>
+                                    <th class="bckgrnd-table-cell-2 for-anothe-col-width for-another-column"></th>
+                                    <th class="bckgrnd-table-cell-2 for-anothe-col-width for-last-column"></th>
+                                @endif
+                            </tr>
                             @foreach ($uniqGoods as $good)
                                 @if (($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]) - $good['min_stock'] >= 0)
                                 <tr>
