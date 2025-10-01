@@ -475,6 +475,9 @@
                                     @endforeach
                                 </td>
                                 <td class="text-center"><span class="badge bg-{{ $order->status->color() }}">{{ $order->status->name() }}</span>
+                                    @if (!empty($order->comment_manager))
+                                    <div class="mt-1">Коментарий куратора:<br>{{ $order->comment_manager }}</div>
+                                    @endif
                                 </td>
                                 
 

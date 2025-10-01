@@ -24,7 +24,16 @@
     height: 20px !important;
 }
 .swal2-btn-eq {
-  min-width: 120px;
-  padding-left: 16px !important;
-  padding-right: 16px !important;
+  min-width: 160px;
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+
+/* Fix display of curator comment link (bootstrap-editable adds dashed underline) */
+a#comments-manager.editable-click {
+  border-bottom: none !important;
+  text-decoration: none !important;
+}
+a#comments-manager {
+  text-align: left !important;
 }

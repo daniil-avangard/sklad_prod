@@ -156,9 +156,7 @@
                                 @can('update', $order)
                             href="#" class="comments-manager" id="comments-manager" data-type="textarea"
                                 data-pk="{{ $order->id }}" data-title="Введите комментарий"
-                                @endcan>
-                                {{ $order->comment_manager }}
-                            </a>
+                                @endcan>{{ $order->comment_manager }}</a>
                         </p>
                     </div>
 
