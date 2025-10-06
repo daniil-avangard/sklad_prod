@@ -108,15 +108,19 @@ class ProductTable {
                                 let searchTem = '1';
                                 let flag = false;
                                 let arrayForAnd = [];
+                                let checkCategory = false;
                                 
-                                let flagForAnd = companyFilter.value == "all" || companyFilter.value == "" ? false : true;
+                                let flagForAnd = companyFilter.value != "all" && companyFilter.value != "" ? true : false;
                                 if (flagForAnd) arrayForAnd.push(companyFilter.value);
                                 if (!flagForAnd) {
-                                    flagForAnd = categoryFilter.value == "all" || categoryFilter.value == "" ? false : true;
-                                    if (flagForAnd) arrayForAnd.push(categoryFilter.value);
+                                    flagForAnd = categoryFilter.value != "all" && categoryFilter.value != "" ? true : false;
+                                    if (flagForAnd) {
+                                        arrayForAnd.push(categoryFilter.value);
+                                        checkCategory = true;
+                                    }
                                 }
-                                if (categoryFilter.value != "all" && categoryFilter.value != "") arrayForAnd.push(categoryFilter.value);
-                                console.log(flagForAnd, arrayForAnd.length);
+                                if (categoryFilter.value != "all" && categoryFilter.value != "" && !(checkCategory)) arrayForAnd.push(categoryFilter.value);
+                                console.log(flagForAnd, arrayForAnd);
                                 let selectorForCheckboxes = false;
                                 checkedArrayNew.forEach((elm, ind) => {
                                     if (elm[0]) {
@@ -164,25 +168,54 @@ class ProductTable {
                 } else {
                     $.fn.DataTable.ext.search.push(
                             function(settings, data, dataIndex) {
-                                let flagForAnd = companyFilter.value == "all" || companyFilter.value == "" ? false : true;
+                                let flagForAnd = companyFilter.value != "all" && companyFilter.value != "" ? true : false;
+                                let arrayForAnd = [];
+                                let checkCategory = false;
+                                if (flagForAnd) arrayForAnd.push(companyFilter.value);
+                                if (!flagForAnd) {
+                                    flagForAnd = categoryFilter.value != "all" && categoryFilter.value != "" ? true : false;
+                                    if (flagForAnd) {
+                                        arrayForAnd.push(categoryFilter.value);
+                                        checkCategory = true;
+                                    }
+                                }
+                                if (categoryFilter.value != "all" && categoryFilter.value != "" && !(checkCategory)) arrayForAnd.push(categoryFilter.value);
                                 console.log("checking here = ", flagForAnd);
                                 let searchTem = '1';
                                 let flag = false;
                                 
                           
                                 filterArrayValued.forEach((elm1, ind) => {
-                                    if (companyFilter != elm1[1]) {
+                                    if (companyFilter != elm1[1] && categoryFilter != elm1[1]) {
                                         if (data[elm1[0]].includes(elm1[1].value)) flag = true;
                                     }
                                 });
-                          
+                                let checkFilterArrayValued = filterArrayValued.filter((elmF => elmF[1] != companyFilter && elmF[1] != categoryFilter));
+//                                
+                                if (flagForAnd && checkFilterArrayValued.length == 0) {
+                                    let newFilterArrayValued = filterArrayValued.filter((elmF => elmF[1] == companyFilter || elmF[1] == categoryFilter));
+                                    newFilterArrayValued.forEach((elm1, ind) => {
+                                  
+                                        if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                   
+                                    });
+                                }
+                           
                                 
-//                                if (data[columnIndex].includes(value)) flag = true;
+//                                здесь фильтр на "и"
                                 if (flagForAnd && flag) {
-                                    if (data[self.arrayOfFilters1[0][0]].includes(companyFilter.value)) {
+                                    if (data[self.arrayOfFilters1[0][0]].includes(companyFilter.value) || data[self.arrayOfFilters1[1][0]].includes(categoryFilter.value)) {
                                         flag = true;
                                     } else {
                                         flag = false;
+                                    }
+                                    
+                                    if (arrayForAnd.length > 1) {
+                                        if (data[self.arrayOfFilters1[0][0]].includes(companyFilter.value) && data[self.arrayOfFilters1[1][0]].includes(categoryFilter.value)) {
+                                            flag = true;
+                                        } else {
+                                            flag = false;
+                                        }
                                     }
                                 }
                                 return flag;
@@ -216,6 +249,7 @@ class ProductTable {
         checkbox.addEventListener('change', () => {
             const isChecked = checkbox.checked;
             const companyFilter = this.companyFilter;
+            const categoryFilter = this.categoryFilter;
             
             if (isChecked) {
                 this.table.search('').columns().search('').draw();
@@ -225,8 +259,16 @@ class ProductTable {
                 $.fn.DataTable.ext.search.push(
                         function(settings, data, dataIndex) {
                             let flagForAnd = companyFilter.value == "all" || companyFilter.value == "" ? false : true;
+                            let arrayForAnd = [];
+                            if (flagForAnd) arrayForAnd.push(companyFilter.value);
+                                if (!flagForAnd) {
+                                    flagForAnd = categoryFilter.value == "all" || categoryFilter.value == "" ? false : true;
+                                    if (flagForAnd) arrayForAnd.push(categoryFilter.value);
+                                }
+                                if (categoryFilter.value != "all" && categoryFilter.value != "") arrayForAnd.push(categoryFilter.value);
                             let searchTem = '1';
                             let flag = false;
+                            
                             checkedArray.forEach((elm, ind) => {
                                 if (elm[0]) {
                                     if (data[elm[1]].includes(searchTem)) flag = true;
@@ -245,7 +287,15 @@ class ProductTable {
                                     } else {
                                         flag = false;
                                     }
-                                }
+                                    
+                                    if (arrayForAnd.length > 1) {
+                                        if (data[self.arrayOfFilters1[0][0]].includes(companyFilter.value) && data[self.arrayOfFilters1[1][0]].includes(categoryFilter.value)) {
+                                            flag = true;
+                                        } else {
+                                            flag = false;
+                                        }
+                                    }
+                            }
                             return flag
                         }
                     
