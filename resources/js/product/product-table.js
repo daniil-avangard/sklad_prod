@@ -33,7 +33,7 @@ class ProductTable {
         const tableColumns = this.accessColumnByUserRole[role];
         
         this.arrayOfCheckboxes1 = [[tableColumns.kko_hall, this.kko_hall], [tableColumns.kko_account_opening, this.kko_account_opening], [tableColumns.kko_manager, this.kko_manager], [tableColumns.express_hall, this.express_hall]];
-        this.arrayOfFilters1 = [[tableColumns.kko_operator, this.kko_operator], [tableColumns.express_operator, this.express_operator]];
+        this.arrayOfFilters1 = [[tableColumns.company, this.companyFilter],[tableColumns.kko_operator, this.kko_operator], [tableColumns.express_operator, this.express_operator]];
 
         // Слушатели на селекты
         if (tableColumns.company) this.#filterBySelect(tableColumns.company, this.companyFilter);
