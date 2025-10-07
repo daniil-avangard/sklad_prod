@@ -23,12 +23,12 @@
                                                 <div class="form-group row">
                                                     <div class="col-sm-4">
                                                         <label for="invoice" class="form-label">Номер документа</label>
-                                                        <input type="text" name="invoice" class="form-control">
+                                                        <input type="text" name="invoice" class="form-control" required>
                                                     </div>
 
                                                     <div class="col-sm-4">
                                                         <label for="arrival_date" class="form-label">Дата прихода</label>
-                                                        <input type="date" name="arrival_date" class="form-control">
+                                                        <input type="date" name="arrival_date" class="form-control" required>
                                                     </div>
 
                                                 </div>
@@ -40,7 +40,7 @@
                                                                 <div class="form-group row d-flex align-items-end">
                                                                 <div class="col-sm-4">
                                                                 <label class="form-label">Товары</label>
-                                                                <select name="products[0][product_id]" class="form-select select2 product-select">
+                                                                <select name="products[0][product_id]" class="form-select select2 product-select" required>
                                                                     <option value="">Выберите товар</option>
                                                                     @foreach ($products as $product)
                                                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
@@ -51,7 +51,7 @@
 
                                                             <div class="col-sm-4">
                                                                 <label class="form-label">Количество</label>
-                                                                <input type="text" name="product[0][quantity]" value="0" class="form-control">
+                                                                <input type="text" name="product[0][quantity]" value="0" class="form-control" required>
                                                             </div><!--end col-->
                                                             
                                                             <div class="col-sm-3">

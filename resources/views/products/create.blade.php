@@ -71,7 +71,7 @@
                                         <div class="col-lg-4">
                                             <label for="image">Изображение</label>
                                             <input name="image" type="file" id="image" class="dropify-ru"
-                                                data-max-file-size="10M"
+                                                data-max-file-size="3M"
                                                 data-max-file-size-error="Извините, файл слишком большой" required />
                                         </div>
                                     </div>
