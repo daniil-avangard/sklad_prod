@@ -33,7 +33,7 @@ class ProductTable {
         const tableColumns = this.accessColumnByUserRole[role];
         
         this.arrayOfCheckboxes1 = [[tableColumns.kko_hall, this.kko_hall], [tableColumns.kko_account_opening, this.kko_account_opening], [tableColumns.kko_manager, this.kko_manager], [tableColumns.express_hall, this.express_hall]];
-        this.arrayOfFilters1 = [[tableColumns.kko_operator, this.kko_operator], [tableColumns.express_operator, this.express_operator]];
+        this.arrayOfFilters1 = [[tableColumns.company, this.companyFilter],[tableColumns.category, this.categoryFilter], [tableColumns.kko_operator, this.kko_operator], [tableColumns.express_operator, this.express_operator]];
 
         // Слушатели на селекты
         if (tableColumns.company) this.#filterBySelect(tableColumns.company, this.companyFilter);
@@ -76,6 +76,9 @@ class ProductTable {
         let checkedArray = this.arrayOfCheckboxes1.map(elm => [elm[1].checked, elm[0]]);
         let checkedArrayNew = checkedArray.filter(elm => elm[0]);
         let filterArrayValued = this.arrayOfFilters1.filter(elm => elm[1].value != "all" && elm[1].value != "");
+        const self = this;
+        const companyFilter = this.companyFilter;
+        const categoryFilter = this.categoryFilter;
         
         if (value === "all" || value === "") {
             if (filterArrayValued.length > 0) {
@@ -104,17 +107,58 @@ class ProductTable {
                             function(settings, data, dataIndex) {
                                 let searchTem = '1';
                                 let flag = false;
+                                let arrayForAnd = [];
+                                let checkCategory = false;
+                                
+                                let flagForAnd = companyFilter.value != "all" && companyFilter.value != "" ? true : false;
+                                if (flagForAnd) arrayForAnd.push(companyFilter.value);
+                                if (!flagForAnd) {
+                                    flagForAnd = categoryFilter.value != "all" && categoryFilter.value != "" ? true : false;
+                                    if (flagForAnd) {
+                                        arrayForAnd.push(categoryFilter.value);
+                                        checkCategory = true;
+                                    }
+                                }
+                                if (categoryFilter.value != "all" && categoryFilter.value != "" && !(checkCategory)) arrayForAnd.push(categoryFilter.value);
+                                console.log(flagForAnd, arrayForAnd);
+                                let selectorForCheckboxes = false;
                                 checkedArrayNew.forEach((elm, ind) => {
                                     if (elm[0]) {
+                                        selectorForCheckboxes = true;
+                                        
                                         if (data[elm[1]].includes(searchTem)) flag = true;
+                                        
+                                        
                                     }
                                 });
+//                                if (selectorForCheckboxes && (!flag)) return flag;
+                          
                                 filterArrayValued.forEach((elm1, ind) => {
-                                    if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                    if (companyFilter != elm1[1] && categoryFilter != elm1[1]) {
+                                        if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                    }
                                 });
+                               
+                                                               
+                                
 //                                if (data[columnIndex].includes(value)) flag = true;
-                                if (flag) return true;
-                                return false;
+                                if (flagForAnd && flag) {
+                                    if (data[self.arrayOfFilters1[0][0]].includes(companyFilter.value) || data[self.arrayOfFilters1[1][0]].includes(categoryFilter.value)) {
+                                        flag = true;
+                                    } else {
+                                        flag = false;
+                                    }
+                                    
+                                    if (arrayForAnd.length > 1) {
+                                        if (data[self.arrayOfFilters1[0][0]].includes(companyFilter.value) && data[self.arrayOfFilters1[1][0]].includes(categoryFilter.value)) {
+                                            flag = true;
+                                        } else {
+                                            flag = false;
+                                        }
+                                    }
+                                }
+                               
+                                return flag;
                             }
 
                     );
@@ -124,13 +168,56 @@ class ProductTable {
                 } else {
                     $.fn.DataTable.ext.search.push(
                             function(settings, data, dataIndex) {
+                                let flagForAnd = companyFilter.value != "all" && companyFilter.value != "" ? true : false;
+                                let arrayForAnd = [];
+                                let checkCategory = false;
+                                if (flagForAnd) arrayForAnd.push(companyFilter.value);
+                                if (!flagForAnd) {
+                                    flagForAnd = categoryFilter.value != "all" && categoryFilter.value != "" ? true : false;
+                                    if (flagForAnd) {
+                                        arrayForAnd.push(categoryFilter.value);
+                                        checkCategory = true;
+                                    }
+                                }
+                                if (categoryFilter.value != "all" && categoryFilter.value != "" && !(checkCategory)) arrayForAnd.push(categoryFilter.value);
+                                console.log("checking here = ", flagForAnd);
                                 let searchTem = '1';
                                 let flag = false;
                                 
+                          
                                 filterArrayValued.forEach((elm1, ind) => {
-                                    if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                    if (companyFilter != elm1[1] && categoryFilter != elm1[1]) {
+                                        if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                    }
                                 });
-//                                if (data[columnIndex].includes(value)) flag = true;
+                                let checkFilterArrayValued = filterArrayValued.filter((elmF => elmF[1] != companyFilter && elmF[1] != categoryFilter));
+//                                
+                                if (flagForAnd && checkFilterArrayValued.length == 0) {
+                                    let newFilterArrayValued = filterArrayValued.filter((elmF => elmF[1] == companyFilter || elmF[1] == categoryFilter));
+                                    newFilterArrayValued.forEach((elm1, ind) => {
+                                  
+                                        if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                   
+                                    });
+                                }
+                           
+                                
+//                                здесь фильтр на "и"
+                                if (flagForAnd && flag) {
+                                    if (data[self.arrayOfFilters1[0][0]].includes(companyFilter.value) || data[self.arrayOfFilters1[1][0]].includes(categoryFilter.value)) {
+                                        flag = true;
+                                    } else {
+                                        flag = false;
+                                    }
+                                    
+                                    if (arrayForAnd.length > 1) {
+                                        if (data[self.arrayOfFilters1[0][0]].includes(companyFilter.value) && data[self.arrayOfFilters1[1][0]].includes(categoryFilter.value)) {
+                                            flag = true;
+                                        } else {
+                                            flag = false;
+                                        }
+                                    }
+                                }
                                 return flag;
                             }
                     );
@@ -157,34 +244,79 @@ class ProductTable {
 
     #filterByCheckbox(columnIndex, checkbox) {
         if (!checkbox) return;
+        const self = this;
 
         checkbox.addEventListener('change', () => {
             const isChecked = checkbox.checked;
-
+            const companyFilter = this.companyFilter;
+            const categoryFilter = this.categoryFilter;
+            let checkedArray = this.arrayOfCheckboxes1.map(elm => [elm[1].checked, elm[0]]);
+            let checkedArrayNew = checkedArray.filter(elm => elm[0]);
+            
             if (isChecked) {
                 this.table.search('').columns().search('').draw();
                 let checkedArray = this.arrayOfCheckboxes1.map(elm => [elm[1].checked, elm[0]]);
                 let filterArrayValued = this.arrayOfFilters1.filter(elm => elm[1].value != "all" && elm[1].value != "");
 //                console.log("filterArrayValued = ", filterArrayValued[0][1].value);
                 $.fn.DataTable.ext.search.push(
-                        function(settings, data, dataIndex) {
-                            let searchTem = '1';
-                            let flag = false;
-                            checkedArray.forEach((elm, ind) => {
-                                if (elm[0]) {
-                                    if (data[elm[1]].includes(searchTem)) flag = true;
+                            function(settings, data, dataIndex) {
+                                let searchTem = '1';
+                                let flag = false;
+                                let arrayForAnd = [];
+                                let checkCategory = false;
+                                
+                                let flagForAnd = companyFilter.value != "all" && companyFilter.value != "" ? true : false;
+                                if (flagForAnd) arrayForAnd.push(companyFilter.value);
+                                if (!flagForAnd) {
+                                    flagForAnd = categoryFilter.value != "all" && categoryFilter.value != "" ? true : false;
+                                    if (flagForAnd) {
+                                        arrayForAnd.push(categoryFilter.value);
+                                        checkCategory = true;
+                                    }
                                 }
-                            });
-                            if (filterArrayValued.length > 0) {
-                                filterArrayValued.forEach((elm1, ind) => {
-                                    if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                if (categoryFilter.value != "all" && categoryFilter.value != "" && !(checkCategory)) arrayForAnd.push(categoryFilter.value);
+                                console.log(flagForAnd, arrayForAnd);
+                                let selectorForCheckboxes = false;
+                                checkedArrayNew.forEach((elm, ind) => {
+                                    if (elm[0]) {
+                                        selectorForCheckboxes = true;
+                                        
+                                        if (data[elm[1]].includes(searchTem)) flag = true;
+                                        
+                                        
+                                    }
                                 });
+//                                if (selectorForCheckboxes && (!flag)) return flag;
+                          
+                                filterArrayValued.forEach((elm1, ind) => {
+                                    if (companyFilter != elm1[1] && categoryFilter != elm1[1]) {
+                                        if (data[elm1[0]].includes(elm1[1].value)) flag = true;
+                                    }
+                                });
+                               
+                                                               
+                                
+//                                if (data[columnIndex].includes(value)) flag = true;
+                                if (flagForAnd && flag) {
+                                    if (data[self.arrayOfFilters1[0][0]].includes(companyFilter.value) || data[self.arrayOfFilters1[1][0]].includes(categoryFilter.value)) {
+                                        flag = true;
+                                    } else {
+                                        flag = false;
+                                    }
+                                    
+                                    if (arrayForAnd.length > 1) {
+                                        if (data[self.arrayOfFilters1[0][0]].includes(companyFilter.value) && data[self.arrayOfFilters1[1][0]].includes(categoryFilter.value)) {
+                                            flag = true;
+                                        } else {
+                                            flag = false;
+                                        }
+                                    }
+                                }
+                               
+                                return flag;
                             }
-                            if (flag) return true;
-                            return false;
-                        }
-                    
-                );
+
+                    );
                 this.table.draw();
                 $.fn.DataTable.ext.search.splice(0, 1);
                 console.log(checkedArray);
@@ -256,46 +388,46 @@ const accessColumnByUserRole = {
     "manager": {
         company: 1,
         category: 2,
-        kko_operator: 5,
-        express_operator: 7,
+        kko_operator: 6,
+        express_operator: 8,
         // Чекбоксы
-        kko_hall: 2,
-        kko_account_opening: 3,
-        kko_manager: 4,
-        express_hall: 6
+        kko_hall: 3,
+        kko_account_opening: 4,
+        kko_manager: 5,
+        express_hall: 7
     },
     "division-manager": {
         company: 1,
         category: 2,
-        kko_operator: 5,
-        express_operator: 7,
+        kko_operator: 6,
+        express_operator: 8,
         // Чекбоксы
-        kko_hall: 2,
-        kko_account_opening: 3,
-        kko_manager: 4,
-        express_hall: 6
+        kko_hall: 3,
+        kko_account_opening: 4,
+        kko_manager: 5,
+        express_hall: 7
     },
     "top-manager": {
         company: 1,
         category: 2,
-        kko_operator: 5,
-        express_operator: 7,
+        kko_operator: 6,
+        express_operator: 8,
         // Чекбоксы
-        kko_hall: 2,
-        kko_account_opening: 3,
-        kko_manager: 4,
-        express_hall: 6
+        kko_hall: 3,
+        kko_account_opening: 4,
+        kko_manager: 5,
+        express_hall: 7
     },
     "super-admin": {
         company: 1,
         category: 2,
-        kko_operator: 5,
-        express_operator: 7,
+        kko_operator: 6,
+        express_operator: 8,
         // Чекбоксы
-        kko_hall: 2,
-        kko_account_opening: 3,
-        kko_manager: 4,
-        express_hall: 6
+        kko_hall: 3,
+        kko_account_opening: 4,
+        kko_manager: 5,
+        express_hall: 7
     },
 }
 

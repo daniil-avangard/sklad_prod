@@ -170,6 +170,7 @@
                             <tr>
                                 <th rowspan="2" class="text-center bckgrnd-table-cell-2">Название</th>
                                 <th rowspan="2" class="text-center bckgrnd-table-cell-2">Компания</th>
+                                <th rowspan="2" class="text-center bckgrnd-table-cell-2">Категория</th>
                                 <th colspan="4" class="text-center bckgrnd-table-cell-2">
                                     ККО
                                 </th>
@@ -229,6 +230,7 @@
                                         </div>
                                     </td>
                                     <td class="">{{ $product->companyName }}</td>
+                                    <td class="">{{ $product->categoryName }}</td>
                                     {{-- ККО --}}
                                     <td class="bckgrnd-table-cell-1" data-search={{ $product->kko_hall }}>
                                         {!! kko_express_check($product->kko_hall) !!}
