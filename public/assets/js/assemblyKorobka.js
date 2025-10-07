@@ -770,25 +770,75 @@ if (document.getElementById("status-back")) {
 if (document.getElementById("print-order")) {
 
     
-    document.getElementById("print-order").onclick = () => {
-        let css = '@page { size: landscape; }';
-        let head = document.head || document.getElementsByTagName('head')[0];
-        let style = document.createElement('style');
-        style.type = 'text/css';
-        style.media = 'print';
-        if (style.styleSheet) { // For IE
-            style.styleSheet.cssText = css;
-        } else {
-            style.appendChild(document.createTextNode(css));
-        }
-        head.appendChild(style);
-        
-        window.print();
-        
-        setTimeout(function() {
-            head.removeChild(style);
-        }, 100);
-        document.getElementById("print-order").disabled=false;
-        document.getElementById("print-order").blur();
-    }
+            document.getElementById("print-order").onclick = () => {
+            let css = '@page { size: landscape; }';
+            let head = document.head || document.getElementsByTagName('head')[0];
+            let style = document.createElement('style');
+            style.type = 'text/css';
+            style.media = 'print';
+            if (style.styleSheet) { // For IE
+                style.styleSheet.cssText = css;
+            } else {
+                style.appendChild(document.createTextNode(css));
+            }
+            head.appendChild(style);
+            
+            // Получаем элементы, которые нужно напечатать
+            let printContent = '';
+            
+            // Добавляем первый элемент h4 с классом page-title (сначала)
+            const firstPageTitleElement = document.querySelectorAll('h4.page-title')[0];
+            if (firstPageTitleElement) {
+                printContent += firstPageTitleElement.outerHTML;
+            }
+            
+            // Добавляем элементы по ID (в новом порядке)
+            const elementIds = [
+                "info-about-order",
+                "info-order-table", 
+                "info-order-additional", 
+                "info-order-assemble"
+            ];
+            
+            elementIds.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    printContent += element.outerHTML;
+                }
+            });
+            
+            // Создаем временное окно для печати
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Печать заказа</title>
+                    <style>
+                        ${css}
+                        body { 
+                            font-family: Arial, sans-serif; 
+                            margin: 20px; 
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${printContent}
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            
+            // Ждем загрузки содержимого и выполняем печать
+            printWindow.onload = function() {
+                printWindow.print();
+                printWindow.close();
+                
+                setTimeout(function() {
+                    head.removeChild(style);
+                }, 100);
+                document.getElementById("print-order").disabled = false;
+                document.getElementById("print-order").blur();
+            };
+        };
 }
