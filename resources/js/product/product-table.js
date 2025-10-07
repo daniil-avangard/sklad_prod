@@ -250,6 +250,8 @@ class ProductTable {
             const isChecked = checkbox.checked;
             const companyFilter = this.companyFilter;
             const categoryFilter = this.categoryFilter;
+            let checkedArray = this.arrayOfCheckboxes1.map(elm => [elm[1].checked, elm[0]]);
+            let checkedArrayNew = checkedArray.filter(elm => elm[0]);
             
             if (isChecked) {
                 this.table.search('').columns().search('').draw();
@@ -257,32 +259,46 @@ class ProductTable {
                 let filterArrayValued = this.arrayOfFilters1.filter(elm => elm[1].value != "all" && elm[1].value != "");
 //                console.log("filterArrayValued = ", filterArrayValued[0][1].value);
                 $.fn.DataTable.ext.search.push(
-                        function(settings, data, dataIndex) {
-                            let flagForAnd = companyFilter.value == "all" || companyFilter.value == "" ? false : true;
-                            let arrayForAnd = [];
-                            if (flagForAnd) arrayForAnd.push(companyFilter.value);
+                            function(settings, data, dataIndex) {
+                                let searchTem = '1';
+                                let flag = false;
+                                let arrayForAnd = [];
+                                let checkCategory = false;
+                                
+                                let flagForAnd = companyFilter.value != "all" && companyFilter.value != "" ? true : false;
+                                if (flagForAnd) arrayForAnd.push(companyFilter.value);
                                 if (!flagForAnd) {
-                                    flagForAnd = categoryFilter.value == "all" || categoryFilter.value == "" ? false : true;
-                                    if (flagForAnd) arrayForAnd.push(categoryFilter.value);
+                                    flagForAnd = categoryFilter.value != "all" && categoryFilter.value != "" ? true : false;
+                                    if (flagForAnd) {
+                                        arrayForAnd.push(categoryFilter.value);
+                                        checkCategory = true;
+                                    }
                                 }
-                                if (categoryFilter.value != "all" && categoryFilter.value != "") arrayForAnd.push(categoryFilter.value);
-                            let searchTem = '1';
-                            let flag = false;
-                            
-                            checkedArray.forEach((elm, ind) => {
-                                if (elm[0]) {
-                                    if (data[elm[1]].includes(searchTem)) flag = true;
-                                }
-                            });
-                            if (filterArrayValued.length > 0) {
+                                if (categoryFilter.value != "all" && categoryFilter.value != "" && !(checkCategory)) arrayForAnd.push(categoryFilter.value);
+                                console.log(flagForAnd, arrayForAnd);
+                                let selectorForCheckboxes = false;
+                                checkedArrayNew.forEach((elm, ind) => {
+                                    if (elm[0]) {
+                                        selectorForCheckboxes = true;
+                                        
+                                        if (data[elm[1]].includes(searchTem)) flag = true;
+                                        
+                                        
+                                    }
+                                });
+//                                if (selectorForCheckboxes && (!flag)) return flag;
+                          
                                 filterArrayValued.forEach((elm1, ind) => {
-                                    if (companyFilter != elm1[1]) {
+                                    if (companyFilter != elm1[1] && categoryFilter != elm1[1]) {
                                         if (data[elm1[0]].includes(elm1[1].value)) flag = true;
                                     }
                                 });
-                            }
-                            if (flagForAnd && flag) {
-                                    if (data[self.arrayOfFilters1[0][0]].includes(companyFilter.value)) {
+                               
+                                                               
+                                
+//                                if (data[columnIndex].includes(value)) flag = true;
+                                if (flagForAnd && flag) {
+                                    if (data[self.arrayOfFilters1[0][0]].includes(companyFilter.value) || data[self.arrayOfFilters1[1][0]].includes(categoryFilter.value)) {
                                         flag = true;
                                     } else {
                                         flag = false;
@@ -295,11 +311,12 @@ class ProductTable {
                                             flag = false;
                                         }
                                     }
+                                }
+                               
+                                return flag;
                             }
-                            return flag
-                        }
-                    
-                );
+
+                    );
                 this.table.draw();
                 $.fn.DataTable.ext.search.splice(0, 1);
                 console.log(checkedArray);
