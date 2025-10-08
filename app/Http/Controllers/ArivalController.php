@@ -50,7 +50,7 @@ class ArivalController extends Controller
 
     public function store(Request $request)
     {
-        dd($request->arrival_date, $request->products);
+//        dd($request->arrival_date, $request->products);
         $arival = new Arival();
 
         $arival->user_id = Auth::user()->id;
