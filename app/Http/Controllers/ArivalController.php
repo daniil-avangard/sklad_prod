@@ -35,7 +35,15 @@ class ArivalController extends Controller
     public function create()
     {
         $products = Product::all();
-
+        
+        foreach ($products as $product) {
+            foreach ($product->variants as $variant) {
+                if ($product->id = 1005) {
+//                    dd($variant->date_of_actuality);
+                }
+                
+            }
+        }
         return view('arivals.create', compact('products'));
     }
 

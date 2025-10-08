@@ -57,8 +57,20 @@
                                                             <div class="col-sm-3">
                                                                 <label for="date_of_actuality" class="form-label">Дата актуализации</label>
                                                                 <div class="input-group">
-                                                                    <input type="date" name="product[0][date_of_actuality]" id="date_of_actuality" value="" class="form-control">
-                                                                    <button type="button" class="btn btn-outline-secondary" id="reset_date" onclick="document.getElementById('date_of_actuality').value = ''">Сбросить</button>
+<!--                                                                    <input type="date" name="product[0][date_of_actuality]" id="date_of_actuality" value="" class="form-control" disabled>-->
+<!--                                                                    <button type="button" class="btn btn-outline-secondary" id="reset_date" onclick="document.getElementById('date_of_actuality').value = ''" disabled>Сбросить</button>-->
+                                                                    <select id="dates_for_product" name="dates_for_product" class="" style="width: 200px !important; height: 38px !important; border: 1px solid #e3ebf6; border-radius: 4px;">
+                                                                        <option value="">Выберите даты</option>
+                                                                        @foreach ($products as $product)
+                                                                            @foreach ($product->variants as $variants)
+                                                                                @if ($variants->date_of_actuality == "")
+                                                                                <option value="{{ $variants->product_id }}">Без даты актуализации</option>
+                                                                                @else
+                                                                                <option value="{{ $variants->product_id }}">{{ $variants->date_of_actuality }}</option>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
                                                             </div><!--end col-->
 

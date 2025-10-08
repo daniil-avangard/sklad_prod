@@ -89,7 +89,7 @@
 
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="card">
                                                     <div class="card-header">
                                                         <h4 class="card-title">ККО</h4>
@@ -143,7 +143,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="card">
                                                     <div class="card-header">
                                                         <h4 class="card-title">Экспресс</h4>
@@ -180,6 +180,28 @@
 
 
                                             </div>
+                                            <div class="col-md-4">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h4 class="card-title">Другое</h4>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <div class="form-group mb-3 col-lg-6">
+                                                                <div class="checkbox-primary">
+                                                                    <input id="suvenir_drugoe" type="checkbox"
+                                                                        value="1" name="suvenir_drugoe"
+                                                                        >
+                                                                    <label for="suvenir_drugoe">
+                                                                        Другое
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
