@@ -2,15 +2,16 @@ document.addEventListener("DOMContentLoaded", function() {
     setTimeout(function() {
         const selectForProduct = document.querySelectorAll("select.form-select");
         const selectActuality = document.querySelectorAll("select.select-for-actuality");
+        const selectActualityBase = document.querySelectorAll("select.select-for-actuality-base")[0];
         console.log(selectForProduct);
         selectForProduct.forEach((elm, ind) => {
             elm.onchange = function() {
                 console.log(this.value);
                 const selectedValue = this.value;
-                let newOptions = [];
-                Array.from(selectActuality[ind].options).forEach((option, ind) => {
+                let newOptions = [{value: 0, text: "Выберите даты"}];
+                Array.from(selectActualityBase.options).forEach((option, ind) => {
                     if (option.value == selectedValue) {
-                        newOptions.push({value: option.value, text: option.text})
+                        newOptions.push({value: option.text, text: option.text});
                         console.log(`Option text: ${option.text}`);
                         
                     }

@@ -50,6 +50,7 @@ class ArivalController extends Controller
 
     public function store(Request $request)
     {
+        dd($request->arrival_date, $request->products);
         $arival = new Arival();
 
         $arival->user_id = Auth::user()->id;
@@ -58,7 +59,7 @@ class ArivalController extends Controller
         $arival->save();
 
 
-
+        
         foreach ($request->products as $product) {
             $arivalProduct = new ArivalProduct();
             $arivalProduct->arival_id = $arival->id;
