@@ -114,45 +114,7 @@
 
 
 <script>
-        $(document).ready(function() {
-        function updateSelectOptions() {
-            var selectedValues = [];
-            $('.product-select').each(function() {
-                var selectedValue = $(this).val();
-                if (selectedValue) {
-                    selectedValues.push(selectedValue);
-                }
-            });
-
-            $('.product-select').each(function() {
-                var $select = $(this);
-                $select.find('option').each(function() {
-                    var $option = $(this);
-                    if ($option.val() && selectedValues.includes($option.val()) && $option.val() !== $select.val()) {
-                        $option.prop('disabled', true);
-                    } else {
-                        $option.prop('disabled', false);
-                    }
-                });
-            });
-        }
-
-        $('.select2').select2();
-
-        $(document).on('change', '.product-select', function() {
-            updateSelectOptions();
-        });
-
-        $(document).on('click', '[data-repeater-create]', function() {
-            setTimeout(function() {
-                console.log("Создаем новый продукт");
-                $('.select2').select2();
-                updateSelectOptions();
-            }, 100);
-        });
-
-        updateSelectOptions();
-    });
+       
 </script>
 <script src="/assets/js/newArrival.js"></script>
 
