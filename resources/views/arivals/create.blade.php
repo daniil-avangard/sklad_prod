@@ -23,12 +23,12 @@
                                                 <div class="form-group row">
                                                     <div class="col-sm-4">
                                                         <label for="invoice" class="form-label">Номер документа</label>
-                                                        <input type="text" name="invoice" class="form-control">
+                                                        <input type="text" name="invoice" class="form-control" required>
                                                     </div>
 
                                                     <div class="col-sm-4">
                                                         <label for="arrival_date" class="form-label">Дата прихода</label>
-                                                        <input type="date" name="arrival_date" class="form-control">
+                                                        <input type="date" name="arrival_date" class="form-control" required>
                                                     </div>
 
                                                 </div>
@@ -40,7 +40,7 @@
                                                                 <div class="form-group row d-flex align-items-end">
                                                                 <div class="col-sm-4">
                                                                 <label class="form-label">Товары</label>
-                                                                <select name="products[0][product_id]" class="form-select select2 product-select">
+                                                                <select name="products[0][product_id]" class="form-select select2 product-select" required>
                                                                     <option value="">Выберите товар</option>
                                                                     @foreach ($products as $product)
                                                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
@@ -51,14 +51,29 @@
 
                                                             <div class="col-sm-4">
                                                                 <label class="form-label">Количество</label>
-                                                                <input type="text" name="product[0][quantity]" value="0" class="form-control">
+                                                                <input type="text" name="product[0][quantity]" value="0" class="form-control" required>
                                                             </div><!--end col-->
                                                             
                                                             <div class="col-sm-3">
                                                                 <label for="date_of_actuality" class="form-label">Дата актуализации</label>
                                                                 <div class="input-group">
-                                                                    <input type="date" name="product[0][date_of_actuality]" id="date_of_actuality" value="" class="form-control">
-                                                                    <button type="button" class="btn btn-outline-secondary" id="reset_date" onclick="document.getElementById('date_of_actuality').value = ''">Сбросить</button>
+<!--                                                                    <input type="date" name="product[0][date_of_actuality]" id="date_of_actuality" value="" class="form-control">-->
+<!--                                                                    <button type="button" class="btn btn-outline-secondary form-control" id="reset_date" onclick="document.getElementById('date_of_actuality').value = ''" disabled>Сбросить</button>-->
+                                                                    <select name="product[0][date_of_actuality]" class="select-for-actuality" style="width: 170px !important; height: 38px !important; border: 1px solid #e3ebf6; border-radius: 4px;">
+                                                                        <option value="">Выберите даты</option>
+                                                                    </select>
+                                                                    <select id="date_of_actuality" value="" class="select-for-actuality-base" style="width: 2px !important; height: 2px !important; visibility: hidden;">
+                                                                        <option value="">Выберите даты</option>
+                                                                        @foreach ($products as $product)
+                                                                            @foreach ($product->variants as $variants)
+                                                                                @if ($variants->date_of_actuality == "")
+                                                                                <option value="{{ $variants->product_id }}">Без даты актуализации</option>
+                                                                                @else
+                                                                                <option value="{{ $variants->product_id }}">{{ $variants->date_of_actuality }}</option>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        @endforeach
+                                                                    </select>
                                                                 </div>
                                                             </div><!--end col-->
 
@@ -99,44 +114,8 @@
 
 
 <script>
-        $(document).ready(function() {
-        function updateSelectOptions() {
-            var selectedValues = [];
-            $('.product-select').each(function() {
-                var selectedValue = $(this).val();
-                if (selectedValue) {
-                    selectedValues.push(selectedValue);
-                }
-            });
-
-            $('.product-select').each(function() {
-                var $select = $(this);
-                $select.find('option').each(function() {
-                    var $option = $(this);
-                    if ($option.val() && selectedValues.includes($option.val()) && $option.val() !== $select.val()) {
-                        $option.prop('disabled', true);
-                    } else {
-                        $option.prop('disabled', false);
-                    }
-                });
-            });
-        }
-
-        $('.select2').select2();
-
-        $(document).on('change', '.product-select', function() {
-            updateSelectOptions();
-        });
-
-        $(document).on('click', '[data-repeater-create]', function() {
-            setTimeout(function() {
-                $('.select2').select2();
-                updateSelectOptions();
-            }, 100);
-        });
-
-        updateSelectOptions();
-    });
+       
 </script>
+<script src="/assets/js/newArrival.js"></script>
 
 @endpush

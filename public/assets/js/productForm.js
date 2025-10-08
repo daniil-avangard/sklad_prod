@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     productForm.onsubmit = (evt) => {
         evt.preventDefault();
-        let kkoExpress = ['kko_hall', 'kko_account_opening', 'kko_manager', 'express_hall'];
+        let kkoExpress = ['kko_hall', 'kko_account_opening', 'kko_manager', 'express_hall', 'suvenir_drugoe'];
         console.log("Из формы запускаем");
         const formData = new FormData(productForm);
         let flagKkoExpress = false;

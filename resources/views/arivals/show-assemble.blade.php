@@ -37,7 +37,7 @@
         'back_route' => 'assembly',
     ])
 
-    <div class="row">
+    <div id="info-about-order" class="row">
         <div class="col-4">
             <div class="card">
                 <div class="card-header">
@@ -102,7 +102,7 @@
             </div>
 
 
-            <div class="card">
+            <div id="info-order-table" class="card">
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered">
@@ -166,7 +166,7 @@
             </div>
 
 
-            <div class="card">
+            <div id="info-order-additional" class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
@@ -197,7 +197,7 @@
             </div>
 
 
-            <div class="card">
+            <div id="info-order-assemble" class="card">
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
@@ -296,6 +296,7 @@
 
         </div>
         
+    </div>
     </div>
 @endsection
 

@@ -35,12 +35,22 @@ class ArivalController extends Controller
     public function create()
     {
         $products = Product::all();
-
+        
+        foreach ($products as $product) {
+            foreach ($product->variants as $variant) {
+//                dd($product->id);
+//                if ($product->id = 1005) {
+//                    dd($variant->date_of_actuality);
+//                }
+                
+            }
+        }
         return view('arivals.create', compact('products'));
     }
 
     public function store(Request $request)
     {
+//        dd($request->arrival_date, $request->products);
         $arival = new Arival();
 
         $arival->user_id = Auth::user()->id;
@@ -49,7 +59,7 @@ class ArivalController extends Controller
         $arival->save();
 
 
-
+        
         foreach ($request->products as $product) {
             $arivalProduct = new ArivalProduct();
             $arivalProduct->arival_id = $arival->id;
