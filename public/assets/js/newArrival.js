@@ -7,7 +7,7 @@
             elm.onchange = function() {
                 console.log(this.value);
                 const selectedValue = this.value;
-                let newOptions = [{value: 0, text: "Выберите даты"}];
+                let newOptions = [{value: "", text: "Выберите даты"}];
                 Array.from(selectActualityBase.options).forEach((option, ind) => {
                     if (option.value == selectedValue) {
                         let valForOption = option.text == "Без даты актуализации" ? "" : option.text;
