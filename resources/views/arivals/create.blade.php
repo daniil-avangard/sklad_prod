@@ -59,7 +59,10 @@
                                                                 <div class="input-group">
 <!--                                                                    <input type="date" name="product[0][date_of_actuality]" id="date_of_actuality" value="" class="form-control" disabled>-->
 <!--                                                                    <button type="button" class="btn btn-outline-secondary" id="reset_date" onclick="document.getElementById('date_of_actuality').value = ''" disabled>Сбросить</button>-->
-                                                                    <select id="dates_for_product" name="dates_for_product" class="" style="width: 200px !important; height: 38px !important; border: 1px solid #e3ebf6; border-radius: 4px;">
+                                                                    <select name="dates_for_product" class="select-for-actuality" style="width: 200px !important; height: 38px !important; border: 1px solid #e3ebf6; border-radius: 4px;">
+                                                                        <option value="">Выберите даты</option>
+                                                                    </select>
+                                                                    <select name="dates_for_product" class="select-for-actuality-base" style="width: 2px !important; height: 2px !important; visibility: hidden;">
                                                                         <option value="">Выберите даты</option>
                                                                         @foreach ($products as $product)
                                                                             @foreach ($product->variants as $variants)
@@ -150,5 +153,6 @@
         updateSelectOptions();
     });
 </script>
+<script src="/assets/js/newArrival.js"></script>
 
 @endpush

@@ -38,9 +38,10 @@ class ArivalController extends Controller
         
         foreach ($products as $product) {
             foreach ($product->variants as $variant) {
-                if ($product->id = 1005) {
+//                dd($product->id);
+//                if ($product->id = 1005) {
 //                    dd($variant->date_of_actuality);
-                }
+//                }
                 
             }
         }
