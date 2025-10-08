@@ -10,7 +10,8 @@
                 let newOptions = [{value: 0, text: "Выберите даты"}];
                 Array.from(selectActualityBase.options).forEach((option, ind) => {
                     if (option.value == selectedValue) {
-                        newOptions.push({value: option.text, text: option.text});
+                        let valForOption = option.text == "Без даты актуализации" ? "" : option.text;
+                        newOptions.push({value: valForOption, text: option.text});
                         console.log(`Option text: ${option.text}`);
                         
                     }
