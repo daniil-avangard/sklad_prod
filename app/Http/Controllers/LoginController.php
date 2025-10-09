@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Login\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
-
-
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -23,11 +23,11 @@ class LoginController extends Controller
         $remember = $loginRequest->has('remember');
 
         // Находим пользователя по email без учета регистра
-        $user = \App\Models\User::whereRaw('LOWER(email) = ?', [strtolower($email)])
+        $user = User::whereRaw('LOWER(email) = ?', [strtolower($email)])
                     ->where('is_admin', true)
                     ->first();
 
-        if (!$user || !\Hash::check($password, $user->password)) {
+        if (!$user || !Hash::check($password, $user->password)) {
             return redirect()->back()->withErrors([
                 'email' => 'Неверный логин или пароль'
             ]);
