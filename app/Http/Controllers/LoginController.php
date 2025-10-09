@@ -18,17 +18,22 @@ class LoginController extends Controller
 
     public function store(LoginRequest $loginRequest)
     {
-
-        $data = $loginRequest->only('email', 'password');
+        $email = $loginRequest->input('email');
+        $password = $loginRequest->input('password');
         $remember = $loginRequest->has('remember');
 
-        $data['is_admin'] = true;
+        // Находим пользователя по email без учета регистра
+        $user = \App\Models\User::whereRaw('LOWER(email) = ?', [strtolower($email)])
+                    ->where('is_admin', true)
+                    ->first();
 
-        if (!Auth::attempt($data, $remember)) {
+        if (!$user || !\Hash::check($password, $user->password)) {
             return redirect()->back()->withErrors([
                 'email' => 'Неверный логин или пароль'
             ]);
         }
+
+        Auth::login($user, $remember);
 
         $loginRequest->session()->regenerate();
         Cookie::queue('selectSkladDivision', '', time()+3600, null, null, false, false);
