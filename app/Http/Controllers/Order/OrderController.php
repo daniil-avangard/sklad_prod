@@ -561,6 +561,14 @@ class OrderController extends Controller
                 }
             }
         }
+        
+        $absolutlelyAllGoods = Product::all();
+        foreach ($absolutlelyAllGoods as $porductItem) {
+            if (!isset($uniqGoodsTotalOrdered[$porductItem->name])) {
+                $uniqGoodsTotalOrdered[$porductItem->name] = 0;
+                $uniqGoodsNewOrdered[$porductItem->name] = 0;
+            }
+        }
 
         $allItems = [];
 
@@ -626,8 +634,20 @@ class OrderController extends Controller
                 }
             }
         }
-
+        
+        // Все товары для склада
+        
+        $absolutlelyAllGoods = Product::all();
         $allGoodsInOrders = array();
+        foreach ($absolutlelyAllGoods as $porductItem) {
+            if ($porductItem->variants->sum('quantity') > 0) {
+                $allGoodsInOrders[] = array('name' => $porductItem->name, 'image' => $porductItem->image, 'warehouse' => $porductItem->variants->sum('quantity'), 'min_stock' => $porductItem->min_stock);
+            }
+            
+        }
+//        dd($allGoodsInOrders);
+
+//        $allGoodsInOrders = array();
         $allDivisions = array();
         $allDivisionsData = array();
         $allDivisionsDataNew = array();
@@ -648,7 +668,7 @@ class OrderController extends Controller
                         $allDivisionsData[$order->division->name][$item->product->name]['quontity'] += $item->quantity;
                     }
                 }
-                $allGoodsInOrders[] = array('name' => $item->product->name, 'image' => $item->product->image, 'warehouse' => $item->product->variants->sum('quantity'), 'min_stock' => $item->product->min_stock);
+//                $allGoodsInOrders[] = array('name' => $item->product->name, 'image' => $item->product->image, 'warehouse' => $item->product->variants->sum('quantity'), 'min_stock' => $item->product->min_stock);
             }
         }
 
@@ -784,20 +804,22 @@ class OrderController extends Controller
           
         array_multisort(array_column($allDivisionsNames, 'sort'), SORT_ASC, $allDivisionsNames);
         
-        $result = array();
-        $allGoodsInOrdersUpdated = [];
-        if (count($nullDivisionsGoods) != 0) {
-            foreach ($nullDivisionsGoods as $dellItem) {
-                unset($allGoodsInOrders[$dellItem]);
-            }
-            foreach ($allGoodsInOrders as $item) {
-                $allGoodsInOrdersUpdated[] = $item;
-            }
-            $result = array($allGoodsInOrdersUpdated, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew, $totalNewArray);
-            
-        } else {
-            $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew, $totalNewArray);
-        }
+//        $result = array();
+        $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew, $totalNewArray);
+//        $allGoodsInOrdersUpdated = [];
+        
+//        if (count($nullDivisionsGoods) != 0) {
+//            foreach ($nullDivisionsGoods as $dellItem) {
+//                unset($allGoodsInOrders[$dellItem]);
+//            }
+//            foreach ($allGoodsInOrders as $item) {
+//                $allGoodsInOrdersUpdated[] = $item;
+//            }
+//            $result = array($allGoodsInOrdersUpdated, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew, $totalNewArray);
+//            
+//        } else {
+//            $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew, $totalNewArray);
+//        }
 
         return $result;
 
