@@ -47,6 +47,12 @@
                 <a href="auth-recover-pw.html" class="text-muted font-13"><i class="dripicons-lock"></i> Забыли пароль?</a>
             </div><!--end col--> --}}
         </div><!--end form-group-->
+        
+        <div class="form-group row my-3">
+            <div class="col-12">
+                <a href="/assets/images/Test_Instruct_1.docx">Инструкция по пользованию порталом.</a>
+            </div>
+        </div>
 
         <div class="form-group mb-0 row">
             <div class="col-12">
