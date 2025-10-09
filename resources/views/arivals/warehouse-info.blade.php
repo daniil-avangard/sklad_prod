@@ -25,9 +25,6 @@
 			<table id="excel-table" class="long-table">
                             <tr>
                                 <th class="first-col head-bold bckgrnd-table-cell-2">Товары</th>
-                                @foreach ($divisionNames as $divisionName)
-                                    <th class="rotated-table-text head-bold color-division-{{ $divisionName['sort'] }} bckgrnd-table-cell-2">{{ $divisionName['name'] }}</th>
-                                @endforeach
                                 @if ($flagForExcell == "show")
                                 <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-another-column-100">Заказано</th>  
                                 <th class="head-bold bckgrnd-table-cell-2 for-anothe-col-width for-another-column-10">Доступно<br>для<br>заказа</th>
@@ -39,10 +36,10 @@
                                 <tr>
                                 @else
                                     @if ($flagForExcell == "show" && ($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] + $uniqGoodsNewOrdered[$good['name']]) < 0)
-                                    <tr class="row-color">
+                                    <tr class="">
                                     @else
                                     @if ($flagForExcell == "show" && ($good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] + $uniqGoodsNewOrdered[$good['name']]) >= 0)
-                                    <tr class="row-color-accept">
+                                    <tr class="">
                                     @else
                                     <tr> 
                                     @endif
@@ -58,7 +55,6 @@
                                             </div>
                                         </div>
                                     </td>
-                                    @include('arivals.digits-cell')
                                     @if ($flagForExcell == "show")
                                         <td class="another-col tr-another-cell for-anothe-col-width for-another-column-100">{{ $good['total'] - $totalNewData[$good['name']] }}</td>
                                         <td class="another-col tr-another-cell for-anothe-col-width for-another-column-10">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] - $totalNewData[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>
