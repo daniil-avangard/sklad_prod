@@ -53,7 +53,16 @@
                         @foreach ($arivalProducts as $item)
                             <tr>
                                 <td>{{ $item->product->name }}</td>
-                                <td>{{ \Carbon\Carbon::parse($item->date_of_actuality)->format('d.m.Y') }}</td>
+                                <td>
+                                    @if (is_null($item->date_of_actuality))
+                                        <p class="m-0">Без даты</p>
+                                    @else
+                                        <p class="m-0">
+                                            {{ \Carbon\Carbon::parse($item->date_of_actuality)->format('d.m.Y') }}
+                                        </p>
+                                    @endif
+                                    
+                                </td>
                                 <td>{{ $item->quantity }}</td>
                             </tr>
                         @endforeach
