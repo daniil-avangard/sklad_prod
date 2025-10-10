@@ -70,16 +70,16 @@
                                 <td>{{ $item->quantity }}</td>
                                 <td>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="status_{{ $item->id }}" id="accept_{{ $item->id }}" value="accept">
-                                        <label class="form-check-label" for="accept_{{ $item->id }}">Принять</label>
+                                        <input class="form-check-input" type="radio" name="status_{{ $item->product_id }}" id="accept_{{ $item->product_id }}" value="accept" data-productid="{{ $item->product_id }}">
+                                        <label class="form-check-label" for="accept_{{ $item->product_id }}">Принять</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="status_{{ $item->id }}" id="reject_{{ $item->id }}" value="reject">
-                                        <label class="form-check-label" for="reject_{{ $item->id }}">Отклонить</label>
+                                        <input class="form-check-input" type="radio" name="status_{{ $item->product_id }}" id="reject_{{ $item->product_id }}" value="reject" data-productid="{{ $item->product_id }}">
+                                        <label class="form-check-label" for="reject_{{ $item->product_id }}">Отклонить</label>
                                     </div>
                                     <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="status_{{ $item->id }}" id="pending_{{ $item->id }}" value="pending">
-                                        <label class="form-check-label" for="pending_{{ $item->id }}">Ожидание</label>
+                                        <input class="form-check-input" type="radio" name="status_{{ $item->product_id }}" id="pending_{{ $item->product_id }}" value="pending" data-productid="{{ $item->product_id }}">
+                                        <label class="form-check-label" for="pending_{{ $item->product_id }}">Ожидание</label>
                                     </div>
                                 </td>
                             </tr>

@@ -26,7 +26,7 @@ class ArivalActions {
         
         try {
             this.setButtonLoading(button, true);
-            const request = this.createRequest(url);
+            const request = this.createRequest(url, arivalId);
             const response = await fetch(request);
             
             if (response.ok) {
@@ -55,13 +55,24 @@ class ArivalActions {
         }
     }
 
-    createRequest(url) {
+    createRequest(url, arivalId) {
+        // Получаем все радиокнопки с value="accept"
+        const acceptedRadios = document.querySelectorAll('input[type="radio"][value="accept"]:checked');
+        const acceptedArray = Array.from(acceptedRadios).map(radio => radio.getAttribute('data-productid'));
+        
+        console.log(acceptedArray);
+        
         return new Request(url, {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            }
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: arivalId,
+                accepted: acceptedArray
+            })
         });
     }
 

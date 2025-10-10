@@ -96,9 +96,9 @@ class ArivalController extends Controller
         return view('arivals.show', compact('arival', 'arivalProducts'));
     }
 
-    public function accepted($id)
+    public function accepted(Request $request)
     {
-        $arival = Arival::find($id);
+        $arival = Arival::find($request->id);
         if (Gate::denies('changeStatus', $arival)) {
             throw new AuthorizationException('У вас нет разрешения на изменение статуса прихода.');
         }
@@ -134,9 +134,9 @@ class ArivalController extends Controller
         return redirect()->route('arivals')->with('success', 'Приход принят');
     }
 
-    public function rejected($id)
+    public function rejected(Request $request)
     {
-        $arival = Arival::find($id);
+        $arival = Arival::find($request->id);
         if (Gate::denies('changeStatus', $arival)) {
             throw new AuthorizationException('У вас нет разрешения на изменение статуса прихода.');
         }
