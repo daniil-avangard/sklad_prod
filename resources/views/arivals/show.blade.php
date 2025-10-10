@@ -1,7 +1,10 @@
 @extends('layouts.base')
 
-@section('content')
+@push('styles-plugins')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+@endpush
 
+@section('content')
 
 @include('includes.breadcrumb', [
     'title' => 'Приход ' . $arival->invoice, 
@@ -9,7 +12,6 @@
     'breadcrumbs' => 'Приходы',
     'param' => $arival,
 ])
-
 
 <div class="row">
     <div class="col-12">
@@ -24,8 +26,8 @@
                     </span>
                     @if($arival->status === \App\Enum\ArivalStatusEnum::pending)
                             @can('changeStatus', $arival)
-                                <a href="{{ route('arivals.accepted', $arival->id) }}" class="btn btn-success">Принять</a>
-                                <a href="{{ route('arivals.rejected', $arival->id) }}" class="btn btn-danger">Отклонить</a>
+                                <button type="button" class="btn btn-success" data-action="accept" data-arival-id="{{ $arival->id }}">Принять</button>
+                                <button type="button" class="btn btn-danger" data-action="reject" data-arival-id="{{ $arival->id }}">Отклонить</button>
                     @endcan
                 @endif
                 </p>
@@ -47,6 +49,7 @@
                             <th>Название</th>
                             <th>Дата актуализации</th>
                             <th>Количество</th>
+                            <th>Действия</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,6 +67,20 @@
                                     
                                 </td>
                                 <td>{{ $item->quantity }}</td>
+                                <td>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status_{{ $item->id }}" id="accept_{{ $item->id }}" value="accept">
+                                        <label class="form-check-label" for="accept_{{ $item->id }}">Принять</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status_{{ $item->id }}" id="reject_{{ $item->id }}" value="reject">
+                                        <label class="form-check-label" for="reject_{{ $item->id }}">Отклонить</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="status_{{ $item->id }}" id="pending_{{ $item->id }}" value="pending">
+                                        <label class="form-check-label" for="pending_{{ $item->id }}">Ожидание</label>
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -73,9 +90,8 @@
     </div>
 </div>
 
+@push('scripts')
+<script src="{{ asset('assets/js/arival-actions.js') }}"></script>
+@endpush
 
-
-
-
-
-@endsection 
+@endsection
