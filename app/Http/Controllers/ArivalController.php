@@ -133,7 +133,54 @@ class ArivalController extends Controller
         $arival->save();
         return redirect()->route('arivals')->with('success', 'Приход принят');
     }
+    
+    public function acceptedwithchanges(Request $request)
+{
+    $arival = Arival::find($request->id);
+    if (Gate::denies('changeStatus', $arival)) {
+        throw new AuthorizationException('У вас нет разрешения на изменение статуса прихода.');
+    }
 
+    $arival->status = \App\Enum\ArivalStatusEnum::accepted->value;
+    
+    // Получаем массив принятых product_id из запроса
+    $acceptedProductIds = $request->input('accepted', []);
+    
+    foreach ($arival->products as $item) {
+        // Проверяем, находится ли product_id в массиве принятых
+        if (in_array($item->product_id, $acceptedProductIds)) {
+            // Если да, выполняем существующий код
+            $variant = ProductVariant::where('product_id', $item->product_id)
+                ->where('date_of_actuality', $item->date_of_actuality)
+                ->first();
+
+            if ($variant) {
+                $variant->quantity += $item->quantity;
+                $variant->save();
+            } else {
+                $product = Product::find($item->product_id);
+                $sku = $product->sku;
+                if ($item->date_of_actuality) {
+                    $sku .= '-' . date('dmY', strtotime($item->date_of_actuality));
+                }
+                $variant = new ProductVariant();
+                $variant->product_id = $item->product_id;
+                $variant->sku = $sku;
+                $variant->quantity = $item->quantity;
+                $variant->is_active = true;
+                $variant->date_of_actuality = $item->date_of_actuality;
+                $variant->save();
+            }
+        } else {
+            // Если нет, удаляем запись
+            $item->delete();
+        }
+    }
+
+    $arival->save();
+    return redirect()->route('arivals')->with('success', 'Приход принят');
+
+}
     public function rejected(Request $request)
     {
         $arival = Arival::find($request->id);

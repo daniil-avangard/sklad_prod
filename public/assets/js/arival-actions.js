@@ -15,12 +15,6 @@ class ArivalActions {
         const action = button.getAttribute('data-action');
         const arivalId = button.getAttribute('data-arival-id');
         
-        // Обработка новой кнопки "Принять с изменениями"
-        if (action === 'accept-with-changes') {
-            console.log('hello');
-            return;
-        }
-        
         const url = this.getActionUrl(action, arivalId);
         if (!url) return;
         
@@ -49,6 +43,8 @@ class ArivalActions {
                 return `/arivals/${arivalId}/accepted`;
             case 'reject':
                 return `/arivals/${arivalId}/rejected`;
+            case 'accept-with-changes':
+                return `/arivals/${arivalId}/acceptedwithchanges`;
             default:
                 console.error('Неизвестное действие:', action);
                 return null;
