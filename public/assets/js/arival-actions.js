@@ -15,6 +15,12 @@ class ArivalActions {
         const action = button.getAttribute('data-action');
         const arivalId = button.getAttribute('data-arival-id');
         
+        // Обработка новой кнопки "Принять с изменениями"
+        if (action === 'accept-with-changes') {
+            console.log('hello');
+            return;
+        }
+        
         const url = this.getActionUrl(action, arivalId);
         if (!url) return;
         

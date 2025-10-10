@@ -28,6 +28,7 @@
                             @can('changeStatus', $arival)
                                 <button type="button" class="btn btn-success" data-action="accept" data-arival-id="{{ $arival->id }}">Принять</button>
                                 <button type="button" class="btn btn-danger" data-action="reject" data-arival-id="{{ $arival->id }}">Отклонить</button>
+                                <button type="button" class="btn btn-success" data-action="accept-with-changes" data-arival-id="{{ $arival->id }}">Принять с изменениями</button>
                     @endcan
                 @endif
                 </p>
