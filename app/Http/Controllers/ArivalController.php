@@ -146,6 +146,7 @@ class ArivalController extends Controller
         // Получаем массивы из запроса
         $acceptedProductIds = $request->input('accepted', []);
         $pendingProductIds = $request->input('pending', []);
+        $rejectedProductIds = $request->input('rejected', []);
 
         // Сначала собираем все оригинальные товары для возможного копирования
         $originalProducts = $arival->products->toArray();
@@ -196,6 +197,27 @@ class ArivalController extends Controller
             foreach ($originalProducts as $originalItem) {
                 if (in_array($originalItem['product_id'], $pendingProductIds)) {
                     $newArival->products()->create([
+                        'product_id' => $originalItem['product_id'],
+                        'quantity' => $originalItem['quantity'],
+                        'date_of_actuality' => $originalItem['date_of_actuality'],
+                    ]);
+                }
+            }
+        }
+
+        // Создаем новый приход для отклоненных товаров, если массив rejected не пустой
+        if (!empty($rejectedProductIds)) {
+            $rejectedArival = new Arival();
+            $rejectedArival->user_id = $arival->user_id;
+            $rejectedArival->status = \App\Enum\ArivalStatusEnum::rejected->value;
+            $rejectedArival->invoice = $arival->invoice . '-rejected'; // Добавляем суффикс для уникальности
+            $rejectedArival->arrival_date = $arival->arrival_date;
+            $rejectedArival->save();
+
+            // Копируем отклоненные товары из оригинального массива
+            foreach ($originalProducts as $originalItem) {
+                if (in_array($originalItem['product_id'], $rejectedProductIds)) {
+                    $rejectedArival->products()->create([
                         'product_id' => $originalItem['product_id'],
                         'quantity' => $originalItem['quantity'],
                         'date_of_actuality' => $originalItem['date_of_actuality'],
