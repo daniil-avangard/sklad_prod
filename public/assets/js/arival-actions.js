@@ -56,7 +56,12 @@ class ArivalActions {
         const acceptedRadios = document.querySelectorAll('input[type="radio"][value="accept"]:checked');
         const acceptedArray = Array.from(acceptedRadios).map(radio => radio.getAttribute('data-productid'));
         
+        // Получаем все радиокнопки с value="pending"
+        const pendingRadios = document.querySelectorAll('input[type="radio"][value="pending"]:checked');
+        const pendingArray = Array.from(pendingRadios).map(radio => radio.getAttribute('data-productid'));
+        
         console.log(acceptedArray);
+        console.log(pendingArray);
         
         return new Request(url, {
             method: 'POST',
@@ -67,7 +72,8 @@ class ArivalActions {
             },
             body: JSON.stringify({
                 id: arivalId,
-                accepted: acceptedArray
+                accepted: acceptedArray,
+                pending: pendingArray
             })
         });
     }
