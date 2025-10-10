@@ -4,8 +4,17 @@ class ArivalActions {
         this.radioInputs = document.querySelectorAll('input[type="radio"]');
         this.acceptButton = document.querySelector('button[data-action="accept"]');
         this.rejectButton = document.querySelector('button[data-action="reject"]');
+        this.acceptWithChangesButton = document.querySelector('button[data-action="accept-with-changes"]');
         this.clearButton = document.querySelector('button[data-action="clear"]');
+        this.init();
         this.bindEventListeners();
+    }
+
+    init() {
+        // Блокируем кнопку "Принять с изменениями" при инициализации
+        if (this.acceptWithChangesButton) {
+            this.acceptWithChangesButton.disabled = true;
+        }
     }
 
     bindEventListeners() {
@@ -32,6 +41,11 @@ class ArivalActions {
         if (this.rejectButton) {
             this.rejectButton.disabled = true;
         }
+        
+        // Разблокируем кнопку "Принять с изменениями"
+        if (this.acceptWithChangesButton) {
+            this.acceptWithChangesButton.disabled = false;
+        }
     }
 
     handleClearClick() {
@@ -47,12 +61,25 @@ class ArivalActions {
         if (this.rejectButton) {
             this.rejectButton.disabled = false;
         }
+        
+        // Блокируем кнопку "Принять с изменениями"
+        if (this.acceptWithChangesButton) {
+            this.acceptWithChangesButton.disabled = true;
+        }
     }
 
     async handleActionClick(event) {
         const button = event.target;
         const action = button.getAttribute('data-action');
         const arivalId = button.getAttribute('data-arival-id');
+        
+        // Проверка для кнопки "Принять с изменениями"
+        if (action === 'accept-with-changes') {
+            if (!this.areAllRadiosSelected()) {
+                alert('Вам нужно выбрать все инпуты');
+                return;
+            }
+        }
         
         const url = this.getActionUrl(action, arivalId);
         if (!url) return;
@@ -63,7 +90,7 @@ class ArivalActions {
             const response = await fetch(request);
             
             if (response.ok) {
-                window.location.href = window.location.href;
+                window.location.href = window.location.origin + '/arivals';
             } else {
                 const errorData = await response.json().catch(() => ({}));
                 this.showError(errorData.message || 'Не удалось выполнить действие');
@@ -74,6 +101,27 @@ class ArivalActions {
             this.showError('Произошла ошибка при выполнении запроса');
             this.setButtonLoading(button, false);
         }
+    }
+
+    areAllRadiosSelected() {
+        // Получаем все уникальные имена групп радиокнопок
+        const radioGroups = new Set();
+        this.radioInputs.forEach(radio => {
+            if (radio.name) {
+                radioGroups.add(radio.name);
+            }
+        });
+        
+        // Проверяем, выбрана ли хотя бы одна радиокнопка в каждой группе
+        for (const groupName of radioGroups) {
+            const groupRadios = document.querySelectorAll(`input[name="${groupName}"]`);
+            const isAnyChecked = Array.from(groupRadios).some(radio => radio.checked);
+            if (!isAnyChecked) {
+                return false;
+            }
+        }
+        
+        return true;
     }
 
     getActionUrl(action, arivalId) {
@@ -99,8 +147,13 @@ class ArivalActions {
         const pendingRadios = document.querySelectorAll('input[type="radio"][value="pending"]:checked');
         const pendingArray = Array.from(pendingRadios).map(radio => radio.getAttribute('data-productid'));
         
+        // Получаем все радиокнопки с value="reject" (для свойства rejected)
+        const rejectedRadios = document.querySelectorAll('input[type="radio"][value="reject"]:checked');
+        const rejectedArray = Array.from(rejectedRadios).map(radio => radio.getAttribute('data-productid'));
+        
         console.log(acceptedArray);
         console.log(pendingArray);
+        console.log(rejectedArray);
         
         return new Request(url, {
             method: 'POST',
@@ -112,7 +165,8 @@ class ArivalActions {
             body: JSON.stringify({
                 id: arivalId,
                 accepted: acceptedArray,
-                pending: pendingArray
+                pending: pendingArray,
+                rejected: rejectedArray
             })
         });
     }
