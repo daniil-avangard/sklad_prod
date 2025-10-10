@@ -76,7 +76,10 @@ class ArivalActions {
         // Проверка для кнопки "Принять с изменениями"
         if (action === 'accept-with-changes') {
             if (!this.areAllRadiosSelected()) {
-                alert('Вам нужно выбрать все инпуты');
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Вам нужно выбрать все инпуты'
+                });
                 return;
             }
         }
