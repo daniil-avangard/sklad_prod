@@ -1,6 +1,10 @@
 class ArivalActions {
     constructor() {
         this.actionButtons = document.querySelectorAll('button[data-action]');
+        this.radioInputs = document.querySelectorAll('input[type="radio"]');
+        this.acceptButton = document.querySelector('button[data-action="accept"]');
+        this.rejectButton = document.querySelector('button[data-action="reject"]');
+        this.clearButton = document.querySelector('button[data-action="clear"]');
         this.bindEventListeners();
     }
 
@@ -8,6 +12,41 @@ class ArivalActions {
         this.actionButtons.forEach(button => {
             button.onclick = (event) => this.handleActionClick(event);
         });
+
+        // Обработчик кликов по радиокнопкам
+        this.radioInputs.forEach(radio => {
+            radio.addEventListener('click', () => this.handleRadioClick());
+        });
+
+        // Обработчик клика по кнопке "Очистить"
+        if (this.clearButton) {
+            this.clearButton.onclick = () => this.handleClearClick();
+        }
+    }
+
+    handleRadioClick() {
+        // Блокируем кнопки "Принять" и "Отклонить"
+        if (this.acceptButton) {
+            this.acceptButton.disabled = true;
+        }
+        if (this.rejectButton) {
+            this.rejectButton.disabled = true;
+        }
+    }
+
+    handleClearClick() {
+        // Очищаем все радиокнопки
+        this.radioInputs.forEach(radio => {
+            radio.checked = false;
+        });
+
+        // Разблокируем кнопки "Принять" и "Отклонить"
+        if (this.acceptButton) {
+            this.acceptButton.disabled = false;
+        }
+        if (this.rejectButton) {
+            this.rejectButton.disabled = false;
+        }
     }
 
     async handleActionClick(event) {
