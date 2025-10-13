@@ -78,7 +78,7 @@ class ArivalActions {
             if (!this.areAllRadiosSelected()) {
                 Toast.fire({
                     icon: 'error',
-                    title: 'Вам нужно выбрать все инпуты'
+                    title: 'Вам нужно выбрать все действия с товарами'
                 });
                 return;
             }
