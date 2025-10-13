@@ -42,8 +42,16 @@
                         <a href="{{ route('arivals.show', $arival->id) }}" class="btn btn-primary">Посмотреть</a>
                         @if($arival->status === \App\Enum\ArivalStatusEnum::pending)
                             @can('changeStatus', $arival)
-                                <a href="{{ route('arivals.accepted', $arival->id) }}" class="btn btn-success">Принять</a>
-                                <a href="{{ route('arivals.rejected', $arival->id) }}" class="btn btn-danger">Отклонить</a>
+                                <form action="{{ route('arivals.accepted', $arival->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $arival->id }}">
+                                    <button type="submit" class="btn btn-success">Принять</button>
+                                </form>
+                                <form action="{{ route('arivals.rejected', $arival->id) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $arival->id }}">
+                                    <button type="submit" class="btn btn-danger">Отклонить</button>
+                                </form>
                             @endcan
                         @endif
                     </td>
