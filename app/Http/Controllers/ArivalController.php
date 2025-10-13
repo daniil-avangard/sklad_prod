@@ -96,9 +96,9 @@ class ArivalController extends Controller
         return view('arivals.show', compact('arival', 'arivalProducts'));
     }
 
-    public function accepted($id)
+    public function accepted(Request $request)
     {
-        $arival = Arival::find($id);
+        $arival = Arival::find($request->id);
         if (Gate::denies('changeStatus', $arival)) {
             throw new AuthorizationException('У вас нет разрешения на изменение статуса прихода.');
         }
@@ -133,10 +133,105 @@ class ArivalController extends Controller
         $arival->save();
         return redirect()->route('arivals')->with('success', 'Приход принят');
     }
-
-    public function rejected($id)
+    
+    public function acceptedwithchanges(Request $request)
     {
-        $arival = Arival::find($id);
+        $arival = Arival::find($request->id);
+        if (Gate::denies('changeStatus', $arival)) {
+            throw new AuthorizationException('У вас нет разрешения на изменение статуса прихода.');
+        }
+
+        $arival->status = \App\Enum\ArivalStatusEnum::accepted->value;
+
+        // Получаем массивы из запроса
+        $acceptedProductIds = $request->input('accepted', []);
+        $pendingProductIds = $request->input('pending', []);
+        $rejectedProductIds = $request->input('rejected', []);
+
+        // Сначала собираем все оригинальные товары для возможного копирования
+        $originalProducts = $arival->products->toArray();
+
+        // Обработка товаров для текущего прихода
+        foreach ($arival->products as $item) {
+            if (in_array($item->product_id, $acceptedProductIds)) {
+                // Если товар принят, обновляем остатки
+                $variant = ProductVariant::where('product_id', $item->product_id)
+                    ->where('date_of_actuality', $item->date_of_actuality)
+                    ->first();
+
+                if ($variant) {
+                    $variant->quantity += $item->quantity;
+                    $variant->save();
+                } else {
+                    $product = Product::find($item->product_id);
+                    $sku = $product->sku;
+                    if ($item->date_of_actuality) {
+                        $sku .= '-' . date('dmY', strtotime($item->date_of_actuality));
+                    }
+                    $variant = new ProductVariant();
+                    $variant->product_id = $item->product_id;
+                    $variant->sku = $sku;
+                    $variant->quantity = $item->quantity;
+                    $variant->is_active = true;
+                    $variant->date_of_actuality = $item->date_of_actuality;
+                    $variant->save();
+                }
+            } else {
+                // Если товар не принят, удаляем запись
+                $item->delete();
+            }
+        }
+
+        $arival->save();
+
+        // Создаем новый приход для товаров в ожидании, если массив pending не пустой
+        if (!empty($pendingProductIds)) {
+            $newArival = new Arival();
+            $newArival->user_id = $arival->user_id;
+            $newArival->status = \App\Enum\ArivalStatusEnum::pending->value;
+            $newArival->invoice = $arival->invoice . '-pending'; // Добавляем суффикс для уникальности
+            $newArival->arrival_date = $arival->arrival_date;
+            $newArival->save();
+
+            // Копируем товары с pending статусом из оригинального массива
+            foreach ($originalProducts as $originalItem) {
+                if (in_array($originalItem['product_id'], $pendingProductIds)) {
+                    $newArival->products()->create([
+                        'product_id' => $originalItem['product_id'],
+                        'quantity' => $originalItem['quantity'],
+                        'date_of_actuality' => $originalItem['date_of_actuality'],
+                    ]);
+                }
+            }
+        }
+
+        // Создаем новый приход для отклоненных товаров, если массив rejected не пустой
+        if (!empty($rejectedProductIds)) {
+            $rejectedArival = new Arival();
+            $rejectedArival->user_id = $arival->user_id;
+            $rejectedArival->status = \App\Enum\ArivalStatusEnum::rejected->value;
+            $rejectedArival->invoice = $arival->invoice . '-rejected'; // Добавляем суффикс для уникальности
+            $rejectedArival->arrival_date = $arival->arrival_date;
+            $rejectedArival->save();
+
+            // Копируем отклоненные товары из оригинального массива
+            foreach ($originalProducts as $originalItem) {
+                if (in_array($originalItem['product_id'], $rejectedProductIds)) {
+                    $rejectedArival->products()->create([
+                        'product_id' => $originalItem['product_id'],
+                        'quantity' => $originalItem['quantity'],
+                        'date_of_actuality' => $originalItem['date_of_actuality'],
+                    ]);
+                }
+            }
+        }
+
+        return redirect()->route('arivals')->with('success', 'Приход принят');
+    }
+    
+    public function rejected(Request $request)
+    {
+        $arival = Arival::find($request->id);
         if (Gate::denies('changeStatus', $arival)) {
             throw new AuthorizationException('У вас нет разрешения на изменение статуса прихода.');
         }

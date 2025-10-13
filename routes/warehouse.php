@@ -22,9 +22,12 @@ Route::middleware([ValidateCsrfToken::class, 'auth', 'admin'])->group(function (
     Route::delete('/arivals/{arival}', [ArivalController::class, 'delete'])->name('arivals.delete');
 
     // Принятие прихода
-    Route::get('/arivals/{arival}/accepted', [ArivalController::class, 'accepted'])->name('arivals.accepted');
+//    Route::get('/arivals/{arival}/accepted', [ArivalController::class, 'accepted'])->name('arivals.accepted');
+    Route::post('/arivals/{arival}/accepted', [ArivalController::class, 'accepted'])->name('arivals.accepted');
+    Route::post('/arivals/{arival}/acceptedwithchanges', [ArivalController::class, 'acceptedwithchanges'])->name('arivals.acceptedwithchanges');
     // Отклонение прихода
-    Route::get('/arivals/{arival}/rejected', [ArivalController::class, 'rejected'])->name('arivals.rejected');
+//    Route::get('/arivals/{arival}/rejected', [ArivalController::class, 'rejected'])->name('arivals.rejected');
+    Route::post('/arivals/{arival}/rejected', [ArivalController::class, 'rejected'])->name('arivals.rejected');
 
 
     // Списание
