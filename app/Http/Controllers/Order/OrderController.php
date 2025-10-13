@@ -111,27 +111,33 @@ class OrderController extends Controller
         
         $currentSessionOrders = [];
         
-        foreach ($orders as $order) {
-            if ($order->created_at->format('m') == $currentMonth) {
-                    $currentSessionOrders[] = $order;
+        if (!$orders->isEmpty()) {
+            foreach ($orders as $order) {
+                if ($order->created_at->format('m') == $currentMonth) {
+                        $currentSessionOrders[] = $order;
+                }
             }
         }
+        
 
 //        $absolutelyAllOrders = Order::whereIn('status',[StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get();
         $absolutelyAllOrders = Order::whereIn('status',[StatusEnum::NEW->value, StatusEnum::PROCESSING->value, StatusEnum::MANAGER_PROCESSING->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value])->get();
         $uniqGoodsTotalOrdered = array();
         $uniqGoodsNewOrdered = array();
-        foreach ($absolutelyAllOrders as $order) {
-            foreach ($order->items as $item) {
-                if (!isset($uniqGoodsTotalOrdered[$item->product->name])) {
-                    $uniqGoodsTotalOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? 0 : $item->quantity;
-                    $uniqGoodsNewOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $item->quantity : 0;
-                } else {
-                    $uniqGoodsTotalOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $uniqGoodsTotalOrdered[$item->product->name] + 0 : $uniqGoodsTotalOrdered[$item->product->name] + $item->quantity;
-                    $uniqGoodsNewOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $uniqGoodsNewOrdered[$item->product->name] + $item->quantity : $uniqGoodsNewOrdered[$item->product->name] + 0;
+        if (!$absolutelyAllOrders->isEmpty()) {
+            foreach ($absolutelyAllOrders as $order) {
+                foreach ($order->items as $item) {
+                    if (!isset($uniqGoodsTotalOrdered[$item->product->name])) {
+                        $uniqGoodsTotalOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? 0 : $item->quantity;
+                        $uniqGoodsNewOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $item->quantity : 0;
+                    } else {
+                        $uniqGoodsTotalOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $uniqGoodsTotalOrdered[$item->product->name] + 0 : $uniqGoodsTotalOrdered[$item->product->name] + $item->quantity;
+                        $uniqGoodsNewOrdered[$item->product->name] = $order->status->value == StatusEnum::NEW->value ? $uniqGoodsNewOrdered[$item->product->name] + $item->quantity : $uniqGoodsNewOrdered[$item->product->name] + 0;
+                    }
                 }
             }
         }
+        
 
         $allItems = [];
 
@@ -142,12 +148,22 @@ class OrderController extends Controller
             }
         }
 
-        $result = $this->forNewTable($divisionGroups, $currentSessionOrders);
-        $uniqGoods = $result[0];
-        $divisionNames = $result[1];
-        $allDivisionsData = $result[2];
-        $allDivisionsDataNew = $result[3];
-        $totalNewData = $result[4];
+        if (count($currentSessionOrders) > 0) {
+            $result = $this->forNewTable($divisionGroups, $currentSessionOrders);
+            $uniqGoods = $result[0];
+            $divisionNames = $result[1];
+            $allDivisionsData = $result[2];
+            $allDivisionsDataNew = $result[3];
+            $totalNewData = $result[4];
+        } else {
+            $result = [];
+            $uniqGoods = [];
+            $divisionNames = [];
+            $allDivisionsData = [];
+            $allDivisionsDataNew = [];
+            $totalNewData = [];
+        }
+        
         foreach ($uniqGoods as $good) {
             if ($good['name'] == "Ручка") {
 //                dd($good['warehouse'], $uniqGoodsTotalOrdered[$good['name']], $good['total'],  $totalNewData[$good['name']], $uniqGoodsNewOrdered[$good['name']]);
