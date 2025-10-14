@@ -820,6 +820,11 @@ class OrderController extends Controller
           
         array_multisort(array_column($allDivisionsNames, 'sort'), SORT_ASC, $allDivisionsNames);
         
+        $names = array_column($allGoodsInOrders, 'name');
+
+        // Сортируем массив по именам
+        array_multisort($names, SORT_ASC, $allGoodsInOrders);
+        
 //        $result = array();
         $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew, $totalNewArray);
 //        $allGoodsInOrdersUpdated = [];

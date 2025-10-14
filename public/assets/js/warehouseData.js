@@ -115,40 +115,41 @@ class ExcellTable {
       printWindow.print();
       printWindow.close();
     };
+    this.printButton.blur();
   }
   
   saveTableToFile() {
     const table = document.getElementById('excel-table');
     if (!table) return;
     
-    // Создаем текстовое представление таблицы
-    let tableText = '';
+    // Создаем CSV представление таблицы
+    let csvContent = '';
     
     // Обрабатываем строки таблицы
     const rows = table.querySelectorAll('tr');
     rows.forEach(row => {
       const cells = row.querySelectorAll('th, td');
-      const rowText = Array.from(cells).map(cell => {
+      const rowArray = Array.from(cells).map(cell => {
         // Получаем текст, убираем HTML теги и лишние пробелы
         let text = cell.textContent || cell.innerText || '';
         text = text.replace(/\s+/g, ' ').trim();
-        // Экранируем кавычки и запятые для CSV-подобного формата
-        if (text.includes(',') || text.includes('"') || text.includes('\n')) {
+        // Экранируем кавычки и точки с запятой для CSV формата
+        if (text.includes(';') || text.includes('"') || text.includes('\n')) {
           text = '"' + text.replace(/"/g, '""') + '"';
         }
         return text;
-      }).join('\t'); // Используем табуляцию как разделитель
+      });
       
-      tableText += rowText + '\n';
+      csvContent += rowArray.join(';') + '\n';
     });
     
     // Создаем Blob и скачиваем файл
-    const blob = new Blob([tableText], { type: 'text/plain;charset=utf-8' });
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'ostatki_tovarov_' + new Date().toISOString().slice(0, 10) + '.txt';
+    link.download = 'ostatki_tovarov_' + new Date().toISOString().slice(0, 10) + '.csv';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
