@@ -36,7 +36,7 @@ class ArivalController extends Controller
 
     public function create()
     {
-        $products = Product::all();
+        $products = Product::all()->sortBy('name');
         
         foreach ($products as $product) {
             foreach ($product->variants as $variant) {

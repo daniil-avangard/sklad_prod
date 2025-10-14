@@ -91,6 +91,9 @@ class ExcellTable {
         th { 
           background-color: #f2f2f2; 
         }
+        img {
+          width: 200px;
+        }
       </style>
     `;
     
