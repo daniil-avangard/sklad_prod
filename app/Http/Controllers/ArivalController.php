@@ -477,21 +477,40 @@ class ArivalController extends Controller
           }
         $order = Order::find($request->orderId);
         
-        if ($request->status == "shipped") {
-            foreach ($order->items as $item) {
-                // Находим вариант товара по product_id, сортируем по date_of_actuality по возрастанию (NULL значения первыми)
-                $variant = ProductVariant::where('product_id', $item->product_id)
-                    ->orderByRaw('date_of_actuality IS NULL DESC, date_of_actuality ASC')
-                    ->first();
+            if ($request->status == "shipped") {
+                foreach ($order->items as $item) {
+                    $remainingQuantity = $item->quantity;
 
-                if ($variant) {
-                    // Уменьшаем количество на складе и зарезервированное количество
-                    $variant->quantity = max(0, $variant->quantity - $item->quantity);
-                    $variant->reserved_order = max(0, $variant->reserved_order - $item->quantity);
-                    $variant->save();
+                    // Получаем все варианты товара с quantity > 0, отсортированные по FIFO
+                    $variants = ProductVariant::where('product_id', $item->product_id)
+                        ->where('quantity', '>', 0)
+                        ->orderByRaw('date_of_actuality IS NULL DESC, date_of_actuality ASC')
+                        ->get();
+
+                    // Проходим по всем вариантам пока не спишем всё количество
+                    foreach ($variants as $variant) {
+                        if ($remainingQuantity <= 0) {
+                            break;
+                        }
+
+                        $availableQuantity = $variant->quantity;
+                        $quantityToDeduct = min($availableQuantity, $remainingQuantity);
+
+                        // Уменьшаем количество на складе и зарезервированное количество
+                        $variant->quantity = $availableQuantity - $quantityToDeduct;
+                        $variant->reserved_order = max(0, $variant->reserved_order - $quantityToDeduct);
+                        $variant->save();
+
+                        $remainingQuantity -= $quantityToDeduct;
+                    }
+
+                    // Опционально: проверка если не хватило товара для полного списания
+                    if ($remainingQuantity > 0) {
+                        // Можно добавить логирование или выбросить исключение
+                        // Например: throw new \Exception("Недостаточно товара для списания");
+                    }
                 }
             }
-        }
 
         $order->status = $orderStatus;
         $order->save();

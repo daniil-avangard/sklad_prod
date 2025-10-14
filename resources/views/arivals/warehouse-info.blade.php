@@ -63,7 +63,12 @@
                                 </tr>
                             @endforeach
 			</table>
+                        
 		</div>
+                <div class="mt-3">
+                    <button type="button" id="data-to-print" class="btn btn-primary">На печать</button>
+                    <button type="button" id="data-to-file" class="btn btn-secondary">В файл</button>
+                </div>
         </div>
     </div>
 @endsection
