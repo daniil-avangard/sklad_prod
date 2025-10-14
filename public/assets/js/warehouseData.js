@@ -111,7 +111,7 @@ class ExcellTable {
     printWindow.document.close();
     
     // Печатаем после загрузки
-    printWindow.onload = function() {
+    printWindow.onload = () => {
       printWindow.print();
       printWindow.close();
     };
@@ -191,6 +191,6 @@ class ExcellTable {
   
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
     const obj = new ExcellTable();
 });
