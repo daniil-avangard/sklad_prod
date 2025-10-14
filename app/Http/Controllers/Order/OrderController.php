@@ -636,7 +636,7 @@ class OrderController extends Controller
         $divisionStateOrdersNew = array();
         $allDivisionsProcessingNew = array();
 
-        $arrayOfStatuses = array(StatusEnum::WAREHOUSE_START->value, StatusEnum::SHIPPED->value, StatusEnum::ASSEMBLED->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value, StatusEnum::DELIVERED->value);
+        $arrayOfStatuses = array(StatusEnum::WAREHOUSE_START->value, StatusEnum::ASSEMBLED->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value);
 
         foreach ($orders as $order) {
             if (in_array($order->status->value, $arrayOfStatuses)) {
