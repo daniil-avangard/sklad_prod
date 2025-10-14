@@ -17,6 +17,8 @@ use App\Models\Division;
 use App\Models\Order;
 use App\Models\Korobka;
 use App\Enum\Order\StatusEnum;
+use App\Enum\ArivalStatusEnum;
+use App\Models\InventorySnapshot;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ArivalController extends Controller
@@ -103,7 +105,7 @@ class ArivalController extends Controller
             throw new AuthorizationException('У вас нет разрешения на изменение статуса прихода.');
         }
 
-        $arival->status = \App\Enum\ArivalStatusEnum::accepted->value;
+        $arival->status = ArivalStatusEnum::accepted->value;
 
 
         foreach ($arival->products as $item) {
@@ -127,6 +129,25 @@ class ArivalController extends Controller
                 $variant->is_active = true;
                 $variant->date_of_actuality = $item->date_of_actuality;
                 $variant->save();
+            }
+            
+            // Добавляем запись в InventorySnapshot
+            $today = now()->toDateString();
+            $existingSnapshot = InventorySnapshot::where('product_id', $item->product_id)
+                ->where('snapshot_date', $today)
+                ->first();
+
+            if ($existingSnapshot) {
+                // Если запись за сегодня уже существует, обновляем количество
+                $existingSnapshot->quantity += $item->quantity;
+                $existingSnapshot->save();
+            } else {
+                // Если записи нет, создаем новую
+                InventorySnapshot::create([
+                    'product_id' => $item->product_id,
+                    'snapshot_date' => $today,
+                    'quantity' => $item->quantity
+                ]);
             }
         }
 
@@ -455,7 +476,7 @@ class ArivalController extends Controller
               break;
           }
         $order = Order::find($request->orderId);
-//        $order->status = $request->status == "started" ? StatusEnum::WAREHOUSE_START->value: StatusEnum::ASSEMBLED->value;
+
         $order->status = $orderStatus;
         $order->save();
         $name = $order->status->name();
