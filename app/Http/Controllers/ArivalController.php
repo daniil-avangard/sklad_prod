@@ -139,12 +139,12 @@ class ArivalController extends Controller
 
             if ($existingSnapshot) {
                 // Если запись за сегодня уже существует, обновляем количество
-                $existingSnapshot->quantity += $item->quantity;
+                $existingSnapshot->quantity += $variant->quantity;
                 $existingSnapshot->save();
             } else {
                 // Если записи нет, создаем новую
                 InventorySnapshot::create([
-                    'product_id' => $item->product_id,
+                    'product_id' => $variant->product_id,
                     'snapshot_date' => $today,
                     'quantity' => $item->quantity
                 ]);
@@ -476,6 +476,22 @@ class ArivalController extends Controller
               break;
           }
         $order = Order::find($request->orderId);
+        
+        if ($request->status == "shipped") {
+            foreach ($order->items as $item) {
+                // Находим вариант товара по product_id, сортируем по date_of_actuality по возрастанию (NULL значения первыми)
+                $variant = ProductVariant::where('product_id', $item->product_id)
+                    ->orderByRaw('date_of_actuality IS NULL DESC, date_of_actuality ASC')
+                    ->first();
+
+                if ($variant) {
+                    // Уменьшаем количество на складе и зарезервированное количество
+                    $variant->quantity = max(0, $variant->quantity - $item->quantity);
+                    $variant->reserved_order = max(0, $variant->reserved_order - $item->quantity);
+                    $variant->save();
+                }
+            }
+        }
 
         $order->status = $orderStatus;
         $order->save();

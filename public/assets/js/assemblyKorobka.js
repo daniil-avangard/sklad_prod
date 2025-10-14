@@ -1,35 +1,3 @@
-//let statusNew = document.getElementById("korobka-add-new");
-//
-//statusNew.onclick = async () => {
-//    let url = '/basket/createKorobkaNew';
-//    let dataToSend = {_token: $('meta[name="csrf-token"]').attr('content') };
-////    let dataToSend = {name: data.name, orderId: data.orderId, action:data.action };
-//    console.log(dataToSend);
-//    const request = new Request(url, {
-//                                method: "POST",
-//                                headers: {
-//                                            'Content-Type': 'application/json;charset=utf-8',
-//                                        },
-//                                body: JSON.stringify(dataToSend)
-//                                });
-//                                
-//    let res = {};
-//    try {
-//        const response = await fetch(request);  
-//        if (!response.ok) {
-//            throw new Error(`Response status: ${response.status}`);
-//        }
-//        res = await response.json();
-//        res.result = true;
-//        
-//        console.log(res);
-//    }
-//    catch(error) {
-//        console.log(error.message);
-//        res.result = false;
-//    }
-//}
-
 const checkStatusForButtons = () => {
     let status = document.getElementById("order-status").dataset.status;
     let buttonsArray = ["start-assembl", "package-assembled", "package-shipped"];
@@ -119,6 +87,8 @@ const deliveryDataConfig = {
 
 const getSelectedDeliveryId = () => {
     const r = document.querySelector('input[type="radio"][name="delivery-method"]:checked');
+    let testVar = r ? r.value : 'delivery-track'
+    console.log(testVar);
     return r ? r.value : 'delivery-track';
 };
 
@@ -265,8 +235,21 @@ const postSetDeliveryMethod = async (orderId, selectedId) => {
 };
 
 const addDeliveryForRow = async (itemForPK, parent) => {
+    const deliveryDataConfig = {
+        'delivery-track': { method: 'track', fields: [{key:'track', label:'Трек-номер', type:'big'}] },
+        'delivery-kurier': { method: 'courier', fields: [
+            {key:'date', label:'Дата', type:'date'},
+            {key:'time', label:'Время', type:'time'}
+        ] },
+        'delivery-car': { method: 'car', fields: [
+            {key:'car_number', label:'Номер автомобиля', type:'small'},
+            {key:'date', label:'Дата', type:'date'}
+        ] },
+        'delivery-another': { method: 'other', fields: [{key:'comment', label:'Комментарий', type:'big'}] }
+    };
     const selectedId = getSelectedDeliveryId();
     const cfg = deliveryDataConfig[selectedId];
+    console.log(selectedId, cfg);
     const row = parent.getElementsByTagName('TR')[0];
     const inputs = Array.from(row.cells[1].querySelectorAll('input')).slice(0, row.cells[1].children.length-2);
     const payload = { orderId: itemForPK.dataset.pk, method: cfg.method, action: 'save', _token: $('meta[name="csrf-token"]').attr('content') };
@@ -549,6 +532,7 @@ const createKorobkaElement = async (flagForStart='none') => {
                 newCheckbox.checked = ind == 0 ? true : false;
                 newCheckbox.setAttribute("class", "checkbox-filter-new btn-margin");
                 newCheckbox.id = elm[0];
+                newCheckbox.value = elm[0];
                 newCheckbox.name = 'delivery-method';
                 function funcForCheck() {
                     if (this.checked) {
