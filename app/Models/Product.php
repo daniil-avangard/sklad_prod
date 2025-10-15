@@ -74,7 +74,7 @@ class Product extends Model
 
     public function writeoffProduct()
     {
-        return $this->hasMany(WriteoffProduct::class, 'product_id');
+        return $this->hasMany(WriteoffProduct::class);
     }
     
     public function writeoffs()

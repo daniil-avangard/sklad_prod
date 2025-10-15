@@ -364,6 +364,7 @@ class ProductController extends Controller
                 'quantity' => $arivalProduct->quantity
             ];
         })->unique('arival.id');
+//        dd($product->arivalProduct()->with('arival')->get());
         return view('products.arivals.index', compact('product', 'arivals'));
     }
 
@@ -374,22 +375,28 @@ class ProductController extends Controller
         // }
 
         $this->authorize('view', Writeoff::class);
-        $writeoffs1 = $product->writeOffProduct()->get()->toArray();
-        $writeoffs = $product->writeoffs->map(function ($writeoff) {
+
+//        $writeoffs2 = $product->writeoffs->map(function ($writeoff) {
+//            return [
+//                'writeoff' => $writeoff,
+//                'quantity' => $writeoff->pivot->quantity
+//            ];
+//        });
+//        dd($product->writeoffs);
+        $writeoffs = $product->writeOffProduct()->with('writeOff')->orderByDesc('created_at')->get()->map(function ($writeOffProduct) {
             return [
-                'writeoff' => $writeoff,
-                'quantity' => $writeoff->pivot->quantity
+                'writeoff' => $writeOffProduct->writeOff,
+                'quantity' => $writeOffProduct->quantity
             ];
-        });
-//        dd($writeoffs2);
-//        $writeoffs = $product->writeOffProduct()->with('writeOff')->get()->map(function ($writeOffProduct) {
+        })->unique('writeoff.id');
+//        dd($product->writeOffProduct()->with('writeOff')->orderByDesc('created_at')->get()->map(function ($writeOffProduct) {
 //            return [
 //                'writeoff' => $writeOffProduct->writeOff,
 //                'quantity' => $writeOffProduct->quantity
 //            ];
-//        })->unique('writeOff.id');
+//        }));
 //        
-//        dd($writeoffs->toArray());
+//        dd($product->writeOffProduct()->with('writeOff')->orderByDesc('created_at')->get());
         return view('products.writeoffs.index', compact('product', 'writeoffs'));
     }
     
