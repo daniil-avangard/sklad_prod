@@ -23,7 +23,7 @@
 
                             <div class="col-sm-4">
                                 <label for="writeoff_date" class="form-label">Дата списания</label>
-                                <input type="date" name="writeoff_date" class="form-control" required>
+                                <input type="date" name="writeoff_date" class="form-control" onfocus="this.showPicker()" required>
                             </div>
 
                             <div class="col-sm-4">
@@ -60,7 +60,7 @@
 
                                             <div class="col-sm-3">
                                                 <label class="form-label">Количество</label>
-                                                <input type="text" name="product[0][quantity]" value="0"
+                                                <input type="text" name="product[0][quantity]" value=""
                                                     class="form-control" required>
                                             </div><!--end col-->
 

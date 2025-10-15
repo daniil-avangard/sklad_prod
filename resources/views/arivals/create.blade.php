@@ -28,7 +28,7 @@
 
                                                     <div class="col-sm-4">
                                                         <label for="arrival_date" class="form-label">Дата прихода</label>
-                                                        <input type="date" name="arrival_date" class="form-control" required>
+                                                        <input type="date" name="arrival_date" class="form-control" onfocus="this.showPicker()" required>
                                                     </div>
 
                                                 </div>
@@ -51,7 +51,7 @@
 
                                                             <div class="col-sm-4">
                                                                 <label class="form-label">Количество</label>
-                                                                <input type="text" name="product[0][quantity]" value="0" class="form-control" required>
+                                                                <input type="text" name="product[0][quantity]" value="" class="form-control" required>
                                                             </div><!--end col-->
                                                             
                                                             <div class="col-sm-3">

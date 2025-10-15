@@ -76,6 +76,12 @@ class Product extends Model
     {
         return $this->hasMany(WriteoffProduct::class);
     }
+    
+    public function writeoffs()
+    {
+        return $this->belongsToMany(Writeoff::class, 'writeoff_products', 'product_id', 'writeoff_id')
+                    ->withPivot('quantity'); // Подгружаем поле quantity из промежуточной таблицы
+    }
 
     public function divisions()
     {
