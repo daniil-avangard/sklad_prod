@@ -32,4 +32,9 @@ class Writeoff extends Model
     {
         return $this->belongsTo(User::class);
     }
+    
+    public function writeOffProducts()
+    {
+        return $this->hasMany(WriteoffProduct::class, 'writeoff_id');
+    }
 }
