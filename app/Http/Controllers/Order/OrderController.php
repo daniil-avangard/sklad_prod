@@ -636,7 +636,7 @@ class OrderController extends Controller
         $divisionStateOrdersNew = array();
         $allDivisionsProcessingNew = array();
 
-        $arrayOfStatuses = array(StatusEnum::WAREHOUSE_START->value, StatusEnum::SHIPPED->value, StatusEnum::ASSEMBLED->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value, StatusEnum::DELIVERED->value);
+        $arrayOfStatuses = array(StatusEnum::WAREHOUSE_START->value, StatusEnum::ASSEMBLED->value, StatusEnum::TRANSFERRED_TO_WAREHOUSE->value);
 
         foreach ($orders as $order) {
             if (in_array($order->status->value, $arrayOfStatuses)) {
@@ -819,6 +819,11 @@ class OrderController extends Controller
         }
           
         array_multisort(array_column($allDivisionsNames, 'sort'), SORT_ASC, $allDivisionsNames);
+        
+        $names = array_column($allGoodsInOrders, 'name');
+
+        // Сортируем массив по именам
+        array_multisort($names, SORT_ASC, $allGoodsInOrders);
         
 //        $result = array();
         $result = array($allGoodsInOrders, $allDivisionsNames, $allDivisionsData, $allDivisionsDataNew, $totalNewArray);

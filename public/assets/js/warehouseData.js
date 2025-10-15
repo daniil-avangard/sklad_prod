@@ -5,14 +5,15 @@ class ExcellTable {
     this.popUpsChilds = document.querySelectorAll('.order-popup-child-1');
     this.butonChangeOrderAllStatus = document.getElementById('acept-all-orders');
     this.pElementsOrders = document.querySelectorAll('.clickForOrder');
-//    this.editElementsOrders = document.querySelectorAll('.edit-button-excell');
     this.tableThMain = document.getElementById('excel-table').getElementsByTagName("TH")[0];
     this.tableInputToZero = document.querySelectorAll('.checkbox-filter-new');
+    this.printButton = document.getElementById('data-to-print');
+    this.fileButton = document.getElementById('data-to-file');
     
     this.adjustHTML();
     this.start();
-//    this.dataFromApi();
     this.initSettings();
+    this.initPrintAndFileHandlers();
   }
   
   adjustHTML() {
@@ -50,7 +51,113 @@ class ExcellTable {
 //      document.getElementById('month-orders').innerHTML = d.getMonth() == 11 ? month[0] : month[d.getMonth()+1];
   }
   
+  initPrintAndFileHandlers() {
+    // Обработчик печати через onclick и стрелочную функцию
+    if (this.printButton) {
+      this.printButton.onclick = () => {
+        this.printTable();
+      };
+    }
+    
+    // Обработчик сохранения в файл через onclick и стрелочную функцию
+    if (this.fileButton) {
+      this.fileButton.onclick = () => {
+        this.saveTableToFile();
+      };
+    }
+  }
   
+  printTable() {
+    const table = document.getElementById('excel-table');
+    if (!table) return;
+    
+    // Создаем стили для печати
+    const printStyles = `
+      <style>
+        @page { size: landscape; }
+        body { 
+          font-family: Arial, sans-serif; 
+          margin: 20px; 
+        }
+        table { 
+          border-collapse: collapse; 
+          width: 100%; 
+        }
+        th, td { 
+          border: 1px solid #000; 
+          padding: 8px; 
+          text-align: left; 
+        }
+        th { 
+          background-color: #f2f2f2; 
+        }
+        img {
+          width: 200px;
+        }
+      </style>
+    `;
+    
+    // Создаем новое окно для печати
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Печать таблицы</title>
+        ${printStyles}
+      </head>
+      <body>
+        ${table.outerHTML}
+      </body>
+      </html>
+    `);
+    printWindow.document.close();
+    
+    // Печатаем после загрузки
+    printWindow.onload = () => {
+      printWindow.print();
+      printWindow.close();
+    };
+    this.printButton.blur();
+  }
+  
+  saveTableToFile() {
+    const table = document.getElementById('excel-table');
+    if (!table) return;
+    
+    // Создаем CSV представление таблицы
+    let csvContent = '';
+    
+    // Обрабатываем строки таблицы
+    const rows = table.querySelectorAll('tr');
+    rows.forEach(row => {
+      const cells = row.querySelectorAll('th, td');
+      const rowArray = Array.from(cells).map(cell => {
+        // Получаем текст, убираем HTML теги и лишние пробелы
+        let text = cell.textContent || cell.innerText || '';
+        text = text.replace(/\s+/g, ' ').trim();
+        // Экранируем кавычки и точки с запятой для CSV формата
+        if (text.includes(';') || text.includes('"') || text.includes('\n')) {
+          text = '"' + text.replace(/"/g, '""') + '"';
+        }
+        return text;
+      });
+      
+      csvContent += rowArray.join(';') + '\n';
+    });
+    
+    // Создаем Blob и скачиваем файл
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'ostatki_tovarov_' + new Date().toISOString().slice(0, 10) + '.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
   
   initSettings() {
     let self = this;
@@ -83,24 +190,11 @@ class ExcellTable {
         el.addEventListener("mouseout", listener, false);
 
     });
-    
-   
-    
-    
-    
-//    Array.from(self.editElementsOrders).forEach((el, index) => {
-//        el.onclick = () => {
-//            excellCellClickFunction(el.parentNode);
-//        }
-//    });
 
-   
   }
   
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", () => {
     const obj = new ExcellTable();
-
-
 });
