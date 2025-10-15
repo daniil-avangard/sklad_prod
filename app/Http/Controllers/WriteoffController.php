@@ -32,7 +32,7 @@ class WriteoffController extends Controller
     {
         $this->authorize('create', Writeoff::class);
 
-        $products = Product::all();
+        $products = Product::all()->sortBy('name');
         return view('writeoffs.create', compact('products'));
     }
 

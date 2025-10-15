@@ -19,6 +19,7 @@
                         <tr>
                             <th>Причина</th>
                             <th>Дата списания</th>
+                            <th>Количество</th>
                             <th>Пользователь</th>
                             <th>Статус</th>
                             <th>Дата создания</th>
@@ -30,8 +31,9 @@
                             <tr>
                                 <td>{{ $writeoff['writeoff']->reason }}</td>
                                 <td>{{ \Carbon\Carbon::parse($writeoff['writeoff']->writeoff_date)->format('d.m.Y') }}</td>
+                                <td>{{ $writeoff['quantity'] }}</td>
                                 <td>{{ $writeoff['writeoff']->user->surname }} {{ $writeoff['writeoff']->user->first_name }}
-                                    {{ $writeoff['writeoff']->user->middle_name }}</td>
+                                    {{ $writeoff['writeoff']->user->middle_name }}</td>            
                                 <td>
                                     <span class="badge bg-{{ $writeoff['writeoff']->status->color() }}">
                                         {{ $writeoff['writeoff']->status->name() }}

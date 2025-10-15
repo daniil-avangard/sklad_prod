@@ -56,9 +56,12 @@
                                         </div>
                                     </td>
                                     @if ($flagForExcell == "show")
-                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column-100">{{ $good['total'] - $totalNewData[$good['name']] }}</td>
+<!--                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column-100">{{ $good['total'] - $totalNewData[$good['name']] }}</td>
                                         <td class="another-col tr-another-cell for-anothe-col-width for-another-column-10">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']]+$good['total'] - $totalNewData[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>
-                                        <td class="another-col tr-another-cell for-anothe-col-width for-last-column">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>                         
+                                        <td class="another-col tr-another-cell for-anothe-col-width for-last-column">{{ $good['warehouse']-$uniqGoodsTotalOrdered[$good['name']] + $uniqGoodsNewOrdered[$good['name']] }}</td>-->
+                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column-100">{{ $good['total'] }}</td>
+                                        <td class="another-col tr-another-cell for-anothe-col-width for-another-column-10">{{ $good['warehouse'] }}</td>
+                                        <td class="another-col tr-another-cell for-anothe-col-width for-last-column">{{ $good['warehouse']-$good['total'] }}</td>
                                     @endif
                                 </tr>
                             @endforeach
