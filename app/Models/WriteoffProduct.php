@@ -22,7 +22,7 @@ class WriteoffProduct extends Model
 
     public function writeoff()
     {
-        return $this->belongsTo(Writeoff::class);
+        return $this->belongsTo(Writeoff::class, 'writeoff_id');
     }
 
     public function product()

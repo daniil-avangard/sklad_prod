@@ -374,14 +374,21 @@ class ProductController extends Controller
         // }
 
         $this->authorize('view', Writeoff::class);
-
-        $writeoffs = $product->writeOffProduct()->with('writeOff')->get()->map(function ($writeOffProduct) {
+        $writeoffs1 = $product->writeOffProduct()->get()->toArray();
+        $writeoffs = $product->writeoffs->map(function ($writeoff) {
             return [
-                'writeoff' => $writeOffProduct->writeOff,
-                'quantity' => $writeOffProduct->quantity
+                'writeoff' => $writeoff,
+                'quantity' => $writeoff->pivot->quantity
             ];
-        })->unique('writeOff.id');
-        
+        });
+//        dd($writeoffs2);
+//        $writeoffs = $product->writeOffProduct()->with('writeOff')->get()->map(function ($writeOffProduct) {
+//            return [
+//                'writeoff' => $writeOffProduct->writeOff,
+//                'quantity' => $writeOffProduct->quantity
+//            ];
+//        })->unique('writeOff.id');
+//        
 //        dd($writeoffs->toArray());
         return view('products.writeoffs.index', compact('product', 'writeoffs'));
     }
