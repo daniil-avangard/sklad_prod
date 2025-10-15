@@ -60,7 +60,7 @@
 
                                             <div class="col-sm-3">
                                                 <label class="form-label">Количество</label>
-                                                <input type="text" name="product[0][quantity]" value="0"
+                                                <input type="text" name="product[0][quantity]" value=""
                                                     class="form-control" required>
                                             </div><!--end col-->
 
