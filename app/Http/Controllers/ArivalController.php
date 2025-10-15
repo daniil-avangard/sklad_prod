@@ -17,6 +17,8 @@ use App\Models\Division;
 use App\Models\Order;
 use App\Models\Korobka;
 use App\Enum\Order\StatusEnum;
+use App\Enum\ArivalStatusEnum;
+use App\Models\InventorySnapshot;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class ArivalController extends Controller
@@ -34,7 +36,7 @@ class ArivalController extends Controller
 
     public function create()
     {
-        $products = Product::all();
+        $products = Product::all()->sortBy('name');
         
         foreach ($products as $product) {
             foreach ($product->variants as $variant) {
@@ -103,7 +105,7 @@ class ArivalController extends Controller
             throw new AuthorizationException('У вас нет разрешения на изменение статуса прихода.');
         }
 
-        $arival->status = \App\Enum\ArivalStatusEnum::accepted->value;
+        $arival->status = ArivalStatusEnum::accepted->value;
 
 
         foreach ($arival->products as $item) {
@@ -127,6 +129,25 @@ class ArivalController extends Controller
                 $variant->is_active = true;
                 $variant->date_of_actuality = $item->date_of_actuality;
                 $variant->save();
+            }
+            
+            // Добавляем запись в InventorySnapshot
+            $today = now()->toDateString();
+            $existingSnapshot = InventorySnapshot::where('product_id', $item->product_id)
+                ->where('snapshot_date', $today)
+                ->first();
+
+            if ($existingSnapshot) {
+                // Если запись за сегодня уже существует, обновляем количество
+                $existingSnapshot->quantity += $variant->quantity;
+                $existingSnapshot->save();
+            } else {
+                // Если записи нет, создаем новую
+                InventorySnapshot::create([
+                    'product_id' => $variant->product_id,
+                    'snapshot_date' => $today,
+                    'quantity' => $item->quantity
+                ]);
             }
         }
 
@@ -455,7 +476,42 @@ class ArivalController extends Controller
               break;
           }
         $order = Order::find($request->orderId);
-//        $order->status = $request->status == "started" ? StatusEnum::WAREHOUSE_START->value: StatusEnum::ASSEMBLED->value;
+        
+            if ($request->status == "shipped") {
+                foreach ($order->items as $item) {
+                    $remainingQuantity = $item->quantity;
+
+                    // Получаем все варианты товара с quantity > 0, отсортированные по FIFO
+                    $variants = ProductVariant::where('product_id', $item->product_id)
+                        ->where('quantity', '>', 0)
+                        ->orderByRaw('date_of_actuality IS NULL DESC, date_of_actuality ASC')
+                        ->get();
+
+                    // Проходим по всем вариантам пока не спишем всё количество
+                    foreach ($variants as $variant) {
+                        if ($remainingQuantity <= 0) {
+                            break;
+                        }
+
+                        $availableQuantity = $variant->quantity;
+                        $quantityToDeduct = min($availableQuantity, $remainingQuantity);
+
+                        // Уменьшаем количество на складе и зарезервированное количество
+                        $variant->quantity = $availableQuantity - $quantityToDeduct;
+                        $variant->reserved_order = max(0, $variant->reserved_order - $quantityToDeduct);
+                        $variant->save();
+
+                        $remainingQuantity -= $quantityToDeduct;
+                    }
+
+                    // Опционально: проверка если не хватило товара для полного списания
+                    if ($remainingQuantity > 0) {
+                        // Можно добавить логирование или выбросить исключение
+                        // Например: throw new \Exception("Недостаточно товара для списания");
+                    }
+                }
+            }
+
         $order->status = $orderStatus;
         $order->save();
         $name = $order->status->name();

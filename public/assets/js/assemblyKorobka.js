@@ -1,35 +1,3 @@
-//let statusNew = document.getElementById("korobka-add-new");
-//
-//statusNew.onclick = async () => {
-//    let url = '/basket/createKorobkaNew';
-//    let dataToSend = {_token: $('meta[name="csrf-token"]').attr('content') };
-////    let dataToSend = {name: data.name, orderId: data.orderId, action:data.action };
-//    console.log(dataToSend);
-//    const request = new Request(url, {
-//                                method: "POST",
-//                                headers: {
-//                                            'Content-Type': 'application/json;charset=utf-8',
-//                                        },
-//                                body: JSON.stringify(dataToSend)
-//                                });
-//                                
-//    let res = {};
-//    try {
-//        const response = await fetch(request);  
-//        if (!response.ok) {
-//            throw new Error(`Response status: ${response.status}`);
-//        }
-//        res = await response.json();
-//        res.result = true;
-//        
-//        console.log(res);
-//    }
-//    catch(error) {
-//        console.log(error.message);
-//        res.result = false;
-//    }
-//}
-
 const checkStatusForButtons = () => {
     let status = document.getElementById("order-status").dataset.status;
     let buttonsArray = ["start-assembl", "package-assembled", "package-shipped"];
@@ -119,6 +87,8 @@ const deliveryDataConfig = {
 
 const getSelectedDeliveryId = () => {
     const r = document.querySelector('input[type="radio"][name="delivery-method"]:checked');
+    let testVar = r ? r.value : 'delivery-track'
+    console.log(testVar);
     return r ? r.value : 'delivery-track';
 };
 
@@ -236,10 +206,14 @@ const regenerateInputsForRow = (row, selectedId) => {
         const hasData = getHasData();
         if (addBtn) addBtn.disabled = hasData ? true : !anyValue;
         if (cleanBtn) cleanBtn.disabled = !anyValue && !hasData ? true : false; // X активен если есть что чистить или сохранено
+        if (addBtn) addBtn.disabled = false;
+        if (cleanBtn) cleanBtn.disabled = false;
     };
     inputs.forEach(inp => { 
+        console.log("Ищем инпуты = ", inp);
         inp.oninput = () => { 
             inp.classList.remove('invalid-input'); 
+            console.log("Нажат инпут = ", inp);
             recomputeButtons(); 
         }; 
     });
@@ -265,29 +239,55 @@ const postSetDeliveryMethod = async (orderId, selectedId) => {
 };
 
 const addDeliveryForRow = async (itemForPK, parent) => {
+    const deliveryDataConfig = {
+        'delivery-track': { method: 'track', fields: [{key:'track', label:'Трек-номер', type:'big'}] },
+        'delivery-kurier': { method: 'courier', fields: [
+            {key:'date', label:'Дата', type:'date'},
+            {key:'time', label:'Время', type:'time'}
+        ] },
+        'delivery-car': { method: 'car', fields: [
+            {key:'car_number', label:'Номер автомобиля', type:'small'},
+            {key:'date', label:'Дата', type:'date'}
+        ] },
+        'delivery-another': { method: 'other', fields: [{key:'comment', label:'Комментарий', type:'big'}] }
+    };
     const selectedId = getSelectedDeliveryId();
     const cfg = deliveryDataConfig[selectedId];
+    console.log(selectedId, cfg);
     const row = parent.getElementsByTagName('TR')[0];
     const inputs = Array.from(row.cells[1].querySelectorAll('input')).slice(0, row.cells[1].children.length-2);
     const payload = { orderId: itemForPK.dataset.pk, method: cfg.method, action: 'save', _token: $('meta[name="csrf-token"]').attr('content') };
     // Валидация и сбор
+    let flagForSendData = true;
     switch (cfg.method) {
         case 'track':
-            if (!inputs[0] || inputs[0].value === '') return;
+            if (!inputs[0] || inputs[0].value === '') {
+                flagForSendData = false;
+                return;
+            }
             payload.track = inputs[0].value;
             break;
         case 'courier':
-            if (!inputs[0].value || !inputs[1].value) return;
+            if (!inputs[0].value || !inputs[1].value) {
+                flagForSendData = false;
+                return;
+            }
             payload.date = inputs[0].value;
             payload.time = inputs[1].value;
             break;
         case 'car':
-            if (!inputs[0].value || !inputs[1].value) return;
+            if (!inputs[0].value || !inputs[1].value) {
+                flagForSendData = false;
+                return;
+            }
             payload.car_number = inputs[0].value;
             payload.date = inputs[1].value;
             break;
         case 'other':
-            if (!inputs[0].value) return;
+            if (!inputs[0].value) {
+                flagForSendData = false;
+                return;
+            }
             payload.comment = inputs[0].value;
             break;
     }
@@ -301,37 +301,40 @@ const addDeliveryForRow = async (itemForPK, parent) => {
         },
         body: JSON.stringify(payload)
     });
-    try {
-        const response = await fetch(request);
-        if (!response.ok) throw new Error(`Response status: ${response.status}`);
-        const result = await response.json();
-        // Проставим dataset метод и значения, чтобы восстановление работало при смене radio
-        row.dataset.method = cfg.method;
-        switch (cfg.method) {
-            case 'track':
-                row.dataset.track = inputs[0] ? inputs[0].value : '';
-                break;
-            case 'courier':
-                row.dataset.courierDate = inputs[0] ? inputs[0].value : '';
-                row.dataset.courierTime = inputs[1] ? inputs[1].value : '';
-                break;
-            case 'car':
-                row.dataset.carNumber = inputs[0] ? inputs[0].value : '';
-                row.dataset.carDate = inputs[1] ? inputs[1].value : '';
-                break;
-            case 'other':
-                row.dataset.otherComment = inputs[0] ? inputs[0].value : '';
-                break;
+    if (flagForSendData) {
+        try {
+            console.log('Отправляем данные из инпутов');
+            const response = await fetch(request);
+            if (!response.ok) throw new Error(`Response status: ${response.status}`);
+            const result = await response.json();
+            // Проставим dataset метод и значения, чтобы восстановление работало при смене radio
+            row.dataset.method = cfg.method;
+            switch (cfg.method) {
+                case 'track':
+                    row.dataset.track = inputs[0] ? inputs[0].value : '';
+                    break;
+                case 'courier':
+                    row.dataset.courierDate = inputs[0] ? inputs[0].value : '';
+                    row.dataset.courierTime = inputs[1] ? inputs[1].value : '';
+                    break;
+                case 'car':
+                    row.dataset.carNumber = inputs[0] ? inputs[0].value : '';
+                    row.dataset.carDate = inputs[1] ? inputs[1].value : '';
+                    break;
+                case 'other':
+                    row.dataset.otherComment = inputs[0] ? inputs[0].value : '';
+                    break;
+            }
+            inputs.forEach(i => { i.disabled = true; i.style.backgroundColor = '#e6ffed'; });
+            const copyBtn = row.parentElement.parentElement.parentElement.querySelector('.copy-korobka');
+            if (copyBtn) copyBtn.disabled = false;
+            const addBtn = row.cells[1].querySelector('.add-track');
+            if (addBtn) addBtn.disabled = true;
+            const cleanBtn = row.cells[1].querySelector('.clean-track');
+            if (cleanBtn) cleanBtn.disabled = false;
+        } catch (e) {
+            console.log(e.message);
         }
-        inputs.forEach(i => { i.disabled = true; i.style.backgroundColor = '#e6ffed'; });
-        const copyBtn = row.parentElement.parentElement.parentElement.querySelector('.copy-korobka');
-        if (copyBtn) copyBtn.disabled = false;
-        const addBtn = row.cells[1].querySelector('.add-track');
-        if (addBtn) addBtn.disabled = true;
-        const cleanBtn = row.cells[1].querySelector('.clean-track');
-        if (cleanBtn) cleanBtn.disabled = false;
-    } catch (e) {
-        console.log(e.message);
     }
 };
 
@@ -549,6 +552,7 @@ const createKorobkaElement = async (flagForStart='none') => {
                 newCheckbox.checked = ind == 0 ? true : false;
                 newCheckbox.setAttribute("class", "checkbox-filter-new btn-margin");
                 newCheckbox.id = elm[0];
+                newCheckbox.value = elm[0];
                 newCheckbox.name = 'delivery-method';
                 function funcForCheck() {
                     if (this.checked) {
@@ -614,6 +618,9 @@ const createKorobkaElement = async (flagForStart='none') => {
             const checkedRadio = newCheckDiv.querySelector('input[type="radio"][name="delivery-method"]:checked');
             const initialId = checkedRadio ? checkedRadio.id : 'delivery-track';
             regenerateInputsForAllRows(initialId);
+            regenerateInputsForAllRows('delivery-kurier');
+            regenerateInputsForAllRows('delivery-car');
+            regenerateInputsForAllRows('delivery-another');
         }
         
         parentKorobkaNode.insertBefore(clone, parentKorobkaNode.lastChild.previousElementSibling);
