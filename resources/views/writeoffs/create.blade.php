@@ -23,7 +23,7 @@
 
                             <div class="col-sm-4">
                                 <label for="writeoff_date" class="form-label">Дата списания</label>
-                                <input type="date" name="writeoff_date" class="form-control" required>
+                                <input type="date" name="writeoff_date" class="form-control" onfocus="this.showPicker()" required>
                             </div>
 
                             <div class="col-sm-4">
