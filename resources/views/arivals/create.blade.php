@@ -111,11 +111,6 @@
 <script src="/plugins/select2/select2.min.js"></script>
 <script src="/plugins/repeater/jquery.repeater.min.js"></script>
 <script src="/assets/pages/jquery.form-repeater.js"></script>
-
-
-<script>
-       
-</script>
 <script src="/assets/js/newArrival.js"></script>
 
 @endpush

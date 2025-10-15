@@ -23,12 +23,12 @@
 
                             <div class="col-sm-4">
                                 <label for="writeoff_date" class="form-label">Дата списания</label>
-                                <input type="date" name="writeoff_date" class="form-control">
+                                <input type="date" name="writeoff_date" class="form-control" required>
                             </div>
 
                             <div class="col-sm-4">
                                 <label for="reason" class="form-label">Причина списания</label>
-                                <input type="text" name="reason" class="form-control">
+                                <input type="text" name="reason" class="form-control" required>
                             </div>
 
                         </div>
@@ -41,7 +41,7 @@
                                             <div class="col-sm-4">
                                                 <label class="form-label">Товары</label>
                                                 <select name="products[0][product_id]"
-                                                    class="form-select select2 product-select">
+                                                    class="form-select select2 product-select" required>
                                                     <option value="">Выберите товар</option>
                                                     @foreach ($products as $product)
                                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
@@ -52,7 +52,7 @@
                                             <div class="col-sm-4">
                                                 <label class="form-label">Дата актуализации</label>
                                                 <select class="form-select" name="products[0][date_of_actuality]"
-                                                    id="">
+                                                    id="" required>
                                                     <option value="">Выберите товар</option>
 
                                                 </select>
@@ -61,7 +61,7 @@
                                             <div class="col-sm-3">
                                                 <label class="form-label">Количество</label>
                                                 <input type="text" name="product[0][quantity]" value="0"
-                                                    class="form-control">
+                                                    class="form-control" required>
                                             </div><!--end col-->
 
 
@@ -156,7 +156,9 @@
                     },
                     success: function(response) {
                         console.log(response);
+                        dateSelect.append('<option value="">Выберите даты</option>');
                         $.each(response, function(key, value) {
+                            
                             if (value['date'] == null) {
                                 dateSelect.append('<option value="">Без даты</option>');
                             } else {
