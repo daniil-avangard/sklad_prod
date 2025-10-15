@@ -602,7 +602,7 @@ class OrderController extends Controller
         $allDivisionsDataNew = $result[3];
         $totalNewData = $result[4];
         foreach ($uniqGoods as $good) {
-            if ($good['name'] == "Ручка") {
+            if ($good['name'] == "Стеклянная бутылка") {
 //                dd($good['warehouse'], $uniqGoodsTotalOrdered[$good['name']], $good['total'],  $totalNewData[$good['name']], $uniqGoodsNewOrdered[$good['name']]);
             }
         }

@@ -381,9 +381,11 @@ class ProductController extends Controller
                 'quantity' => $writeOffProduct->quantity
             ];
         })->unique('writeOff.id');
-
+        
+//        dd($writeoffs->toArray());
         return view('products.writeoffs.index', compact('product', 'writeoffs'));
     }
+    
 
     public function addAllDivisions(Request $request)
     {

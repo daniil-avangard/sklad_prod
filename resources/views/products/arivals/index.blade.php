@@ -19,6 +19,7 @@
                         <tr>
                             <th>Номер</th>
                             <th>Дата поставки</th>
+                            <th>Количество</th>
                             <th>Пользователь</th>
                             <th>Статус</th>
                             <th>Дата создания</th>
@@ -30,6 +31,7 @@
                             <tr>
                                 <td>{{ $arival['arival']->invoice }}</td>
                                 <td>{{ \Carbon\Carbon::parse($arival['arival']->arival_date)->format('d.m.Y') }}</td>
+                                <td>{{ $arival['quantity'] }}</td>
                                 <td>{{ $arival['arival']->user->surname }} {{ $arival['arival']->user->first_name }}
                                     {{ $arival['arival']->user->middle_name }}</td>
                                 <td>
