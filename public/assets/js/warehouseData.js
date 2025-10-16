@@ -152,7 +152,7 @@ class ExcellTable {
     
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'ostatki_tovarov_' + new Date().toISOString().slice(0, 10) + '.csv';
+    link.download = 'ostatki_tovarov_' + new Date().toISOString().slice(0, 10) + '.txt';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
