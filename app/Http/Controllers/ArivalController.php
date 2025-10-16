@@ -29,9 +29,23 @@ class ArivalController extends Controller
     {
         $this->authorize('viewAny', Arival::class);
         $canCreateArival = Gate::allows('create', Arival::class);
+        
+        $allOrdersStatus = [];
+        $allArivalsCreateUsers = [];
 
         $arivals = Arival::all()->sortByDesc('created_at');
-        return view('arivals.index', compact('arivals', 'canCreateArival'));
+        foreach ($arivals as $arival) {
+            $valueForUser = array('value' => $arival->user->id, 'label' => $arival->user->surname . " " . $arival->user->first_name);
+            $valueForStatus = array('value' => $arival->status->value, 'label' => $arival->status->name());
+            if (!(in_array($valueForStatus, $allOrdersStatus))) {
+                $allOrdersStatus[] = $valueForStatus;
+            }
+            
+            if (!(in_array($valueForUser, $allArivalsCreateUsers))) {
+                $allArivalsCreateUsers[] = $valueForUser;
+            }
+        }
+        return view('arivals.index', compact('arivals', 'canCreateArival', 'allOrdersStatus', 'allArivalsCreateUsers'));
     }
 
     public function create()

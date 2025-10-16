@@ -24,8 +24,21 @@ class WriteoffController extends Controller
         }
         $canCreateWriteoff = Gate::allows('create', Writeoff::class);
 
+        $allOrdersStatus = [];
+        $allArivalsCreateUsers = [];
         $writeoffs = Writeoff::all()->sortByDesc('created_at');
-        return view('writeoffs.index', compact('writeoffs', 'canCreateWriteoff'));
+        foreach ($writeoffs as $writeoff) {
+            $valueForUser = array('value' => $writeoff->user->id, 'label' => $writeoff->user->surname . " " . $writeoff->user->first_name);
+            $valueForStatus = array('value' => $writeoff->status->value, 'label' => $writeoff->status->name());
+            if (!(in_array($valueForStatus, $allOrdersStatus))) {
+                $allOrdersStatus[] = $valueForStatus;
+            }
+            
+            if (!(in_array($valueForUser, $allArivalsCreateUsers))) {
+                $allArivalsCreateUsers[] = $valueForUser;
+            }
+        }
+        return view('writeoffs.index', compact('writeoffs', 'canCreateWriteoff', 'allOrdersStatus', 'allArivalsCreateUsers'));
     }
 
     public function create()
