@@ -20,7 +20,7 @@ class FilterPage {
             self.selectOrderStatus.onchange = () => {
 //                document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
                 if (self.selectDivision) {
-                    self.display(self.selectDivision.value, self.selectOrderStatus.value, false, false, self.selectIDOrder.value);
+                    self.display(self.selectDivision.value, self.selectOrderStatus.value, false, true, self.selectIDOrder.value);
                 } else {
                     self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
                 }
@@ -42,9 +42,9 @@ class FilterPage {
                         let valuProductCookie = parent.value == "Все" ? "" : parent.value;
                         let valueID = parent.value == "Все" ? false : parent.value;
                         if (self.selectDivision) {
-                            if (parent.id == 'idOfOrders') self.display(self.selectDivision.value, self.selectOrderStatus.value, false, false, valueID);
+                            if (parent.id == 'idOfOrders') self.display(self.selectDivision.value, self.selectOrderStatus.value, false, true, valueID);
                             if (parent.id == 'productsOfOrders1') self.display(self.selectDivision.value, self.selectOrderStatus.value, valueID, true, self.selectIDOrder.value);
-                            if (parent.id == 'divisiones-names') self.display(valueID, self.selectOrderStatus.value, false, false, self.selectIDOrder.value);
+                            if (parent.id == 'divisiones-names') self.display(valueID, self.selectOrderStatus.value, false, true, self.selectIDOrder.value);
                         } else {
                             if (parent.id == 'idOfOrders') self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
                             if (parent.id == 'productsOfOrders1') self.display(false, self.selectOrderStatus.value, valueID, true, self.selectIDOrder.value);
