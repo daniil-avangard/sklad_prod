@@ -510,13 +510,13 @@ class OrderController extends Controller
         
         $divisionGroupProducts = DB::table('division_group_product')
             ->join('division_division_group', 'division_group_product.division_group_id', '=', 'division_division_group.division_group_id')
-            ->where('division_division_group.division_id', $this->divisionId)
+            ->where('division_division_group.division_id', $divisionIDCreatedOrder)
             ->pluck('division_group_product.product_id');
 
         
         $products = Product::whereIn('id', $divisionGroupProducts)
-            ->orWhereHas('divisions', function ($query) {
-                $query->where('division_id', $this->divisionId);
+            ->orWhereHas('divisions', function ($query) use ($divisionIDCreatedOrder) {
+                $query->where('division_id', $divisionIDCreatedOrder);
             })
             ->whereHas('variants', function ($query) {
                 $query->where('quantity', '>', 0);
