@@ -177,7 +177,7 @@
                         <label class="form-label">Товары</label>
                         <select id="product-name" name="products" class="form-select select2 product-select-option">
                             <option value="">Выберите товар</option>
-                            @foreach ($allGoodsInOrders as $product)
+                            @foreach ($products as $product)
                                 <option value="{{ $product['id'] }}">{{ $product['name'] }}</option>
                             @endforeach
                         </select>
