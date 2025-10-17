@@ -517,7 +517,16 @@ class OrderController extends Controller
         $products = Product::whereIn('id', $divisionGroupProducts)
             ->orWhereHas('divisions', function ($query) {
                 $query->where('division_id', $this->divisionId);
-            })->orderBy('name')->get();
+            })
+            ->whereHas('variants', function ($query) {
+                $query->where('quantity', '>', 0);
+            })
+            ->withSum('variants', 'quantity')
+            ->orderBy('name')
+            ->get();
+        
+            
+//        dd($products);
 
         $currentStatus = $order->status->value;
 
@@ -529,7 +538,7 @@ class OrderController extends Controller
             return $item->product->name;
         });
 
-        return view('orders.show', compact('order', 'currentStatus', 'allGoodsInOrders'));
+        return view('orders.show', compact('order', 'currentStatus', 'allGoodsInOrders', 'products'));
     }
     
     public function warehouseData()
