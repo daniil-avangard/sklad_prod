@@ -170,18 +170,9 @@ class BasketController extends Controller
         $divisionGroups2 = Auth::user()->divisionGroups()->pluck('id');
         $divisionGroups = Auth::user()->division_id;
         $role1 = UserRoleEnum::DIVISION_MANAGER->value;
-        $divisionManagerRoleId = Role::where('value', UserRoleEnum::DIVISION_MANAGER->value)->value('id');
+//        $divisionManagerRoleId = Role::where('value', UserRoleEnum::DIVISION_MANAGER->value)->value('id');
         
-//        $otherUsers = User::whereHas('divisionGroups', function ($query) {
-//                $query->whereIn('division_group_id', Auth::user()->divisionGroups->pluck('id'));
-//            })
-//            ->whereHas('roles', function ($query) {
-//                $query->where('role_id', 1008);
-//            })
-//            ->where('id', '!=', Auth::user()->id)
-//            ->get();
-        
-        $otherUsers = User::whereHas('divisionGroups', function ($query) {
+        $kuratorUsers = User::whereHas('divisionGroups', function ($query) {
                 $query->whereIn('division_group_id', Auth::user()->divisionGroups->pluck('id'));
             })
             ->whereHas('roles', function ($query) {
@@ -189,7 +180,6 @@ class BasketController extends Controller
             })
             ->where('id', '!=', Auth::user()->id)
             ->get();
-        dd($divisionManagerRoleId, $otherUsers);
 
         $basket = $this->basket; // Получение корзины из текущего объекта
         $order = new Order(); // Создание нового заказа
@@ -219,10 +209,21 @@ class BasketController extends Controller
 //        dd(Config::get('sklad.emailmodestatus'));
         $message = "Ваш заказ №" . $newComposerOrder->id . " от " . $newComposerOrder->created_at . " отправлен на утверждение куратору.";
         $message1 = strval($message);
+        
 //        $emailFrom = Config::get('sklad.emailmodestatus') == "dev" ? strval(Config::get('sklad.emailaddress')) : strval(Auth::user()->email);
         $emailFrom = Config::get('sklad.emailmodestatus') == "dev" ? strval(Config::get('sklad.emailaddress')) : strval(Config::get('sklad.emailaddress'));
         $userToEmail = Config::get('sklad.emailmodestatus') == "dev" ? "abdyushevr@avangard.ru" : $newComposerOrder->user->email;
         ProcessPodcast::dispatch($newComposerOrder, $message1, $emailFrom, $userToEmail);
+        if (!$kuratorUsers->isEmpty()) {
+            foreach ($kuratorUsers as $kurator) {
+                $messageKur = "Заказ №" . $newComposerOrder->id . " от " . $newComposerOrder->created_at . " пришел к вам на утверждение.";
+                $messageKur1 = strval($messageKur);
+                $emailFrom = Config::get('sklad.emailmodestatus') == "dev" ? strval(Config::get('sklad.emailaddress')) : strval(Config::get('sklad.emailaddress'));
+                $userToEmail = Config::get('sklad.emailmodestatus') == "dev" ? "abdyushevr@avangard.ru" : $kurator->email;
+                ProcessPodcast::dispatch($newComposerOrder, $messageKur1, $emailFrom, $userToEmail);
+            }
+            
+        }
 //        ProcessPodcast::dispatch($this->sentEmail($newComposerOrder))->delay($dateTime->addMinutes(3));
 //        EmailSend::dispatch(function () {
         // работающая часть

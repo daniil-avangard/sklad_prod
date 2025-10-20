@@ -257,6 +257,8 @@ class OrderController extends Controller
         $dateTime = Carbon::now();
         $testUser = "abdyushevr@avangard.ru";
         $appUser1 = $newComposerOrder->user;
+        
+        $aboveRole = $toProcessStatus == StatusEnum::TRANSFERRED_TO_WAREHOUSE->value ? UserRoleEnum::WAREHOUSEMAN->value : UserRoleEnum::TOP_MANAGER->value;
         $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на утверждение начальнику куратора.";
         if ($toProcessStatus == StatusEnum::TRANSFERRED_TO_WAREHOUSE->value) {
             $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на склад.";
