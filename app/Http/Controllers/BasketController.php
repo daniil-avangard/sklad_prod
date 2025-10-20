@@ -7,8 +7,11 @@ use App\Models\Basket;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Order;
+use App\Models\User;
+use App\Models\Role;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
+use App\Enum\UserRoleEnum;
 use App\Enum\Order\StatusEnum;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\OrderShipped;
@@ -164,8 +167,29 @@ class BasketController extends Controller
     public function saveOrder(Request $request)
     {
         $appUser = Auth::user();
-//        $divisionGroups = Auth::user()->divisionGroups()->pluck('id');
+        $divisionGroups2 = Auth::user()->divisionGroups()->pluck('id');
         $divisionGroups = Auth::user()->division_id;
+        $role1 = UserRoleEnum::DIVISION_MANAGER->value;
+        $divisionManagerRoleId = Role::where('value', UserRoleEnum::DIVISION_MANAGER->value)->value('id');
+        
+//        $otherUsers = User::whereHas('divisionGroups', function ($query) {
+//                $query->whereIn('division_group_id', Auth::user()->divisionGroups->pluck('id'));
+//            })
+//            ->whereHas('roles', function ($query) {
+//                $query->where('role_id', 1008);
+//            })
+//            ->where('id', '!=', Auth::user()->id)
+//            ->get();
+        
+        $otherUsers = User::whereHas('divisionGroups', function ($query) {
+                $query->whereIn('division_group_id', Auth::user()->divisionGroups->pluck('id'));
+            })
+            ->whereHas('roles', function ($query) {
+                $query->where('value', UserRoleEnum::DIVISION_MANAGER->value);
+            })
+            ->where('id', '!=', Auth::user()->id)
+            ->get();
+        dd($divisionManagerRoleId, $otherUsers);
 
         $basket = $this->basket; // Получение корзины из текущего объекта
         $order = new Order(); // Создание нового заказа
