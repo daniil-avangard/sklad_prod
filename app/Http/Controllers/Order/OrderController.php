@@ -257,11 +257,29 @@ class OrderController extends Controller
         $dateTime = Carbon::now();
         $testUser = "abdyushevr@avangard.ru";
         $appUser1 = $newComposerOrder->user;
+        $roleAboveUsers = [];
         
         $aboveRole = $toProcessStatus == StatusEnum::TRANSFERRED_TO_WAREHOUSE->value ? UserRoleEnum::WAREHOUSEMAN->value : UserRoleEnum::TOP_MANAGER->value;
         $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на утверждение начальнику куратора.";
         if ($toProcessStatus == StatusEnum::TRANSFERRED_TO_WAREHOUSE->value) {
             $message = "Ваш заказ №" . $newComposerOrder->id . " отправлен на склад.";
+            $roleAboveUsers = User::whereHas('divisionGroups', function ($query) {
+                    $query->whereIn('division_group_id', Auth::user()->divisionGroups->pluck('id'));
+                })
+                ->whereHas('roles', function ($query) {
+                    $query->where('value', UserRoleEnum::WAREHOUSEMAN->value);
+                })
+                ->where('id', '!=', Auth::user()->id)
+                ->get();
+        } else {
+            $roleAboveUsers = User::whereHas('divisionGroups', function ($query) {
+                    $query->whereIn('division_group_id', Auth::user()->divisionGroups->pluck('id'));
+                })
+                ->whereHas('roles', function ($query) {
+                    $query->where('value', UserRoleEnum::TOP_MANAGER->value);
+                })
+                ->where('id', '!=', Auth::user()->id)
+                ->get();
         }
         $message1 = strval($message);
 //        ProcessPodcast::dispatch($newComposerOrder, $message1)->withoutDelay();
@@ -269,6 +287,15 @@ class OrderController extends Controller
         $emailFrom = Config::get('sklad.emailmodestatus') == "dev" ? strval(Config::get('sklad.emailaddress')) : strval(Config::get('sklad.emailaddress'));
         $userToEmail = Config::get('sklad.emailmodestatus') == "dev" ? "abdyushevr@avangard.ru" : $newComposerOrder->user->email;
         ProcessPodcast::dispatch($newComposerOrder, $message1, $emailFrom, $userToEmail);
+        if (!$roleAboveUsers->isEmpty()) {
+            foreach ($roleAboveUsers as $kurator) {
+                $messageAbove = "Заказ №" . $newComposerOrder->id . " от " . $newComposerOrder->created_at . " пришел вам на утверждение. " . $kurator->email;
+                $messageAbove1 = strval($messageAbove);
+                $emailFrom = Config::get('sklad.emailmodestatus') == "dev" ? strval(Config::get('sklad.emailaddress')) : strval(Config::get('sklad.emailaddress'));
+                $userToEmail = Config::get('sklad.emailmodestatus') == "dev" ? "abdyushevr@avangard.ru" : $kurator->email;
+                ProcessPodcast::dispatch($newComposerOrder, $messageAbove1, $emailFrom, $userToEmail);
+            }
+        }
 //        try {
 //            Mail::to($testUser)->send(new OrderShipped($appUser1, $message1));
 //        } catch (Throwable $e) {
