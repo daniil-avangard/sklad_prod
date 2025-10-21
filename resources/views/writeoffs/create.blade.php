@@ -63,7 +63,7 @@
 
                                             <div class="col-sm-4">
                                                 <label class="form-label">Дата актуализации</label>
-                                                <select class="form-select" name="products[0][date_of_actuality]"
+                                                <select class="form-select actuality-select" name="products[0][date_of_actuality]"
                                                     id="" required>
                                                     <option value="">Выберите товар</option>
 
@@ -72,6 +72,7 @@
 
                                             <div class="col-sm-3">
                                                 <label class="form-label">Количество</label>
+                                                <input type="text" class="info-for-quantity" style="width: 80px" disabled>
                                                 <input type="text" name="product[0][quantity]" value=""
                                                     class="form-control" required>
                                             </div><!--end col-->
@@ -186,4 +187,5 @@
             }
         });
     </script>
+    <script src="/assets/js/newWriteoff.js"></script>
 @endpush
