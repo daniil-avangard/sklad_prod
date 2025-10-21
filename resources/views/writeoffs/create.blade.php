@@ -47,6 +47,18 @@
                                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
                                                     @endforeach
                                                 </select>
+                                                <select id="date_of_actuality_writeoff" value="" class="select-for-actuality-base" style="width: 2px !important; height: 2px !important; visibility: hidden;">
+                                                    <option value="">Выберите даты</option>
+                                                    @foreach ($products as $product)
+                                                        @foreach ($product->variants as $variants)
+                                                            @if ($variants->date_of_actuality == "")
+                                                            <option value="{{ $variants->product_id }}" data-quantity="{{ $variants->quantity }}">Без даты актуализации</option>
+                                                            @else
+                                                            <option value="{{ $variants->product_id }}" data-quantity="{{ $variants->quantity }}">{{ $variants->date_of_actuality }}</option>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
+                                                </select>
                                             </div><!--end col-->
 
                                             <div class="col-sm-4">

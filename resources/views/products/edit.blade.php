@@ -4,6 +4,7 @@
 
 @push('styles-plugins')
     <link href="/plugins/dropify/css/dropify.min.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
 @endpush
 @section('content')
     @include('includes.breadcrumb', [
@@ -95,7 +96,8 @@
                             </div>
 
 
-                            <div class="">
+                            <div class="wrap-form-data">
+                                <span class="tooltiptext">Заполните это поле</span>
                                 <div class="card">
                                     <div class="card-header">
                                         <h4 class="card-title">ККО</h4>

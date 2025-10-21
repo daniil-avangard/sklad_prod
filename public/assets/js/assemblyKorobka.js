@@ -454,7 +454,10 @@ const changeOrderStatus = async (status="started", name="none") => {
             throw new Error(`Response status: ${response.status}`);
         }
         res = await response.json();
-        
+        if (status == "shipped") {
+            const url = new URL(window.location.href);
+            window.open(url, "_self");
+        }
         console.log(res);
     }
     catch(error) {
