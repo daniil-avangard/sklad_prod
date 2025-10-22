@@ -100,8 +100,5 @@
 @endsection
 
 @push('scripts-plugins')
-<!--    <script src="/plugins/x-editable/js/bootstrap-editable.min.js"></script>-->
-<!--    <script src="/assets/pages/orders/update_new.quantity.js"></script>-->
-<!--    <script src="/assets/js/checkBoxesOrdersList.js"></script>-->
     <script src="/assets/js/ordersListElements.js"></script>
 @endpush

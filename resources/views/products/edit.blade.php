@@ -4,6 +4,7 @@
 
 @push('styles-plugins')
     <link href="/plugins/dropify/css/dropify.min.css" rel="stylesheet">
+    <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
 @endpush
 @section('content')
     @include('includes.breadcrumb', [
@@ -20,7 +21,7 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <x-form action="{{ route('products.update', $product) }}" method="PUT" enctype="multipart/form-data">
+                    <x-form id="product-form" action="{{ route('products.update', $product) }}" method="PUT" enctype="multipart/form-data">
                         <div class="d-grid gap-4 mb-4" style="grid-template-columns: repeat(2, 1fr);">
                             <div class="card mb-0">
                                 <div class="card-header">
@@ -48,7 +49,7 @@
                                         <div class="">
                                             <div class="form-group mb-3">
                                                 <label for="company_id">Компания</label>
-                                                <select class="form-select" id="company_id" name="company_id">
+                                                <select class="form-select" id="company_id" name="company_id" required>
                                                     <option value="">Выберите компанию</option>
                                                     @foreach ($companies as $company)
                                                         <option value="{{ $company->id }}"
@@ -62,7 +63,7 @@
                                         <div class="">
                                             <div class="form-group">
                                                 <label for="category_id">Категория</label>
-                                                <select class="form-select" id="category_id" name="category_id">
+                                                <select class="form-select" id="category_id" name="category_id" required>
                                                     <option value="">Выберите категорию</option>
                                                     @foreach ($categories as $category)
                                                         <option
@@ -77,7 +78,7 @@
                                             <div class="form-group mb-0">
                                                 <label for="min_stock">Минимальный остаток</label>
                                                 <input type="number" class="form-control" id="min_stock" name="min_stock"
-                                                    min="0" placeholder="0" value="{{ $product->min_stock }}">
+                                                    min="0" placeholder="0" value="{{ $product->min_stock }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -95,7 +96,8 @@
                             </div>
 
 
-                            <div class="">
+                            <div class="wrap-form-data">
+                                <span class="tooltiptext">Заполните это поле</span>
                                 <div class="card">
                                     <div class="card-header">
                                         <h4 class="card-title">ККО</h4>
@@ -177,10 +179,31 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Другое</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="form-group mb-3">
+                                                <div class="checkbox-primary">
+                                                    <input id="suvenir_drugoe" type="checkbox"
+                                                                        value="1" name="suvenir_drugoe"
+                                                        >
+                                                    <label for="suvenir_drugoe">
+                                                        Другое
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="form-group mb-0">
                                     <label for="description">Описание</label>
-                                    <textarea class="form-control" id="description" name="description" rows="10">{{ $product->description }}</textarea>
+                                    <textarea class="form-control" id="description" name="description" rows="10" required>{{ $product->description }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -219,4 +242,5 @@
             });
         });
     </script>
+    <script src="/assets/js/productFormCreate.js"></script>
 @endpush

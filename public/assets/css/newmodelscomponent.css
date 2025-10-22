@@ -559,6 +559,12 @@ tr p {
     visibility: visible !important;
 }
 
+.tooltiptext-visible-1 {
+    visibility: visible !important;
+    top: 30% !important;
+    left: 80% !important;
+}
+
 .icon-digits-exell {
     margin-left: 5px;
     cursor: pointer;
