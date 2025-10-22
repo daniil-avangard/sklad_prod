@@ -13,7 +13,7 @@ class FilterPage {
         this.graphicProduct = document.getElementById('grafic-button');
         this.graphicDataProduct = document.getElementById('grafic-months');
         this.checkBoxBlock = document.getElementById('month-field');
-        this.checkBoxArray1 = document.querySelectorAll("input[type='checkbox']");
+        this.checkBoxArray1 = document.querySelectorAll('.month-field input[type="checkbox"]');
         this.cleanFilters = document.querySelectorAll(".clean-filters");
         this.cleanMonthsFilter = document.getElementById('clean-months');
         this.cleanStatusProdFilter = document.getElementById('clean-status-product');
@@ -577,7 +577,7 @@ class FilterPage {
         
         if (checkBox) {
             let arrCheck = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
-            console.log(arrCheck);
+            console.log(self.checkBoxArray1);
             if (arrCheck.length > 0) {
                 this.tableTrArray
                     .filter(row => {
