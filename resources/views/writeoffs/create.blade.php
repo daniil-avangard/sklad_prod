@@ -54,7 +54,7 @@
                                                             @if ($variants->date_of_actuality == "")
                                                             <option value="{{ $variants->product_id }}" data-quantity="{{ $variants->quantity }}">Без даты актуализации</option>
                                                             @else
-                                                            <option value="{{ $variants->product_id }}" data-quantity="{{ $variants->quantity }}">{{ $variants->date_of_actuality }}</option>
+                                                            <option value="{{ $variants->product_id }}" data-quantity="{{ $variants->quantity }}">{{ date("d.m.Y", strtotime($variants->date_of_actuality)) }}</option>
                                                             @endif
                                                         @endforeach
                                                     @endforeach
@@ -72,7 +72,7 @@
 
                                             <div class="col-sm-3">
                                                 <label class="form-label">Количество</label>
-                                                <input type="text" class="info-for-quantity" style="width: 80px" disabled>
+                                                <input type="text" value="" class="info-for-quantity" style="width: 80px" disabled>
                                                 <input type="text" name="product[0][quantity]" value=""
                                                     class="form-control" required>
                                             </div><!--end col-->
@@ -113,79 +113,7 @@
 
 
     <script>
-        $(document).ready(function() {
-            function updateSelectOptions() {
-                var selectedValues = [];
-                $('.product-select').each(function() {
-                    var selectedValue = $(this).val();
-                    if (selectedValue) {
-                        selectedValues.push(selectedValue);
-                    }
-                });
-
-                $('.product-select').each(function() {
-                    var $select = $(this);
-                    $select.find('option').each(function() {
-                        var $option = $(this);
-                        if ($option.val() && selectedValues.includes($option.val()) && $option
-                            .val() !== $select.val()) {
-                            $option.prop('disabled', true);
-                        } else {
-                            $option.prop('disabled', false);
-                        }
-                    });
-                });
-            }
-
-            $('.select2').select2();
-
-            $(document).on('change', '.product-select', function() {
-                updateSelectOptions();
-            });
-
-            $(document).on('click', '[data-repeater-create]', function() {
-                setTimeout(function() {
-                    $('.select2').select2();
-                    updateSelectOptions();
-                }, 100);
-            });
-
-            updateSelectOptions();
-        });
-
-        $(document).on('change', '.product-select', function() {
-            var $select = $(this);
-            var dateSelect = $select.closest('.form-group').find('select[name$="[date_of_actuality]"]');
-            dateSelect.find('option').remove().end();
-
-            var productId = $select.val();
-            console.log(productId);
-            if (productId && productId !== '') {
-                $.ajax({
-                    url: '{{ route('writeoffs.variants.dates') }}',
-                    type: 'GET',
-                    data: {
-                        product_id: productId
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        dateSelect.append('<option value="">Выберите даты</option>');
-                        $.each(response, function(key, value) {
-                            
-                            if (value['date'] == null) {
-                                dateSelect.append('<option value="">Без даты</option>');
-                            } else {
-                                dateSelect.append('<option value="' + moment(value['date'])
-                                    .format('DD.MM.YYYY') + '">' +
-                                    moment(value['date']).format('DD.MM.YYYY') +
-                                    '</option>');
-                            }
-
-                        });
-                    }
-                });
-            }
-        });
+       
     </script>
     <script src="/assets/js/newWriteoff.js"></script>
 @endpush
