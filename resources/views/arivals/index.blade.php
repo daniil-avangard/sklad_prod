@@ -212,25 +212,45 @@
                     <th>Номер</th>
                     <th>Дата поставки</th>
                     <th>Пользователь</th>
+                    <th>Товары</th>
                     <th>Статус</th>
-                    <th>Дата создания</th>
                     <th>Действие</th>
                 </tr>
                 </thead>
                 <tbody>
-
+                @php
+                    $flagforrow = "f";
+                @endphp
+                @php
+                    $flagforrow1 = "f";
+                @endphp
                 @foreach ($arivals as $arival)
                 <tr>
                     <td>{{ $arival->id }}</td>
                     <td>{{ $arival->invoice }}</td>
                     <td>{{ \Carbon\Carbon::parse($arival->arrival_date)->format('d.m.Y') }}</td>
-                        <td>{{ $arival->user->surname }} {{ $arival->user->first_name }} {{ $arival->user->middle_name }}</td>
+                    <td>{{ $arival->user->surname }} {{ $arival->user->first_name }} {{ $arival->user->middle_name }}</td>
+                    <td>
+                        @foreach ($arival->products as $item)
+                            @if ($flagforrow1 == "f")
+                            <p class="p-orders-quant"><span>{{ $item->product->name }}</span></p>
+                            @php
+                            $flagforrow1 = "t";
+                            @endphp
+                            @else
+                            <p class="p-orders-quant order-index-row"><span>{{ $item->product->name }}</span></p>
+                            @php
+                            $flagforrow1 = "f";
+                            @endphp
+                            @endif
+                        @endforeach
+                    </td>
                     <td>
                         <span class="badge bg-{{ $arival->status->color() }}">
                             {{ $arival->status->name() }}
                         </span>
                     </td>
-                    <td>{{ \Carbon\Carbon::parse($arival->created_at)->format('d.m.Y H:i:s') }}</td>
+
                     <td>
                         <a href="{{ route('arivals.show', $arival->id) }}" class="btn btn-primary">Посмотреть</a>
                         @if($arival->status === \App\Enum\ArivalStatusEnum::pending)
