@@ -210,7 +210,7 @@ class FilterPage {
         if (status) {
             this.tableTrArray
                     .filter(row => {
-                        let cell = row.cells[5].getElementsByTagName("SPAN")[0];
+                        let cell = row.cells[6].getElementsByTagName("SPAN")[0];
                         let text = self.selectOrderStatus.options[self.selectOrderStatus.selectedIndex].text;
                         return (cell.innerHTML.trim() != text);
                     })

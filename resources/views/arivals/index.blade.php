@@ -4,6 +4,9 @@
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
+        tr p {
+            margin-bottom: 5px !important;
+        }
         .order-popup-parent {
             position: relative;
             display: block;
@@ -213,6 +216,7 @@
                     <th>Дата поставки</th>
                     <th>Пользователь</th>
                     <th>Товары</th>
+                    <th>Количество</th>
                     <th>Статус</th>
                     <th>Действие</th>
                 </tr>
@@ -230,15 +234,30 @@
                     <td>{{ $arival->invoice }}</td>
                     <td>{{ \Carbon\Carbon::parse($arival->arrival_date)->format('d.m.Y') }}</td>
                     <td>{{ $arival->user->surname }} {{ $arival->user->first_name }} {{ $arival->user->middle_name }}</td>
-                    <td>
+                    <td class="td-with-row-color">
+                        @foreach ($arival->products as $item)
+                            @if ($flagforrow == "f")
+                            <p class="p-orders"><span>{{ $item->product->name }}</span></p>
+                            @php
+                            $flagforrow = "t";
+                            @endphp
+                            @else
+                            <p class="p-orders order-index-row"><span>{{ $item->product->name }}</span></p>
+                            @php
+                            $flagforrow = "f";
+                            @endphp
+                            @endif
+                        @endforeach
+                    </td>
+                    <td class="td-with-row-color">
                         @foreach ($arival->products as $item)
                             @if ($flagforrow1 == "f")
-                            <p class="p-orders-quant"><span>{{ $item->product->name }}</span></p>
+                            <p class="p-orders-quant"><span>{{ $item->quantity }}</span></p>
                             @php
                             $flagforrow1 = "t";
                             @endphp
                             @else
-                            <p class="p-orders-quant order-index-row"><span>{{ $item->product->name }}</span></p>
+                            <p class="p-orders-quant order-index-row"><span>{{ $item->quantity }}</span></p>
                             @php
                             $flagforrow1 = "f";
                             @endphp
