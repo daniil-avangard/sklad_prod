@@ -4,7 +4,7 @@ class FilterPage {
         this.selectDivision = document.getElementById('divisiones-names');
         this.selectOrderStatus = document.getElementById('status-of-orders');
         this.checkBoxBlock = document.getElementById('month-field');
-        this.checkBoxArray1 = document.querySelectorAll("input[type='checkbox']");
+        this.checkBoxArray1 = document.querySelectorAll('.month-field input[type="checkbox"]');
         this.cleanFilters = document.querySelectorAll(".clean-filters");
         this.tableTrArray = Array.from(document.getElementById('datatable').rows).slice(1);
         this.monthDetails = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
@@ -210,7 +210,7 @@ class FilterPage {
         if (status) {
             this.tableTrArray
                     .filter(row => {
-                        let cell = row.cells[4].getElementsByTagName("SPAN")[0];
+                        let cell = row.cells[5].getElementsByTagName("SPAN")[0];
                         let text = self.selectOrderStatus.options[self.selectOrderStatus.selectedIndex].text;
                         return (cell.innerHTML.trim() != text);
                     })

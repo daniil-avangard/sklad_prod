@@ -13,21 +13,13 @@ const funcForSelectProduct = function() {
                 let newOptions = [{value: "", text: "Выберите даты"}];
                 Array.from(selectActualityBase.options).forEach((option, ind) => {
                     if (option.text == selectedValue && option.value == selectForProduct[index].value) {
-//                        let valForOption = option.text == "Без даты актуализации" ? "" : option.text;
-//                        newOptions.push({value: valForOption, text: option.text});
-                        console.log(`Option text: ${selectForProduct[index].value} ${index}`);
-                        console.log(`Option dataset: ${option.dataset.quantity}`);
-                        console.log(inputForQuantity[index]);
+                        console.log("Проверка индекса = ", inputForQuantity[index]);
                         inputForQuantity[index].value = option.dataset.quantity;
                     }
                 });
             }
         });
 }
-
-//document.addEventListener("DOMContentLoaded", function() {
-//    funcForSelectProduct();
-//});
 
 $(document).ready(function() {
             function updateSelectOptions() {
@@ -95,7 +87,7 @@ $(document).ready(function() {
                         $.each(response, function(key, value) {
                             
                             if (value['date'] == null) {
-                                dateSelect.append('<option value="">Без даты</option>');
+                                dateSelect.append('<option value="Без даты актуализации">Без даты актуализации</option>');
                             } else {
                                 dateSelect.append('<option value="' + moment(value['date'])
                                     .format('DD.MM.YYYY') + '">' +

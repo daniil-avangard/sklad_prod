@@ -35,6 +35,9 @@ class ArivalController extends Controller
 
         $arivals = Arival::all()->sortByDesc('created_at');
         foreach ($arivals as $arival) {
+//            foreach ($arival->products as $item) {
+//                dd($item->product->name);
+//            }
             $valueForUser = array('value' => $arival->user->id, 'label' => $arival->user->surname . " " . $arival->user->first_name);
             $valueForStatus = array('value' => $arival->status->value, 'label' => $arival->status->name());
             if (!(in_array($valueForStatus, $allOrdersStatus))) {
