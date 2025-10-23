@@ -303,34 +303,7 @@ class FilterPage {
 //                    .forEach(row => row.classList.add('row-hidden'));
 //            
 //        }
-//        if (product) {
-//            this.tableTrArray
-//                    .filter(row => {
-//                        let arrayProductsDivs = row.cells[3].querySelectorAll('.order-popup-parent');
-//                        let arrayProductsQuantities = row.cells[4].getElementsByTagName("P");
-//                        let flag = true;
-//                        let quontityIndex = 0;
-//                        Array.from(arrayProductsDivs).forEach((elm, ind) => {
-//                            let valueDiv = elm.getElementsByTagName("P")[0];
-////                            console.log(valueDiv);
-//                            if (valueDiv.innerHTML.trim() == product) {
-//                                flag = false;
-//                                quontityIndex = ind;
-//                            }
-//                        });
-//                        if (!flag) {
-//                            Array.from(arrayProductsDivs).forEach((elm, ind) => {
-//                                let valueDiv = elm.getElementsByTagName("P")[0];
-//                                if (valueDiv.innerHTML.trim() != product) elm.classList.add('row-hidden'); 
-//                            });
-//                            Array.from(arrayProductsQuantities).forEach((elm, ind) => {
-//                                if (ind != quontityIndex) elm.classList.add('row-hidden');
-//                            });
-//                        }
-//                        return flag;
-//                    })
-//                    .forEach(row => row.classList.add('row-hidden'));
-//        }
+
         
         if (checkBox) {
             let arrCheck = Array.from(self.checkBoxArray1).filter(elm => elm.checked).map(elm => elm.value);
