@@ -4,6 +4,9 @@
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
+        tr p {
+            margin-bottom: 5px !important;
+        }
         .order-popup-parent {
             position: relative;
             display: block;
@@ -86,16 +89,16 @@
         <div class="block-filters-index">
             <div class="order-filters">
                 <div class="filters-work-part">
-                    <label for="productsOfOrders1" class="unclicked">ID:</label>
+                    <label for="productsOfOrders1" class="unclicked">Товары:</label>
                     <div class="searchable">
-                        <input class="index-top-filters" type="text" name="productsOfOrders1" id="idOfOrders" placeholder="Все">
-                        <ul id="id-list-data" class="dropdown__box-list">
+                        <input class="index-top-filters" type="text" name="productsOfOrders1" id="productsOfOrders1" placeholder="Все">
+                        <ul id="product-list-data" class="dropdown__box-list">
                             <li class="dropdown-item dropdown-item-new" data-productoption="Все">
                                 Все
                             </li>
-                            @foreach ($arivals as $arival)
-                                <li class="dropdown-item dropdown-item-new" data-productoption="{{ $arival->id }}">
-                                        {{ $arival->id }}
+                            @foreach ($allOrdersProducts as $productOrder)
+                                <li class="dropdown-item dropdown-item-new" data-productoption="{{ $productOrder['name'] }}">
+                                        {{ $productOrder['name'] }}
                                 </li>
                             @endforeach
 
@@ -204,15 +207,15 @@
         </div>
     </div>
     <div class="col-12">
-        <div class="table-responsive">
-            <table id="datatable" class="table table-bordered">
+        
+            <table id="orders-table" class="table table-bordered custom-table">
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Номер</th>
                     <th>Дата поставки</th>
                     <th>Пользователь</th>
                     <th>Товары</th>
+                    <th>Количество</th>
                     <th>Статус</th>
                     <th>Действие</th>
                 </tr>
@@ -226,19 +229,42 @@
                 @endphp
                 @foreach ($arivals as $arival)
                 <tr>
-                    <td>{{ $arival->id }}</td>
                     <td>{{ $arival->invoice }}</td>
                     <td>{{ \Carbon\Carbon::parse($arival->arrival_date)->format('d.m.Y') }}</td>
                     <td>{{ $arival->user->surname }} {{ $arival->user->first_name }} {{ $arival->user->middle_name }}</td>
-                    <td>
+                    <td class="td-with-row-color">
+                        @foreach ($arival->products as $item)
+                            @if ($flagforrow == "f")
+                            <div class="order-popup-parent" data-productid="{{ $item->product->id }}">
+                            @php
+                            $flagforrow = "t";
+                            @endphp
+                            @else
+                            <div class="order-popup-parent order-index-row" data-productid="{{ $item->product->id }}">
+                            @php
+                            $flagforrow = "f";
+                            @endphp
+                            @endif
+                                <p class="p-orders">{{ $item->product->name }}</p>
+                                <div class="order-popup-child">
+
+                                    <img src="{{ asset('storage/' . $item->product->image) }}" alt="" class=" mx-auto  d-block popup-child-img" height="150">
+
+                                </div>
+                                </div>
+                        
+
+                        @endforeach
+                    </td>
+                    <td class="td-with-row-color">
                         @foreach ($arival->products as $item)
                             @if ($flagforrow1 == "f")
-                            <p class="p-orders-quant"><span>{{ $item->product->name }}</span></p>
+                            <p class="p-orders-quant"><span>{{ $item->quantity }}</span></p>
                             @php
                             $flagforrow1 = "t";
                             @endphp
                             @else
-                            <p class="p-orders-quant order-index-row"><span>{{ $item->product->name }}</span></p>
+                            <p class="p-orders-quant order-index-row"><span>{{ $item->quantity }}</span></p>
                             @php
                             $flagforrow1 = "f";
                             @endphp
@@ -273,7 +299,7 @@
 
                 </tbody>
             </table>
-        </div>
+        
     </div>
 </div>
 @endsection
