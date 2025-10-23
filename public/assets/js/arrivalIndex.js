@@ -237,8 +237,8 @@ class FilterPage {
         
         this.tableTrArray.forEach(row => {
             row.classList.remove('row-hidden');
-            let arrayProductsDivs = row.cells[4].querySelectorAll('.order-popup-parent');
-            let arrayProductsQuantities = row.cells[5].getElementsByTagName("P");
+            let arrayProductsDivs = row.cells[3].querySelectorAll('.order-popup-parent');
+            let arrayProductsQuantities = row.cells[4].getElementsByTagName("P");
             Array.from(arrayProductsDivs).forEach((elm, ind) => elm.classList.remove('row-hidden'));
             Array.from(arrayProductsQuantities).forEach((elm, ind) => elm.classList.remove('row-hidden'));
         });
@@ -247,7 +247,7 @@ class FilterPage {
             this.tableTrArray
                     .filter(row => {
 //                        let cell = row.cells[1].getElementsByTagName("A")[0];
-                        let cell = row.cells[3];
+                        let cell = row.cells[2];
                         return (cell.innerHTML.trim() != division)
                     })
                     .forEach(row => row.classList.add('row-hidden'));
@@ -255,7 +255,7 @@ class FilterPage {
         if (status) {
             this.tableTrArray
                     .filter(row => {
-                        let cell = row.cells[6].getElementsByTagName("SPAN")[0];
+                        let cell = row.cells[5].getElementsByTagName("SPAN")[0];
                         let text = self.selectOrderStatus.options[self.selectOrderStatus.selectedIndex].text;
                         return (cell.innerHTML.trim() != text);
                     })
@@ -265,8 +265,8 @@ class FilterPage {
         if (product) {
             this.tableTrArray
                     .filter(row => {
-                        let arrayProductsDivs = row.cells[4].querySelectorAll('.order-popup-parent');
-                        let arrayProductsQuantities = row.cells[5].getElementsByTagName("P");
+                        let arrayProductsDivs = row.cells[3].querySelectorAll('.order-popup-parent');
+                        let arrayProductsQuantities = row.cells[4].getElementsByTagName("P");
                         let flag = true;
                         let quontityIndex = 0;
                         console.log(product, arrayProductsDivs, arrayProductsQuantities);
@@ -311,7 +311,7 @@ class FilterPage {
             if (arrCheck.length > 0) {
                 this.tableTrArray
                     .filter(row => {
-                        let valueMonthYear = row.cells[2].innerHTML.substring(3, 5) + row.cells[2].innerHTML.substring(6, 10);
+                        let valueMonthYear = row.cells[1].innerHTML.substring(3, 5) + row.cells[1].innerHTML.substring(6, 10);
                         return !(arrCheck.includes(valueMonthYear));
                     })
                     .forEach(row => row.classList.add('row-hidden'));

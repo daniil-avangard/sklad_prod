@@ -211,7 +211,6 @@
             <table id="orders-table" class="table table-bordered custom-table">
                 <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Номер</th>
                     <th>Дата поставки</th>
                     <th>Пользователь</th>
@@ -230,7 +229,6 @@
                 @endphp
                 @foreach ($arivals as $arival)
                 <tr>
-                    <td>{{ $arival->id }}</td>
                     <td>{{ $arival->invoice }}</td>
                     <td>{{ \Carbon\Carbon::parse($arival->arrival_date)->format('d.m.Y') }}</td>
                     <td>{{ $arival->user->surname }} {{ $arival->user->first_name }} {{ $arival->user->middle_name }}</td>
