@@ -32,8 +32,17 @@ class ArivalController extends Controller
         
         $allOrdersStatus = [];
         $allArivalsCreateUsers = [];
+        $allOrdersProducts = [];
 
         $arivals = Arival::all()->sortByDesc('created_at');
+        $products = Product::all()->sortBy('name');
+        foreach ($products as $product) {
+            $valueForProducts = array('name' => $product->name, 'id' => $product->id);
+            if (!(in_array($valueForProducts, $allOrdersProducts))) {
+                $allOrdersProducts[] = $valueForProducts;
+            }
+        }
+        
         foreach ($arivals as $arival) {
 //            foreach ($arival->products as $item) {
 //                dd($item->product->name);
@@ -47,8 +56,9 @@ class ArivalController extends Controller
             if (!(in_array($valueForUser, $allArivalsCreateUsers))) {
                 $allArivalsCreateUsers[] = $valueForUser;
             }
+            
         }
-        return view('arivals.index', compact('arivals', 'canCreateArival', 'allOrdersStatus', 'allArivalsCreateUsers'));
+        return view('arivals.index', compact('arivals', 'canCreateArival', 'allOrdersStatus', 'allArivalsCreateUsers', 'allOrdersProducts'));
     }
 
     public function create()
