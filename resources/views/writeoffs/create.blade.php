@@ -76,7 +76,7 @@
                                             </div>
 
                                             <div id="wrtf-quontity-check" class="col-sm-3">
-                                                <label class="form-label">Количество</label>
+                                                <label class="form-label">Количество к списанию</label>
                                                 <input type="text" name="product[0][quantity]" value=""
                                                     class="form-control writeoff-value" style="margin-bottom: 10px !important;" required>
                                                 <label class="form-label">Количество на складе</label>
