@@ -4,6 +4,15 @@
     <link type="text/css" href="/assets/css/newmodelscomponent.css" rel="stylesheet">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
+        tr p {
+            margin-bottom: 5px !important;
+        }
+        .order-popup-parent {
+            position: relative;
+            display: block;
+            cursor: pointer;
+            user-select: none;
+        }
         .order-popup-parent {
             position: relative;
             display: block;
@@ -90,16 +99,16 @@
         <div class="block-filters-index">
             <div class="order-filters">
                 <div class="filters-work-part">
-                    <label for="productsOfOrders1" class="unclicked">ID:</label>
+                    <label for="productsOfOrders1" class="unclicked">Товар:</label>
                     <div class="searchable">
-                        <input class="index-top-filters" type="text" name="productsOfOrders1" id="idOfOrders" placeholder="Все">
-                        <ul id="id-list-data" class="dropdown__box-list">
+                        <input class="index-top-filters" type="text" name="productsOfOrders1" id="productsOfOrders1" placeholder="Все">
+                        <ul id="product-list-data" class="dropdown__box-list">
                             <li class="dropdown-item dropdown-item-new" data-productoption="Все">
                                 Все
                             </li>
-                            @foreach ($writeoffs as $writeoff)
-                                <li class="dropdown-item dropdown-item-new" data-productoption="{{ $writeoff->id }}">
-                                        {{ $writeoff->id }}
+                            @foreach ($allOrdersProducts as $productOrder)
+                                <li class="dropdown-item dropdown-item-new" data-productoption="{{ $productOrder['name'] }}">
+                                        {{ $productOrder['name'] }}
                                 </li>
                             @endforeach
 
@@ -212,27 +221,71 @@
             <table id="datatable" class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Номер</th>
                     <th>Дата списания</th>
                     <th>Пользователь</th>
+                    <th>Товары</th>
+                    <th>Количество</th>
                     <th>Статус</th>
-                    <th>Дата создания</th>
                     <th>Действие</th>
                 </tr>
                 </thead>
                 <tbody>
-
+                @php
+                    $flagforrow = "f";
+                @endphp
+                @php
+                    $flagforrow1 = "f";
+                @endphp
                 @foreach ($writeoffs as $writeoff)
                 <tr>
                     <td>{{ $writeoff->id }}</td>
                     <td>{{ \Carbon\Carbon::parse($writeoff->writeoff_date)->format('d.m.Y') }}</td>
-                        <td>{{ $writeoff->user->surname }} {{ $writeoff->user->first_name }} {{ $writeoff->user->middle_name }}</td>
+                    <td>{{ $writeoff->user->surname }} {{ $writeoff->user->first_name }} {{ $writeoff->user->middle_name }}</td>
+                    <td class="td-with-row-color">
+                        @foreach ($writeoff->products as $item)
+                            @if ($flagforrow == "f")
+                            <div class="order-popup-parent" data-productid="{{ $item->product->id }}">
+                            @php
+                            $flagforrow = "t";
+                            @endphp
+                            @else
+                            <div class="order-popup-parent order-index-row" data-productid="{{ $item->product->id }}">
+                            @php
+                            $flagforrow = "f";
+                            @endphp
+                            @endif
+                                <p class="p-orders">{{ $item->product->name }}</p>
+                                <div class="order-popup-child">
+
+                                    <img src="{{ asset('storage/' . $item->product->image) }}" alt="" class=" mx-auto  d-block popup-child-img" height="150">
+
+                                </div>
+                                </div>
+                        
+
+                        @endforeach
+                    </td>
+                    <td class="td-with-row-color">
+                        @foreach ($writeoff->products as $item)
+                            @if ($flagforrow1 == "f")
+                            <p class="p-orders-quant"><span>{{ $item->quantity }}</span></p>
+                            @php
+                            $flagforrow1 = "t";
+                            @endphp
+                            @else
+                            <p class="p-orders-quant order-index-row"><span>{{ $item->quantity }}</span></p>
+                            @php
+                            $flagforrow1 = "f";
+                            @endphp
+                            @endif
+                        @endforeach
+                    </td>
                     <td>
                         <span class="badge bg-{{ $writeoff->status->color() }}">
                             {{ $writeoff->status->name() }}
                         </span>
                     </td>
-                    <td>{{ \Carbon\Carbon::parse($writeoff->created_at)->format('d.m.Y H:i:s') }}</td>
                     <td>
                         <a href="{{ route('writeoffs.show', $writeoff->id) }}" class="btn btn-primary">Посмотреть</a>
                         @if($writeoff->status === \App\Enum\WriteoffStatusEnum::pending)

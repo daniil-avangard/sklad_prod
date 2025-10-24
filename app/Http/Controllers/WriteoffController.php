@@ -26,6 +26,14 @@ class WriteoffController extends Controller
 
         $allOrdersStatus = [];
         $allArivalsCreateUsers = [];
+        $allOrdersProducts = [];
+        $products = Product::all()->sortBy('name');
+        foreach ($products as $product) {
+            $valueForProducts = array('name' => $product->name, 'id' => $product->id);
+            if (!(in_array($valueForProducts, $allOrdersProducts))) {
+                $allOrdersProducts[] = $valueForProducts;
+            }
+        }
         $writeoffs = Writeoff::all()->sortByDesc('created_at');
         foreach ($writeoffs as $writeoff) {
             $valueForUser = array('value' => $writeoff->user->id, 'label' => $writeoff->user->surname . " " . $writeoff->user->first_name);
@@ -38,7 +46,7 @@ class WriteoffController extends Controller
                 $allArivalsCreateUsers[] = $valueForUser;
             }
         }
-        return view('writeoffs.index', compact('writeoffs', 'canCreateWriteoff', 'allOrdersStatus', 'allArivalsCreateUsers'));
+        return view('writeoffs.index', compact('writeoffs', 'canCreateWriteoff', 'allOrdersStatus', 'allArivalsCreateUsers', 'allOrdersProducts'));
     }
 
     public function create()
