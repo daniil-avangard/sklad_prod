@@ -75,11 +75,12 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-sm-3">
-                                                <label class="form-label">Количество</label>
-                                                <input type="text" value="" class="info-for-quantity" style="width: 80px" disabled>
+                                            <div id="wrtf-quontity-check" class="col-sm-3">
+                                                <label class="form-label">Количество к списанию</label>
                                                 <input type="text" name="product[0][quantity]" value=""
-                                                    class="form-control writeoff-value" required>
+                                                    class="form-control writeoff-value" style="margin-bottom: 10px !important;" required>
+                                                <label class="form-label">Количество на складе</label>
+                                                <input type="text" value="" class="info-for-quantity" style="width: 80px" disabled>
                                             </div><!--end col-->
 
 
