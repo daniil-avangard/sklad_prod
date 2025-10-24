@@ -2,6 +2,11 @@
 
 @push('styles-plugins')
     <link href="/plugins/select2/select2.min.css" rel="stylesheet" type="text/css" />
+    <style>
+        .wrong-value {
+            background-color: red !important;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -74,7 +79,7 @@
                                                 <label class="form-label">Количество</label>
                                                 <input type="text" value="" class="info-for-quantity" style="width: 80px" disabled>
                                                 <input type="text" name="product[0][quantity]" value=""
-                                                    class="form-control" required>
+                                                    class="form-control writeoff-value" required>
                                             </div><!--end col-->
 
 
@@ -110,10 +115,5 @@
     <script src="/plugins/select2/select2.min.js"></script>
     <script src="/plugins/repeater/jquery.repeater.min.js"></script>
     <script src="/assets/pages/jquery.form-repeater.js"></script>
-
-
-    <script>
-       
-    </script>
     <script src="/assets/js/newWriteoff.js"></script>
 @endpush

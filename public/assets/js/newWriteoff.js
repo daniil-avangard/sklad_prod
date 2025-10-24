@@ -4,6 +4,7 @@ const funcForSelectProduct = function() {
 //    const selectActuality = document.querySelectorAll("select.select-for-actuality");
     const selectActualityBase = document.querySelectorAll("select.select-for-actuality-base")[0];
     const inputForQuantity = document.querySelectorAll("input.info-for-quantity");
+    const checkForQuantity = document.querySelectorAll("input.writeoff-value");
     console.log(selectForProduct);
     selectForActuality.forEach((elm, index) => {
             elm.onchange = function() {
@@ -17,6 +18,17 @@ const funcForSelectProduct = function() {
                         inputForQuantity[index].value = option.dataset.quantity;
                     }
                 });
+            }
+        });
+        
+        checkForQuantity.forEach((elm, index) => {
+            elm.oninput = () => {
+                if (Number(elm.value) > Number(inputForQuantity[index].value)) {
+                    console.log(inputForQuantity[index].value, elm.value);
+                    elm.classList.add("wrong-value");
+                } else {
+                    elm.classList.remove("wrong-value");
+                }
             }
         });
 }
