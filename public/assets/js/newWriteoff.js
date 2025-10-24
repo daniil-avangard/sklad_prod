@@ -16,6 +16,15 @@ const funcForSelectProduct = function() {
                     if (option.text == selectedValue && option.value == selectForProduct[index].value) {
                         console.log("Проверка индекса = ", inputForQuantity[index]);
                         inputForQuantity[index].value = option.dataset.quantity;
+                        if (checkForQuantity[index].classList.contains("wrong-value")) checkForQuantity[index].classList.remove("wrong-value");
+                        const checkValue = checkForQuantity[index].value;
+                        if (!isNaN(Number(checkValue)) && !isNaN(parseFloat(checkValue))) {
+                            if (Number(checkValue) > Number(inputForQuantity[index].value)) {
+                                checkForQuantity[index].classList.add("wrong-value");
+                            } else {
+                                checkForQuantity[index].classList.remove("wrong-value");
+                            }
+                        }
                     }
                 });
             }
