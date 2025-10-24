@@ -221,13 +221,12 @@
             <table id="datatable" class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>Номер</th>
                     <th>Дата списания</th>
                     <th>Пользователь</th>
                     <th>Товары</th>
                     <th>Количество</th>
                     <th>Статус</th>
-                    <th>Дата создания</th>
                     <th>Действие</th>
                 </tr>
                 </thead>
@@ -287,7 +286,6 @@
                             {{ $writeoff->status->name() }}
                         </span>
                     </td>
-                    <td>{{ \Carbon\Carbon::parse($writeoff->created_at)->format('d.m.Y H:i:s') }}</td>
                     <td>
                         <a href="{{ route('writeoffs.show', $writeoff->id) }}" class="btn btn-primary">Посмотреть</a>
                         @if($writeoff->status === \App\Enum\WriteoffStatusEnum::pending)
