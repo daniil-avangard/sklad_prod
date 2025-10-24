@@ -1,6 +1,7 @@
 let deleteFromBasket = document.querySelectorAll('.delete-from-basket');
 let inputFormElements = document.querySelectorAll('input[type=number]');
 let mainFormSaveOrder = document.getElementById('save-order-form');
+let buttonFormSaveOrder = document.getElementById('save-order-form-button');
 const addProductToBasketForms = document.querySelectorAll('.add-product-to-basket-form');
 
 inputFormElements.forEach((inputElm, ind) => {
@@ -8,6 +9,13 @@ inputFormElements.forEach((inputElm, ind) => {
         inputElm.style.backgroundColor = "#ffff33";
     }
 });
+
+const init = () => {
+    const d = new Date();
+    buttonFormSaveOrder.disabled = d.getDate() >=1 ? false : true;
+}
+
+init();
 
 // функция по удалению товара из корзины и
 // соотвествующего ряда

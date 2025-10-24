@@ -106,7 +106,7 @@
                         
                                 <x-form id="save-order-form" action="{{ route('basket.saveorder') }}" method="POST">
                                     <textarea name="comment" class="form-control textarea-width" placeholder="Комментарий к заказу"></textarea>
-                                    <button class="btn btn-primary mt-2 btn-products-colors basket-button-position-correction-1">Отправить заказ</button>
+                                    <button id="save-order-form-button" class="btn btn-primary mt-2 btn-products-colors basket-button-position-correction-1">Отправить заказ</button>
                                 </x-form>
                             
                       
