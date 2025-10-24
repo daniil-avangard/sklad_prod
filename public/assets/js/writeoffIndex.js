@@ -1,8 +1,11 @@
 class FilterPage {
     constructor() {
+        this.popUps = document.querySelectorAll('.order-popup-parent');
+        this.popUpsChilds = document.querySelectorAll('.order-popup-child');
         this.selectIDOrder = document.getElementById('idOfOrders');
         this.selectDivision = document.getElementById('divisiones-names');
         this.selectOrderStatus = document.getElementById('status-of-orders');
+        this.selectProductOrder = document.getElementById('productsOfOrders1');
         this.checkBoxBlock = document.getElementById('month-field');
         this.checkBoxArray1 = document.querySelectorAll('.month-field input[type="checkbox"]');
         this.cleanFilters = document.querySelectorAll(".clean-filters");
@@ -10,6 +13,7 @@ class FilterPage {
         this.monthDetails = ["Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
         
         this.initsettings();
+        this.initSettingsPopUpElements();
         this.initsettingsCleanFilters();
     }
     
@@ -20,9 +24,9 @@ class FilterPage {
             self.selectOrderStatus.onchange = () => {
 //                document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
                 if (self.selectDivision) {
-                    self.display(self.selectDivision.value, self.selectOrderStatus.value, false, true, self.selectIDOrder.value);
+                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, false);
                 } else {
-                    self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
+                    self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, false);
                 }
             }
         }
@@ -42,12 +46,12 @@ class FilterPage {
                         let valuProductCookie = parent.value == "Все" ? "" : parent.value;
                         let valueID = parent.value == "Все" ? false : parent.value;
                         if (self.selectDivision) {
-                            if (parent.id == 'idOfOrders') self.display(self.selectDivision.value, self.selectOrderStatus.value, false, true, valueID);
-                            if (parent.id == 'productsOfOrders1') self.display(self.selectDivision.value, self.selectOrderStatus.value, valueID, true, self.selectIDOrder.value);
-                            if (parent.id == 'divisiones-names') self.display(valueID, self.selectOrderStatus.value, false, true, self.selectIDOrder.value);
+                            if (parent.id == 'idOfOrders') self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, false);
+                            if (parent.id == 'productsOfOrders1') self.display(self.selectDivision.value, self.selectOrderStatus.value, valueID, true, false);
+                            if (parent.id == 'divisiones-names') self.display(valueID, self.selectOrderStatus.value, self.selectProductOrder.value, true, false);
                         } else {
-                            if (parent.id == 'idOfOrders') self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, valueID);
-                            if (parent.id == 'productsOfOrders1') self.display(false, self.selectOrderStatus.value, valueID, true, self.selectIDOrder.value);
+                            if (parent.id == 'idOfOrders') self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, false);
+                            if (parent.id == 'productsOfOrders1') self.display(false, self.selectOrderStatus.value, valueID, true, false);
                         }
                     }
                 }
@@ -88,6 +92,10 @@ class FilterPage {
             funcForFilters(self.selectDivision, 'cities-list-data', 'selectSkladDivision');
         }
         
+        if (self.selectProductOrder) {
+            funcForFilters(self.selectProductOrder, 'product-list-data', 'selectSkladProductOrder');
+        }
+        
         if (self.checkBoxBlock) {
             Array.from(self.checkBoxArray1).forEach((checkBox, ind) => {
                 checkBox.onchange = () => {
@@ -112,13 +120,49 @@ class FilterPage {
 //                    document.cookie = `selectSkladCheckBoxBlock=${arrCheck.join(",")}`;
                     if (self.selectDivision) {
                         console.log("Сейчас здесь");
-                        self.display(self.selectDivision.value, self.selectOrderStatus.value, false, checkBox, self.selectIDOrder.value);
+                        self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox, false);
                     } else {
-                        self.display(false, self.selectOrderStatus.value, false, checkBox, self.selectIDOrder.value);
+                        self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, checkBox, false);
                     }
                 }
             });
         }
+    }
+    
+    initSettingsPopUpElements() {
+        const self = this;
+        
+        Array.from(self.popUps).forEach((el, index) => {
+            const listener = () => {
+                const rect = el.getBoundingClientRect();
+                self.popUpsChilds.forEach((child, ind) => {
+                    if (ind != index) {
+                        if (child.classList.contains("show")) {
+                            child.classList.toggle("show");
+                        }
+                    }  
+                });
+//                console.log(rect.top);
+                if (rect.top < 300) {
+                    self.popUpsChilds[index].classList.remove("order-popup-child");
+                    self.popUpsChilds[index].classList.add("order-popup-child-near-top");
+                } else {
+                    self.popUpsChilds[index].classList.add("order-popup-child");
+                    self.popUpsChilds[index].classList.remove("order-popup-child-near-top");
+                }
+                self.popUpsChilds[index].classList.toggle("show");
+            }
+            
+//            const clickEvent = () => {
+//                const url = new URL(window.location.origin);
+//                url.pathname = '/product/list/' + el.dataset.productid;
+//                window.open(url, "_self");
+//            }
+
+            el.addEventListener("mouseover", listener, false);
+            el.addEventListener("mouseout", listener, false);
+//            el.addEventListener("click", clickEvent);
+        });
     }
     
     initsettingsCleanFilters() {
@@ -133,19 +177,19 @@ class FilterPage {
                 self.selectOrderStatus.value = "";
 //                document.cookie = `selectSkladOrderStatus=${self.selectOrderStatus.value}`;
 //                
-//                self.selectProductOrder.value = "";
+                self.selectProductOrder.value = "";
 //                document.cookie = `selectSkladProductOrder=${self.selectProductOrder.value}`;
                 Array.from(self.checkBoxArray1).forEach((elm, ind) => {
                     elm.checked = false;
                 });
 //                document.cookie = `selectSkladCheckBoxBlock=${[].join(",")}`;
 //                
-                self.selectIDOrder.value = "";
+//                self.selectIDOrder.value = "";
 //                document.cookie = `selectSkladIDOrder=${self.selectIDOrder.value}`;
                 if (self.selectDivision) {
-                    self.display(self.selectDivision.value, self.selectOrderStatus.value, false, true, self.selectIDOrder.value);
+                    self.display(self.selectDivision.value, self.selectOrderStatus.value, self.selectProductOrder.value, true, false);
                 } else {
-                    self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, self.selectIDOrder.value);
+                    self.display(false, self.selectOrderStatus.value, self.selectProductOrder.value, true, false);
                 }
 //                document.getElementById('chartContainer').innerHTML = "";
 //                document.getElementById('chartContainer-1').innerHTML = "";
@@ -192,10 +236,10 @@ class FilterPage {
         
         this.tableTrArray.forEach(row => {
             row.classList.remove('row-hidden');
-//            let arrayProductsDivs = row.cells[3].querySelectorAll('.order-popup-parent');
-//            let arrayProductsQuantities = row.cells[4].getElementsByTagName("P");
-//            Array.from(arrayProductsDivs).forEach((elm, ind) => elm.classList.remove('row-hidden'));
-//            Array.from(arrayProductsQuantities).forEach((elm, ind) => elm.classList.remove('row-hidden'));
+            let arrayProductsDivs = row.cells[3].querySelectorAll('.order-popup-parent');
+            let arrayProductsQuantities = row.cells[4].getElementsByTagName("P");
+            Array.from(arrayProductsDivs).forEach((elm, ind) => elm.classList.remove('row-hidden'));
+            Array.from(arrayProductsQuantities).forEach((elm, ind) => elm.classList.remove('row-hidden'));
         });
         
         if (division) {
@@ -210,7 +254,7 @@ class FilterPage {
         if (status) {
             this.tableTrArray
                     .filter(row => {
-                        let cell = row.cells[3].getElementsByTagName("SPAN")[0];
+                        let cell = row.cells[5].getElementsByTagName("SPAN")[0];
                         let text = self.selectOrderStatus.options[self.selectOrderStatus.selectedIndex].text;
                         return (cell.innerHTML.trim() != text);
                     })
